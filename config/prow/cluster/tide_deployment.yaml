@@ -25,18 +25,25 @@ spec:
         - --dry-run=false
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
-        - --github-token-path=/etc/github/oauth
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
-        - --history-uri=gs://k8s-prow/tide-history.json
-        - --status-path=gs://k8s-prow/tide-status-checkpoint.yaml
+        - --history-uri=gs://gardener-prow/tide-history.json
+        - --status-path=gs://gardener-prow/tide-status-checkpoint.yaml
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        env:
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
         ports:
         - name: http
           containerPort: 8888
         - name: metrics
           containerPort: 9090
         volumeMounts:
-        - name: oauth
+        - name: github-app
           mountPath: /etc/github
           readOnly: true
         - name: config
@@ -46,9 +53,9 @@ spec:
           mountPath: /etc/job-config
           readOnly: true
       volumes:
-      - name: oauth
+      - name: github-app
         secret:
-          secretName: oauth-token
+          secretName: github-app
       - name: config
         configMap:
           name: config

@@ -24,12 +24,22 @@ spec:
         - --dry-run=false
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
-        - --github-token-path=/etc/github/oauth
         - --update-period=6h
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        env:
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
         ports:
           - name: http
             containerPort: 8888
         volumeMounts:
+        - name: github-app
+          mountPath: /etc/github
+          readOnly: true
         - name: hmac
           mountPath: /etc/webhook
           readOnly: true
@@ -40,6 +50,9 @@ spec:
           mountPath: /etc/plugins
           readOnly: true
       volumes:
+      - name: github-app
+        secret:
+          secretName: github-app
       - name: hmac
         secret:
           secretName: hmac-token
