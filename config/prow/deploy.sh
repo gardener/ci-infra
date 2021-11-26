@@ -16,6 +16,7 @@ color-green() { # Green
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 prow_components=(
+"prow_namespace.yaml"
 "test-pods_namespace.yaml"
 "cpu-limit-range_limitrange.yaml"
 "crier_deployment.yaml"
@@ -32,14 +33,13 @@ prow_components=(
 "horologium_deployment.yaml"
 "horologium_rbac.yaml"
 "horologium_service.yaml"
-"ing_ingress.yaml"
+"prow_ingress.yaml"
 "mem-limit-range_limitrange.yaml"
 "needs-rebase_deployment.yaml"
 "needs-rebase_service.yaml"
 "prow_controller_manager_deployment.yaml"
 "prow_controller_manager_rbac.yaml"
 "prow_controller_manager_service.yaml"
-"prowjob_customresourcedefinition.yml"
 "sinker_deployment.yaml"
 "sinker_rbac.yaml"
 "sinker_service.yaml"
@@ -56,6 +56,10 @@ if ! [ -x "$(command -v "kubectl")" ]; then
 fi
 
 echo "$(color-green Deploying Prow...)"
+
+# use server-side apply for CRD, otherwise annotation will be too long
+kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/prowjob_customresourcedefinition.yaml"
+
 for c in "${prow_components[@]}"; do
   kubectl apply -f "$SCRIPT_DIR/cluster/$c"
 done
