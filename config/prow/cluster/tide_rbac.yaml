@@ -3,13 +3,13 @@ kind: ServiceAccount
 metadata:
   annotations:
     iam.gke.io/gcp-service-account: control-plane@k8s-prow.iam.gserviceaccount.com
-  namespace: default
+  namespace: prow
   name: tide
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: default
+  namespace: prow
   name: tide
 rules:
   - apiGroups:
@@ -25,7 +25,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: default
+  namespace: prow
   name: tide
 roleRef:
   apiGroup: rbac.authorization.k8s.io

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: prow-controller-manager
-  namespace: default
+  namespace: prow
   name: prow-controller-manager
 spec:
   ports:

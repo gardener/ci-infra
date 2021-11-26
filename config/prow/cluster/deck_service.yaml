@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: deck
-  namespace: default
+  namespace: prow
   name: deck
 spec:
   selector:

@@ -97,7 +97,7 @@ deck:
 #    - k8s-ovn
 #    - containerd-integration
 
-prowjob_namespace: default
+prowjob_namespace: prow
 pod_namespace: test-pods
 log_level: debug
 

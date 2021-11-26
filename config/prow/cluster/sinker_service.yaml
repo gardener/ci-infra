@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: sinker
-  namespace: default
+  namespace: prow
   name: sinker
 spec:
   ports:

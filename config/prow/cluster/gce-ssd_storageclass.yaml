@@ -1,7 +1,7 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  namespace: default
+  namespace: prow
   name: gce-ssd
 provisioner: kubernetes.io/gce-pd
 parameters:

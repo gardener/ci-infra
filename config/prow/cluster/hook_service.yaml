@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: hook
-  namespace: default
+  namespace: prow
   name: hook
 spec:
   selector:

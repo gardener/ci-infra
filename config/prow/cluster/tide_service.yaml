@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: tide
-  namespace: default
+  namespace: prow
   name: tide
 spec:
   selector:

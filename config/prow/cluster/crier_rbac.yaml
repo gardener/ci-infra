@@ -5,12 +5,12 @@ metadata:
   annotations:
     iam.gke.io/gcp-service-account: control-plane@k8s-prow.iam.gserviceaccount.com
   name: crier
-  namespace: default
+  namespace: prow
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: default
+  namespace: prow
   name: crier
 rules:
 - apiGroups:
@@ -48,7 +48,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: crier-namespaced
-  namespace: default
+  namespace: prow
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -56,7 +56,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: crier
-  namespace: default
+  namespace: prow
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -70,4 +70,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: crier
-  namespace: default
+  namespace: prow
