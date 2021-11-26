@@ -1,0 +1,7 @@
+aliases:
+  ci-infra-reviewers:
+  - timebertt
+  - rfranzke
+  ci-infra-approvers:
+  - timebertt
+  - rfranzke
