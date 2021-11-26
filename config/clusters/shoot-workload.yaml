@@ -1,8 +1,8 @@
 apiVersion: core.gardener.cloud/v1beta1
 kind: Shoot
 metadata:
-  # registered as test-infra-trusted cluster
-  name: prow
+  # registered as test-infra-untrusted cluster (default workload cluster)
+  name: prow-work
   namespace: garden-garden-ci
 spec:
   addons:
@@ -12,19 +12,6 @@ spec:
       enabled: true
       externalTrafficPolicy: Cluster
   cloudProfileName: gcp
-  dns:
-    providers:
-    - type: aws-route53
-      secretName: aws-route53-ci
-  extensions:
-  - type: shoot-cert-service
-    providerConfig:
-      apiVersion: service.cert.extensions.gardener.cloud/v1alpha1
-      kind: CertConfig
-      issuers:
-      - name: ci-issuer
-        server: 'https://acme-v02.api.letsencrypt.org/directory'
-        email: tim.ebert@sap.com
   kubernetes:
     allowPrivilegedContainers: true
     kubeAPIServer:
@@ -58,24 +45,6 @@ spec:
       kind: ControlPlaneConfig
       zone: europe-west1-c
     workers:
-    - name: controlplane
-      machine:
-        image:
-          name: gardenlinux
-          version: 318.8.0
-        type: e2-standard-4
-      minimum: 1
-      maximum: 3
-      maxSurge: 1
-      maxUnavailable: 0
-      # TODO: add taints to repel test-pods
-      systemComponents:
-        allow: true
-      volume:
-        size: 50Gi
-        type: pd-ssd
-      zones:
-      - europe-west1-c
     - name: worker
       machine:
         image:
@@ -87,7 +56,7 @@ spec:
       maxSurge: 1
       maxUnavailable: 0
       systemComponents:
-        allow: false
+        allow: true
       volume:
         size: 100Gi
         type: pd-ssd
