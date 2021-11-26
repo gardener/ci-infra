@@ -1,18 +1,3 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  namespace: prow
-  labels:
-    app: ghproxy
-  name: ghproxy
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: gce-ssd
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,30 +35,11 @@ spec:
       - name: cache
         persistentVolumeClaim:
           claimName: ghproxy
-      # run on our dedicated node
-      tolerations:
-      - key: "dedicated"
-        operator: "Equal"
-        value: "ghproxy"
-        effect: "NoSchedule"
-      nodeSelector:
-        dedicated: "ghproxy"
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: ghproxy
-  namespace: prow
-  name: ghproxy
-spec:
-  ports:
-  - name: main
-    port: 80
-    protocol: TCP
-    targetPort: 8888
-  - name: metrics
-    port: 9090
-  selector:
-    app: ghproxy
-  type: ClusterIP
+#      # run on our dedicated node
+#      tolerations:
+#      - key: "dedicated"
+#        operator: "Equal"
+#        value: "ghproxy"
+#        effect: "NoSchedule"
+#      nodeSelector:
+#        dedicated: "ghproxy"
