@@ -2,18 +2,15 @@
 ---
 triggers:
 - repos:
-  - kubernetes
-  - kubernetes-client
-  - kubernetes-csi
-  - kubernetes-sigs
-  join_org_url: "https://git.k8s.io/community/community-membership.md#member"
+  - gardener/ci-infra
   only_org_members: true
+#  join_org_url: "https://git.k8s.io/community/community-membership.md#member"
 
-owners:
-  mdyamlrepos:
-  - kubernetes/website
-  skip_collaborators:
-  - kubernetes-sigs/contributor-playground
+#owners:
+#  mdyamlrepos:
+#  - kubernetes/website
+#  skip_collaborators:
+#  - kubernetes-sigs/contributor-playground
 
 approve:
 - repos:
@@ -52,113 +49,105 @@ blunderbuss:
   max_request_count: 2
   use_status_availability: true
 
-cat:
-  key_path: /etc/cat-api/api-key
-
-goose:
-  key_path: /etc/unsplash-api/honk.txt
-
 heart:
-  adorees:
-  - mirandachrist
   commentregexp: ".*"
 
-slack:
-  mergewarnings:
-  - repos:
-    - kubernetes/community
-    - kubernetes/org
-    channels:
-    - sig-contribex
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/enhancements
-    channels:
-    - enhancements
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/utils
-    - kubernetes/component-helpers
-    channels:
-    - sig-architecture
-    exempt_users:
-    - k8s-ci-robot
-    - k8s-publishing-bot
-  - repos:
-    - kubernetes/api
-    - kubernetes/apiextensions-apiserver
-    - kubernetes/apimachinery
-    - kubernetes/apiserver
-    - kubernetes/client-go
-    - kubernetes/code-generator
-    - kubernetes/component-base
-    - kubernetes/controller-manager
-    - kubernetes/kube-aggregator
-    - kubernetes/kube-controller-manager
-    - kubernetes/sample-apiserver
-    - kubernetes/sample-controller
-    channels:
-    - sig-api-machinery
-    exempt_users:
-    - k8s-publishing-bot
-  - repos:
-    - kubernetes/pod-security-admission
-    channels:
-    - sig-auth
-    exempt_users:
-    - k8s-publishing-bot
-  - repos:
-    - kubernetes/kubernetes
-    channels:
-    - github-management
-    exempt_users:
-    - k8s-ci-robot # future home of tide
-    - k8s-release-robot # anago
-    exempt_branches:
-        feature-serverside-apply:
-            - lavalamp # feature-serverside-apply "branch manager"
-            - apelisse # feature-serverside-apply "branch manager"
-        feature-rate-limiting:
-            - lavalamp # feature-rate-limiting "branch manager"
-            - deads2k # feature-rate-limiting "branch manager"
-  - repos:
-    - kubernetes/test-infra
-    channels:
-    - testing-ops
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/sig-release
-    channels:
-    - release-management
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/release
-    channels:
-    - release-management
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/k8s.io
-    channels:
-    - sig-k8s-infra
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/kops
-    channels:
-    - kops-dev
-    exempt_users:
-    - k8s-ci-robot
-  - repos:
-    - kubernetes/cluster-api-provider-aws
-    channels:
-    - cluster-api-aws
-    exempt_users:
-    - k8s-ci-robot
+#slack:
+#  mergewarnings:
+#  - repos:
+#    - kubernetes/community
+#    - kubernetes/org
+#    channels:
+#    - sig-contribex
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/enhancements
+#    channels:
+#    - enhancements
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/utils
+#    - kubernetes/component-helpers
+#    channels:
+#    - sig-architecture
+#    exempt_users:
+#    - k8s-ci-robot
+#    - k8s-publishing-bot
+#  - repos:
+#    - kubernetes/api
+#    - kubernetes/apiextensions-apiserver
+#    - kubernetes/apimachinery
+#    - kubernetes/apiserver
+#    - kubernetes/client-go
+#    - kubernetes/code-generator
+#    - kubernetes/component-base
+#    - kubernetes/controller-manager
+#    - kubernetes/kube-aggregator
+#    - kubernetes/kube-controller-manager
+#    - kubernetes/sample-apiserver
+#    - kubernetes/sample-controller
+#    channels:
+#    - sig-api-machinery
+#    exempt_users:
+#    - k8s-publishing-bot
+#  - repos:
+#    - kubernetes/pod-security-admission
+#    channels:
+#    - sig-auth
+#    exempt_users:
+#    - k8s-publishing-bot
+#  - repos:
+#    - kubernetes/kubernetes
+#    channels:
+#    - github-management
+#    exempt_users:
+#    - k8s-ci-robot # future home of tide
+#    - k8s-release-robot # anago
+#    exempt_branches:
+#        feature-serverside-apply:
+#            - lavalamp # feature-serverside-apply "branch manager"
+#            - apelisse # feature-serverside-apply "branch manager"
+#        feature-rate-limiting:
+#            - lavalamp # feature-rate-limiting "branch manager"
+#            - deads2k # feature-rate-limiting "branch manager"
+#  - repos:
+#    - kubernetes/test-infra
+#    channels:
+#    - testing-ops
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/sig-release
+#    channels:
+#    - release-management
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/release
+#    channels:
+#    - release-management
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/k8s.io
+#    channels:
+#    - sig-k8s-infra
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/kops
+#    channels:
+#    - kops-dev
+#    exempt_users:
+#    - k8s-ci-robot
+#  - repos:
+#    - kubernetes/cluster-api-provider-aws
+#    channels:
+#    - cluster-api-aws
+#    exempt_users:
+#    - k8s-ci-robot
 
 #milestone_applier:
 #  kubernetes/enhancements:
@@ -319,18 +308,18 @@ config_updater:
       name: config
       clusters:
         test-infra-trusted:
-          - default
+        - prow
     config/prow/plugins.yaml:
       name: plugins
       clusters:
         test-infra-trusted:
-          - default
+        - prow
     config/jobs/**/*.yaml:
       name: job-config
       gzip: true
       clusters:
         test-infra-trusted:
-          - default
+        - prow
 
 #welcome:
 #- repos:
@@ -371,11 +360,9 @@ plugins:
     - assign
     - blockade
     - blunderbuss
-    - cat
-    - cla
+    - config-updater
     - dog
     - golint
-    - goose
     - heart
     - help
     - hold
@@ -385,22 +372,16 @@ plugins:
     - lifecycle
     - mergecommitblocker
     - milestone
-    - milestoneapplier
-    - milestonestatus
     - override
     - owners-label
-    - pony
     - retitle
     - shrug
-    - sigmention
     - size
     - skip
-    - slackevents
     - transfer-issue
     - trick-or-treat
     - trigger
     - verify-owners
-    - welcome
     - wip
     - yuks
 

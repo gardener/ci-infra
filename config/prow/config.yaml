@@ -17,9 +17,6 @@ plank:
         sidecar: "gcr.io/k8s-prow/sidecar:v20210928-0afc0f8086"
       gcs_configuration:
         bucket: "gardener-prow"
-#        path_strategy: "legacy"
-        default_org: "gardener"
-        default_repo: "gardener"
       gcs_credentials_secret: "gardener-prow-storage"
       resources:
         clonerefs:
@@ -44,9 +41,9 @@ sinker:
 deck:
   spyglass:
     size_limit: 100000000 # 100MB
-    gcs_browser_prefix: https://gcsweb.k8s.io/gcs/
-    testgrid_config: gs://k8s-testgrid/config
-    testgrid_root: https://testgrid.k8s.io/
+#    gcs_browser_prefix: https://gcsweb.k8s.io/gcs/
+#    testgrid_config: gs://k8s-testgrid/config
+#    testgrid_root: https://testgrid.k8s.io/
     lenses:
     - lens:
         name: metadata
@@ -86,16 +83,10 @@ deck:
       required_files:
         - artifacts/.*\.link\.txt
   tide_update_period: 1s
-#  hidden_repos:
-#  - kubernetes-security
-#  google_analytics: UA-82843984-5
   rerun_auth_configs:
     '*':
       github_team_ids:
       - 5415312 # ci-infra-maintainers
-#  additional_allowed_buckets:
-#    - k8s-ovn
-#    - containerd-integration
 
 prowjob_namespace: prow
 pod_namespace: test-pods
@@ -512,10 +503,11 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-  - author: k8s-ci-robot
-    labels: # k8s-ci-robot should only create autobump PR with this label
+  - author: gardener-prow[bot]
+    repos:
+    - gardener/ci-infra
+    labels: # prow should only create autobump PR with this label
     - skip-review
-    - "cncf-cla: yes"
     missingLabels:
     - do-not-merge
     - do-not-merge/blocked-paths
@@ -526,25 +518,6 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    repos:
-    - kubernetes/test-infra
-  - author: k8s-infra-ci-robot
-    labels: # k8s-infra-ci-robot should only create autobump PR with this label
-    - skip-review
-    - "cncf-cla: yes"
-    missingLabels:
-    - do-not-merge
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    repos:
-    - kubernetes/k8s.io
-    - kubernetes/test-infra
 
   merge_method:
     gardener/ci-infra: squash
@@ -554,14 +527,10 @@ tide:
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
-#  context_options:
-#    orgs:
-#      kubernetes:
-#        optional-contexts:
-#        - "EasyCLA" # NOTE(cblecker): This is temporary until we fully roll out EasyCLA
-#        repos:
-#          dashboard:
-#            from-branch-protection: true
+  context_options:
+    orgs:
+      gardener:
+        from-branch-protection: true
   batch_size_limit:
     "kubernetes/kubernetes": 15
   priority:
