@@ -3,7 +3,9 @@ apiVersion: storage.k8s.io/v1
 metadata:
   namespace: prow
   name: gce-ssd
-provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
+allowVolumeExpansion: true
+provisioner: pd.csi.storage.gke.io
 reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
