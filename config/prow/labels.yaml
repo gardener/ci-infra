@@ -1,0 +1,236 @@
+# default: global configuration to be applied to all repos
+# repos: list of repos with specific configuration to be applied in addition to default
+#   labels: list of labels - keys for each item: color, description, name, target, deleteAfter, previously
+#     deleteAfter: 2006-01-02T15:04:05Z (rfc3339)
+#     previously: list of previous labels (color name deleteAfter, previously)
+#     target: one of issues, prs, or both (also TBD)
+#     addedBy: human? prow plugin? other?
+---
+repos:
+  gardener/ci-infra:
+    labels:
+      - color: 0ffa16
+        description: Indicates a PR has been approved by an approver from all required OWNERS files.
+        name: approved
+        target: prs
+        prowPlugin: approve
+        addedBy: approvers
+      - color: fef2c0
+        description: Indicates a cherry-pick PR into a release branch has been approved by the release branch manager. # Consumed by the kubernetes/kubernetes cherry-pick-queue.
+        name: cherry-pick-approved
+        target: prs
+        addedBy: humans
+      - color: 8fc951
+        description: Indicates an issue or PR is ready to be actively worked on.
+        name: triage/accepted
+        target: both
+        prowPlugin: label
+        addedBy: org members
+      - color: d455d0
+        description: Indicates an issue is a duplicate of other open issue.
+        name: triage/duplicate
+        target: both
+        addedBy: humans
+      - color: d455d0
+        description: Indicates an issue needs more information in order to work on it.
+        name: triage/needs-information
+        target: both
+        addedBy: humans
+      - color: d455d0
+        description: Indicates an issue can not be reproduced as described.
+        name: triage/not-reproducible
+        target: both
+        addedBy: humans
+      - color: d455d0
+        description: Indicates an issue that can not or will not be resolved.
+        name: triage/unresolved
+        target: both
+        addedBy: humans
+      - color: e11d21
+        description: Indicates that a PR should not merge because it touches files in blocked paths.
+        name: do-not-merge/blocked-paths
+        target: prs
+        prowPlugin: blockade
+        addedBy: prow
+      - color: e11d21
+        description: Indicates that a PR is not yet approved to merge into a release branch.
+        name: do-not-merge/cherry-pick-not-approved
+        target: prs
+        addedBy: prow
+        prowPlugin: cherrypickunapproved
+      - color: e11d21
+        description: Indicates that a PR should not merge because someone has issued a /hold command.
+        name: do-not-merge/hold
+        target: prs
+        prowPlugin: hold
+        addedBy: anyone
+      - color: e11d21
+        description: Indicates that a PR should not merge because it has an invalid commit message.
+        name: do-not-merge/invalid-commit-message
+        target: prs
+        prowPlugin: invalidcommitmsg
+        addedBy: prow
+      - color: e11d21
+        description: Indicates that a PR should not merge because it has an invalid OWNERS file in it.
+        name: do-not-merge/invalid-owners-file
+        target: prs
+        prowPlugin: verify-owners
+        addedBy: prow
+      - color: e11d21
+        description: Indicates that a PR should not merge because it's missing one of the release note labels.
+        name: do-not-merge/release-note-label-needed
+        target: prs
+        prowPlugin: releasenote
+        addedBy: prow
+      - color: e11d21
+        description: Indicates that a PR should not merge because it is a work in progress.
+        name: do-not-merge/work-in-progress
+        target: prs
+        prowPlugin: wip
+        addedBy: prow
+      - color: e11d21
+        description: Indicates a PR which contains merge commits.
+        name: do-not-merge/contains-merge-commits
+        target: prs
+        prowPlugin: mergecommitblocker
+        addedBy: prow
+      - color: e11d21
+        description: Indicates a PR lacks a `kind/foo` label and requires one.
+        name: do-not-merge/needs-kind
+        target: prs
+        prowPlugin: require-matching-label
+        addedBy: prow
+      - color: 7057ff
+        description: Denotes an issue ready for a new contributor, according to the "help wanted" guidelines.
+        name: 'good first issue'
+        target: issues
+        prowPlugin: help
+        addedBy: anyone
+      - color: 006b75
+        description: Denotes an issue that needs help from a contributor. Must meet "help wanted" guidelines.
+        name: 'help wanted'
+        target: issues
+        prowPlugin: help
+        addedBy: anyone
+      - color: 15dd18
+        description: Indicates that a PR is ready to be merged.
+        name: lgtm
+        target: prs
+        prowPlugin: lgtm
+        addedBy: reviewers or members
+      - color: d3e2f0
+        description: Indicates that an issue or PR should not be auto-closed due to staleness.
+        name: lifecycle/frozen
+        target: both
+        prowPlugin: lifecycle
+        addedBy: anyone
+      - color: 8fc951
+        description: Indicates that an issue or PR is actively being worked on by a contributor.
+        name: lifecycle/active
+        target: both
+        prowPlugin: lifecycle
+        addedBy: anyone
+      - color: "604460"
+        description: Denotes an issue or PR that has aged beyond stale and will be auto-closed.
+        name: lifecycle/rotten
+        target: both
+        prowPlugin: lifecycle
+        addedBy: anyone or prow
+      - color: "795548"
+        description: Denotes an issue or PR has remained open with no activity and has become stale.
+        name: lifecycle/stale
+        target: both
+        prowPlugin: lifecycle
+        addedBy: anyone or prow
+      - color: ededed
+        description: Indicates a PR lacks a `kind/foo` label and requires one.
+        name: needs-kind
+        target: prs
+        prowPlugin: require-matching-label
+        addedBy: prow
+      - color: b60205
+        description: Indicates a PR that requires an org member to verify it is safe to test. # This is to prevent spam/abuse of our CI system, and can be circumvented by becoming an org member. Org members can remove this label with the `/ok-to-test` command.
+        name: needs-ok-to-test
+        target: prs
+        prowPlugin: trigger
+        addedBy: prow
+      - color: e11d21
+        description: Indicates a PR cannot be merged because it has merge conflicts with HEAD.
+        name: needs-rebase
+        target: prs
+        prowPlugin: needs-rebase
+        isExternalPlugin: true
+        addedBy: prow
+      - color: 15dd18
+        description: Indicates a non-member PR verified by an org member that is safe to test. # This is the opposite of needs-ok-to-test and should be mutually exclusive.
+        name: ok-to-test
+        target: prs
+        prowPlugin: trigger
+        addedBy: prow
+      - color: ee9900
+        description: Denotes a PR that changes 100-499 lines, ignoring generated files.
+        name: size/L
+        target: prs
+        prowPlugin: size
+        addedBy: prow
+      - color: eebb00
+        description: Denotes a PR that changes 30-99 lines, ignoring generated files.
+        name: size/M
+        target: prs
+        prowPlugin: size
+        addedBy: prow
+      - color: 77bb00
+        description: Denotes a PR that changes 10-29 lines, ignoring generated files.
+        name: size/S
+        target: prs
+        prowPlugin: size
+        addedBy: prow
+      - color: ee5500
+        description: Denotes a PR that changes 500-999 lines, ignoring generated files.
+        name: size/XL
+        target: prs
+        prowPlugin: size
+        addedBy: prow
+      - color: "009900"
+        description: Denotes a PR that changes 0-9 lines, ignoring generated files.
+        name: size/XS
+        target: prs
+        prowPlugin: size
+        addedBy: prow
+      - color: ee0000
+        description: Denotes a PR that changes 1000+ lines, ignoring generated files.
+        name: size/XXL
+        target: prs
+        prowPlugin: size
+        addedBy: prow
+      - color: ffaa00
+        description: Denotes a PR that should be squashed by tide when it merges.
+        name: tide/merge-method-squash
+        target: prs
+        addedBy: humans
+      - color: ffaa00
+        description: Denotes a PR that should be rebased by tide when it merges.
+        name: tide/merge-method-rebase
+        target: prs
+        addedBy: humans
+      - color: ffaa00
+        description: Denotes a PR that should use a standard merge by tide when it merges.
+        name: tide/merge-method-merge
+        target: prs
+        addedBy: humans
+      - color: e11d21
+        description: Denotes an issue that blocks the tide merge queue for a branch while it is open.
+        name: tide/merge-blocker
+        target: issues
+        addedBy: humans
+      - color: 0ffa16
+        description: Indicates a PR is trusted, used by tide for auto-merging PRs.
+        name: skip-review
+        target: prs
+        addedBy: autobump bot
+      - color: f9d0c4
+        description: ¯\\\_(ツ)_/¯
+        name: "¯\\_(ツ)_/¯"
+        target: both
+        prowPlugin: shrug
+        addedBy: humans
