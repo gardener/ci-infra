@@ -25,9 +25,11 @@ spec:
         - --dry-run=false
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
+        - --github-graphql-endpoint=http://ghproxy/graphql
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --history-uri=gs://gardener-prow/tide-history.json
+        - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
         - --status-path=gs://gardener-prow/tide-status-checkpoint.yaml
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
@@ -52,6 +54,9 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
+        - name: gcs-credentials
+          mountPath: /etc/gcs-credentials
+          readOnly: true
       volumes:
       - name: github-app
         secret:
@@ -62,3 +67,6 @@ spec:
       - name: job-config
         configMap:
           name: job-config
+      - name: gcs-credentials
+        secret:
+          secretName: gardener-prow-storage

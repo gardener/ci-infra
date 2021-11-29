@@ -29,6 +29,8 @@ spec:
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --job-config-path=/etc/job-config
+        - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
+        - --status-path=gs://gardener-prow/status-reconciler-status
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
         env:
@@ -50,6 +52,9 @@ spec:
         - name: plugins
           mountPath: /etc/plugins
           readOnly: true
+        - name: gcs-credentials
+          mountPath: /etc/gcs-credentials
+          readOnly: true
       volumes:
       - name: github-app
         secret:
@@ -63,3 +68,6 @@ spec:
       - name: plugins
         configMap:
           name: plugins
+      - name: gcs-credentials
+        secret:
+          secretName: gardener-prow-storage

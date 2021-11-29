@@ -23,6 +23,7 @@ spec:
         args:
         - --blob-storage-workers=1
         - --config-path=/etc/config/config.yaml
+        - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --github-workers=5
@@ -57,6 +58,9 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
+        - name: gcs-credentials
+          mountPath: /etc/gcs-credentials
+          readOnly: true
 #        - name: slack
 #          mountPath: /etc/slack
 #          readOnly: true
@@ -77,3 +81,6 @@ spec:
         secret:
           defaultMode: 420
           secretName: kubeconfig
+      - name: gcs-credentials
+        secret:
+          secretName: gardener-prow-storage

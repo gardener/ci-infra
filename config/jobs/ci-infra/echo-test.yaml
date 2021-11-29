@@ -1,7 +1,8 @@
 periodics:
-- interval: 10m
+- name: echo-test
+  interval: 10m
   agent: kubernetes
-  name: echo-test
+  decorate: true
   spec:
     containers:
     - image: alpine

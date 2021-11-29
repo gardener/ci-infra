@@ -24,8 +24,12 @@ after they have been reviewed. All job configs are located in [`config/jobs`].
    ```bash
    $ kubectl apply -f config/prow/cluster/prow_namespace.yaml
    ```
-1. Create the required secrets in the prow cluster:
-  - `gardener-prow-storage` (Service account with `Storage Admin` permissions for GCS bucket, according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#configure-a-gcs-bucket))
+1. Create the `test-pods` namespace in the workload/build cluster:
+   ```bash
+   $ kubectl apply -f config/prow/cluster/test-pods_namespace.yaml
+   ```   
+1. Create the required secrets (mainly in the prow cluster):
+  - `gardener-prow-storage` (Service account with `Storage Admin` permissions for GCS bucket, according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#configure-a-gcs-bucket), needs to be present in the `prow` namespace and in the `test-pods` namespace in both clusters)
   - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
   - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
   - `hmac-token`
