@@ -40,7 +40,7 @@ after they have been reviewed. All job configs are located in [`config/jobs`].
     ```bash
     $ kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
     ```
-  - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters))
+  - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
     - add two contexts: the prow cluster as `gardener-prow-trusted` and the build/workload cluster as `gardener-prow-build`
     - `gardener-prow-trusted` context should use the in-cluster `ServiceAccount` token and CA file, so that all Prow components are bound to their respective RBAC roles
     - `gardener-prow-build` needs to be bound to the `cluster-admin` role. The [gencred](https://github.com/kubernetes/test-infra/tree/master/gencred) utility can be used to easily create a `ServiceAccount` and `ClusterRoleBinding` and retrieve the `ServiceAccount` token.

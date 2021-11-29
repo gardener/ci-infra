@@ -75,6 +75,7 @@ prow_components=(
 "tide_deployment.yaml"
 "tide_rbac.yaml"
 "tide_service.yaml"
+"trusted_serviceaccounts.yaml"
 )
 
 prow_components_build=(
@@ -96,13 +97,16 @@ ensure-context() {
   return 1
 }
 
-current_context=$(kubectl config current-context 2>/dev/null || true)
-restore-context() {
-  if [[ -n "$current_context" ]]; then
-    kubectl config set-context "$current_context"
-  fi
+# create temporary kubeconfig copy that we can modify (switch contexts)
+# in the deploy job pod, the kubeconfig is mounted from a secret and secret mounts are read-only filesystems
+temp_kubeconfig=$(mktemp)
+cleanup-kubeconfig() {
+  rm -f "$temp_kubeconfig"
 }
-trap restore-context EXIT
+trap cleanup-kubeconfig EXIT
+
+kubectl config view --raw > "$temp_kubeconfig"
+export KUBECONFIG="$temp_kubeconfig"
 
 echo -n "$(color-step "Ensuring contexts exist"):"
 ensure-context gardener-prow-trusted
@@ -110,7 +114,7 @@ ensure-context gardener-prow-build
 echo " $(color-green done)"
 
 echo "$(color-step "Deploying prow components to gardener-prow-trusted cluster...")"
-kubectl config set-context gardener-prow-trusted
+kubectl config use-context gardener-prow-trusted
 # use server-side apply for CRD, otherwise annotation will be too long
 kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/prowjob_customresourcedefinition.yaml"
 
@@ -120,7 +124,7 @@ done
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying prow components to gardener-prow-build cluster...")"
-kubectl config set-context gardener-prow-build
+kubectl config use-context gardener-prow-build
 for c in "${prow_components_build[@]}"; do
   kubectl apply -f "$SCRIPT_DIR/cluster/$c"
 done
