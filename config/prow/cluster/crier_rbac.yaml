@@ -2,8 +2,6 @@
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  annotations:
-    iam.gke.io/gcp-service-account: control-plane@k8s-prow.iam.gserviceaccount.com
   name: crier
   namespace: prow
 ---
