@@ -1,7 +1,7 @@
 apiVersion: core.gardener.cloud/v1beta1
 kind: Shoot
 metadata:
-  # registered as test-infra-trusted cluster
+  # registered as gardener-prow-trusted cluster
   name: prow
   namespace: garden-garden-ci
 spec:

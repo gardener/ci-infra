@@ -302,23 +302,23 @@ config_updater:
     config/prow/labels.yaml:
       name: label-config
       clusters:
-        test-infra-trusted:
+        gardener-prow-trusted:
         - prow
     config/prow/config.yaml:
       name: config
       clusters:
-        test-infra-trusted:
+        gardener-prow-trusted:
         - prow
     config/prow/plugins.yaml:
       name: plugins
       clusters:
-        test-infra-trusted:
+        gardener-prow-trusted:
         - prow
     config/jobs/**/*.yaml:
       name: job-config
       gzip: true
       clusters:
-        test-infra-trusted:
+        gardener-prow-trusted:
         - prow
 
 #welcome:
