@@ -75,7 +75,11 @@ after they have been reviewed. All job configs are located in [`config/jobs`].
         user:
           token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
       ```
-1. Deploy Prow components:
+1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
    $ ./config/prow/deploy.sh
+   ```
+1. Bootstrap Prow configuration/jobs. This initial configuration has to be done manually, later on changes to configuration and jobs will be automatically applied by the [`updateconfig`](https://github.com/kubernetes/test-infra/tree/master/prow/plugins/updateconfig) plugin once merged into master.
+   ```bash
+   $ ./hack/boostrap-config.sh
    ```
