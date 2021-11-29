@@ -70,7 +70,7 @@ after they have been reviewed. All job configs are located in [`config/jobs`].
       users:
       - name: gardener-prow-trusted-token
         user:
-          token-file: /var/run/secrets/kubernetes.io/serviceaccount/token # use in-cluster config
+          tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token # use in-cluster config
       - name: gardener-prow-build-token
         user:
           token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
