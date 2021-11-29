@@ -26,12 +26,17 @@ if [ -z "$kubeconfig" ] ; then
 fi
 
 docker run --rm -w /etc/ci-infra -v $PWD/config:/etc/ci-infra/config \
-  -v "$kubeconfig":/etc/kubeconfig \
-  gcr.io/k8s-prow/config-bootstrapper:v20211126-48cb2fc883 \
-  --kubeconfig=/etc/kubeconfig \
-  --source-path=.  \
+  gcr.io/k8s-prow/checkconfig:v20211126-48cb2fc883 \
   --config-path=config/prow/config.yaml \
-  --plugin-config=config/prow/plugins.yaml \
   --job-config-path=config/jobs \
-  --dry-run=false \
+  --plugin-config=config/prow/plugins.yaml \
+  --strict \
+  --warnings=mismatched-tide-lenient \
+  --warnings=tide-strict-branch \
+  --warnings=needs-ok-to-test \
+  --warnings=validate-owners \
+  --warnings=missing-trigger \
+  --warnings=validate-urls \
+  --warnings=unknown-fields \
+  --warnings=duplicate-job-refs
   $@
