@@ -13,25 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit
-set -o nounset
-set -o pipefail
+# Usage: mkpj.sh --job=foo ...
+#
+# Arguments to this script will be passed to a dockerized mkpj
+#
+# Example Usage:
+# config/mkpj.sh --job=post-test-infra-push-bootstrap | kubectl create -f -
+#
+# NOTE: kubectl should be pointed at the prow services cluster you intend
+# to create the prowjob in!
 
 cd "$(git rev-parse --show-toplevel)"
 
-kubeconfig="${KUBECONFIG:-}"
-if [ -z "$kubeconfig" ] ; then
-  echo "Error: no kubeconfig given. Please set KUBECONFIG."
-  exit 1
-fi
-
-docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  -v "$kubeconfig":/etc/kubeconfig \
-  gcr.io/k8s-prow/config-bootstrapper:v20211126-48cb2fc883 \
-  --kubeconfig=/etc/kubeconfig \
-  --source-path=.  \
+docker run -i --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
+  gcr.io/k8s-prow/mkpj:v20211126-48cb2fc883 \
   --config-path=config/prow/config.yaml \
-  --plugin-config=config/prow/plugins.yaml \
   --job-config-path=config/jobs \
-  --dry-run=false \
-  $@
+  "$@"
