@@ -29,53 +29,53 @@ after they have been reviewed. All job configs are located in [`config/jobs`].
    $ kubectl apply -f config/prow/cluster/build
    ```   
 1. Create the required secrets (mainly in the prow cluster):
-  - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`)
-  - `gardener-prow-storage` (Service account with `Storage Admin` permissions for GCS bucket, according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#configure-a-gcs-bucket), needs to be present in the `prow` namespace and in the `test-pods` namespace in both clusters)
-  - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
-  - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
-  - `hmac-token`
-    ```bash
-    $ kubectl -n prow create secret generic hmac-token --from-literal=hmac=$(openssl rand -hex 20)
-    ```
-  - `oauth-cookie-secret`
-    ```bash
-    $ kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
-    ```
-  - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
-    - add two contexts: the prow cluster as `gardener-prow-trusted` and the build/workload cluster as `gardener-prow-build`
-    - `gardener-prow-trusted` context should use the in-cluster `ServiceAccount` token and CA file, so that all Prow components are bound to their respective RBAC roles
-    - `gardener-prow-build` needs to be bound to the `cluster-admin` role. The [gencred](https://github.com/kubernetes/test-infra/tree/master/gencred) utility can be used to easily create a `ServiceAccount` and `ClusterRoleBinding` and retrieve the `ServiceAccount` token.
-    - Template:
-      ```yaml
-      apiVersion: v1
-      kind: Config
-      current-context: gardener-prow-build # default cluster
-      contexts:
-      - name: gardener-prow-trusted
-        context:
-          cluster: gardener-prow-trusted
-          user: gardener-prow-trusted-token
-      - name: gardener-prow-build
-        context:
-          cluster: gardener-prow-build
-          user: gardener-prow-build-token
-      clusters:
-      - name: gardener-prow-trusted
-        cluster: # in-cluster config
-          server: 'https://kubernetes.default.svc'
-          certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      - name: gardener-prow-build
-        cluster:
-          server: <<workload-cluster-api-server-address>>
-          certificate-authority-data: <<base64-encoded-CA-bundle>>
-      users:
-      - name: gardener-prow-trusted-token
-        user:
-          tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token # use in-cluster config
-      - name: gardener-prow-build-token
-        user:
-          token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
+    - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`)
+    - `gardener-prow-storage` (Service account with `Storage Admin` permissions for GCS bucket, according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#configure-a-gcs-bucket), needs to be present in the `prow` namespace and in the `test-pods` namespace in both clusters)
+    - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
+    - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
+    - `hmac-token`
+      ```bash
+      $ kubectl -n prow create secret generic hmac-token --from-literal=hmac=$(openssl rand -hex 20)
       ```
+    - `oauth-cookie-secret`
+      ```bash
+      $ kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
+      ```
+    - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
+      - add two contexts: the prow cluster as `gardener-prow-trusted` and the build/workload cluster as `gardener-prow-build`
+      - `gardener-prow-trusted` context should use the in-cluster `ServiceAccount` token and CA file, so that all Prow components are bound to their respective RBAC roles
+      - `gardener-prow-build` needs to be bound to the `cluster-admin` role. The [gencred](https://github.com/kubernetes/test-infra/tree/master/gencred) utility can be used to easily create a `ServiceAccount` and `ClusterRoleBinding` and retrieve the `ServiceAccount` token.
+      - Template:
+        ```yaml
+        apiVersion: v1
+        kind: Config
+        current-context: gardener-prow-build # default cluster
+        contexts:
+        - name: gardener-prow-trusted
+          context:
+            cluster: gardener-prow-trusted
+            user: gardener-prow-trusted-token
+        - name: gardener-prow-build
+          context:
+            cluster: gardener-prow-build
+            user: gardener-prow-build-token
+        clusters:
+        - name: gardener-prow-trusted
+          cluster: # in-cluster config
+            server: 'https://kubernetes.default.svc'
+            certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        - name: gardener-prow-build
+          cluster:
+            server: <<workload-cluster-api-server-address>>
+            certificate-authority-data: <<base64-encoded-CA-bundle>>
+        users:
+        - name: gardener-prow-trusted-token
+          user:
+            tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token # use in-cluster config
+        - name: gardener-prow-build-token
+          user:
+            token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
+        ```
 1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
    $ ./config/prow/deploy.sh
