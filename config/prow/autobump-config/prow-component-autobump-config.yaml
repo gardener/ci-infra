@@ -1,0 +1,20 @@
+---
+gitHubLogin: "gardener-ci-robot"
+gitHubToken: "/etc/github-token/token"
+gitName: "Gardener Prow Robot"
+gitEmail: "gardener.ci.robot@gmail.com"
+skipPullRequest: false
+gitHubOrg: "gardener"
+gitHubRepo: "ci-infra"
+remoteName: "ci-infra"
+upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
+includedConfigPaths:
+  - "."
+targetVersion: "latest"
+prefixes:
+  - name: "Prow"
+    prefix: "gcr.io/k8s-prow/"
+    refConfigFile: "config/prow/cluster/deck_deployment.yaml"
+    repo: "https://github.com/kubernetes/test-infra"
+    summarise: true
+    consistentImages: true

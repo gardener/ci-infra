@@ -32,3 +32,51 @@ periodics:
     - name: github-token
       secret:
         secretName: github-token
+
+- cron: "30 * * * 1-5"
+  name: ci-prow-autobump
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211126-48cb2fc883
+      command:
+      - /app/prow/cmd/generic-autobumper/app.binary
+      args:
+      - --config=config/prow/autobump-config/prow-component-autobump-config.yaml
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
+
+- cron: "45 * * * 1-5"
+  name: ci-prow-autobump-jobs
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211126-48cb2fc883
+      command:
+      - /app/prow/cmd/generic-autobumper/app.binary
+      args:
+      - --config=config/prow/autobump-config/prow-job-autobump-config.yaml
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
