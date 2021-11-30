@@ -1,0 +1,98 @@
+apiVersion: core.gardener.cloud/v1beta1
+kind: Shoot
+metadata:
+  # registered as gardener-prow-trusted cluster
+  name: prow
+  namespace: garden-garden-ci
+spec:
+  addons:
+    kubernetesDashboard:
+      enabled: false
+    nginxIngress:
+      enabled: true
+      externalTrafficPolicy: Cluster
+  cloudProfileName: gcp
+  dns:
+    providers:
+    - type: aws-route53
+      secretName: aws-route53-ci
+  extensions:
+  - type: shoot-cert-service
+    providerConfig:
+      apiVersion: service.cert.extensions.gardener.cloud/v1alpha1
+      kind: CertConfig
+      issuers:
+      - name: ci-issuer
+        server: 'https://acme-v02.api.letsencrypt.org/directory'
+        email: tim.ebert@sap.com
+  kubernetes:
+    allowPrivilegedContainers: true
+    kubeAPIServer:
+      enableBasicAuthentication: false
+    kubeProxy:
+      mode: IPTables
+    version: 1.21.5
+    verticalPodAutoscaler:
+      enabled: true
+  maintenance:
+    autoUpdate:
+      kubernetesVersion: true
+      machineImageVersion: true
+    timeWindow:
+      begin: 030000+0200
+      end: 040000+0200
+  networking:
+    type: calico
+    pods: 100.96.0.0/11
+    nodes: 10.250.0.0/16
+    services: 100.64.0.0/13
+  provider:
+    type: gcp
+    infrastructureConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: InfrastructureConfig
+      networks:
+        workers: 10.250.0.0/16
+    controlPlaneConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: ControlPlaneConfig
+      zone: europe-west1-c
+    workers:
+    - name: controlplane
+      machine:
+        image:
+          name: gardenlinux
+          version: 318.8.0
+        type: e2-standard-4
+      minimum: 1
+      maximum: 3
+      maxSurge: 1
+      maxUnavailable: 0
+      # TODO: add taints to repel test-pods
+      systemComponents:
+        allow: true
+      volume:
+        size: 50Gi
+        type: pd-ssd
+      zones:
+      - europe-west1-c
+    - name: worker
+      machine:
+        image:
+          name: gardenlinux
+          version: 318.8.0
+        type: e2-standard-16
+      minimum: 1
+      maximum: 5
+      maxSurge: 1
+      maxUnavailable: 0
+      systemComponents:
+        allow: false
+      volume:
+        size: 100Gi
+        type: pd-ssd
+      zones:
+      - europe-west1-c
+  purpose: production
+  region: europe-west1
+  secretBindingName: gcp-gardener-prow

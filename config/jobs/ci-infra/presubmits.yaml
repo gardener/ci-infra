@@ -1,0 +1,24 @@
+presubmits:
+  gardener/ci-infra:
+  - name: pull-ci-infra-prow-checkconfig
+    cluster: gardener-prow-build
+    run_if_changed: '^(config/prow/(config|plugins).yaml$|config/jobs/.*.yaml$)'
+    decorate: true
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/checkconfig:v20211126-48cb2fc883
+        command:
+        - /checkconfig
+        args:
+        - --config-path=config/prow/config.yaml
+        - --job-config-path=config/jobs
+        - --plugin-config=config/prow/plugins.yaml
+        - --strict
+        - --warnings=mismatched-tide-lenient
+        - --warnings=tide-strict-branch
+        - --warnings=needs-ok-to-test
+        - --warnings=validate-owners
+        - --warnings=missing-trigger
+        - --warnings=validate-urls
+        - --warnings=unknown-fields
+        - --warnings=duplicate-job-refs

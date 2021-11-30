@@ -1,0 +1,19 @@
+periodics:
+- name: echo-test
+  interval: 30m
+  cluster: gardener-prow-build
+  agent: kubernetes
+  decorate: true
+  spec:
+    containers:
+    - image: alpine
+      command: ["/bin/date"]
+- name: echo-test-trusted
+  interval: 30m
+  cluster: gardener-prow-trusted
+  agent: kubernetes
+  decorate: true
+  spec:
+    containers:
+    - image: alpine
+      command: ["/bin/date"]

@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: prow
+  name: hook
+  labels:
+    app: hook
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: hook
+  template:
+    metadata:
+      labels:
+        app: hook
+    spec:
+      serviceAccountName: hook
+      terminationGracePeriodSeconds: 180
+      containers:
+      - name: hook
+        image: gcr.io/k8s-prow/hook:v20210928-0afc0f8086
+        imagePullPolicy: Always
+        args:
+        - --dry-run=false
+#        - --slack-token-file=/etc/slack/token
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --config-path=/etc/config/config.yaml
+        - --job-config-path=/etc/job-config
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        env:
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        - name: KUBECONFIG
+          value: "/etc/kubeconfig/config"
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
+        ports:
+        - name: http
+          containerPort: 8888
+        - name: metrics
+          containerPort: 9090
+        volumeMounts:
+        - name: github-app
+          mountPath: /etc/github
+          readOnly: true
+#        - name: slack
+#          mountPath: /etc/slack
+        - name: hmac
+          mountPath: /etc/webhook
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: plugins
+          mountPath: /etc/plugins
+          readOnly: true
+#        - name: cat-api
+#          mountPath: /etc/cat-api
+#          readOnly: true
+#        - name: unsplash-api
+#          mountPath: /etc/unsplash-api
+#          readOnly: true
+        - name: kubeconfig
+          mountPath: /etc/kubeconfig
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 3
+          timeoutSeconds: 600
+      volumes:
+      - name: github-app
+        secret:
+          secretName: github-app
+#      - name: slack
+#        secret:
+#          secretName: slack-token
+      - name: hmac
+        secret:
+          secretName: hmac-token
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+      - name: plugins
+        configMap:
+          name: plugins
+#      - name: cat-api
+#        configMap:
+#          name: cat-api-key
+#      - name: unsplash-api
+#        secret:
+#          secretName: unsplash-api-key
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: prow
+  name: crier
+  labels:
+    app: crier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crier
+  template:
+    metadata:
+      labels:
+        app: crier
+    spec:
+      serviceAccountName: crier
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: crier
+        image: gcr.io/k8s-prow/crier:v20210928-0afc0f8086
+        args:
+        - --blob-storage-workers=1
+        - --config-path=/etc/config/config.yaml
+        - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --github-workers=5
+        - --job-config-path=/etc/job-config
+        - --kubernetes-blob-storage-workers=1
+#        - --slack-token-file=/etc/slack/token
+#        - --slack-workers=1
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        env:
+        # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
+        - name: KUBECONFIG
+          value: "/etc/kubeconfig/config"
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
+        ports:
+        - name: metrics
+          containerPort: 9090
+        volumeMounts:
+        - name: github-app
+          mountPath: /etc/github
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
+        - name: config
+          mountPath: /etc/config
+          readOnly: true
+        - name: job-config
+          mountPath: /etc/job-config
+          readOnly: true
+        - name: gcs-credentials
+          mountPath: /etc/gcs-credentials
+          readOnly: true
+#        - name: slack
+#          mountPath: /etc/slack
+#          readOnly: true
+      volumes:
+      - name: github-app
+        secret:
+          secretName: github-app
+      - name: config
+        configMap:
+          name: config
+      - name: job-config
+        configMap:
+          name: job-config
+#      - name: slack
+#        secret:
+#          secretName: slack-token
+      - name: kubeconfig
+        secret:
+          defaultMode: 420
+          secretName: kubeconfig
+      - name: gcs-credentials
+        secret:
+          secretName: gardener-prow-storage

@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: prow
+  name: prow
+  annotations:
+    cert.gardener.cloud/issuer: ci-issuer
+    cert.gardener.cloud/purpose: managed
+    dns.gardener.cloud/class: garden
+    dns.gardener.cloud/dnsnames: prow.gardener.cloud
+spec:
+  rules:
+  - host: prow.gardener.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: deck
+            port:
+              number: 80
+      - path: /hook
+        pathType: Prefix
+        backend:
+          service:
+            name: hook
+            port:
+              number: 8888
+#      - path: /metrics
+#        backend:
+#          service:
+#            name: pushgateway-external
+#            port:
+#              number: 80
+  tls:
+  - hosts:
+    - prow.gardener.cloud
+    secretName: prow-ingress-tls
