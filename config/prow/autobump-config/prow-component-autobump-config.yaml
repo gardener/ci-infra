@@ -10,6 +10,10 @@ remoteName: "ci-infra"
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
   - "."
+extraFiles:
+  - "config/mkpj.sh"
+  - "hack/bootstrap-config.sh"
+  - "hack/check-config.sh"
 targetVersion: "latest"
 prefixes:
   - name: "Prow"
