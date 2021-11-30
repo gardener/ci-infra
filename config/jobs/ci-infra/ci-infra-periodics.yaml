@@ -1,0 +1,34 @@
+periodics:
+- name: ci-prow-label-sync
+  cron: "17 * * * *"  # Every hour at 17 minutes past the hour
+  cluster: gardener-prow-trusted
+  labels:
+    app: label-sync
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/label_sync:v20210928-0afc0f8086
+      command:
+      - /app/label_sync/app.binary
+      args:
+      - --config=config/prow/labels.yaml
+      - --confirm=true
+      - --only=gardener/ci-infra
+      - --endpoint=http://ghproxy.prow.svc
+      - --endpoint=https://api.github.com
+      # TODO: switch to GitHub App Auth, once it's implemented in label_sync
+      # see https://github.com/kubernetes/test-infra/issues/24143
+      - --token=/etc/github/token
+      - --debug
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token

@@ -299,11 +299,6 @@ heart:
 
 config_updater:
   maps:
-    config/prow/labels.yaml:
-      name: label-config
-      clusters:
-        gardener-prow-trusted:
-        - prow
     config/prow/config.yaml:
       name: config
       clusters:
