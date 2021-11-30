@@ -39,26 +39,22 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --spyglass=true
-        - --rerun-creates-job # TODO: allow only for certain teams
+        - --rerun-creates-job
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --github-oauth-config-file=/etc/githuboauth/secret
         - --cookie-secret=/etc/cookie/secret
         - --plugin-config=/etc/plugins/plugins.yaml
         - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
-        - --github-app-id=$(GITHUB_APP_ID)
-        - --github-app-private-key-path=/etc/github/cert
+        # TODO: switch to GitHub App Auth, once it's implemented in combination with OAuth flow
+        # see https://github.com/kubernetes/test-infra/issues/23870
+        - --github-token-path=/etc/github/token
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
           value: "/etc/kubeconfig/config"
-        - name: GITHUB_APP_ID
-          valueFrom:
-            secretKeyRef:
-              name: github-app
-              key: appid
         volumeMounts:
-        - name: github-app
+        - name: github-token
           mountPath: /etc/github
           readOnly: true
         - name: oauth-config
@@ -96,9 +92,9 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 600
       volumes:
-      - name: github-app
+      - name: github-token
         secret:
-          secretName: github-app
+          secretName: github-token
       - name: oauth-config
         secret:
           secretName: github-oauth-config
