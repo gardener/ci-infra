@@ -13,21 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit
-set -o nounset
-set -o pipefail
+# Usage: mkpj.sh --job=foo ...
+#
+# Arguments to this script will be passed to a dockerized mkpj
+#
+# Example Usage:
+# config/mkpj.sh --job=post-test-infra-push-bootstrap | kubectl create -f -
+#
+# NOTE: kubectl should be pointed at the prow services cluster you intend
+# to create the prowjob in!
 
 cd "$(git rev-parse --show-toplevel)"
 
-pat_path="${GITHUB_PAT_PATH:-}"
-if [ -z "$pat_path" ] ; then
-  echo "Error: no personal access token given. Please set GITHUB_PAT_PATH."
-  exit 1
-fi
-
-docker run --rm -v $PWD/config/prow/labels.yaml:/etc/config/labels.yaml -v "$pat_path":/etc/github/oauth \
-  gcr.io/k8s-prow/label_sync:v20210928-0afc0f8086 \
-  --config /etc/config/labels.yaml \
-  --token /etc/github/oauth \
-  --only gardener/ci-infra \
-  $@
+docker run -i --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
+  gcr.io/k8s-prow/mkpj:v20211126-48cb2fc883 \
+  --config-path=config/prow/config.yaml \
+  --job-config-path=config/jobs \
+  "$@"

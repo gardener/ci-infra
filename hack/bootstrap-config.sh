@@ -25,7 +25,7 @@ if [ -z "$kubeconfig" ] ; then
   exit 1
 fi
 
-docker run --rm -w /etc/ci-infra -v $PWD/config:/etc/ci-infra/config \
+docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
   -v "$kubeconfig":/etc/kubeconfig \
   gcr.io/k8s-prow/config-bootstrapper:v20211126-48cb2fc883 \
   --kubeconfig=/etc/kubeconfig \

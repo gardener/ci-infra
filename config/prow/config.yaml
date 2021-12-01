@@ -506,21 +506,6 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-  - author: gardener-prow[bot]
-    repos:
-    - gardener/ci-infra
-    labels: # prow should only create autobump PR with this label
-    - skip-review
-    missingLabels:
-    - do-not-merge
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
 
   merge_method:
     gardener/ci-infra: squash
@@ -534,8 +519,6 @@ tide:
     orgs:
       gardener:
         from-branch-protection: true
-  batch_size_limit:
-    "kubernetes/kubernetes": 15
   priority:
   - labels: [ "kind/flake", "priority/critical-urgent" ]
   - labels: [ "kind/failing-test", "priority/critical-urgent" ]

@@ -1,0 +1,82 @@
+periodics:
+- name: ci-prow-label-sync
+  cron: "17 * * * *"  # Every hour at 17 minutes past the hour
+  cluster: gardener-prow-trusted
+  labels:
+    app: label-sync
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/label_sync:v20210928-0afc0f8086
+      command:
+      - /app/label_sync/app.binary
+      args:
+      - --config=config/prow/labels.yaml
+      - --confirm=true
+      - --only=gardener/ci-infra
+      - --endpoint=http://ghproxy.prow.svc
+      - --endpoint=https://api.github.com
+      # TODO: switch to GitHub App Auth, once it's implemented in label_sync
+      # see https://github.com/kubernetes/test-infra/issues/24143
+      - --token=/etc/github/token
+      - --debug
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
+
+- cron: "30 * * * 1-5"
+  name: ci-prow-autobump
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211126-48cb2fc883
+      command:
+      - /app/prow/cmd/generic-autobumper/app.binary
+      args:
+      - --config=config/prow/autobump-config/prow-component-autobump-config.yaml
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
+
+- cron: "45 * * * 1-5"
+  name: ci-prow-autobump-jobs
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211126-48cb2fc883
+      command:
+      - /app/prow/cmd/generic-autobumper/app.binary
+      args:
+      - --config=config/prow/autobump-config/prow-job-autobump-config.yaml
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token

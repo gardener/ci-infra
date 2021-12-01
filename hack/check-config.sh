@@ -19,13 +19,7 @@ set -o pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
-kubeconfig="${KUBECONFIG:-}"
-if [ -z "$kubeconfig" ] ; then
-  echo "Error: no kubeconfig given. Please set KUBECONFIG."
-  exit 1
-fi
-
-docker run --rm -w /etc/ci-infra -v $PWD/config:/etc/ci-infra/config \
+docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
   gcr.io/k8s-prow/checkconfig:v20211126-48cb2fc883 \
   --config-path=config/prow/config.yaml \
   --job-config-path=config/jobs \
