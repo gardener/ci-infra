@@ -9,6 +9,9 @@ periodics:
   - org: gardener
     repo: ci-infra
     base_ref: master
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
   spec:
     containers:
     - image: gcr.io/k8s-prow/label_sync:v20211201-aa97daa0b4
@@ -41,6 +44,9 @@ periodics:
   - org: gardener
     repo: ci-infra
     base_ref: master
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20211201-aa97daa0b4
@@ -65,6 +71,9 @@ periodics:
   - org: gardener
     repo: ci-infra
     base_ref: master
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20211201-aa97daa0b4
