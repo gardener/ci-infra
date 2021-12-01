@@ -28,9 +28,9 @@ All job configs are located in [`config/jobs`](config/jobs).
    $ kubectl apply -f config/prow/cluster/build
    ```   
 1. Create the required secrets (mainly in the prow cluster):
-    - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`, needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
     - `gardener-prow-storage` (Service account with `Storage Admin` permissions for GCS bucket, according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#configure-a-gcs-bucket), needs to be present in the `prow` namespace and in the `test-pods` namespace in both clusters)
     - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
+    - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`, needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
     - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
     - `hmac-token`
       ```bash
@@ -75,6 +75,7 @@ All job configs are located in [`config/jobs`](config/jobs).
           user:
             token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
         ```
+    - `slack-token` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter))
 1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
    $ ./config/prow/deploy.sh

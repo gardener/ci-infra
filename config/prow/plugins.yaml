@@ -52,102 +52,15 @@ blunderbuss:
 heart:
   commentregexp: ".*"
 
-#slack:
-#  mergewarnings:
-#  - repos:
-#    - kubernetes/community
-#    - kubernetes/org
-#    channels:
-#    - sig-contribex
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/enhancements
-#    channels:
-#    - enhancements
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/utils
-#    - kubernetes/component-helpers
-#    channels:
-#    - sig-architecture
-#    exempt_users:
-#    - k8s-ci-robot
-#    - k8s-publishing-bot
-#  - repos:
-#    - kubernetes/api
-#    - kubernetes/apiextensions-apiserver
-#    - kubernetes/apimachinery
-#    - kubernetes/apiserver
-#    - kubernetes/client-go
-#    - kubernetes/code-generator
-#    - kubernetes/component-base
-#    - kubernetes/controller-manager
-#    - kubernetes/kube-aggregator
-#    - kubernetes/kube-controller-manager
-#    - kubernetes/sample-apiserver
-#    - kubernetes/sample-controller
-#    channels:
-#    - sig-api-machinery
-#    exempt_users:
-#    - k8s-publishing-bot
-#  - repos:
-#    - kubernetes/pod-security-admission
-#    channels:
-#    - sig-auth
-#    exempt_users:
-#    - k8s-publishing-bot
-#  - repos:
-#    - kubernetes/kubernetes
-#    channels:
-#    - github-management
-#    exempt_users:
-#    - k8s-ci-robot # future home of tide
-#    - k8s-release-robot # anago
-#    exempt_branches:
-#        feature-serverside-apply:
-#            - lavalamp # feature-serverside-apply "branch manager"
-#            - apelisse # feature-serverside-apply "branch manager"
-#        feature-rate-limiting:
-#            - lavalamp # feature-rate-limiting "branch manager"
-#            - deads2k # feature-rate-limiting "branch manager"
-#  - repos:
-#    - kubernetes/test-infra
-#    channels:
-#    - testing-ops
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/sig-release
-#    channels:
-#    - release-management
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/release
-#    channels:
-#    - release-management
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/k8s.io
-#    channels:
-#    - sig-k8s-infra
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/kops
-#    channels:
-#    - kops-dev
-#    exempt_users:
-#    - k8s-ci-robot
-#  - repos:
-#    - kubernetes/cluster-api-provider-aws
-#    channels:
-#    - cluster-api-aws
-#    exempt_users:
-#    - k8s-ci-robot
+slack:
+  # warn about manual merges
+  mergewarnings:
+  - repos:
+    - gardener/ci-infra
+    channels:
+    - gardener-prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
 
 #milestone_applier:
 #  kubernetes/enhancements:

@@ -126,9 +126,13 @@ slack_reporter_configs:
     job_states_to_report:
       - failure
       - error
-    channel: test-failures
-    # The template shown below is the default
-    report_template: 'Job {{.Spec.Job}} of type {{.Spec.Type}} ended with state {{.Status.State}}. <{{.Status.URL}}|View logs>'
+    channel: gardener-test-failures
+    report_template: |
+      *Job:* {{.Spec.Job}} ({{.Spec.Type}})
+      *Status:* {{.Status.State}}
+      {{ with .Spec.Refs}}*Repository:* {{.Org}}/{{.Repo}}
+      *Commit:* <{{.BaseLink}}|{{printf "%.7s" .BaseSHA}}>
+      {{ end}}*<{{.Status.URL}}|View logs>*
 
 #branch-protection:
 #  orgs:

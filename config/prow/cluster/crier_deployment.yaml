@@ -21,16 +21,16 @@ spec:
       - name: crier
         image: gcr.io/k8s-prow/crier:v20211201-aa97daa0b4
         args:
-        - --blob-storage-workers=1
+        - --blob-storage-workers=10
         - --config-path=/etc/config/config.yaml
         - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
-        - --github-workers=5
+        - --github-workers=10
         - --job-config-path=/etc/job-config
-        - --kubernetes-blob-storage-workers=1
-#        - --slack-token-file=/etc/slack/token
-#        - --slack-workers=1
+        - --kubernetes-blob-storage-workers=10
+        - --slack-token-file=/etc/slack/token
+        - --slack-workers=10
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
         env:
@@ -49,21 +49,21 @@ spec:
         - name: github-app
           mountPath: /etc/github
           readOnly: true
-        - mountPath: /etc/kubeconfig
-          name: kubeconfig
-          readOnly: true
         - name: config
           mountPath: /etc/config
           readOnly: true
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
+        - name: slack
+          mountPath: /etc/slack
+          readOnly: true
+        - mountPath: /etc/kubeconfig
+          name: kubeconfig
+          readOnly: true
         - name: gcs-credentials
           mountPath: /etc/gcs-credentials
           readOnly: true
-#        - name: slack
-#          mountPath: /etc/slack
-#          readOnly: true
       volumes:
       - name: github-app
         secret:
@@ -74,9 +74,9 @@ spec:
       - name: job-config
         configMap:
           name: job-config
-#      - name: slack
-#        secret:
-#          secretName: slack-token
+      - name: slack
+        secret:
+          secretName: slack-token
       - name: kubeconfig
         secret:
           defaultMode: 420

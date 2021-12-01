@@ -28,11 +28,11 @@ spec:
         imagePullPolicy: Always
         args:
         - --dry-run=false
-#        - --slack-token-file=/etc/slack/token
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
+        - --slack-token-file=/etc/slack/token
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
         env:
@@ -53,8 +53,8 @@ spec:
         - name: github-app
           mountPath: /etc/github
           readOnly: true
-#        - name: slack
-#          mountPath: /etc/slack
+        - name: slack
+          mountPath: /etc/slack
         - name: hmac
           mountPath: /etc/webhook
           readOnly: true
@@ -67,12 +67,6 @@ spec:
         - name: plugins
           mountPath: /etc/plugins
           readOnly: true
-#        - name: cat-api
-#          mountPath: /etc/cat-api
-#          readOnly: true
-#        - name: unsplash-api
-#          mountPath: /etc/unsplash-api
-#          readOnly: true
         - name: kubeconfig
           mountPath: /etc/kubeconfig
           readOnly: true
@@ -93,9 +87,9 @@ spec:
       - name: github-app
         secret:
           secretName: github-app
-#      - name: slack
-#        secret:
-#          secretName: slack-token
+      - name: slack
+        secret:
+          secretName: slack-token
       - name: hmac
         secret:
           secretName: hmac-token
@@ -108,12 +102,6 @@ spec:
       - name: plugins
         configMap:
           name: plugins
-#      - name: cat-api
-#        configMap:
-#          name: cat-api-key
-#      - name: unsplash-api
-#        secret:
-#          secretName: unsplash-api-key
       - name: kubeconfig
         secret:
           defaultMode: 420
