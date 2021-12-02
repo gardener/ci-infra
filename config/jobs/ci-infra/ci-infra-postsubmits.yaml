@@ -19,7 +19,7 @@ postsubmits:
           *Deploying prow*
           *Job:* {{.Spec.Job}} ({{.Spec.Type}})
           *Status:* {{.Status.State}}
-          *Commit:* <{{.BaseLink}}|{{printf "%.7s" .BaseSHA}}>
+          *Commit:* <{{.Spec.Refs.BaseLink}}|{{printf "%.7s" .Spec.Refs.BaseSHA}}>
           *<{{.Status.URL}}|Spyglass> | <https://prow.gardener.cloud/?job={{.Spec.Job}}|Deck>*
     spec:
       serviceAccountName: deployer
