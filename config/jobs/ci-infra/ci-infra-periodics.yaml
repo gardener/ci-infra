@@ -38,6 +38,41 @@ periodics:
       secret:
         secretName: github-token
 
+- cron: "54 * * * *"  # Every hour at 54 minutes past the hour
+  name: ci-prow-branchprotector
+  cluster: gardener-prow-trusted
+  decorate: true
+  decoration_config:
+    timeout: 5h
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  annotations:
+    description: Runs Prow's branchprotector to apply configured GitHub status context requirements and merge policies
+  labels:
+    app: branchprotector
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/branchprotector:v20211201-aa97daa0b4
+      command:
+      - /app/prow/cmd/branchprotector/app.binary
+      args:
+      - --config-path=config/prow/config.yaml
+      - --confirm
+      - --job-config-path=config/jobs
+      - --github-endpoint=http://ghproxy.prow.svc
+      - --github-endpoint=https://api.github.com
+      - --github-token-path=/etc/github/token
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
+
 - cron: "30 * * * 1-5"
   name: ci-prow-autobump
   cluster: gardener-prow-trusted
