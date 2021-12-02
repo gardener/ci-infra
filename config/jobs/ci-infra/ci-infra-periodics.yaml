@@ -12,6 +12,8 @@ periodics:
   reporter_config:
     slack:
       channel: "gardener-prow-alerts"
+  annotations:
+    description: Runs label_sync to synchronize GitHub repo labels with the label config defined in config/prow/labels.yaml
   spec:
     containers:
     - image: gcr.io/k8s-prow/label_sync:v20211201-aa97daa0b4
@@ -47,6 +49,8 @@ periodics:
   reporter_config:
     slack:
       channel: "gardener-prow-alerts"
+  annotations:
+    description: Runs autobumper to create/update a PR that bumps prow images to the latest published version
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20211201-aa97daa0b4
@@ -74,6 +78,8 @@ periodics:
   reporter_config:
     slack:
       channel: "gardener-prow-alerts"
+  annotations:
+    description: Runs autobumper to create/update a PR that bumps prowjob images to latest published version
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20211201-aa97daa0b4

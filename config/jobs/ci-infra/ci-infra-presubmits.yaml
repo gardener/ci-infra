@@ -4,6 +4,8 @@ presubmits:
     cluster: gardener-prow-build
     run_if_changed: '^(config/prow/(config|plugins).yaml$|config/jobs/.*.yaml$)'
     decorate: true
+    annotations:
+      description: Runs checkconfig to validate changes to job configs, config.yaml and friends
     spec:
       containers:
       - image: gcr.io/k8s-prow/checkconfig:v20211201-aa97daa0b4
