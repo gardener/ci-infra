@@ -121,9 +121,10 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-          restrictions: # only allow admins to merge, prevent everyone from pushing
+          restrictions: # prevent everyone from pushing/merging
             users: []
             teams: []
+          enforce_admins: true # protections apply to admins as well
 
 tide:
   sync_period: 2m
