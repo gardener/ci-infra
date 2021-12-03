@@ -153,10 +153,6 @@ tide:
   squash_label: tide/merge-method-squash
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
-  context_options:
-    orgs:
-      gardener:
-        from-branch-protection: true
   priority:
   - labels: [ "kind/flake", "priority/critical-urgent" ]
   - labels: [ "kind/failing-test", "priority/critical-urgent" ]
