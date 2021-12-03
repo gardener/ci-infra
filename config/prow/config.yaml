@@ -122,6 +122,10 @@ branch-protection:
             contexts:
             - license/cla
           restrictions: # prevent everyone from pushing/merging
+            # NB: tide is running as GitHub App, which currently cannot be configured here to be excluded from branch
+            # protections (see https://github.com/kubernetes/test-infra/issues/24530).
+            # Hence, remember to manually add the `gardener-prow` GitHub App to all branch protection rules
+            # to allow tide to push/merge.
             users: []
             teams: []
           enforce_admins: true # protections apply to admins as well
