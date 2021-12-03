@@ -21,6 +21,8 @@ postsubmits:
           *Status:* {{.Status.State}}
           *Commit:* <{{.Spec.Refs.BaseLink}}|{{printf "%.7s" .Spec.Refs.BaseSHA}}>
           *<{{.Status.URL}}|Spyglass> | <https://prow.gardener.cloud/?job={{.Spec.Job}}|Deck>*
+    annotations:
+      description: Deploys the configured version of prow by running config/prow/deploy.sh
     spec:
       serviceAccountName: deployer
       containers:

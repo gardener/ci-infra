@@ -4,6 +4,8 @@ periodics:
   cluster: gardener-prow-build
   agent: kubernetes
   decorate: true
+  annotations:
+    description: Periodic dummy job to verify that jobs can be executed on the build cluster
   spec:
     containers:
     - image: alpine
@@ -13,6 +15,8 @@ periodics:
   cluster: gardener-prow-trusted
   agent: kubernetes
   decorate: true
+  annotations:
+    description: Periodic dummy job to verify that jobs can be executed on the trusted cluster
   spec:
     containers:
     - image: alpine

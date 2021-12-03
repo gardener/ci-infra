@@ -51,11 +51,10 @@ slack:
     - gardener-prow[bot]
 
 repo_milestone:
-  # Default maintainer
-  '':
-    # You can curl the following endpoint in order to determine the github ID of your team
-    # responsible for maintaining the milestones. You may need to specify the page number.
-    # curl -H "Authorization: token <token>" "https://api.github.com/orgs/<org-name>/teams?page=N"
+  # You can curl the following endpoint in order to determine the github ID of your team
+  # responsible for maintaining the milestones. You may need to specify the page number.
+  # curl -H "Authorization: token <token>" "https://api.github.com/orgs/<org-name>/teams?page=N"
+  gardener/ci-infra:
     maintainers_id: 5415312
     maintainers_team: ci-infra-maintainers
 
