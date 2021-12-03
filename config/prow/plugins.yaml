@@ -3,6 +3,7 @@
 triggers:
 - repos:
   - gardener/ci-infra
+  - gardener/gardener
   only_org_members: true
 
 approve:
@@ -128,6 +129,11 @@ plugins:
     - welcome
     - wip
     - yuks
+  gardener/gardener:
+    plugins:
+    - override
+    - skip
+    - trigger
 
 external_plugins:
   gardener/ci-infra:
