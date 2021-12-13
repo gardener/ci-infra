@@ -1,4 +1,4 @@
-# from https://github.com/kubernetes/test-infra/blob/40d2900a41d5daeb84ba2e11d027e6d68b56403e/config/prow/cluster/prowjob_customresourcedefinition.yaml
+# from https://raw.githubusercontent.com/kubernetes/test-infra/68c18d9abb5c54b35848f54d9be9c16cada4af4d/config/prow/cluster/prowjob-crd/prowjob_customresourcedefinition.yaml
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -19976,10 +19976,19 @@ spec:
                           description: ProwJobState specifies whether the job is running
                           type: string
                         type: array
+                      report:
+                        description: 'Report is derived from JobStatesToReport, it''s
+                          used for differentiating nil from empty slice, as yaml roundtrip
+                          by design can''t tell the difference when omitempty is supplied.
+                          See https://github.com/kubernetes/test-infra/pull/24168
+                          for details Priority-wise, it goes by following order: -
+                          `report: true/false`` in job config - `JobStatesToReport:
+                          <anything including empty slice>` in job config - `report:
+                          true/false`` in global config - `JobStatesToReport:` in
+                          global config'
+                        type: boolean
                       report_template:
                         type: string
-                    required:
-                    - job_states_to_report
                     type: object
                 type: object
               rerun_auth_config:
