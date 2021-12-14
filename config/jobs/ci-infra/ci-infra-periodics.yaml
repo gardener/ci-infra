@@ -93,6 +93,7 @@ periodics:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
       - --config=config/prow/autobump-config/prow-component-autobump-config.yaml
+      - --labels-override=kind/enhancement
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token
@@ -122,6 +123,7 @@ periodics:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
       - --config=config/prow/autobump-config/prow-job-autobump-config.yaml
+      - --labels-override=kind/enhancement
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token
