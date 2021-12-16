@@ -16,7 +16,7 @@ periodics:
     description: Runs label_sync to synchronize GitHub repo labels with the label config defined in config/prow/labels.yaml
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20211214-938f24ffd3
+    - image: gcr.io/k8s-prow/label_sync:v20211215-2ac42ad900
       command:
       - /app/label_sync/app.binary
       args:
@@ -54,7 +54,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: gcr.io/k8s-prow/branchprotector:v20211214-938f24ffd3
+    - image: gcr.io/k8s-prow/branchprotector:v20211215-2ac42ad900
       command:
       - /app/prow/cmd/branchprotector/app.binary
       args:
@@ -88,7 +88,7 @@ periodics:
     description: Runs autobumper to create/update a PR that bumps prow images to the latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211214-938f24ffd3
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211215-2ac42ad900
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -118,7 +118,7 @@ periodics:
     description: Runs autobumper to create/update a PR that bumps prowjob images to latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20211214-938f24ffd3
+    - image: gcr.io/k8s-prow/generic-autobumper:v20211215-2ac42ad900
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
