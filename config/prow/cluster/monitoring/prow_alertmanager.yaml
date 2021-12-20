@@ -13,6 +13,9 @@ spec:
     runAsUser: 1000
   serviceAccountName: alertmanager
   version: v0.15.2
+  configSecret: alertmanager-prow
+  secrets:
+  - alertmanager-prow-slack
   storage: # Note that this section is immutable so changes require deleting and recreating the resource.
     volumeClaimTemplate:
       metadata:

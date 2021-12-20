@@ -76,6 +76,9 @@ All job configs are located in [`config/jobs`](config/jobs).
             token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
         ```
     - `slack-token` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter))
+    - `alertmanager-prow-slack` (needs to be present in the prow-monitoring namespace of the prow cluster)
+      - Follow https://api.slack.com/incoming-webhooks and setup a webhook.
+      - Create the secret including the Webhook URL under key `api_url`.
 1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
    $ ./config/prow/deploy.sh

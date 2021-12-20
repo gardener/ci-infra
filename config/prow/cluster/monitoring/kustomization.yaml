@@ -45,3 +45,10 @@ secretGenerator:
       app: prometheus
   files:
   - prometheus/additional-scrape-targets.yaml
+- name: alertmanager-prow
+  options:
+    labels:
+      app: alertmanager
+  files:
+  - alertmanager.yaml=alertmanager/config.yaml
+  - alertmanager/slack-messages.tmpl
