@@ -3,3 +3,8 @@ kind: Kustomization
 
 components:
 - prometheus-operator-crds
+
+resources:
+- kube-state-metrics_deployment.yaml
+- kube-state-metrics_rbac.yaml
+- kube-state-metrics_service.yaml
