@@ -13,11 +13,15 @@
 {{ end }}
 
 {{ define "custom_slack_text" }}
+{{ with index .Alerts 0 -}}
+:chart_with_upwards_trend: *<{{ .GeneratorURL }}|Graph>*
+{{ end }}
+
+*Alert details*:
+
 {{ range .Alerts -}}
 *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
-
 *Description:* {{ .Annotations.description }}
-
 *Details:*
 {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
 {{ end }}
