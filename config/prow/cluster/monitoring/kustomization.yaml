@@ -1,10 +1,47 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+generatorOptions:
+  disableNameSuffixHash: true
+
+namespace: prow-monitoring
+
 components:
 - prometheus-operator-crds
 
 resources:
+- prow-monitoring_namespace.yaml
+- alertmanager_rbac.yaml
+- alertmanager_service.yaml
+- blackbox-exporter_configmap.yaml
+- blackbox-exporter_deployment.yaml
+- blackbox-exporter_service.yaml
+- grafana_configmaps.yaml
+- grafana_deployment.yaml
+- grafana_rbac.yaml
+- grafana_service.yaml
 - kube-state-metrics_deployment.yaml
 - kube-state-metrics_rbac.yaml
 - kube-state-metrics_service.yaml
+- kube-state-metrics_servicemonitor.yaml
+- monitoring_ingress.yaml
+- prometheus_operator_deployment.yaml
+- prometheus_operator_rbac.yaml
+- prometheus_rbac.yaml
+- prometheus_service.yaml
+- prow_alertmanager.yaml
+- prow_prometheus.yaml
+- prow_servicemonitors.yaml
+- pushgateway-proxy_configmap.yaml
+- pushgateway-proxy_deployment.yaml
+- pushgateway-proxy_service.yaml
+- pushgateway_deployment.yaml
+- pushgateway_service.yaml
+
+secretGenerator:
+- name: prometheus-prow-additional-scrape-configs
+  options:
+    labels:
+      app: prometheus
+  files:
+  - prometheus/additional-scrape-targets.yaml

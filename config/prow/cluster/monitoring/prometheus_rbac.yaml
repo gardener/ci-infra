@@ -4,11 +4,15 @@ kind: ServiceAccount
 metadata:
   name: prometheus-prow
   namespace: prow-monitoring
+  labels:
+    app: prometheus
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus-prow
+  labels:
+    app: prometheus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -22,6 +26,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: prometheus-prow
+  labels:
+    app: prometheus
 rules:
 - apiGroups:
   - ""
@@ -40,8 +46,7 @@ rules:
   - configmaps
   verbs:
   - get
-- apiGroups: null
-  nonResourceURLs:
+- nonResourceURLs:
   - /metrics
   resources: []
   verbs:

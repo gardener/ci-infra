@@ -1,13 +1,11 @@
-# PROW_INSTANCE_SPECIFIC
-# Contains prow components list, could be solved by breaking these down to individual files
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: prometheus
   name: prometheus
   namespace: prow-monitoring
+  labels:
+    app: prometheus
 spec:
   endpoints:
   - interval: 30s
@@ -23,10 +21,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: alertmanager
   name: alertmanager
   namespace: prow-monitoring
+  labels:
+    app: alertmanager
 spec:
   endpoints:
   - interval: 30s
@@ -42,10 +40,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: grafana
   name: grafana
   namespace: prow-monitoring
+  labels:
+    app: grafana
 spec:
   endpoints:
   - interval: 30s
@@ -61,10 +59,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: deck
   name: deck
   namespace: prow-monitoring
+  labels:
+    app: deck
 spec:
   endpoints:
   - interval: 30s
@@ -72,7 +70,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-      - default
+    - prow
   selector:
     matchLabels:
       app: deck
@@ -80,10 +78,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: ghproxy
   name: ghproxy
   namespace: prow-monitoring
+  labels:
+    app: ghproxy
 spec:
   endpoints:
   - interval: 30s
@@ -91,7 +89,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-      - default
+    - prow
   selector:
     matchLabels:
       app: ghproxy
@@ -99,10 +97,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: hook
   name: hook
   namespace: prow-monitoring
+  labels:
+    app: hook
 spec:
   endpoints:
   - interval: 30s
@@ -110,7 +108,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-    - default
+    - prow
   selector:
     matchLabels:
       app: hook
@@ -118,10 +116,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: plank
   name: plank
   namespace: prow-monitoring
+  labels:
+    app: plank
 spec:
   endpoints:
   - interval: 30s
@@ -129,7 +127,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-    - default
+    - prow
   selector:
     matchLabels:
       app: prow-controller-manager
@@ -137,10 +135,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: sinker
   name: sinker
   namespace: prow-monitoring
+  labels:
+    app: sinker
 spec:
   endpoints:
   - interval: 30s
@@ -148,7 +146,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-    - default
+    - prow
   selector:
     matchLabels:
       app: sinker
@@ -156,10 +154,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: tide
   name: tide
   namespace: prow-monitoring
+  labels:
+    app: tide
 spec:
   endpoints:
   - interval: 30s
@@ -167,7 +165,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-    - default
+    - prow
   selector:
     matchLabels:
       app: tide
@@ -175,10 +173,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: horologium
   name: horologium
   namespace: prow-monitoring
+  labels:
+    app: horologium
 spec:
   endpoints:
   - interval: 30s
@@ -186,7 +184,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-    - default
+    - prow
   selector:
     matchLabels:
       app: horologium
@@ -194,10 +192,10 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  labels:
-    app: crier
   name: crier
   namespace: prow-monitoring
+  labels:
+    app: crier
 spec:
   endpoints:
   - interval: 30s
@@ -205,27 +203,7 @@ spec:
     scheme: http
   namespaceSelector:
     matchNames:
-    - default
+    - prow
   selector:
     matchLabels:
       app: crier
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    app.kubernetes.io/name: kubernetes-external-secrets
-    app: kubernetes-external-secrets
-  name: kubernetes-external-secrets
-  namespace: prow-monitoring
-spec:
-  endpoints:
-  - interval: 30s
-    port: prometheus
-    scheme: http
-  namespaceSelector:
-    matchNames:
-    - default
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: kubernetes-external-secrets

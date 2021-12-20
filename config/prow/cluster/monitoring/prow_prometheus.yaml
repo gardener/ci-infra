@@ -9,14 +9,16 @@ spec:
     volumeClaimTemplate:
       metadata:
         name: prometheus
+        labels:
+          app: prometheus
       spec:
         accessModes:
-        - "ReadWriteOnce"
-        storageClassName: "standard"
+        - ReadWriteOnce
+        storageClassName: gce-ssd
         resources:
           requests:
             storage: 100Gi
-  retention: "90d" # TODO(chaodaiG): change back to 180d once figure out how to properly increase the volume.
+  retention: 90d
   serviceAccountName: prometheus-prow
   alerting:
     alertmanagers:
@@ -36,11 +38,10 @@ spec:
   image: docker.io/prom/prometheus
   externalLabels: {}
   listenLocal: false
-  nodeSelector: {}
   securityContext:
     fsGroup: 2000
     runAsNonRoot: true
     runAsUser: 1000
   additionalScrapeConfigs:
-    name: additional-scrape-configs
-    key: prometheus-additional.yaml
+    name: prometheus-prow-additional-scrape-configs
+    key: additional-scrape-targets.yaml

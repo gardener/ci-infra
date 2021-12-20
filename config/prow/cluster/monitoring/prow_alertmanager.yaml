@@ -7,7 +7,6 @@ spec:
   replicas: 3
   image: docker.io/prom/alertmanager
   listenLocal: false
-  nodeSelector: {}
   securityContext:
     fsGroup: 2000
     runAsNonRoot: true
@@ -17,11 +16,13 @@ spec:
   storage: # Note that this section is immutable so changes require deleting and recreating the resource.
     volumeClaimTemplate:
       metadata:
-        name: prometheus
+        name: alertmanager
+        labels:
+          app: alertmanager
       spec:
         accessModes:
-        - "ReadWriteOnce"
-        storageClassName: "standard"
+        - ReadWriteOnce
+        storageClassName: gce-ssd
         resources:
           requests:
             storage: 10Gi

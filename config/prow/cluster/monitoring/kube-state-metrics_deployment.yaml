@@ -1,21 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: 2.0.0-beta
   name: kube-state-metrics
-  namespace: kube-system
+  namespace: prow-monitoring
+  labels:
+    app: kube-state-metrics
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: kube-state-metrics
+      app: kube-state-metrics
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: kube-state-metrics
-        app.kubernetes.io/version: 2.0.0-alpha.1
+        app: kube-state-metrics
     spec:
       containers:
       - image: k8s.gcr.io/kube-state-metrics/kube-state-metrics:2.0.0-alpha.1
@@ -41,6 +39,4 @@ spec:
           timeoutSeconds: 5
         securityContext:
           runAsUser: 65534
-      # nodeSelector:
-      #   kubernetes.io/os: linux
       serviceAccountName: kube-state-metrics

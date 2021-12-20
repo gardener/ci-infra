@@ -1,11 +1,10 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: prometheus-operator
   name: prometheus-operator
   namespace: prow-monitoring
+  labels:
+    app: prometheus-operator
 spec:
   replicas: 1
   selector:
@@ -27,9 +26,4 @@ spec:
         ports:
         - containerPort: 8080
           name: http
-        resources: {}
-        securityContext: {}
-      nodeSelector: {}
-      securityContext: {}
-      serviceAccount: prometheus-operator
       serviceAccountName: prometheus-operator

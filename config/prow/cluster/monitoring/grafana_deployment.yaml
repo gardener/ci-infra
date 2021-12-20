@@ -1,12 +1,10 @@
-# PROW_INSTANCE_SPECIFIC
-# Contains prow dashboards list, will be different among prow instances
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: grafana
   name: grafana
   namespace: prow-monitoring
+  labels:
+    app: grafana
 spec:
   #keep replicas 1 unless we have a solution to
   #A. GLB BackendConfig with session affinity, or
