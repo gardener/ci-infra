@@ -77,3 +77,18 @@ configMapGenerator:
       app: grafana
   files:
   - grafana/nginx.conf
+- name: grafana-dashboards
+  options:
+    labels:
+      app: grafana
+  files:
+  - grafana/dashboards/boskos.json
+  - grafana/dashboards/boskos-http.json
+  - grafana/dashboards/deck.json
+  - grafana/dashboards/ghproxy.json
+  - grafana/dashboards/hook.json
+  - grafana/dashboards/plank.json
+  - grafana/dashboards/prow.json
+  - grafana/dashboards/sinker.json
+  - grafana/dashboards/slo.json
+  - grafana/dashboards/tide.json

@@ -63,6 +63,9 @@ spec:
         - mountPath: /etc/grafana/provisioning/dashboards
           name: grafana-dashboard-sources
           readOnly: false
+        - mountPath: /grafana-dashboards
+          name: grafana-dashboards
+          readOnly: false
       serviceAccountName: grafana
       volumes:
       - name: grafana-storage
@@ -76,6 +79,9 @@ spec:
       - name: grafana-dashboard-sources
         configMap:
           name: grafana-dashboard-sources
+      - name: grafana-dashboards
+        configMap:
+          name: grafana-dashboards
       - name: grafana-nginx
         configMap:
           name: grafana-nginx
