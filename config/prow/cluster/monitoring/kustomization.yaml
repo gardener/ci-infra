@@ -16,7 +16,6 @@ resources:
 - blackbox-exporter_configmap.yaml
 - blackbox-exporter_deployment.yaml
 - blackbox-exporter_service.yaml
-- grafana_configmaps.yaml
 - grafana_deployment.yaml
 - grafana_rbac.yaml
 - grafana_service.yaml
@@ -52,3 +51,29 @@ secretGenerator:
   files:
   - alertmanager.yaml=alertmanager/config.yaml
   - alertmanager/slack-messages.tmpl
+
+configMapGenerator:
+- name: grafana-config
+  options:
+    labels:
+      app: grafana
+  files:
+  - grafana/grafana.ini
+- name: grafana-datasources
+  options:
+    labels:
+      app: grafana
+  files:
+  - grafana/datasources.yaml
+- name: grafana-dashboard-sources
+  options:
+    labels:
+      app: grafana
+  files:
+  - grafana/dashboard-sources.yaml
+- name: grafana-nginx
+  options:
+    labels:
+      app: grafana
+  files:
+  - grafana/nginx.conf
