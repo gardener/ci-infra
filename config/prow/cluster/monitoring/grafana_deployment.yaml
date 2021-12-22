@@ -19,22 +19,10 @@ spec:
         app: grafana
     spec:
       containers:
-      - image: nginx:1.21.4-alpine
-        name: nginx
-        readinessProbe:
-          httpGet:
-            path: /healthy
-            port: 80
-        ports:
-          - containerPort: 80
-            name: nginx
-        volumeMounts:
-          - mountPath: /etc/nginx/
-            name: grafana-nginx
-      - args:
+      - name: grafana
+        args:
         - -config=/etc/grafana/grafana.ini
         image: grafana/grafana:7.5.11
-        name: grafana
         env:
         - name: GF_SECURITY_ADMIN_USER
           value: admin
@@ -44,8 +32,12 @@ spec:
               name: grafana
               key: admin_password
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
           name: http
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
         resources:
           requests:
             cpu: 100m

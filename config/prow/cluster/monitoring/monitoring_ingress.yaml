@@ -19,7 +19,7 @@ spec:
           service:
             name: grafana
             port:
-              number: 80
+              name: http
   tls:
   - hosts:
     - monitoring.prow.gardener.cloud

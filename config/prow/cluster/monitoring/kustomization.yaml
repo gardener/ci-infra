@@ -66,12 +66,6 @@ configMapGenerator:
       app: grafana
   files:
   - grafana/dashboard-sources.yaml
-- name: grafana-nginx
-  options:
-    labels:
-      app: grafana
-  files:
-  - grafana/nginx.conf
 - name: grafana-dashboards
   options:
     labels:
