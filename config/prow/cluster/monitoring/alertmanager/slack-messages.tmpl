@@ -1,29 +1,9 @@
 {{ define "custom_slack_title" }}
-[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}
-{{- if gt (len .CommonLabels) (len .GroupLabels) -}}
-    {{" "}}(
-    {{- with .CommonLabels.Remove .GroupLabels.Names }}
-        {{- range $index, $label := .SortedPairs -}}
-            {{ if $index }}, {{ end }}
-            {{- $label.Name }}="{{ $label.Value -}}"
-        {{- end }}
-    {{- end -}}
-    )
-{{- end }}
+[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
 {{ end }}
 
 {{ define "custom_slack_text" }}
-{{ with index .Alerts 0 -}}
-:chart_with_upwards_trend: *<{{ .GeneratorURL }}|Graph>*
-{{ end }}
-
-*Alert details*:
-
 {{ range .Alerts -}}
-*Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
-*Description:* {{ .Annotations.description }}
-*Details:*
-{{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
-{{ end }}
+{{ .Annotations.message }} (`{{ .Labels.severity }}`)
 {{ end }}
 {{ end }}
