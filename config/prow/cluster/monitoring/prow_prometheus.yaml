@@ -5,6 +5,8 @@ metadata:
   namespace: prow-monitoring
 spec:
   replicas: 2
+  image: prom/prometheus
+  version: v2.32.1
   storage:
     volumeClaimTemplate:
       metadata:
@@ -34,8 +36,6 @@ spec:
     matchExpressions:
     - key: app
       operator: Exists
-  version: v2.7.1
-  image: docker.io/prom/prometheus
   externalLabels: {}
   listenLocal: false
   securityContext:
