@@ -4,6 +4,7 @@ plank:
     '*': >-
       [Full PR test history](https://prow.gardener.cloud/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}).
       [Your PR dashboard](https://prow.gardener.cloud/pr?query=is%3Apr%20state%3Aopen%20author%3A{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
+      [Command help for this repository](https://prow.gardener.cloud/command-help?repo={{.Spec.Refs.Org}}%2F{{.Spec.Refs.Repo}}).
   job_url_prefix_config:
     '*': https://prow.gardener.cloud/view/
   pod_pending_timeout: 15m
