@@ -163,10 +163,6 @@ tide:
   - labels: [ "kind/failing-test", "priority/critical-urgent" ]
   - labels: [ "kind/bug", "priority/critical-urgent" ]
 
-push_gateway:
-  endpoint: pushgateway.prow-monitoring
-  serve_metrics: true
-
 github_reporter:
   job_types_to_report:
   - presubmit

@@ -31,11 +31,6 @@ resources:
 - prow_alertmanager.yaml
 - prow_prometheus.yaml
 - prow_servicemonitors.yaml
-- pushgateway-proxy_configmap.yaml
-- pushgateway-proxy_deployment.yaml
-- pushgateway-proxy_service.yaml
-- pushgateway_deployment.yaml
-- pushgateway_service.yaml
 
 secretGenerator:
 - name: prometheus-prow-additional-scrape-configs

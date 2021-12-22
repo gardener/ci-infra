@@ -20,13 +20,6 @@ spec:
             name: grafana
             port:
               number: 80
-      - path: /metrics
-        pathType: Prefix
-        backend:
-          service:
-            name: pushgateway-proxy
-            port:
-              number: 80
   tls:
   - hosts:
     - monitoring.prow.gardener.cloud
