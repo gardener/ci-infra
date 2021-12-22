@@ -7,7 +7,6 @@ metadata:
     app: pushgateway-proxy
 data:
   nginx.conf: |-
-    user www-data;
     worker_processes 4;
     pid /run/nginx.pid;
     error_log /dev/stdout;
