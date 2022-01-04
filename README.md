@@ -9,7 +9,7 @@ This is currently under construction / in evaluation phase.
 ## CI Job Management
 
 Gardener uses a [`prow`](https://github.com/kubernetes/test-infra/blob/master/prow) instance at [prow.gardener.cloud](https://prow.gardener.cloud) to handle CI and automation for parts of the project.
-Everyone can participate in a self-service PR-based workflow, where changes are automatically deployed after they have been reviewed and merge.
+Everyone can participate in a self-service PR-based workflow, where changes are automatically deployed after they have been reviewed and merged.
 All job configs are located in [`config/jobs`](config/jobs).
 
 ## How to setup
@@ -91,3 +91,17 @@ All job configs are located in [`config/jobs`](config/jobs).
    ```bash
    $ ./hack/boostrap-config.sh
    ```
+
+## Monitoring
+
+A basic monitoring stack is installed in the prow cluster consisting of:
+- [prometheus-operator](https://github.com/prometheus-operator/prometheus-operator)
+- alertmanager (cluster with 3 replicas for HA)
+- prometheus (2 replicas for HA)
+- blackbox-exporter
+- kube-state-metrics
+- grafana
+
+Alertmanager will send Slack alerts in `#gardener-prow-alerts` (SAP-internal workspace).
+
+Grafana is available publicly at https://monitoring.prow.gardener.cloud.
