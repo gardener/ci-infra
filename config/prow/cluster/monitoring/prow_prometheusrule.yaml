@@ -202,13 +202,14 @@ spec:
         severity: high
   - name: abnormal webhook behaviors
     rules:
+    # TODO: reconsider whether this alert makes sense at the scale of our org and with what timeframe based on some experience
     - alert: no-webhook-calls
       annotations:
-        message: There have been no webhook calls on working hours for 10m
+        message: There have been no webhook calls on working hours for 1h
       expr: |
-        (sum(increase(prow_webhook_counter[1m])) == 0 or absent(prow_webhook_counter))
-        and ((day_of_week() > 0) and (day_of_week() < 6) and (hour() >= 8))
-      for: 10m
+        (sum(increase(prow_webhook_counter[10m])) == 0 or absent(prow_webhook_counter))
+        and ((day_of_week() > 0) and (day_of_week() < 6) and (hour() >= 8) and (hour() <= 18))
+      for: 1h
       labels:
         severity: high
         slo: hook
