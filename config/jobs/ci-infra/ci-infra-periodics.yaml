@@ -132,3 +132,69 @@ periodics:
     - name: github-token
       secret:
         secretName: github-token
+
+# These jobs are used as heartbeat health checks of the Prow instance's ability to run jobs (one for each cluster).
+# Alerts expect them to run every 5 mins and will fire after 20 mins without a successful run.
+# Please keep them in sync with the `pull-ci-infra-prow-checkconfig` job
+- name: ci-infra-prow-checkconfig-trusted
+  interval: 5m
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
+  annotations:
+    description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/checkconfig:v20220110-28076d3f8c
+      command:
+      - /checkconfig
+      args:
+      - --config-path=config/prow/config.yaml
+      - --job-config-path=config/jobs
+      - --plugin-config=config/prow/plugins.yaml
+      - --strict
+      - --warnings=mismatched-tide-lenient
+      - --warnings=tide-strict-branch
+      - --warnings=needs-ok-to-test
+      - --warnings=validate-owners
+      - --warnings=missing-trigger
+      - --warnings=validate-urls
+      - --warnings=unknown-fields
+      - --warnings=duplicate-job-refs
+- name: ci-infra-prow-checkconfig-build
+  interval: 5m
+  cluster: gardener-prow-build
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
+  annotations:
+    description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/checkconfig:v20220110-28076d3f8c
+      command:
+      - /checkconfig
+      args:
+      - --config-path=config/prow/config.yaml
+      - --job-config-path=config/jobs
+      - --plugin-config=config/prow/plugins.yaml
+      - --strict
+      - --warnings=mismatched-tide-lenient
+      - --warnings=tide-strict-branch
+      - --warnings=needs-ok-to-test
+      - --warnings=validate-owners
+      - --warnings=missing-trigger
+      - --warnings=validate-urls
+      - --warnings=unknown-fields
+      - --warnings=duplicate-job-refs

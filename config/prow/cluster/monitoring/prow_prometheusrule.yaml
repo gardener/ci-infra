@@ -311,14 +311,14 @@ spec:
         severity: critical
   - name: Heartbeat ProwJobs
     rules:
-    - alert: 'No recent successful runs: `ci-test-infra-prow-checkconfig`'
+    - alert: 'No recent successful heartbeat job runs'
       annotations:
-        message: 'The heartbeat job `ci-test-infra-prow-checkconfig` has not had a successful run in the past 20m (should run every 5m).'
+        message: 'The heartbeat job `{{ $labels.job_name }}` has not had a successful run in the past 20m (should run every 5m).'
       expr: |
-        sum(increase(prowjob_state_transitions{job_name="ci-test-infra-prow-checkconfig", state="success"}[20m])) < 0.5
+        sum(increase(prowjob_state_transitions{job_name=~"ci-infra-prow-checkconfig-(trusted|build)", state="success"}[20m])) by (job_name) < 0.5
       labels:
         severity: critical
-        slo: plank
+        slo: prow-controller-manager
   - interval: 1m
     name: SLO Compliance
     rules:
