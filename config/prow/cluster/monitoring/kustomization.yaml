@@ -71,8 +71,6 @@ configMapGenerator:
     labels:
       app: grafana
   files:
-  - grafana/dashboards/boskos.json
-  - grafana/dashboards/boskos-http.json
   - grafana/dashboards/deck.json
   - grafana/dashboards/ghproxy.json
   - grafana/dashboards/hook.json
