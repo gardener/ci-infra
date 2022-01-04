@@ -4,7 +4,7 @@
     module: [http_2xx]
   static_configs:
   - targets:
-    # TODO: align this with prober alerts
+    # ATTENTION: Keep this in sync with the Blackbox Prober alerts in prow_prometheusrule.yaml
     - https://prow.gardener.cloud
     - https://monitoring.prow.gardener.cloud
     - https://storage.googleapis.com/gardener-prow/tide-history.json

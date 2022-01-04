@@ -30,6 +30,7 @@ resources:
 - prometheus_service.yaml
 - prow_alertmanager.yaml
 - prow_prometheus.yaml
+- prow_prometheusrule.yaml
 - prow_servicemonitors.yaml
 
 secretGenerator:
