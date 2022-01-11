@@ -1,5 +1,6 @@
 presubmits:
   gardener/ci-infra:
+  # Please keep this in sync with the `ci-infra-prow-checkconfig-{trusted,build}` jobs
   - name: pull-ci-infra-prow-checkconfig
     cluster: gardener-prow-build
     run_if_changed: '^(config/prow/(config|plugins).yaml$|config/jobs/.*.yaml$)'

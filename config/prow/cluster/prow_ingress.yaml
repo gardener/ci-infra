@@ -27,12 +27,6 @@ spec:
             name: hook
             port:
               number: 8888
-#      - path: /metrics
-#        backend:
-#          service:
-#            name: pushgateway-external
-#            port:
-#              number: 80
   tls:
   - hosts:
     - prow.gardener.cloud

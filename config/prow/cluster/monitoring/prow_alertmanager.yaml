@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: prow
+  namespace: prow-monitoring
+spec:
+  replicas: 3
+  image: prom/alertmanager
+  version: v0.23.0
+  listenLocal: false
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: alertmanager
+  configSecret: alertmanager-prow
+  secrets:
+  - alertmanager-prow-slack
+  storage: # Note that this section is immutable so changes require deleting and recreating the resource.
+    volumeClaimTemplate:
+      metadata:
+        name: alertmanager
+        labels:
+          app: alertmanager
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: gce-ssd
+        resources:
+          requests:
+            storage: 10Gi

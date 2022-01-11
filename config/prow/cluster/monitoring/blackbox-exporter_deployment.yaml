@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blackbox-exporter
+  namespace: prow-monitoring
+  labels:
+    app: blackbox-exporter
+spec:
+  selector:
+    matchLabels:
+      app: blackbox-exporter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blackbox-exporter
+    spec:
+      containers:
+      - name: blackbox-exporter
+        args:
+        - --config.file=/etc/config/probes.yaml
+        image: prom/blackbox-exporter:v0.19.0
+        volumeMounts:
+        - name: config
+          mountPath: /etc/config/
+      volumes:
+      - name: config
+        configMap:
+          name: blackbox-exporter-config

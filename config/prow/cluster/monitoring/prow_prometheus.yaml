@@ -1,0 +1,47 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prow
+  namespace: prow-monitoring
+spec:
+  replicas: 2
+  image: prom/prometheus
+  version: v2.32.1
+  storage:
+    volumeClaimTemplate:
+      metadata:
+        name: prometheus
+        labels:
+          app: prometheus
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: gce-ssd
+        resources:
+          requests:
+            storage: 100Gi
+  retention: 90d
+  serviceAccountName: prometheus-prow
+  alerting:
+    alertmanagers:
+    - namespace: prow-monitoring
+      name: alertmanager
+      port: http
+  enableAdminAPI: false
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+      prometheus: prow
+  serviceMonitorSelector:
+    matchExpressions:
+    - key: app
+      operator: Exists
+  externalLabels: {}
+  listenLocal: false
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  additionalScrapeConfigs:
+    name: prometheus-prow-additional-scrape-configs
+    key: additional-scrape-targets.yaml

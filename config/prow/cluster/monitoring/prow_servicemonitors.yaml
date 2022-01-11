@@ -1,0 +1,209 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus
+  namespace: prow-monitoring
+  labels:
+    app: prometheus
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow-monitoring
+  selector:
+    matchLabels:
+      app: prometheus
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: alertmanager
+  namespace: prow-monitoring
+  labels:
+    app: alertmanager
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow-monitoring
+  selector:
+    matchLabels:
+      app: alertmanager
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: grafana
+  namespace: prow-monitoring
+  labels:
+    app: grafana
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow-monitoring
+  selector:
+    matchLabels:
+      app: grafana
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: deck
+  namespace: prow-monitoring
+  labels:
+    app: deck
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: deck
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ghproxy
+  namespace: prow-monitoring
+  labels:
+    app: ghproxy
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: ghproxy
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hook
+  namespace: prow-monitoring
+  labels:
+    app: hook
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: hook
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: plank
+  namespace: prow-monitoring
+  labels:
+    app: plank
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: prow-controller-manager
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sinker
+  namespace: prow-monitoring
+  labels:
+    app: sinker
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: sinker
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tide
+  namespace: prow-monitoring
+  labels:
+    app: tide
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: tide
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: horologium
+  namespace: prow-monitoring
+  labels:
+    app: horologium
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: horologium
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: crier
+  namespace: prow-monitoring
+  labels:
+    app: crier
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - prow
+  selector:
+    matchLabels:
+      app: crier

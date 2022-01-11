@@ -9,7 +9,7 @@ This is currently under construction / in evaluation phase.
 ## CI Job Management
 
 Gardener uses a [`prow`](https://github.com/kubernetes/test-infra/blob/master/prow) instance at [prow.gardener.cloud](https://prow.gardener.cloud) to handle CI and automation for parts of the project.
-Everyone can participate in a self-service PR-based workflow, where changes are automatically deployed after they have been reviewed and merge.
+Everyone can participate in a self-service PR-based workflow, where changes are automatically deployed after they have been reviewed and merged.
 All job configs are located in [`config/jobs`](config/jobs).
 
 ## How to setup
@@ -76,6 +76,13 @@ All job configs are located in [`config/jobs`](config/jobs).
             token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
         ```
     - `slack-token` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter))
+    - `alertmanager-prow-slack` (needs to be present in the prow-monitoring namespace of the prow cluster)
+      - Follow https://api.slack.com/incoming-webhooks and setup a webhook.
+      - Create the secret including the Webhook URL under key `api_url`.
+    - `grafana` (admin user password)
+      ```bash
+      $ kubectl -n prow-monitoring create secret generic grafana --from-literal=admin_password=$(openssl rand -base64 32)
+      ```
 1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
    $ ./config/prow/deploy.sh
@@ -84,3 +91,17 @@ All job configs are located in [`config/jobs`](config/jobs).
    ```bash
    $ ./hack/boostrap-config.sh
    ```
+
+## Monitoring
+
+A basic monitoring stack is installed in the prow cluster consisting of:
+- [prometheus-operator](https://github.com/prometheus-operator/prometheus-operator)
+- alertmanager (cluster with 3 replicas for HA)
+- prometheus (2 replicas for HA)
+- blackbox-exporter
+- kube-state-metrics
+- grafana
+
+Alertmanager will send Slack alerts in `#gardener-prow-alerts` (SAP-internal workspace).
+
+Grafana is available publicly at https://monitoring.prow.gardener.cloud.

@@ -130,4 +130,9 @@ for c in "${prow_components_build[@]}"; do
 done
 echo "$(color-green done)"
 
+echo "$(color-step "Deploying monitoring components to gardener-prow-trusted cluster...")"
+kubectl config use-context gardener-prow-trusted
+kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring"
+echo "$(color-green done)"
+
 echo "$(color-green SUCCESS)"
