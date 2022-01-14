@@ -16,7 +16,7 @@ periodics:
     description: Runs label_sync to synchronize GitHub repo labels with the label config defined in config/prow/labels.yaml
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20220112-a9160dc9ff
+    - image: gcr.io/k8s-prow/label_sync:v20220114-212d23c82d
       command:
       - /app/label_sync/app.binary
       args:
@@ -54,7 +54,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: gcr.io/k8s-prow/branchprotector:v20220112-a9160dc9ff
+    - image: gcr.io/k8s-prow/branchprotector:v20220114-212d23c82d
       command:
       - /app/prow/cmd/branchprotector/app.binary
       args:
@@ -88,7 +88,7 @@ periodics:
     description: Runs autobumper to create/update a PR that bumps prow images to the latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220112-a9160dc9ff
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220114-212d23c82d
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -118,7 +118,7 @@ periodics:
     description: Runs autobumper to create/update a PR that bumps prowjob images to latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220112-a9160dc9ff
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220114-212d23c82d
       command:
       - /app/prow/cmd/generic-autobumper/app.binary
       args:
@@ -151,7 +151,7 @@ periodics:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20220112-a9160dc9ff
+    - image: gcr.io/k8s-prow/checkconfig:v20220114-212d23c82d
       command:
       - /checkconfig
       args:
@@ -182,7 +182,7 @@ periodics:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20220112-a9160dc9ff
+    - image: gcr.io/k8s-prow/checkconfig:v20220114-212d23c82d
       command:
       - /checkconfig
       args:
