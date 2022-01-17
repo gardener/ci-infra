@@ -2,6 +2,8 @@ aliases:
   ci-infra-reviewers:
   - timebertt
   - rfranzke
+  - oliver-goetz
   ci-infra-approvers:
   - timebertt
   - rfranzke
+  - oliver-goetz
