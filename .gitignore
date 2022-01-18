@@ -1,3 +1,9 @@
-/.idea
-/.vscode
-/tmp
+tmp/
+
+*.test
+*.coverprofile
+*.html
+.vscode
+.project
+.idea
+.DS_Store
