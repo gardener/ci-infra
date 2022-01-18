@@ -9,8 +9,7 @@ spec:
     kubernetesDashboard:
       enabled: false
     nginxIngress:
-      enabled: true
-      externalTrafficPolicy: Cluster
+      enabled: false
   cloudProfileName: gcp
   kubernetes:
     allowPrivilegedContainers: true
@@ -49,7 +48,7 @@ spec:
       machine:
         image:
           name: gardenlinux
-          version: 318.8.0
+          version: 576.1.0
         type: e2-standard-16
       minimum: 1
       maximum: 5
