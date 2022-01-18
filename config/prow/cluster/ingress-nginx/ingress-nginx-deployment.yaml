@@ -795,6 +795,7 @@ spec:
       serviceAccountName: ingress-nginx-admission
       nodeSelector: 
         kubernetes.io/os: linux
+        worker.gardener.cloud/pool: controlplane
       securityContext:
         runAsNonRoot: true
         runAsUser: 2000
@@ -851,6 +852,7 @@ spec:
       serviceAccountName: ingress-nginx-admission
       nodeSelector: 
         kubernetes.io/os: linux
+        worker.gardener.cloud/pool: controlplane
       securityContext:
         runAsNonRoot: true
         runAsUser: 2000

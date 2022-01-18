@@ -60,6 +60,10 @@ controller:
     name: nginx
     enabled: true
     default: true
+  admissionWebhooks:
+    patch:
+      nodeSelector:
+        worker.gardener.cloud/pool: controlplane
 defaultBackend:
   enabled: true
   affinity:
