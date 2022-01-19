@@ -83,6 +83,18 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 3
           timeoutSeconds: 600
+      affinity: 
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - hook
+              topologyKey: kubernetes.io/hostname
+            weight: 100
       volumes:
       - name: github-app
         secret:

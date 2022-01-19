@@ -9,14 +9,25 @@ controller:
       cpu: 1000m
       memory: 500Mi
   affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: worker.gardener.cloud/pool
-            operator: In
-            values:
-            - controlplane
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - ingress-nginx
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+              - ingress-nginx
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - controller
+          topologyKey: kubernetes.io/hostname
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
@@ -26,21 +37,8 @@ controller:
     name: nginx
     enabled: true
     default: true
-  admissionWebhooks:
-    patch:
-      nodeSelector:
-        worker.gardener.cloud/pool: controlplane
 defaultBackend:
   enabled: true
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: worker.gardener.cloud/pool
-            operator: In
-            values:
-            - controlplane
   resources:
     limits:
       cpu: 10m

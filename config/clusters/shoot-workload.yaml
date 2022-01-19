@@ -56,6 +56,8 @@ spec:
       maxUnavailable: 0
       systemComponents:
         allow: true
+      cri:
+        name: containerd
       volume:
         size: 100Gi
         type: pd-ssd

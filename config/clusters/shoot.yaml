@@ -57,38 +57,22 @@ spec:
       kind: ControlPlaneConfig
       zone: europe-west1-c
     workers:
-    - name: controlplane
-      machine:
-        image:
-          name: gardenlinux
-          version: 576.1.0
-        type: e2-standard-4
-      minimum: 1
-      maximum: 3
-      maxSurge: 1
-      maxUnavailable: 0
-      # TODO: add taints to repel test-pods
-      systemComponents:
-        allow: true
-      volume:
-        size: 50Gi
-        type: pd-ssd
-      zones:
-      - europe-west1-c
     - name: worker
       machine:
         image:
           name: gardenlinux
           version: 576.1.0
-        type: e2-standard-16
-      minimum: 1
+        type: e2-standard-4
+      minimum: 2
       maximum: 5
       maxSurge: 1
       maxUnavailable: 0
       systemComponents:
-        allow: false
+        allow: true
+      cri:
+        name: containerd
       volume:
-        size: 100Gi
+        size: 50Gi
         type: pd-ssd
       zones:
       - europe-west1-c

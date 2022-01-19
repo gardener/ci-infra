@@ -45,3 +45,23 @@ spec:
   additionalScrapeConfigs:
     name: prometheus-prow-additional-scrape-configs
     key: additional-scrape-targets.yaml
+  affinity: 
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+              - prow
+            - key: app.kubernetes.io/managed-by
+              operator: In
+              values:
+              - prometheus-operator
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - prometheus
+          topologyKey: kubernetes.io/hostname
+        weight: 100
