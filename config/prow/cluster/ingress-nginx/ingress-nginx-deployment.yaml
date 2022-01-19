@@ -377,7 +377,7 @@ spec:
       app.kubernetes.io/name: ingress-nginx
       app.kubernetes.io/instance: ingress-nginx
       app.kubernetes.io/component: controller
-  replicas: 2
+  replicas: 3
   revisionHistoryLimit: 10
   strategy:
     
@@ -469,7 +469,7 @@ spec:
           resources: 
             requests:
               cpu: 100m
-              memory: 90Mi
+              memory: 120Mi
       nodeSelector: 
         kubernetes.io/os: linux
       affinity: 
@@ -553,6 +553,13 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          resources: 
+            limits:
+              cpu: 10m
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 20Mi
       nodeSelector: 
         kubernetes.io/os: linux
       serviceAccountName: ingress-nginx-backend
