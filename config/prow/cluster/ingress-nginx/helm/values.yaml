@@ -1,0 +1,50 @@
+# Check values.yaml of ingress-nginx for help https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
+controller:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 100m
+      memory: 120Mi
+    limits:
+      cpu: 1000m
+      memory: 500Mi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker.gardener.cloud/pool
+            operator: In
+            values:
+            - controlplane
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  watchIngressWithoutClass: true
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+  admissionWebhooks:
+    patch:
+      nodeSelector:
+        worker.gardener.cloud/pool: controlplane
+defaultBackend:
+  enabled: true
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker.gardener.cloud/pool
+            operator: In
+            values:
+            - controlplane
+  resources:
+    limits:
+      cpu: 10m
+      memory: 20Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
