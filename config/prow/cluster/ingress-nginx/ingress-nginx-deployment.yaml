@@ -467,6 +467,9 @@ spec:
               mountPath: /usr/local/certificates/
               readOnly: true
           resources: 
+            limits:
+              cpu: 1000m
+              memory: 500Mi
             requests:
               cpu: 100m
               memory: 120Mi

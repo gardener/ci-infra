@@ -5,6 +5,9 @@ controller:
     requests:
       cpu: 100m
       memory: 120Mi
+    limits:
+      cpu: 1000m
+      memory: 500Mi
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
