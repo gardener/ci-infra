@@ -1,9 +1,14 @@
 ---
 name: Bug Report
 about: Report a bug
-labels: kind/bug
 
 ---
+
+<!--
+Please select the kind of this issue.
+"/kind" identifiers:    api-change|bug|cleanup|discussion|enhancement|epic|impediment|poc|post-mortem|question|regression|task|technical-debt|test
+-->
+/kind bug
 
 **What happened**:
 
