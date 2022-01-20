@@ -476,14 +476,25 @@ spec:
       nodeSelector: 
         kubernetes.io/os: linux
       affinity: 
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker.gardener.cloud/pool
-                operator: In
-                values:
-                - controlplane
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - ingress-nginx
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                  - ingress-nginx
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - controller
+              topologyKey: kubernetes.io/hostname
+            weight: 100
       serviceAccountName: ingress-nginx
       terminationGracePeriodSeconds: 300
       volumes:
@@ -566,15 +577,6 @@ spec:
       nodeSelector: 
         kubernetes.io/os: linux
       serviceAccountName: ingress-nginx-backend
-      affinity: 
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: worker.gardener.cloud/pool
-                operator: In
-                values:
-                - controlplane
       terminationGracePeriodSeconds: 60
 ---
 # Source: ingress-nginx/templates/controller-ingressclass.yaml
@@ -805,7 +807,6 @@ spec:
       serviceAccountName: ingress-nginx-admission
       nodeSelector: 
         kubernetes.io/os: linux
-        worker.gardener.cloud/pool: controlplane
       securityContext:
         runAsNonRoot: true
         runAsUser: 2000
@@ -862,7 +863,6 @@ spec:
       serviceAccountName: ingress-nginx-admission
       nodeSelector: 
         kubernetes.io/os: linux
-        worker.gardener.cloud/pool: controlplane
       securityContext:
         runAsNonRoot: true
         runAsUser: 2000
