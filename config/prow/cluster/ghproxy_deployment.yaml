@@ -10,6 +10,10 @@ spec:
     matchLabels:
       app: ghproxy
   replicas: 1  # TODO(fejta): this should be HA
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   template:
     metadata:
       labels:
