@@ -149,6 +149,20 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
+  - author: gardener-ci-robot
+    repos:
+    - gardener/ci-infra
+    labels: # gardener-ci-robot should only create autobump PR with this label
+    - skip-review
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
 
   merge_method:
     gardener/ci-infra: squash
