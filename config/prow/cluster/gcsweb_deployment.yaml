@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcsweb
+  namespace: gcsweb
+  labels:
+    app: gcsweb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gcsweb
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gcsweb
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: gcsweb
+          image: k8s.gcr.io/gcsweb:v1.1.0
+          args:
+            - -upgrade-proxied-http-to-https
+            # buckets owned by gardener
+            - -b=gardener-prow
+            - -p=8080
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 2
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 2
+      affinity: 
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - gcsweb
+              topologyKey: kubernetes.io/hostname
+            weight: 100

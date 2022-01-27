@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gcsweb
+  namespace: gcsweb
+  labels:
+    app: gcsweb
+  annotations:
+    cert.gardener.cloud/issuer: ci-issuer
+    cert.gardener.cloud/purpose: managed
+    dns.gardener.cloud/class: garden
+    dns.gardener.cloud/dnsnames: gcsweb.gardener.cloud
+spec:
+  rules:
+  - host: gcsweb.gardener.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gcsweb
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - gcsweb.gardener.cloud
+    secretName: gcsweb-ingress-tls
