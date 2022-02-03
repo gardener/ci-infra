@@ -137,6 +137,11 @@ plugins:
 
 external_plugins:
   gardener/ci-infra:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review_comment
+      - status
   - name: needs-rebase
     events:
       - issue_comment

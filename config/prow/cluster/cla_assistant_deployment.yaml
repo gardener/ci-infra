@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: prow
+  name: cla-assistant
+  labels:
+    app: cla-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cla-assistant
+  template:
+    metadata:
+      labels:
+        app: cla-assistant
+    spec:
+      terminationGracePeriodSeconds: 180
+      containers:
+      - name: cla-assistant
+        image: ghcr.io/gardener/ci-infra/cla-assistant:latest
+        imagePullPolicy: Always
+        args:
+        - --dry-run=false
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        - --log-level=info
+        env:
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
+        ports:
+          - name: http
+            containerPort: 8888
+        volumeMounts:
+        - name: github-app
+          mountPath: /etc/github
+          readOnly: true
+        - name: hmac
+          mountPath: /etc/webhook
+          readOnly: true
+        - name: plugins
+          mountPath: /etc/plugins
+          readOnly: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 25Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+      volumes:
+      - name: github-app
+        secret:
+          secretName: github-app
+      - name: hmac
+        secret:
+          secretName: hmac-token
+      - name: plugins
+        configMap:
+          name: plugins

@@ -25,3 +25,16 @@ presubmits:
         - --warnings=validate-urls
         - --warnings=unknown-fields
         - --warnings=duplicate-job-refs
+  - name: pull-ci-infra-prow-go-tests
+    cluster: gardener-prow-build
+    run_if_changed: '^(prow\/*)'
+    decorate: true
+    annotations:
+      description: Runs go tests for prow developments in ci-infra 
+    spec:
+      containers:
+      - image: golang:1.17
+        command:
+        - make
+        args:
+        - test

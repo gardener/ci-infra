@@ -234,6 +234,18 @@ repos:
         target: both
         prowPlugin: shrug
         addedBy: humans
+      - color: e11d21
+        description: Indicates the PR's author has not signed the cla-assistant.io CLA.
+        name: 'cla: no'
+        target: prs
+        prowPlugin: cla-assistant
+        addedBy: prow
+      - color: bfe5bf
+        description: Indicates the PR's author has signed the cla-assistant.io CLA.
+        name: 'cla: yes'
+        target: prs
+        prowPlugin: cla-assistant
+        addedBy: prow
   gardener/gardener:
     labels:
       - color: b60205

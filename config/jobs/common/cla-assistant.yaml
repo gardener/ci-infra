@@ -1,0 +1,37 @@
+periodics:
+- name: ci-gardener-triage-robot-cla
+  interval: 10m
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: A sample job to make sure things work
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20211220-180c042a80
+      command:
+      - /app/robots/commenter/app.binary
+      args:
+      - |-
+        --query=org:gardener
+        repo:gardener/ci-infra
+        is:pr
+        is:open
+        -label:"cla: no"
+        -label:"cla: yes"
+      - --updated=10m
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=Unknown CLA label state. Rechecking at cla-assistant.io.
+        /cla
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
