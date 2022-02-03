@@ -26,7 +26,7 @@
 cd "$(git rev-parse --show-toplevel)"
 
 docker run -i --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  gcr.io/k8s-prow/mkpj:v20220202-1256a81e66 \
+  gcr.io/k8s-prow/mkpj:v20220203-ad9c38e2b5 \
   --config-path=config/prow/config.yaml \
   --job-config-path=config/jobs \
   "$@"
