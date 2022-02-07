@@ -12,8 +12,7 @@ periodics:
       - /app/robots/commenter/app.binary
       args:
       - |-
-        --query=org:gardener
-        repo:gardener/ci-infra
+        --query=repo:gardener/ci-infra
         is:pr
         is:open
         -label:"cla: no"
