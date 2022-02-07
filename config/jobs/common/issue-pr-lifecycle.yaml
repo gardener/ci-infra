@@ -1,0 +1,120 @@
+periodics:
+- name: ci-gardener-triage-robot-close
+  interval: 1h
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Closes rotten issues after 30d of inactivity
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20220206-831340cbbf
+      command:
+      - /app/robots/commenter/app.binary
+      args:
+      - |-
+        --query=repo:gardener/ci-infra
+        -label:lifecycle/frozen
+        label:lifecycle/rotten
+      - --updated=720h
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues and PRs.
+        This bot triages issues and PRs according to the following rules:
+        - After 90d of inactivity, `lifecycle/stale` is applied
+        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        You can:
+        - Reopen this issue or PR with `/reopen`
+        - Mark this issue or PR as fresh with `/remove-lifecycle rotten`
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: token
+        mountPath: /etc/github-token
+    volumes:
+    - name: token
+      secret:
+        secretName: github-token
+
+- name: ci-gardener-triage-robot-rotten
+  interval: 1h
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Adds lifecycle/rotten to stale issues after 30d of inactivity
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20220206-831340cbbf
+      command:
+      - /app/robots/commenter/app.binary
+      args:
+      - |-
+        --query=repo:gardener/ci-infra
+        -label:lifecycle/frozen
+        label:lifecycle/stale
+        -label:lifecycle/rotten
+      - --updated=720h
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues and PRs.
+        This bot triages issues and PRs according to the following rules:
+        - After 90d of inactivity, `lifecycle/stale` is applied
+        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        You can:
+        - Mark this issue or PR as fresh with `/remove-lifecycle rotten`
+        - Close this issue or PR with `/close`
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: token
+        mountPath: /etc/github-token
+    volumes:
+    - name: token
+      secret:
+        secretName: github-token
+
+- name: ci-gardener-triage-robot-stale
+  interval: 1h
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Adds lifecycle/stale to issues after 90d of inactivity
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20220206-831340cbbf
+      command:
+      - /app/robots/commenter/app.binary
+      args:
+      - |-
+        --query=repo:gardener/ci-infra
+        -label:lifecycle/frozen
+        -label:lifecycle/stale
+        -label:lifecycle/rotten
+      - --updated=2160h
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=The Gardener project currently lacks enough contributors to adequately respond to all issues and PRs.
+        This bot triages issues and PRs according to the following rules:
+        - After 90d of inactivity, `lifecycle/stale` is applied
+        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        You can:
+        - Mark this issue or PR as fresh with `/remove-lifecycle stale`
+        - Mark this issue or PR as rotten with `/lifecycle rotten`
+        - Close this issue or PR with `/close`
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: token
+        mountPath: /etc/github-token
+    volumes:
+    - name: token
+      secret:
+        secretName: github-token
