@@ -35,7 +35,7 @@ spec:
               key: appid
         ports:
           - name: http
-            containerPort: 8888
+            containerPort: 8080
         volumeMounts:
         - name: github-app
           mountPath: /etc/github

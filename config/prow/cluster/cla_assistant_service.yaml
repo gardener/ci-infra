@@ -8,5 +8,5 @@ spec:
     app: cla-assistant
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: http
   type: ClusterIP
