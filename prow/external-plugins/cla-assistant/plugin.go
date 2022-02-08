@@ -287,32 +287,29 @@ func (c *claAssistantPlugin) enforceClaRecheck(org string, repo string, pullRequ
 
 	if err == nil {
 		c.log.Infof("Successfully reached out to cla-assistant.io to initialize recheck of PR %v", pullRequestNumber)
-		c.createClaResultComment(
+		err := c.ghc.CreateComment(
 			org,
 			repo,
 			pullRequestNumber,
 			fmt.Sprintf("Successfully reached out to cla-assistant.io to initialize recheck of PR #%v", pullRequestNumber),
 		)
+		if err != nil {
+			c.log.WithError(err).Warningf(
+				"Successfully reached out to cla-assistant.io to initialize recheck of PR #%v, but response comment could not be created", pullRequestNumber)
+		}
 	} else {
-		c.createClaResultComment(
+		err := c.ghc.CreateComment(
 			org,
 			repo,
 			pullRequestNumber,
 			fmt.Sprintf("Could not reach out to cla-assistant.io for rechecking PR #%v", pullRequestNumber),
 		)
+		if err != nil {
+			c.log.WithError(err).Errorf(
+				"Could not reach out to cla-assistant.io for rechecking PR #%v and response comment could not be created", pullRequestNumber)
+		}
 	}
 
-	return err
-}
-
-func (c *claAssistantPlugin) createClaResultComment(org string, repo string, pullRequestNumber int, comment string) error {
-	b := backoff.NewExponentialBackOff()
-	b.MaxElapsedTime = c.maxRetryTime
-
-	err := backoff.Retry(
-		func() error { return c.ghc.CreateComment(org, repo, pullRequestNumber, comment) },
-		b,
-	)
 	return err
 }
 

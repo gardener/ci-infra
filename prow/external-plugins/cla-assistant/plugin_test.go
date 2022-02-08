@@ -606,6 +606,7 @@ func TestForceClaRecheck(t *testing.T) {
 
 	p := newClaAssistantTestPlugin()
 	defer p.http.server.Close()
+	ingestDataIntoFakeClient(p.fakeClient)
 
 	for _, test := range tests {
 		t.Run(
@@ -613,7 +614,7 @@ func TestForceClaRecheck(t *testing.T) {
 			func(t *testing.T) {
 
 				p.http.setServerParameters(&test.recoverFromError, &test.responseTimeout, &test.httpResponseCode)
-				err := p.plugin.enforceClaRecheck(testOwner, testRepo, 1234)
+				err := p.plugin.enforceClaRecheck(testOwner, testRepo, 1)
 				if test.errorExpected {
 					assert.Error(t, err)
 				} else {

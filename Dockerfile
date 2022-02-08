@@ -2,7 +2,7 @@
 # Build container
 # ----------------
 
-FROM golang:1.17 AS builder
+FROM golang:1.17.6 AS builder
 LABEL stage=intermediate
 ARG OS
 ARG ARCH
@@ -17,7 +17,7 @@ RUN mkdir /build && GOBIN=/build \
 # Executable container base
 # --------------------------
 
-FROM alpine:3.15 AS ssl_runner
+FROM alpine:3.15.0 AS ssl_runner
 # Install SSL ca certificates
 RUN apk add --no-cache ca-certificates
 # Create nonroot user and group to be used in executable containers
@@ -35,4 +35,4 @@ LABEL version=${EFFECTIVE_VERSION}
 WORKDIR /
 COPY --from=builder /build/cla-assistant /cla-assistant
 EXPOSE 8080
-ENTRYPOINT [ "./cla-assistant" ]
+ENTRYPOINT [ "/cla-assistant" ]
