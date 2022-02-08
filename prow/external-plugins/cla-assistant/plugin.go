@@ -145,26 +145,15 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 		claStatus.State = se.State
 		claStatus.TargetURL = se.TargetURL
 	} else {
-		b := backoff.NewExponentialBackOff()
-		b.MaxElapsedTime = c.maxRetryTime
-		err := backoff.Retry(
-			func() error {
-				status, err := c.ghc.ListStatuses(org, repo, se.SHA)
-				if err != nil {
-					return err
-				}
-				for _, s := range status {
-					if s.Context == claGithubContext {
-						claStatus = s
-						break
-					}
-				}
-				return nil
-			},
-			b,
-		)
+		status, err := c.ghc.ListStatuses(org, repo, se.SHA)
 		if err != nil {
 			return err
+		}
+		for _, s := range status {
+			if s.Context == claGithubContext {
+				claStatus = s
+				break
+			}
 		}
 	}
 
@@ -180,24 +169,9 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 
 	l.Info("Searching for PRs matching the commit.")
 
-	var pullRequests []pullRequest
-	b := backoff.NewExponentialBackOff()
-	b.MaxElapsedTime = c.maxRetryTime
-
-	err := backoff.Retry(
-		func() error {
-			var err error
-			pullRequests, err = c.search(context.Background(), l, fmt.Sprintf("%s repo:%s/%s type:pr state:open", se.SHA, org, repo), org)
-			if err != nil {
-				return fmt.Errorf("error searching for issues matching commit: %w", err)
-			}
-			return nil
-		},
-		b,
-	)
-
+	pullRequests, err := c.search(context.Background(), l, fmt.Sprintf("%s repo:%s/%s type:pr state:open", se.SHA, org, repo), org)
 	if err != nil {
-		return err
+		return fmt.Errorf("error searching for issues matching commit: %w", err)
 	}
 
 	l.Infof("Found %d PRs matching commit.", len(pullRequests))
@@ -222,15 +196,7 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 
 		var pr *github.PullRequest
 
-		b.Reset()
-		err := backoff.Retry(
-			func() error {
-				pr, err = c.ghc.GetPullRequest(org, repo, int(pullRequest.Number))
-				return err
-			},
-			b,
-		)
-
+		pr, err := c.ghc.GetPullRequest(org, repo, int(pullRequest.Number))
 		if err != nil {
 			pl.WithError(err).Warningf("Unable to fetch PR #%d from %s/%s.", int(pullRequest.Number), org, repo)
 			continue
@@ -246,21 +212,13 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 		if claStatus.State == github.StatusSuccess {
 			if hasClaNo {
 				// Remove "CLA no" label
-				b.Reset()
-				err = backoff.Retry(
-					func() error { return c.ghc.RemoveLabel(org, repo, number, labelClaNo) },
-					b,
-				)
+				err := c.ghc.RemoveLabel(org, repo, number, labelClaNo)
 				if err != nil {
 					pl.WithError(err).Warningf("Could not remove %s label from PR #%v.", labelClaNo, int(pullRequest.Number))
 				}
 			}
 			// Add "CLA yes" label
-			b.Reset()
-			err = backoff.Retry(
-				func() error { return c.ghc.AddLabel(org, repo, number, labelClaYes) },
-				b,
-			)
+			err := c.ghc.AddLabel(org, repo, number, labelClaYes)
 			if err != nil {
 				pl.WithError(err).Warningf("Could not add %s label from PR #%v.", labelClaYes, int(pullRequest.Number))
 			}
@@ -270,21 +228,13 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 		// If we end up here, the github status is a failure/error, so a potential CLA yes label needs to be removed.
 		if hasClaYes {
 			// Remove "CLA yes" label
-			b.Reset()
-			err = backoff.Retry(
-				func() error { return c.ghc.RemoveLabel(org, repo, number, labelClaYes) },
-				b,
-			)
+			err := c.ghc.RemoveLabel(org, repo, number, labelClaYes)
 			if err != nil {
 				pl.WithError(err).Warningf("Could not remove %s label from PR #%v.", labelClaYes, int(pullRequest.Number))
 			}
 		}
 		// Add "CLA no" label
-		b.Reset()
-		err = backoff.Retry(
-			func() error { return c.ghc.AddLabel(org, repo, number, labelClaNo) },
-			b,
-		)
+		err = c.ghc.AddLabel(org, repo, number, labelClaNo)
 		if err != nil {
 			pl.WithError(err).Warningf("Could not add %s label from PR #%v.", labelClaNo, int(pullRequest.Number))
 		}
