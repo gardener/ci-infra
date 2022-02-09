@@ -32,9 +32,9 @@ receivers:
     icon_url: https://avatars3.githubusercontent.com/u/3380462
     username: Gardener Prow Alertmanager
     title: '{{ template "custom_slack_title" . }}'
-    # notify timebertt for firing critical alerts
+    # notify oliver-goetz for firing critical alerts
     # TODO: use a slack group instead
-    text: '{{ if eq .Status "firing" }}<@W8VJVJA3H> {{ end }}{{ template "custom_slack_text" . }}'
+    text: '{{ if eq .Status "firing" }}<@W8V9YC6PQ> {{ end }}{{ template "custom_slack_text" . }}'
     link_names: true
 
 templates:
