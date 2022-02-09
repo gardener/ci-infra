@@ -12,7 +12,8 @@ periodics:
       - /app/robots/commenter/app.binary
       args:
       - |-
-        --query=repo:gardener/ci-infra
+        --query=org:gardener
+        repo:gardener/ci-infra
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=720h
@@ -53,7 +54,8 @@ periodics:
       - /app/robots/commenter/app.binary
       args:
       - |-
-        --query=repo:gardener/ci-infra
+        --query=org:gardener
+        repo:gardener/ci-infra
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
@@ -95,7 +97,8 @@ periodics:
       - /app/robots/commenter/app.binary
       args:
       - |-
-        --query=repo:gardener/ci-infra
+        --query=org:gardener
+        repo:gardener/ci-infra
         -label:lifecycle/frozen
         -label:lifecycle/stale
         -label:lifecycle/rotten
