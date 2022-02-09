@@ -56,7 +56,7 @@ func (o *options) Validate() error {
 }
 
 func gatherOptions() options {
-	o := options{pluginsConfig: pluginsflagutil.PluginOptions{PluginConfigPath: "/etc/plugins/plugins.yaml"}}
+	o := options{pluginsConfig: pluginsflagutil.PluginOptions{PluginConfigPathDefault: "/etc/plugins/plugins.yaml"}}
 	fs := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	fs.IntVar(&o.port, "port", 8080, "Port HTTP server listens on.")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "Dry run for testing. Uses API tokens but does not mutate.")
@@ -66,7 +66,10 @@ func gatherOptions() options {
 	for _, group := range []flagutil.OptionGroup{&o.github, &o.instrumentationOptions, &o.pluginsConfig} {
 		group.AddFlags(fs)
 	}
-	fs.Parse(os.Args[1:])
+	err := fs.Parse(os.Args[1:])
+	if err != nil {
+		logrus.Fatalf("Unable to parse command line flags: %v", err)
+	}
 	return o
 }
 
@@ -95,17 +98,18 @@ func main() {
 
 	cla := newClaAssistantPlugin(githubClient, log)
 
-	hs := newHttpServer(secret.GetTokenGenerator(o.webhookSecretFile), &cla, log)
+	hs := newHttpServer(secret.GetTokenGenerator(o.webhookSecretFile), cla, log)
 
 	defer interrupts.WaitForGracefulShutdown()
 
 	health := pjutil.NewHealthOnPort(o.instrumentationOptions.HealthPort)
-	health.ServeReady()
 
 	mux := http.NewServeMux()
-	mux.Handle("/", &hs)
+	mux.Handle("/", hs)
 	externalplugins.ServeExternalPluginHelp(mux, log, cla.helpProvider)
 	httpServer := &http.Server{Addr: ":" + strconv.Itoa(o.port), Handler: mux}
+
+	health.ServeReady()
 	interrupts.ListenAndServe(httpServer, 5*time.Second)
 
 }

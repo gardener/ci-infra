@@ -76,6 +76,27 @@ func TestHandleEvent(t *testing.T) {
 			errorExpected: false,
 		},
 		{
+			name:      "/cla in first line",
+			eventType: "pull_request_review",
+			event: github.ReviewEvent{
+				Action: github.ReviewActionSubmitted,
+				PullRequest: github.PullRequest{
+					Number: 12345,
+					State:  github.PullRequestStateOpen,
+				},
+				Review: github.Review{
+					Body: "/cla",
+				},
+				Repo: github.Repo{
+					Owner: github.User{
+						Login: testOwner,
+					},
+					Name: testRepo,
+				},
+			},
+			errorExpected: false,
+		},
+		{
 			name:      "cla context - pending",
 			eventType: "status",
 			event: github.StatusEvent{

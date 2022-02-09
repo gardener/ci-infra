@@ -51,10 +51,20 @@ endif
 # Rules for verification, formatting, linting, testing and cleaning #
 #####################################################################
 
+.PHONY: check
+check: $(GOIMPORTS) $(GOLANGCI_LINT) $(HELM) $(IMPORT_BOSS)
+	@hack/check.sh --golangci-lint-config=./.golangci.yaml ./prow/...
+
 .PHONY: revendor
 revendor:
 	@GO111MODULE=on go mod tidy
 	@GO111MODULE=on go mod vendor
+
+.PHONY: verify-modules
+verify-vendor: revendor
+	@if !(git diff --quiet HEAD -- go.sum go.mod vendor); then \
+		echo "go module files or vendor folder are out of date, please run 'make revendor'"; exit 1; \
+	fi
 
 .PHONY: test
 test:

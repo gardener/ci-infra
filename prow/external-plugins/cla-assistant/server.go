@@ -31,8 +31,8 @@ type httpServer struct {
 	log            *logrus.Entry
 }
 
-func newHttpServer(tokenGenerator func() []byte, cla *claAssistantPlugin, log *logrus.Entry) httpServer {
-	return httpServer{tokenGenerator: tokenGenerator, cla: cla, log: log}
+func newHttpServer(tokenGenerator func() []byte, cla *claAssistantPlugin, log *logrus.Entry) *httpServer {
+	return &httpServer{tokenGenerator: tokenGenerator, cla: cla, log: log}
 }
 
 // ServeHTTP validates an incoming webhook and puts it into the event channel.
@@ -63,9 +63,15 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 		if err := json.Unmarshal(payload, &ice); err != nil {
 			return err
 		}
+		l = l.WithFields(
+			logrus.Fields{
+				"org":  ice.Repo.Owner.Login,
+				"repo": ice.Repo.Name,
+			},
+		)
 		go func() {
 			if err := s.cla.handleIssueCommentEvent(l, &ice); err != nil {
-				l.WithField("event-type", eventType).WithError(err).Info("Error handling event.")
+				l.WithError(err).Info("Error handling event.")
 			}
 		}()
 	case "pull_request_review_comment":
@@ -73,9 +79,31 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 		if err := json.Unmarshal(payload, &rce); err != nil {
 			return err
 		}
+		l = l.WithFields(
+			logrus.Fields{
+				"org":  rce.Repo.Owner.Login,
+				"repo": rce.Repo.Name,
+			},
+		)
 		go func() {
 			if err := s.cla.handleReviewCommentEvent(l, &rce); err != nil {
-				l.WithField("event-type", eventType).WithError(err).Info("Error handling event.")
+				l.WithError(err).Info("Error handling event.")
+			}
+		}()
+	case "pull_request_review":
+		var pre github.ReviewEvent
+		if err := json.Unmarshal(payload, &pre); err != nil {
+			return err
+		}
+		l = l.WithFields(
+			logrus.Fields{
+				"org":  pre.Repo.Owner.Login,
+				"repo": pre.Repo.Name,
+			},
+		)
+		go func() {
+			if err := s.cla.handleReviewEvent(l, &pre); err != nil {
+				l.WithError(err).Info("Error handling event.")
 			}
 		}()
 	case "status":
@@ -83,9 +111,15 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 		if err := json.Unmarshal(payload, &se); err != nil {
 			return err
 		}
+		l = l.WithFields(
+			logrus.Fields{
+				"org":  se.Repo.Owner.Login,
+				"repo": se.Repo.Name,
+			},
+		)
 		go func() {
 			if err := s.cla.handleStatusEvent(l, &se); err != nil {
-				l.WithField("event-type", eventType).WithError(err).Info("Error handling event.")
+				l.WithError(err).Info("Error handling event.")
 			}
 		}()
 	default:

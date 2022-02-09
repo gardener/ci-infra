@@ -335,6 +335,133 @@ func TestHandleReviewCommentEvent(t *testing.T) {
 	}
 }
 
+func TestHandleReviewEvent(t *testing.T) {
+	type testCase struct {
+		name                  string
+		pre                   github.ReviewEvent
+		reachedServerExpected bool
+	}
+
+	tests := []testCase{
+		{
+			name: "/cla in first line",
+			pre: github.ReviewEvent{
+				Action: github.ReviewActionSubmitted,
+				PullRequest: github.PullRequest{
+					Number: 12345,
+					State:  github.PullRequestStateOpen,
+				},
+				Review: github.Review{
+					Body: "/cla",
+				},
+				Repo: github.Repo{
+					Owner: github.User{
+						Login: testOwner,
+					},
+					Name: testRepo,
+				},
+			},
+			reachedServerExpected: true,
+		},
+		{
+			name: "/cla in second line",
+			pre: github.ReviewEvent{
+				Action: github.ReviewActionSubmitted,
+				PullRequest: github.PullRequest{
+					Number: 12345,
+					State:  github.PullRequestStateOpen,
+				},
+				Review: github.Review{
+					Body: "TestTestTest\n/cla",
+				},
+				Repo: github.Repo{
+					Owner: github.User{
+						Login: testOwner,
+					},
+					Name: testRepo,
+				},
+			},
+			reachedServerExpected: true,
+		},
+		{
+			name: "/cla with leading space",
+			pre: github.ReviewEvent{
+				Action: github.ReviewActionSubmitted,
+				PullRequest: github.PullRequest{
+					Number: 12345,
+					State:  github.PullRequestStateOpen,
+				},
+				Review: github.Review{
+					Body: " /cla",
+				},
+				Repo: github.Repo{
+					Owner: github.User{
+						Login: testOwner,
+					},
+					Name: testRepo,
+				},
+			},
+			reachedServerExpected: false,
+		},
+		{
+			name: "/cla in first line with PR closed",
+			pre: github.ReviewEvent{
+				Action: github.ReviewActionSubmitted,
+				PullRequest: github.PullRequest{
+					Number: 12345,
+					State:  github.PullRequestStateClosed,
+				},
+				Review: github.Review{
+					Body: "/cla",
+				},
+				Repo: github.Repo{
+					Owner: github.User{
+						Login: testOwner,
+					},
+					Name: testRepo,
+				},
+			},
+			reachedServerExpected: false,
+		},
+		{
+			name: "/cla in first line comment edited",
+			pre: github.ReviewEvent{
+				Action: github.ReviewActionDismissed,
+				PullRequest: github.PullRequest{
+					Number: 12345,
+					State:  github.PullRequestStateOpen,
+				},
+				Review: github.Review{
+					Body: "/cla",
+				},
+				Repo: github.Repo{
+					Owner: github.User{
+						Login: testOwner,
+					},
+					Name: testRepo,
+				},
+			},
+			reachedServerExpected: false,
+		},
+	}
+
+	log := logrus.StandardLogger().WithField("TestHandleReviewCommentEvent", pluginName)
+
+	p := newClaAssistantTestPlugin()
+	defer p.http.server.Close()
+
+	for _, test := range tests {
+		t.Run(
+			test.name,
+			func(t *testing.T) {
+				p.http.serverReached = false
+				err := p.plugin.handleReviewEvent(log, &test.pre)
+				assert.NoError(t, err)
+				assert.Equal(t, test.reachedServerExpected, p.http.serverReached)
+			})
+	}
+}
+
 func TestHandleStatusEvent(t *testing.T) {
 	type testCase struct {
 		name                 string
@@ -659,7 +786,10 @@ func (c *claTestServer) serveHTTP(w http.ResponseWriter, _ *http.Request) {
 		time.Sleep(httpTestTimeout + time.Millisecond*1)
 	}
 	w.WriteHeader(c.httpResponseCode)
-	w.Write([]byte("processed"))
+	_, err := w.Write([]byte("processed"))
+	if err != nil {
+		logrus.Errorf("Error writing response: %v", err)
+	}
 	if c.recoverFromError {
 		c.responseTimeout = false
 		c.httpResponseCode = 200
@@ -691,7 +821,7 @@ func newClaAssistantTestPlugin() *claAssistantTestPlugin {
 	p.baseURL = s.server.URL
 	p.maxRetryTime = time.Second * 2
 
-	return &claAssistantTestPlugin{http: s, plugin: &p, fakeClient: ghc}
+	return &claAssistantTestPlugin{http: s, plugin: p, fakeClient: ghc}
 }
 
 type claAssistantTestPlugin struct {
@@ -786,12 +916,30 @@ func createCommitMapKey(owner, repo string, pr int) string {
 
 func ingestDataIntoFakeClient(f *fakeClient) {
 	// SHA must be convertable to integer
-	f.CreateStatus(testOwner, testRepo, shaWithPRClaStatusPending, github.Status{Context: claGithubContext, State: github.StatusPending})
-	f.CreateStatus(testOwner, testRepo, shaWithoutPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
-	f.CreateStatus(testOwner, testRepo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
-	f.CreateStatus(testOwner, testRepo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusFailure})
-	f.AddRepoLabel(testOwner, testRepo, labelClaYes, labelClaYes, "")
-	f.AddRepoLabel(testOwner, testRepo, labelClaNo, labelClaNo, "")
+	err := f.CreateStatus(testOwner, testRepo, shaWithPRClaStatusPending, github.Status{Context: claGithubContext, State: github.StatusPending})
+	if err != nil {
+		logrus.Fatalf("Error creating status: %v", err)
+	}
+	err = f.CreateStatus(testOwner, testRepo, shaWithoutPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
+	if err != nil {
+		logrus.Fatalf("Error creating status: %v", err)
+	}
+	err = f.CreateStatus(testOwner, testRepo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
+	if err != nil {
+		logrus.Fatalf("Error creating status: %v", err)
+	}
+	err = f.CreateStatus(testOwner, testRepo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusFailure})
+	if err != nil {
+		logrus.Fatalf("Error creating status: %v", err)
+	}
+	err = f.AddRepoLabel(testOwner, testRepo, labelClaYes, labelClaYes, "")
+	if err != nil {
+		logrus.Fatalf("Error adding label: %v", err)
+	}
+	err = f.AddRepoLabel(testOwner, testRepo, labelClaNo, labelClaNo, "")
+	if err != nil {
+		logrus.Fatalf("Error adding label: %v", err)
+	}
 
 	shaPlusPRLabels := map[string]*github.Label{shaWithPR: nil, shaWithPRClaStatusPending: nil, shaWithPRAndYesLabel: &prLabelYes, shaWithPRAndNoLabel: &prLabelNo}
 	for s, l := range shaPlusPRLabels {

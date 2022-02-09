@@ -62,9 +62,9 @@ type claAssistantPlugin struct {
 	maxRetryTime time.Duration
 }
 
-func newClaAssistantPlugin(ghc githubClient, log *logrus.Entry) claAssistantPlugin {
+func newClaAssistantPlugin(ghc githubClient, log *logrus.Entry) *claAssistantPlugin {
 	hc := &http.Client{Timeout: time.Second * 15}
-	return claAssistantPlugin{ghc: ghc, hc: hc, log: log, baseURL: claAssistantBaseURL, maxRetryTime: time.Minute * 1}
+	return &claAssistantPlugin{ghc: ghc, hc: hc, log: log, baseURL: claAssistantBaseURL, maxRetryTime: time.Minute * 1}
 }
 
 func (c *claAssistantPlugin) handleIssueCommentEvent(l *logrus.Entry, ice *github.IssueCommentEvent) error {
@@ -123,6 +123,33 @@ func (c *claAssistantPlugin) handleReviewCommentEvent(l *logrus.Entry, rce *gith
 	l.Infof("Calling cla-assistant.io to initialize recheck of PR %v.", rce.PullRequest.Number)
 
 	return c.enforceClaRecheck(rce.Repo.Owner.Login, rce.Repo.Name, rce.PullRequest.Number)
+}
+
+func (c *claAssistantPlugin) handleReviewEvent(l *logrus.Entry, pre *github.ReviewEvent) error {
+
+	l.Debugf(
+		"Review for PR %v of org/repo %s/%s in state %v with action %v received - /cla in message %v",
+		pre.PullRequest.Number,
+		pre.Repo.Owner.Login,
+		pre.Repo.Name,
+		pre.PullRequest.State,
+		pre.Action,
+		checkCLARe.MatchString(pre.Review.Body),
+	)
+
+	// Only consider open PRs and new reviews.
+	if pre.PullRequest.State != github.PullRequestStateOpen || pre.Action != github.ReviewActionSubmitted {
+		return nil
+	}
+
+	// Only consider "/cla" comments.
+	if !checkCLARe.MatchString(pre.Review.Body) {
+		return nil
+	}
+
+	l.Infof("Calling cla-assistant.io to initialize recheck of PR %v.", pre.PullRequest.Number)
+
+	return c.enforceClaRecheck(pre.Repo.Owner.Login, pre.Repo.Name, pre.PullRequest.Number)
 }
 
 func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.StatusEvent) error {
@@ -247,7 +274,7 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 func (c *claAssistantPlugin) helpProvider([]config.OrgRepo) (*pluginhelp.PluginHelp, error) {
 	var ph pluginhelp.PluginHelp
 
-	ph.Description = `CLA assitant plugin attaches CLA labels to PRs according to results from cla-assistant.io. \n
+	ph.Description = `CLA assistant plugin attaches CLA labels to PRs according to results from cla-assistant.io. \n
 						Additionally it can force rechecking the CLA status by /cla command.`
 
 	ph.AddCommand(pluginhelp.Command{

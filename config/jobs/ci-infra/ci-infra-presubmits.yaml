@@ -37,4 +37,4 @@ presubmits:
         command:
         - make
         args:
-        - test
+        - check test verify-vendor # run all presubmit checks
