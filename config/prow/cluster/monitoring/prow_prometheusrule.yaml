@@ -190,16 +190,17 @@ spec:
         sum(rate(github_request_duration_count{status=~"403|405|422"}[30m])) by (status) / ignoring(status) group_left sum(rate(github_request_duration_count[30m])) * 100 > 10
       labels:
         severity: warning
-    - alert: ghproxy-running-out-github-tokens-in-a-hour
-      annotations:
-        message: token {{ $labels.token_hash }} will run out of API quota before the next reset.
-      expr: |
-        github_token_usage{job="ghproxy"} <  1500
-        and
-        predict_linear(github_token_usage{job="ghproxy"}[30m], 1 * 3600) < 0
-      for: 5m
-      labels:
-        severity: high
+    # TODO: reactivate this alert, once https://github.com/kubernetes/test-infra/issues/25177 is fixed
+#    - alert: ghproxy-running-out-github-tokens-in-a-hour
+#      annotations:
+#        message: token {{ $labels.token_hash }} will run out of API quota before the next reset.
+#      expr: |
+#        github_token_usage{job="ghproxy", resource!="search"} <  1500
+#        and
+#        predict_linear(github_token_usage{job="ghproxy", resource!="search"}[30m], 1 * 3600) < 0
+#      for: 5m
+#      labels:
+#        severity: high
   - name: abnormal webhook behaviors
     rules:
     # TODO: reconsider whether this alert makes sense at the scale of our org and with what timeframe based on some experience
