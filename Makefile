@@ -24,6 +24,14 @@ IMG_CLA_ASSISTANT := cla-assistant
 REG_CLA_ASSISTANT := $(REGISTRY)/$(IMG_CLA_ASSISTANT)
 
 
+#########################################
+# Tools                                 #
+#########################################
+
+TOOLS_DIR := hack/tools
+include hack/tools.mk
+
+
 #################################################################
 # Rules related to binary build, Docker image build and release #
 #################################################################
@@ -52,7 +60,7 @@ endif
 #####################################################################
 
 .PHONY: check
-check: $(GOIMPORTS) $(GOLANGCI_LINT) $(HELM) $(IMPORT_BOSS)
+check: $(GOIMPORTS) $(GOLANGCI_LINT)
 	@hack/check.sh --golangci-lint-config=./.golangci.yaml ./prow/...
 
 .PHONY: revendor
