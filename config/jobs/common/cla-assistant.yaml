@@ -3,6 +3,9 @@ periodics:
   interval: 10m
   cluster: gardener-prow-trusted
   decorate: true
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
   annotations:
     description: Trigger recheck of CLAs for open PRs without an CLA label
   spec:
@@ -18,7 +21,7 @@ periodics:
         -label:"cla: no"
         -label:"cla: yes"
       - --updated=10m
-      - --token=/etc/github-token/token
+      - --token=/etc/github/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=Unknown CLA label state. Rechecking at cla-assistant.io.
