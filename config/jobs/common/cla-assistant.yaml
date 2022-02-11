@@ -3,6 +3,9 @@ periodics:
   interval: 10m
   cluster: gardener-prow-trusted
   decorate: true
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
   annotations:
     description: Trigger recheck of CLAs for open PRs without an CLA label
   spec:
