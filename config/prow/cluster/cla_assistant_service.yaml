@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: prow
+  name: cla-assistant
+spec:
+  selector:
+    app: cla-assistant
+  ports:
+  - port: 80
+    targetPort: http
+  type: ClusterIP

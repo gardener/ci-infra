@@ -1,0 +1,16 @@
+# This .dockerignore should be treated as a white list for more security
+
+# Ignore everything by default:
+**
+# -----------------------------------------------------------------------
+
+
+# ALLOW:
+
+!Dockerfile   # Dockerfile might be needed for pushing containers to registry later
+
+!go.mod
+!go.sum
+!vendor/**
+
+!prow/**

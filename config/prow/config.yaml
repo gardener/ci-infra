@@ -139,6 +139,7 @@ tide:
     labels:
     - lgtm
     - approved
+    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -149,11 +150,13 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
+    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
+    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -163,6 +166,7 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
+    - "cla: no"
 
   merge_method:
     gardener/ci-infra: squash
