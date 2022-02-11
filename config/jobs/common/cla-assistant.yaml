@@ -18,7 +18,7 @@ periodics:
         -label:"cla: no"
         -label:"cla: yes"
       - --updated=10m
-      - --token=/etc/github-token/token
+      - --token=/etc/github/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=Unknown CLA label state. Rechecking at cla-assistant.io.
