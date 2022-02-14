@@ -31,6 +31,7 @@ import (
 	"k8s.io/test-infra/prow/config"
 	"k8s.io/test-infra/prow/github"
 	"k8s.io/test-infra/prow/github/fakegithub"
+	"k8s.io/test-infra/prow/plugins"
 )
 
 const (
@@ -667,20 +668,51 @@ func TestHandleStatusEvent(t *testing.T) {
 					assert.NoError(t, err)
 				}
 				if test.expectedLabelAdded != "" {
-					for _, l := range p.fakeClient.IssueLabelsAdded {
-						assert.Contains(t, l, test.expectedLabelAdded)
-					}
+					assert.NotEmpty(t, p.fakeClient.IssueLabelsAdded)
+					assert.Contains(t, p.fakeClient.IssueLabelsAdded, testLabelString(testOwner, testRepo, prNumberForSha[test.se.SHA], test.expectedLabelAdded))
 				} else {
 					assert.Nil(t, p.fakeClient.IssueLabelsAdded)
 				}
 				if test.expectedLabelRemoved != "" {
-					for _, l := range p.fakeClient.IssueLabelsRemoved {
-						assert.Contains(t, l, test.expectedLabelRemoved)
-					}
+					assert.NotEmpty(t, p.fakeClient.IssueLabelsRemoved)
+					assert.Contains(t, p.fakeClient.IssueLabelsRemoved, testLabelString(testOwner, testRepo, prNumberForSha[test.se.SHA], test.expectedLabelRemoved))
 				} else {
 					assert.Nil(t, p.fakeClient.IssueLabelsRemoved)
 				}
 			})
+	}
+}
+
+func TestHandleAllPRs(t *testing.T) {
+
+	log := logrus.StandardLogger().WithField("TestHandleIssueCommentEvent", pluginName)
+	p := newClaAssistantTestPlugin()
+	defer p.http.server.Close()
+	ingestDataIntoFakeClient(p.fakeClient)
+	config := &plugins.Configuration{
+		ExternalPlugins: map[string][]plugins.ExternalPlugin{
+			fmt.Sprintf("%s/%s", testOwner, testRepo): {
+				{
+					Name: pluginName,
+					Events: []string{
+						"issue_comment",
+						"pull_request_review_comment",
+						"pull_request_review",
+						"status",
+					},
+				},
+			},
+		},
+	}
+
+	err := p.plugin.handleAllPRs(log, config)
+
+	assert.NoError(t, err)
+
+	for sha, label := range shaPlusPRLabels {
+		if label != nil {
+			assert.Contains(t, p.fakeClient.PullRequests[prNumberForSha[sha]].Labels, *label)
+		}
 	}
 }
 
@@ -854,26 +886,46 @@ func (f *fakeClient) QueryWithGitHubAppsSupport(ctx context.Context, q interface
 
 	queryList := strings.Split(string(query), " ")
 
-	if len(queryList) < 3 {
-		return fmt.Errorf("Invalid query")
+	var (
+		owner string
+		repo  string
+		sha   string
+	)
+
+	for _, q := range queryList {
+		switch {
+		case strings.HasPrefix(q, "repo:"):
+			ownerRepo := strings.TrimPrefix(q, "repo:")
+			owner = ownerRepo[:strings.LastIndex(ownerRepo, "/")]
+			repo = ownerRepo[strings.LastIndex(ownerRepo, "/")+1:]
+		case len(strings.Split(q, ":")) == 1:
+			sha = q
+		}
 	}
 
-	sha := queryList[0]
-
-	ownerRepo := strings.TrimPrefix(queryList[1], "repo:")
-	owner := ownerRepo[:strings.LastIndex(ownerRepo, "/")]
-	repo := ownerRepo[strings.LastIndex(ownerRepo, "/")+1:]
+	if owner == "" || repo == "" {
+		return fmt.Errorf("Query does not contain owner and repo")
+	}
 
 	var prNumbers []int
-	for n, cm := range f.CommitMap {
-		for _, c := range cm {
-			if c.SHA == sha {
-				p := n[strings.LastIndex(n, "#")+1:]
-				prNumber, err := strconv.Atoi(p)
-				if err != nil {
-					continue
+
+	if sha != "" {
+		for n, cm := range f.CommitMap {
+			for _, c := range cm {
+				if c.SHA == sha {
+					p := n[strings.LastIndex(n, "#")+1:]
+					prNumber, err := strconv.Atoi(p)
+					if err != nil {
+						continue
+					}
+					prNumbers = append(prNumbers, prNumber)
 				}
-				prNumbers = append(prNumbers, prNumber)
+			}
+		}
+	} else {
+		for number, pr := range f.PullRequests {
+			if pr.Base.Repo.Owner.Login == owner && pr.Base.Repo.Name == repo {
+				prNumbers = append(prNumbers, number)
 			}
 		}
 	}
@@ -893,8 +945,9 @@ func (f *fakeClient) QueryWithGitHubAppsSupport(ctx context.Context, q interface
 			struct {
 				PullRequest pullRequest "graphql:\"... on PullRequest\""
 			}{PullRequest: pullRequest{
-				Number: githubql.Int(pr.Number),
-				Author: struct{ Login githubql.String }{Login: "Test-Author"},
+				Number:     githubql.Int(pr.Number),
+				Author:     struct{ Login githubql.String }{Login: "Test-Author"},
+				HeadRefOID: githubql.String(pr.Head.SHA),
 				Repository: struct {
 					Name  githubql.String
 					Owner struct{ Login githubql.String }
@@ -913,6 +966,17 @@ func (f *fakeClient) QueryWithGitHubAppsSupport(ctx context.Context, q interface
 func createCommitMapKey(owner, repo string, pr int) string {
 	return fmt.Sprintf("%s/%s#%d", owner, repo, pr)
 }
+
+var (
+	// Test Pull Requests
+	shaPlusPRLabels map[string]*github.Label = map[string]*github.Label{
+		shaWithPR:                 nil,
+		shaWithPRClaStatusPending: nil,
+		shaWithPRAndYesLabel:      &prLabelYes,
+		shaWithPRAndNoLabel:       &prLabelNo,
+	}
+	prNumberForSha = map[string]int{}
+)
 
 func ingestDataIntoFakeClient(f *fakeClient) {
 	// SHA must be convertable to integer
@@ -941,13 +1005,18 @@ func ingestDataIntoFakeClient(f *fakeClient) {
 		logrus.Fatalf("Error adding label: %v", err)
 	}
 
-	shaPlusPRLabels := map[string]*github.Label{shaWithPR: nil, shaWithPRClaStatusPending: nil, shaWithPRAndYesLabel: &prLabelYes, shaWithPRAndNoLabel: &prLabelNo}
 	for s, l := range shaPlusPRLabels {
 		i, _ := f.CreatePullRequest(testOwner, testRepo, "Without label", "Body", "HEAD", "BASE", true)
 		f.PullRequests[i].Head = github.PullRequestBranch{SHA: s}
+		prNumberForSha[s] = i
 		f.CommitMap[createCommitMapKey(testOwner, testRepo, i)] = append(f.CommitMap[createCommitMapKey(testOwner, testRepo, i)], github.RepositoryCommit{SHA: s})
 		if l != nil {
 			f.PullRequests[i].Labels = append(f.PullRequests[i].Labels, *l)
 		}
 	}
+}
+
+func testLabelString(owner, repo string, number int, label string) string {
+	// According to label string definition of AddLabels method in fakegithub.go
+	return fmt.Sprintf("%s/%s#%d:%s", owner, repo, number, label)
 }
