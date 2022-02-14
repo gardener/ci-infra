@@ -10,7 +10,7 @@ periodics:
     description: Trigger recheck of CLAs for open PRs without an CLA label
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20211220-180c042a80
+    - image: gcr.io/k8s-prow/commenter:v20220214-1fa5b1ec33
       command:
       - /app/robots/commenter/app.binary
       args:
