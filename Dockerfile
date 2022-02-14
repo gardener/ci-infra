@@ -29,9 +29,9 @@ USER 65532
 # ----------------------
 
 FROM ssl_runner AS cla-assistant
-ARG EFFECTIVE_VERSION
+ARG VERSION
 LABEL app=cla-assistant
-LABEL version=${EFFECTIVE_VERSION}
+LABEL version=${VERSION}
 WORKDIR /
 COPY --from=builder /build/cla-assistant /cla-assistant
 EXPOSE 8080

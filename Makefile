@@ -15,8 +15,7 @@
 
 REGISTRY          := $(shell cat .REGISTRY 2>/dev/null)
 PUSH_LATEST_TAG   := true
-VERSION           := $(shell cat VERSION)
-EFFECTIVE_VERSION := $(VERSION)-$(shell git rev-parse --short HEAD)
+VERSION           := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
 OS                := linux
 ARCH              := amd64
 
@@ -40,16 +39,16 @@ docker-images:
 ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
-	@echo "Building docker images with version and tag $(EFFECTIVE_VERSION)"
-	@docker build --build-arg EFFECTIVE_VERSION=$(EFFECTIVE_VERSION) --build-arg ARCH=$(ARCH) --build-arg OS=$(OS) -t $(REG_CLA_ASSISTANT):$(EFFECTIVE_VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
+	@echo "Building docker images with version and tag $(VERSION)"
+	@docker build --build-arg VERSION=$(VERSION) --build-arg ARCH=$(ARCH) --build-arg OS=$(OS) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
 
 .PHONY: docker-push
 docker-push:
 ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
-	@if ! docker images $(REG_CLA_ASSISTANT) | awk '{ print $$2 }' | grep -q -F $(EFFECTIVE_VERSION); then echo "$(REG_CLA_ASSISTANT) version $(EFFECTIVE_VERSION) is not yet built. Please run 'make docker-images'"; false; fi
-	@docker push $(REG_CLA_ASSISTANT):$(EFFECTIVE_VERSION)
+	@if ! docker images $(REG_CLA_ASSISTANT) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CLA_ASSISTANT) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
+	@docker push $(REG_CLA_ASSISTANT):$(VERSION)
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_CLA_ASSISTANT):latest
 endif
