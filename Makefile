@@ -68,7 +68,7 @@ revendor:
 	@GO111MODULE=on go mod tidy
 	@GO111MODULE=on go mod vendor
 
-.PHONY: verify-modules
+.PHONY: verify-vendor
 verify-vendor: revendor
 	@if !(git diff --quiet HEAD -- go.sum go.mod vendor); then \
 		echo "go module files or vendor folder are out of date, please run 'make revendor'"; exit 1; \
