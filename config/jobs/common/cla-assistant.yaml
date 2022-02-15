@@ -20,7 +20,7 @@ periodics:
         is:open
         -label:"cla: no"
         -label:"cla: yes"
-      - --updated=10m
+      - --updated=1h
       - --token=/etc/github/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-

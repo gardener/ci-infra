@@ -42,6 +42,8 @@ type options struct {
 	instrumentationOptions prowflagutil.InstrumentationOptions
 	logLevel               string
 
+	updatePeriod time.Duration
+
 	webhookSecretFile string
 }
 
@@ -60,6 +62,7 @@ func gatherOptions() options {
 	fs := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	fs.IntVar(&o.port, "port", 8080, "Port HTTP server listens on.")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "Dry run for testing. Uses API tokens but does not mutate.")
+	fs.DurationVar(&o.updatePeriod, "update-period", time.Hour*1, "Period duration for periodic scans of all PRs.")
 	fs.StringVar(&o.webhookSecretFile, "hmac-secret-file", "/etc/webhook/hmac", "Path to the file containing the GitHub HMAC secret.")
 	fs.StringVar(&o.logLevel, "log-level", "debug", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 
@@ -88,12 +91,17 @@ func main() {
 	log := logrus.StandardLogger().WithField("plugin", pluginName)
 
 	if err := secret.Add(o.webhookSecretFile); err != nil {
-		logrus.WithError(err).Fatal("Error starting secrets agent.")
+		log.WithError(err).Fatal("Error starting secrets agent.")
+	}
+
+	pa, err := o.pluginsConfig.PluginAgent()
+	if err != nil {
+		log.WithError(err).Fatal("Error loading plugin config")
 	}
 
 	githubClient, err := o.github.GitHubClient(o.dryRun)
 	if err != nil {
-		logrus.WithError(err).Fatal("Error getting GitHub client.")
+		log.WithError(err).Fatal("Error getting GitHub client.")
 	}
 
 	cla := newClaAssistantPlugin(githubClient, log)
@@ -108,6 +116,14 @@ func main() {
 	mux.Handle("/", hs)
 	externalplugins.ServeExternalPluginHelp(mux, log, cla.helpProvider)
 	httpServer := &http.Server{Addr: ":" + strconv.Itoa(o.port), Handler: mux}
+
+	interrupts.TickLiteral(func() {
+		start := time.Now()
+		if err := cla.handleAllPRs(log, pa.Config()); err != nil {
+			log.WithError(err).Error("Error during periodic check all PRs.")
+		}
+		log.WithField("duration", fmt.Sprintf("%v", time.Since(start))).Info("Periodic update complete.")
+	}, o.updatePeriod)
 
 	health.ServeReady()
 	interrupts.ListenAndServe(httpServer, 5*time.Second)

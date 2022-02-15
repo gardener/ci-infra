@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strings"
 	"time"
 
 	backoff "github.com/cenkalti/backoff/v4"
@@ -27,6 +28,7 @@ import (
 	"k8s.io/test-infra/prow/config"
 	"k8s.io/test-infra/prow/github"
 	"k8s.io/test-infra/prow/pluginhelp"
+	"k8s.io/test-infra/prow/plugins"
 )
 
 const (
@@ -194,6 +196,7 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 		return nil
 	}
 
+	l.Info("Handling status event")
 	l.Info("Searching for PRs matching the commit.")
 
 	pullRequests, err := c.search(context.Background(), l, fmt.Sprintf("%s repo:%s/%s type:pr state:open", se.SHA, org, repo), org)
@@ -204,71 +207,134 @@ func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.Statu
 	l.Infof("Found %d PRs matching commit.", len(pullRequests))
 
 	for _, pullRequest := range pullRequests {
-		pl := l.WithField("pr", pullRequest.Number)
-		hasClaYes := pullRequest.hasLabel(labelClaYes)
-		hasClaNo := pullRequest.hasLabel(labelClaNo)
-		if hasClaYes && claStatus.State == github.StatusSuccess {
-			// Nothing to update.
-			pl.Infof("PR #%v has up-to-date %q label.", int(pullRequest.Number), labelClaYes)
-			continue
-		}
-
-		if hasClaNo && (claStatus.State == github.StatusFailure || claStatus.State == github.StatusError) {
-			// Nothing to update.
-			pl.Infof("PR #%v has up-to-date %q label.", int(pullRequest.Number), labelClaNo)
-			continue
-		}
-
-		pl.Info("PR labels may be out of date. Getting pull request info.")
-
-		var pr *github.PullRequest
-
-		pr, err := c.ghc.GetPullRequest(org, repo, int(pullRequest.Number))
-		if err != nil {
-			pl.WithError(err).Warningf("Unable to fetch PR #%d from %s/%s.", int(pullRequest.Number), org, repo)
-			continue
-		}
-
 		// Check if this is the latest commit in the PR.
-		if pr.Head.SHA != se.SHA {
-			pl.Info("Event is not for PR HEAD, skipping.")
+		if string(pullRequest.HeadRefOID) != se.SHA {
+			l.Info("Event is not for PR HEAD, skipping.")
 			continue
 		}
-
-		number := pr.Number
-		if claStatus.State == github.StatusSuccess {
-			if hasClaNo {
-				// Remove "CLA no" label
-				err := c.ghc.RemoveLabel(org, repo, number, labelClaNo)
-				if err != nil {
-					pl.WithError(err).Warningf("Could not remove %s label from PR #%v.", labelClaNo, int(pullRequest.Number))
-				}
-			}
-			// Add "CLA yes" label
-			err := c.ghc.AddLabel(org, repo, number, labelClaYes)
-			if err != nil {
-				pl.WithError(err).Warningf("Could not add %s label from PR #%v.", labelClaYes, int(pullRequest.Number))
-			}
-			continue
-		}
-
-		// If we end up here, the github status is a failure/error, so a potential CLA yes label needs to be removed.
-		if hasClaYes {
-			// Remove "CLA yes" label
-			err := c.ghc.RemoveLabel(org, repo, number, labelClaYes)
-			if err != nil {
-				pl.WithError(err).Warningf("Could not remove %s label from PR #%v.", labelClaYes, int(pullRequest.Number))
-			}
-		}
-		// Add "CLA no" label
-		err = c.ghc.AddLabel(org, repo, number, labelClaNo)
+		err := c.ensureClaLabels(l, org, repo, claStatus.State, pullRequest)
 		if err != nil {
-			pl.WithError(err).Warningf("Could not add %s label from PR #%v.", labelClaNo, int(pullRequest.Number))
+			l.WithError(err).Errorf("Error ensuring cla labels for PR #%v", pullRequest.Number)
 		}
-
 	}
 	return nil
 
+}
+
+func (c *claAssistantPlugin) ensureClaLabels(l *logrus.Entry, org, repo, claState string, pullRequest pullRequest) error {
+	pl := l.WithField("pr", pullRequest.Number)
+	hasClaYes := pullRequest.hasLabel(labelClaYes)
+	hasClaNo := pullRequest.hasLabel(labelClaNo)
+	if hasClaYes && claState == github.StatusSuccess {
+		// Nothing to update.
+		pl.Infof("PR #%v has up-to-date %q label.", int(pullRequest.Number), labelClaYes)
+		return nil
+	}
+
+	if hasClaNo && (claState == github.StatusFailure || claState == github.StatusError) {
+		// Nothing to update.
+		pl.Infof("PR #%v has up-to-date %q label.", int(pullRequest.Number), labelClaNo)
+		return nil
+	}
+
+	pl.Info("PR labels may be out of date. Ensure right labels")
+
+	number := int(pullRequest.Number)
+	if claState == github.StatusSuccess {
+		if hasClaNo {
+			// Remove "CLA no" label
+			err := c.ghc.RemoveLabel(org, repo, number, labelClaNo)
+			if err != nil {
+				pl.WithError(err).Warningf("Could not remove %s label from PR #%v.", labelClaNo, int(pullRequest.Number))
+				return err
+			}
+		}
+		// Add "CLA yes" label
+		err := c.ghc.AddLabel(org, repo, number, labelClaYes)
+		if err != nil {
+			pl.WithError(err).Warningf("Could not add %s label from PR #%v.", labelClaYes, int(pullRequest.Number))
+			return err
+		}
+		return nil
+	}
+
+	// If we end up here, the github status is a failure/error, so a potential CLA yes label needs to be removed.
+	if hasClaYes {
+		// Remove "CLA yes" label
+		err := c.ghc.RemoveLabel(org, repo, number, labelClaYes)
+		if err != nil {
+			pl.WithError(err).Warningf("Could not remove %s label from PR #%v.", labelClaYes, int(pullRequest.Number))
+			return err
+		}
+	}
+	// Add "CLA no" label
+	err := c.ghc.AddLabel(org, repo, number, labelClaNo)
+	if err != nil {
+		pl.WithError(err).Warningf("Could not add %s label from PR #%v.", labelClaNo, int(pullRequest.Number))
+		return err
+	}
+	return nil
+}
+
+func (c *claAssistantPlugin) handleAllPRs(l *logrus.Entry, config *plugins.Configuration) error {
+
+	l.Info("Checking cla labels of all open PRs.")
+	orgs, repos := config.EnabledReposForExternalPlugin(pluginName)
+	if len(orgs) == 0 && len(repos) == 0 {
+		l.Warnf("No repos have been configured for the %s plugin", pluginName)
+		return nil
+	}
+
+	for _, r := range repos {
+		repoSplit := strings.Split(r, "/")
+		if n := len(repoSplit); n != 2 {
+			l.WithField("repo", r).Warn("Found repo that was not in org/repo format, ignoring...")
+			continue
+		}
+		org := repoSplit[0]
+		repo := repoSplit[1]
+
+		lr := l.WithFields(
+			logrus.Fields{
+				"org":  org,
+				"repo": repo,
+			},
+		)
+
+		pullRequests, err := c.search(context.Background(), l, fmt.Sprintf("repo:%s/%s type:pr state:open", org, repo), org)
+		if err != nil {
+			lr.WithError(err).Error("Error searching open PRs")
+			continue
+		}
+
+		lr.Infof("Found %d PRs.", len(pullRequests))
+
+		for _, pullRequest := range pullRequests {
+
+			status, err := c.ghc.ListStatuses(org, repo, string(pullRequest.HeadRefOID))
+			if err != nil {
+				return err
+			}
+			var claStatus github.Status
+			for _, s := range status {
+				if s.Context == claGithubContext {
+					claStatus = s
+					break
+				}
+			}
+
+			if claStatus.State != claGithubContext {
+				lr.WithField("pr", pullRequest.Number).Debugf("No cla status found for PR #%v", pullRequest.Number)
+			}
+
+			err = c.ensureClaLabels(lr, org, repo, claStatus.State, pullRequest)
+			if err != nil {
+				lr.WithField("pr", pullRequest.Number).WithError(err).Errorf("Error ensuring cla labels for PR #%v", pullRequest.Number)
+			}
+		}
+	}
+
+	return nil
 }
 
 func (c *claAssistantPlugin) helpProvider([]config.OrgRepo) (*pluginhelp.PluginHelp, error) {
@@ -385,6 +451,7 @@ type pullRequest struct {
 	Author struct {
 		Login githubql.String
 	}
+	HeadRefOID githubql.String `graphql:"headRefOid"`
 	Repository struct {
 		Name  githubql.String
 		Owner struct {
