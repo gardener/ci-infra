@@ -97,7 +97,7 @@ func (c *claAssistantPlugin) handleIssueCommentEvent(l *logrus.Entry, ice *githu
 
 	l.Infof("Calling cla-assistant.io to initialize recheck of PR %v.", ice.Issue.Number)
 
-	return c.enforceClaRecheck(ice.Repo.Owner.Login, ice.Repo.Name, ice.Issue.Number)
+	return c.enforceClaRecheck(ice.Repo.Owner.Login, ice.Repo.Name, ice.Issue.Number, true)
 }
 
 func (c *claAssistantPlugin) handleReviewCommentEvent(l *logrus.Entry, rce *github.ReviewCommentEvent) error {
@@ -124,7 +124,7 @@ func (c *claAssistantPlugin) handleReviewCommentEvent(l *logrus.Entry, rce *gith
 
 	l.Infof("Calling cla-assistant.io to initialize recheck of PR %v.", rce.PullRequest.Number)
 
-	return c.enforceClaRecheck(rce.Repo.Owner.Login, rce.Repo.Name, rce.PullRequest.Number)
+	return c.enforceClaRecheck(rce.Repo.Owner.Login, rce.Repo.Name, rce.PullRequest.Number, true)
 }
 
 func (c *claAssistantPlugin) handleReviewEvent(l *logrus.Entry, pre *github.ReviewEvent) error {
@@ -151,7 +151,7 @@ func (c *claAssistantPlugin) handleReviewEvent(l *logrus.Entry, pre *github.Revi
 
 	l.Infof("Calling cla-assistant.io to initialize recheck of PR %v.", pre.PullRequest.Number)
 
-	return c.enforceClaRecheck(pre.Repo.Owner.Login, pre.Repo.Name, pre.PullRequest.Number)
+	return c.enforceClaRecheck(pre.Repo.Owner.Login, pre.Repo.Name, pre.PullRequest.Number, true)
 }
 
 func (c *claAssistantPlugin) handleStatusEvent(l *logrus.Entry, se *github.StatusEvent) error {
@@ -323,8 +323,12 @@ func (c *claAssistantPlugin) handleAllPRs(l *logrus.Entry, config *plugins.Confi
 				}
 			}
 
-			if claStatus.State != claGithubContext {
-				lr.WithField("pr", pullRequest.Number).Debugf("No cla status found for PR #%v", pullRequest.Number)
+			if claStatus.Context != claGithubContext || claStatus.State == github.StatusPending {
+				lr.WithField("pr", pullRequest.Number).Infof("No cla status for PR #%v found. Calling cla-assistant.io to initialize recheck.", pullRequest.Number)
+				err := c.enforceClaRecheck(org, repo, int(pullRequest.Number), false)
+				if err != nil {
+					lr.WithField("pr", pullRequest.Number).WithError(err).Errorf("Error reaching out to cla-assistant.io for PR #%v", pullRequest.Number)
+				}
 			}
 
 			err = c.ensureClaLabels(lr, org, repo, claStatus.State, pullRequest)
@@ -359,7 +363,7 @@ func (c *claAssistantPlugin) createClaAssistantURI(org, repo string, pullRequest
 	return c.baseURL + path
 }
 
-func (c *claAssistantPlugin) enforceClaRecheck(org string, repo string, pullRequestNumber int) error {
+func (c *claAssistantPlugin) enforceClaRecheck(org string, repo string, pullRequestNumber int, createResultComment bool) error {
 	b := backoff.NewExponentialBackOff()
 	b.MaxElapsedTime = c.maxRetryTime
 
@@ -377,6 +381,10 @@ func (c *claAssistantPlugin) enforceClaRecheck(org string, repo string, pullRequ
 		},
 		b,
 	)
+
+	if !createResultComment {
+		return err
+	}
 
 	if err == nil {
 		c.log.Infof("Successfully reached out to cla-assistant.io to initialize recheck of PR %v", pullRequestNumber)

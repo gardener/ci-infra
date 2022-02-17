@@ -773,7 +773,7 @@ func TestForceClaRecheck(t *testing.T) {
 			func(t *testing.T) {
 
 				p.http.setServerParameters(&test.recoverFromError, &test.responseTimeout, &test.httpResponseCode)
-				err := p.plugin.enforceClaRecheck(testOwner, testRepo, 1)
+				err := p.plugin.enforceClaRecheck(testOwner, testRepo, 1, true)
 				if test.errorExpected {
 					assert.Error(t, err)
 				} else {
