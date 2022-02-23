@@ -12,7 +12,7 @@ periodics:
     containers:
     - image: gcr.io/k8s-prow/commenter:v20220222-8d1661c08e
       command:
-      - /app/robots/commenter/app.binary
+      - commenter
       args:
       - |-
         --query=repo:gardener/ci-infra
@@ -56,7 +56,7 @@ periodics:
     containers:
     - image: gcr.io/k8s-prow/commenter:v20220222-8d1661c08e
       command:
-      - /app/robots/commenter/app.binary
+      - commenter
       args:
       - |-
         --query=repo:gardener/ci-infra
@@ -101,7 +101,7 @@ periodics:
     containers:
     - image: gcr.io/k8s-prow/commenter:v20220222-8d1661c08e
       command:
-      - /app/robots/commenter/app.binary
+      - commenter
       args:
       - |-
         --query=repo:gardener/ci-infra
