@@ -1,0 +1,42 @@
+postsubmits:
+  gardener/gardener:
+  - name: post-build-gardener-images
+    branches:
+    - ^master$
+    annotations:
+      description: Testing gardener image build on master branch
+    reporter_config:
+      slack:
+        channel: "gardener-prow-alerts"
+    agent: tekton-pipeline
+    namespace: kaniko-build
+    pipeline_run_spec:
+      # params:
+      # - name: target-repository
+      #   value: eu.gcr.io/sap-cloud-platform-dev1/tekton-gardener
+      # - name: cache-repository
+      #   value: eu.gcr.io/sap-cloud-platform-dev1/kaniko-cache
+      pipelineRef:
+        name: gardener-gardener-kaniko
+      podTemplate:
+        imagePullSecrets: []
+        nodeSelector:
+          dedicated: high-cpu
+        tolerations:
+        - key: "dedicated"
+          operator: "Equal"
+          value: "high-cpu"
+          effect: "NoSchedule"
+      workspaces:
+      - name: git-source
+        volumeClaimTemplate:
+          spec:
+            storageClassName: gce-ssd
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
+      - name: dockerconfig
+        secret:
+          secretName: k8s-playground-docker-config

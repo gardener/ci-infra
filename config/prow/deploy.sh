@@ -146,4 +146,10 @@ kubectl config use-context gardener-prow-trusted
 kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring"
 echo "$(color-green done)"
 
+echo "$(color-step "Deploying tekton pipeline components to gardener-prow-trusted cluster...")"
+kubectl config use-context gardener-prow-trusted
+kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/tekton"
+kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/tekton/kaniko-pipelines"
+echo "$(color-green done)"
+
 echo "$(color-green SUCCESS)"

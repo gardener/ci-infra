@@ -1,0 +1,76 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: prow-pipeline
+  namespace: prow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prow-pipeline
+  template:
+    metadata:
+      labels:
+        app: prow-pipeline
+    spec:
+      serviceAccount: prow-pipeline
+      containers:
+      - name: pipeline
+        image: gcr.io/k8s-prow/pipeline:v20220222-8d1661c08e
+        imagePullPolicy: Always
+        args:
+        - --config=/etc/config/config.yaml
+        volumeMounts:
+        - mountPath: /etc/config
+          name: config
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          # This should be the name of the config map for your prow instance
+          name: config
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: prow-pipeline
+  namespace: prow
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: prow-pipeline
+rules:
+- apiGroups:
+  - tekton.dev
+  resources:
+  - pipelineruns
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - prow.k8s.io
+  resources:
+  - prowjobs
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: prow-pipeline
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prow-pipeline
+subjects:
+- kind: ServiceAccount
+  name: prow-pipeline
+  namespace: prow

@@ -1,0 +1,238 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: gardener-gardener-kaniko
+  namespace: kaniko-build
+spec:
+  params:
+    - name: REPO_OWNER
+    - name: REPO_NAME
+    - name: PULL_BASE_SHA
+    - name: target-registry
+      default: eu.gcr.io/sap-cloud-platform-dev1/tekton-gardener
+    - name: cache-registry
+      default: eu.gcr.io/sap-cloud-platform-dev1/kaniko-cache
+  workspaces:
+    - name: git-source
+    - name: dockerconfig
+  tasks:
+    - name: fetch-from-git
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: https://github.com/$(params.REPO_OWNER)/$(params.REPO_NAME)
+        - name: revision
+          value: $(params.PULL_BASE_SHA)
+      workspaces:
+        - name: output
+          workspace: git-source
+    - name: print-effective-version
+      taskRef:
+        name: print-effective-version
+      runAfter:
+      - fetch-from-git
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: build-image-apiserver
+      taskRef:
+        name: kaniko
+      runAfter:
+      - print-effective-version
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-copy-layers
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=apiserver
+        - name: IMAGE
+          value: $(params.target-registry)/apiserver:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-controller-manager
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=controller-manager
+        - name: IMAGE
+          value: $(params.target-registry)/controller-manager:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-scheduler
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=scheduler
+        - name: IMAGE
+          value: $(params.target-registry)/scheduler:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-gardenlet
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=gardenlet
+        - name: IMAGE
+          value: $(params.target-registry)/gardenlet:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-admission-controller
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=admission-controller
+        - name: IMAGE
+          value: $(params.target-registry)/admission-controller:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-seed-admission-controller
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=seed-admission-controller
+        - name: IMAGE
+          value: $(params.target-registry)/seed-admission-controller:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-resource-manager
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=resource-manager
+        - name: IMAGE
+          value: $(params.target-registry)/resource-manager:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-landscaper-gardenlet
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=landscaper-gardenlet
+        - name: IMAGE
+          value: $(params.target-registry)/landscaper-gardenlet:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-landscaper-controlplane
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=landscaper-controlplane
+        - name: IMAGE
+          value: $(params.target-registry)/landscaper-controlplane:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: build-image-gardener-extension-provider-local
+      taskRef:
+        name: kaniko
+      runAfter:
+      - build-image-apiserver
+      params:
+        - name: EXTRA_ARGS
+          value:
+          - --cache=true
+          - --cache-repo=$(params.cache-registry)
+          - --skip-unused-stages
+          - --reproducible
+          - --target=gardener-extension-provider-local
+        - name: IMAGE
+          value: $(params.target-registry)/gardener-extension-provider-local:$(tasks.print-effective-version.results.effective-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+        - name: dockerconfig
+          workspace: dockerconfig

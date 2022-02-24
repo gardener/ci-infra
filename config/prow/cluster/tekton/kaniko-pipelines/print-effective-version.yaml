@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: print-effective-version
+  namespace: kaniko-build
+  annotations:
+    description: |
+      Print effective version of a git repository
+spec:
+  workspaces:
+  - name: source
+    description: Holds the git repository
+  results:
+    - name: effective-version
+      description: Effective version of source
+  steps:
+    - name: print-effective-version
+      image: bitnami/git:latest
+      script: |
+        #!/usr/bin/env sh
+        cd $(workspaces.source.path)
+        echo "$(cat VERSION)-$(git rev-parse HEAD)" | tr -d '\n' | tee $(results.effective-version.path)
