@@ -16,7 +16,7 @@ periodics:
     description: Runs label_sync to synchronize GitHub repo labels with the label config defined in config/prow/labels.yaml
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/label_sync:v20220228-b708ca80fc
       command:
       - label_sync
       args:
@@ -54,7 +54,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: gcr.io/k8s-prow/branchprotector:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/branchprotector:v20220228-b708ca80fc
       command:
       - branchprotector
       args:
@@ -88,7 +88,7 @@ periodics:
     description: Runs autobumper to create/update a PR that bumps prow images to the latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-b708ca80fc
       command:
       - generic-autobumper
       args:
@@ -118,7 +118,7 @@ periodics:
     description: Runs autobumper to create/update and auto-merge a PR that bumps prow images to the latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-b708ca80fc
       command:
       - generic-autobumper
       args:
@@ -148,7 +148,7 @@ periodics:
     description: Runs autobumper to create/update a PR that bumps prowjob images to latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-b708ca80fc
       command:
       - generic-autobumper
       args:
@@ -178,7 +178,7 @@ periodics:
     description: Runs autobumper to create/update and auto-merge a PR that bumps prowjob images to latest published version
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/generic-autobumper:v20220228-b708ca80fc
       command:
       - generic-autobumper
       args:
@@ -211,7 +211,7 @@ periodics:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/checkconfig:v20220228-b708ca80fc
       command:
       - checkconfig
       args:
@@ -242,7 +242,7 @@ periodics:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20220228-ac7f771fc8
+    - image: gcr.io/k8s-prow/checkconfig:v20220228-b708ca80fc
       command:
       - checkconfig
       args:
