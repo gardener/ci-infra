@@ -1,0 +1,17 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-apidiff
+    cluster: gardener-prow-build
+    skip_if_only_changed: "^docs/|\\.md$"
+    decorate: true
+    optional: true
+    branches:
+    - ^master$ # run on master branch
+    spec:
+      containers:
+      - name: test
+        image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+        command:
+        - make
+        arge:
+        - check-apidiff
