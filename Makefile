@@ -17,13 +17,13 @@ REGISTRY          := $(shell cat .REGISTRY 2>/dev/null)
 PUSH_LATEST_TAG   := true
 GOLANG_VERSION    := 1.17.8
 VERSION           := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
-OS                := linux
-ARCH              := amd64
 
 IMG_GOLANG_TEST := golang-test
 REG_GOLANG_TEST := $(REGISTRY)/$(IMG_GOLANG_TEST)
 IMG_CLA_ASSISTANT := cla-assistant
 REG_CLA_ASSISTANT := $(REGISTRY)/$(IMG_CLA_ASSISTANT)
+IMG_IMAGE_BUILDER := image-builder
+REG_IMAGE_BUILDER := $(REGISTRY)/$(IMG_IMAGE_BUILDER)
 
 
 #########################################
@@ -45,7 +45,8 @@ endif
 	@echo "Building docker golang image for tests with version and tag $(GOLANG_VERSION)"
 	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):latest -f Dockerfile --target $(IMG_GOLANG_TEST) .
 	@echo "Building docker images with version and tag $(VERSION)"
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) --build-arg VERSION=$(VERSION) --build-arg ARCH=$(ARCH) --build-arg OS=$(OS) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
+	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
+	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_IMAGE_BUILDER):$(VERSION) -t $(REG_IMAGE_BUILDER):latest -f Dockerfile --target $(IMG_IMAGE_BUILDER) .
 
 .PHONY: docker-push
 docker-push:
@@ -55,10 +56,13 @@ endif
 	@if ! docker images $(REG_GOLANG_TEST) | awk '{ print $$2 }' | grep -q -F $(GOLANG_VERSION); then echo "$(REG_GOLANG_TEST) version $(GOLANG_VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_GOLANG_TEST):$(GOLANG_VERSION)
 	@if ! docker images $(REG_CLA_ASSISTANT) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CLA_ASSISTANT) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
+	@if ! docker images $(REG_IMAGE_BUILDER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_IMAGE_BUILDER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_CLA_ASSISTANT):$(VERSION)
+	@docker push $(REG_IMAGE_BUILDER):$(VERSION)
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_GOLANG_TEST):latest
 	@docker push $(REG_CLA_ASSISTANT):latest
+	@docker push $(REG_IMAGE_BUILDER):latest
 endif
 
 
