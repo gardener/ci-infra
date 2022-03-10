@@ -236,7 +236,7 @@ func defineDestinations(target string, options options) ([]string, error) {
 
 	if options.addDateSHATag {
 		if len(options.pullBaseSHA) < 7 {
-			return destinations, errors.New(fmt.Sprintf("pullBaseSHA %v is it a correct SHA", options.pullBaseSHA))
+			return destinations, fmt.Errorf("pullBaseSHA %v is it a correct SHA", options.pullBaseSHA)
 		}
 		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), options.pullBaseSHA[:7])
 		destination := fmt.Sprintf("--destination=%s/%s:%s", options.registry, target, tag)
@@ -360,8 +360,8 @@ func (c *buildController) handleBuildPods(key string) error {
 
 	if !exists {
 		delete(c.runningBuildPods, key)
-		c.log.Errorf("Build pod %s does not exist anymore. Aborting build.", key)
-		c.stop(errors.New(fmt.Sprintf("build pod %s does not exist anymore. Aborting build.", key)))
+		c.log.Errorf("Build pod %s does not exist anymore. Aborting build", key)
+		c.stop(fmt.Errorf("build pod %s does not exist anymore. Aborting build", key))
 	}
 
 	pod := obj.(*corev1.Pod)
@@ -374,7 +374,7 @@ func (c *buildController) handleBuildPods(key string) error {
 	if pod.Status.Phase == corev1.PodFailed {
 		delete(c.runningBuildPods, key)
 		c.log.Errorf("Build pod %s failed. Aborting build", pod.GetName())
-		c.stop(errors.New(fmt.Sprintf("build pod %s failed. Aborting build", pod.GetName())))
+		c.stop(fmt.Errorf("build pod %s failed. Aborting build", pod.GetName()))
 	}
 
 	if !c.stopController && len(c.runningBuildPods) == 0 {
