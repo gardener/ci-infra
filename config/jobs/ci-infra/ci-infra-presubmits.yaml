@@ -31,6 +31,7 @@ presubmits:
     decorate: true
     annotations:
       description: Runs go tests for prow developments in ci-infra 
+    max_concurrency: 5
     spec:
       containers:
       - image: golang:1.17.6
@@ -40,3 +41,7 @@ presubmits:
         - check
         - test
         - verify-vendor
+        resources:
+          requests:
+            cpu: 6
+            memory: 2000Mi
