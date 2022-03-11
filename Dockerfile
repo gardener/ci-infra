@@ -2,7 +2,7 @@
 # Build container
 # ----------------
 
-FROM golang:1.17.6 AS builder
+FROM golang:1.17.7 AS builder
 LABEL stage=intermediate
 ARG OS
 ARG ARCH
