@@ -27,7 +27,7 @@ fi
 
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
   -v "$kubeconfig":/etc/kubeconfig \
-  gcr.io/k8s-prow/config-bootstrapper:v20220310-1636de6255 \
+  gcr.io/k8s-prow/config-bootstrapper:v20220310-033172a69b \
   --kubeconfig=/etc/kubeconfig \
   --source-path=.  \
   --config-path=config/prow/config.yaml \
