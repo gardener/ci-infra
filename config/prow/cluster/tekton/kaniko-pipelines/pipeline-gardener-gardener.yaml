@@ -44,7 +44,6 @@ spec:
         - name: EXTRA_ARGS
           value:
           - --cache=true
-          - --cache-copy-layers
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
           - --reproducible
@@ -67,7 +66,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=controller-manager
         - name: IMAGE
           value: $(params.target-registry)/controller-manager:$(tasks.print-effective-version.results.effective-version)
@@ -87,7 +85,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=scheduler
         - name: IMAGE
           value: $(params.target-registry)/scheduler:$(tasks.print-effective-version.results.effective-version)
@@ -107,7 +104,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=gardenlet
         - name: IMAGE
           value: $(params.target-registry)/gardenlet:$(tasks.print-effective-version.results.effective-version)
@@ -127,7 +123,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=admission-controller
         - name: IMAGE
           value: $(params.target-registry)/admission-controller:$(tasks.print-effective-version.results.effective-version)
@@ -147,7 +142,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=seed-admission-controller
         - name: IMAGE
           value: $(params.target-registry)/seed-admission-controller:$(tasks.print-effective-version.results.effective-version)
@@ -167,7 +161,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=resource-manager
         - name: IMAGE
           value: $(params.target-registry)/resource-manager:$(tasks.print-effective-version.results.effective-version)
@@ -187,7 +180,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=landscaper-gardenlet
         - name: IMAGE
           value: $(params.target-registry)/landscaper-gardenlet:$(tasks.print-effective-version.results.effective-version)
@@ -207,7 +199,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=landscaper-controlplane
         - name: IMAGE
           value: $(params.target-registry)/landscaper-controlplane:$(tasks.print-effective-version.results.effective-version)
@@ -227,7 +218,6 @@ spec:
           - --cache=true
           - --cache-repo=$(params.cache-registry)
           - --skip-unused-stages
-          - --reproducible
           - --target=gardener-extension-provider-local
         - name: IMAGE
           value: $(params.target-registry)/gardener-extension-provider-local:$(tasks.print-effective-version.results.effective-version)
