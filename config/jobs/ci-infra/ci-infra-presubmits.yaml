@@ -27,7 +27,6 @@ presubmits:
         - --warnings=duplicate-job-refs
   - name: pull-ci-infra-prow-go-tests
     cluster: gardener-prow-build
-    run_if_changed: '^(prow\/*|Dockerfile|Makefile|go.(mod|sum))'
     decorate: true
     annotations:
       description: Runs go tests for prow developments in ci-infra 
