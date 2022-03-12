@@ -17,16 +17,72 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-cd "$(git rev-parse --show-toplevel)"
+# See https://misc.flogisoft.com/bash/tip_colors_and_formatting
 
-kubeconfig="${KUBECONFIG:-}"
-if [ -z "$kubeconfig" ] ; then
-  echo "Error: no kubeconfig given. Please set KUBECONFIG."
+color-green() { # Green
+  echo -e "\x1B[1;32m${@}\x1B[0m"
+}
+
+color-step() { # Yellow
+  echo -e "\x1B[1;33m${@}\x1B[0m"
+}
+
+color-context() { # Bold blue
+  echo -e "\x1B[1;34m${@}\x1B[0m"
+}
+
+color-missing() { # Yellow
+  echo -e "\x1B[1;33m${@}\x1B[0m"
+}
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+bootstrap_trusted_components=(
+"trusted_serviceaccounts.yaml"
+)
+
+if ! [ -x "$(command -v "kubectl")" ]; then
+  echo "ERROR: kubectl is not present. Exiting..."
   exit 1
 fi
 
+ensure-context() {
+  local context=$1
+  echo -n " $(color-context "$context")"
+  kubectl config get-contexts "$context" &> /dev/null && return 0
+  echo ": $(color-missing MISSING), stopping..."
+  return 1
+}
+
+# create temporary kubeconfig copy that we can modify (switch contexts)
+# in the deploy job pod, the kubeconfig is mounted from a secret and secret mounts are read-only filesystems
+temp_kubeconfig=$(mktemp)
+cleanup-kubeconfig() {
+  rm -f "$temp_kubeconfig"
+}
+trap cleanup-kubeconfig EXIT
+
+kubectl config view --raw > "$temp_kubeconfig"
+export KUBECONFIG="$temp_kubeconfig"
+
+echo -n "$(color-step "Ensuring contexts exist"):"
+ensure-context gardener-prow-trusted
+ensure-context gardener-prow-build
+echo " $(color-green done)"
+
+echo "$(color-step "Deploying bootstrap components to gardener-prow-trusted cluster...")"
+kubectl config use-context gardener-prow-trusted
+for c in "${bootstrap_trusted_components[@]}"; do
+  kubectl apply --server-side=true -f "$SCRIPT_DIR/../config/prow/cluster/bootstrap-trusted/$c"
+done
+echo " $(color-green done)"
+
+echo "$(color-step "Bootstrapping prow to gardener-prow-trusted cluster...")"
+kubectl config use-context gardener-prow-trusted
+cd "$(git rev-parse --show-toplevel)"
+
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  -v "$kubeconfig":/etc/kubeconfig \
+  -v "$temp_kubeconfig":/etc/kubeconfig \
   gcr.io/k8s-prow/config-bootstrapper:v20220310-033172a69b \
   --kubeconfig=/etc/kubeconfig \
   --source-path=.  \
@@ -35,3 +91,4 @@ docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
   --job-config-path=config/jobs \
   --dry-run=false \
   $@
+echo " $(color-green done)"

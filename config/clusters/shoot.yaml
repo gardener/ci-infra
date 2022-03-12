@@ -13,24 +13,26 @@ spec:
   cloudProfileName: gcp
   dns:
     providers:
-    - type: aws-route53
-      secretName: aws-route53-ci
+      - secretName: aws-route53-ci
+        type: aws-route53
   extensions:
-  - type: shoot-cert-service
-    providerConfig:
-      apiVersion: service.cert.extensions.gardener.cloud/v1alpha1
-      kind: CertConfig
-      issuers:
-      - name: ci-issuer
-        server: 'https://acme-v02.api.letsencrypt.org/directory'
-        email: tim.ebert@sap.com
+    - type: shoot-cert-service
+      providerConfig:
+        apiVersion: service.cert.extensions.gardener.cloud/v1alpha1
+        issuers:
+          - email: tim.ebert@sap.com
+            name: ci-issuer
+            server: 'https://acme-v02.api.letsencrypt.org/directory'
+        kind: CertConfig
+  hibernation:
+    enabled: false
   kubernetes:
     allowPrivilegedContainers: true
     kubeAPIServer:
       enableBasicAuthentication: false
     kubeProxy:
       mode: IPTables
-    version: 1.21.5
+    version: 1.21.8
     verticalPodAutoscaler:
       enabled: true
   maintenance:
@@ -47,35 +49,61 @@ spec:
     services: 100.64.0.0/13
   provider:
     type: gcp
+    controlPlaneConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: ControlPlaneConfig
+      zone: europe-west1-c
     infrastructureConfig:
       apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
       kind: InfrastructureConfig
       networks:
         workers: 10.250.0.0/16
-    controlPlaneConfig:
-      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
-      kind: ControlPlaneConfig
-      zone: europe-west1-c
     workers:
-    - name: worker
-      machine:
-        image:
-          name: gardenlinux
-          version: 576.1.0
-        type: e2-standard-4
-      minimum: 2
-      maximum: 5
-      maxSurge: 1
-      maxUnavailable: 0
-      systemComponents:
-        allow: true
-      cri:
-        name: containerd
-      volume:
-        size: 50Gi
-        type: pd-ssd
-      zones:
-      - europe-west1-c
+      - cri:
+          name: containerd
+        name: worker
+        machine:
+          type: e2-standard-4
+          image:
+            name: gardenlinux
+            version: 576.3.0
+        maximum: 5
+        minimum: 2
+        maxSurge: 1
+        maxUnavailable: 0
+        volume:
+          type: pd-ssd
+          size: 50Gi
+        zones:
+          - europe-west1-c
+        systemComponents:
+          allow: true
+      - cri:
+          name: containerd
+        labels:
+          dedicated: high-cpu
+        name: image-builder
+        machine:
+          type: n2d-standard-16
+          image:
+            name: gardenlinux
+            version: 576.3.0
+        maximum: 5
+        minimum: 1
+        maxSurge: 1
+        maxUnavailable: 0
+        taints:
+          - key: dedicated
+            value: high-cpu
+            effect: NoSchedule
+        volume:
+          type: pd-ssd
+          size: 200Gi
+        zones:
+          - europe-west1-c
+        systemComponents:
+          allow: false
   purpose: production
   region: europe-west1
   secretBindingName: gcp-gardener-prow
+  

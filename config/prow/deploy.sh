@@ -81,7 +81,6 @@ prow_components=(
 "tide_deployment.yaml"
 "tide_rbac.yaml"
 "tide_service.yaml"
-"trusted_serviceaccounts.yaml"
 )
 
 prow_components_build=(
