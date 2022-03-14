@@ -258,3 +258,31 @@ periodics:
       - --warnings=validate-urls
       - --warnings=unknown-fields
       - --warnings=duplicate-job-refs
+- name: ci-ci-infra-prow-go-tests
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  reporter_config:
+    slack:
+      channel: "gardener-prow-alerts"
+  decorate: true
+  annotations:
+    description: Runs go tests for prow developments in ci-infra 
+  spec:
+    containers:
+    - image: golang:1.17.7
+      command:
+      - make
+      args:
+      - check
+      - test
+      - verify-vendor
+      resources:
+        limits:
+          memory: 4000Mi
+        requests:
+          cpu: 4
+          memory: 2000Mi

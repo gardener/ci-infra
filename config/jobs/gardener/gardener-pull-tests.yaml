@@ -6,6 +6,9 @@ presubmits:
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
     annotations:
       description: Runs unit tests for gardener developments in pull requests
     max_concurrency: 5
@@ -24,8 +27,10 @@ presubmits:
         - test-prometheus
         - check-docforge
         resources:
+          limits:
+            memory: 16000Mi
           requests:
-            cpu: 8
+            cpu: 5
             memory: 8000Mi
   - name: pull-gardener-integration
     cluster: gardener-prow-build
@@ -33,6 +38,9 @@ presubmits:
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
     annotations:
       description: Runs integration tests for gardener developments in pull requests
     max_concurrency: 5
@@ -45,6 +53,69 @@ presubmits:
         args:
         - test-integration
         resources:
+          limits:
+            memory: 4000Mi
           requests:
-            cpu: 6
+            cpu: 4
             memory: 2000Mi
+periodics:
+- name: ci-gardener-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 40m
+    grace_period: 10m
+  annotations:
+    description: Runs unit tests for gardener developments in pull requests
+  spec:
+    containers:
+    # Run all tests sequentially in one container or as separete prow jobs.
+    # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+    - image: ghcr.io/gardener/ci-infra/golang-test:1.17.7
+      command:
+      - make
+      args:
+      - check-generate
+      - check
+      - format
+      - test
+      - test-prometheus
+      - check-docforge
+      resources:
+        limits:
+          memory: 16000Mi
+        requests:
+          cpu: 5
+          memory: 8000Mi
+- name: ci-gardener-integration
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Runs integration tests for gardener developments in pull requests
+  spec:
+    containers:
+    - name: test-integration
+      image: ghcr.io/gardener/ci-infra/golang-test:1.17.7
+      command:
+      - make
+      args:
+      - test-integration
+      resources:
+        limits:
+          memory: 4000Mi
+        requests:
+          cpu: 4
+          memory: 2000Mi

@@ -41,6 +41,8 @@ presubmits:
         - test
         - verify-vendor
         resources:
+          limits:
+            memory: 4000Mi
           requests:
-            cpu: 6
+            cpu: 4
             memory: 2000Mi
