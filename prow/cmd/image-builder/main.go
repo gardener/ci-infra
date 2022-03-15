@@ -90,8 +90,10 @@ func gatherOptions() options {
 }
 
 func main() {
-
-	logrusutil.ComponentInit()
+	logrusutil.Init(&logrusutil.DefaultFieldsFormatter{
+		PrintLineNumber:  true,
+		WrappedFormatter: &logrus.TextFormatter{},
+	})
 	o := gatherOptions()
 	if err := o.Validate(); err != nil {
 		logrus.Fatalf("Invalid options: %v", err)
