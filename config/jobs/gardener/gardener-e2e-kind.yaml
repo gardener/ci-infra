@@ -45,10 +45,10 @@ presubmits:
           privileged: true
         resources:
           limits:
-            memory: 18000Mi
+            memory: 18Gi
           requests:
             cpu: 5
-            memory: 9000Mi
+            memory: 9Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
@@ -101,10 +101,10 @@ periodics:
         privileged: true
       resources:
         limits:
-          memory: 18000Mi
+          memory: 18Gi
         requests:
           cpu: 5
-          memory: 9000Mi
+          memory: 9Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
