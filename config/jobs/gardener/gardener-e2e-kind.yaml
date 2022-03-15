@@ -7,7 +7,7 @@ presubmits:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
     decoration_config:
-      timeout: 120m
+      timeout: 60m
       grace_period: 15m
     labels:
       preset-dind-enabled: "true"
@@ -45,11 +45,10 @@ presubmits:
           privileged: true
         resources:
           limits:
-            cpu: 7
-            memory: 9000Mi
+            memory: 18Gi
           requests:
-            cpu: 7
-            memory: 9000Mi
+            cpu: 5
+            memory: 9Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
@@ -65,7 +64,7 @@ periodics:
     base_ref: master
   decorate: true
   decoration_config:
-    timeout: 120m
+    timeout: 60m
     grace_period: 15m
   labels:
     preset-dind-enabled: "true"
@@ -102,11 +101,10 @@ periodics:
         privileged: true
       resources:
         limits:
-          cpu: 7
-          memory: 9000Mi
+          memory: 18Gi
         requests:
-          cpu: 7
-          memory: 9000Mi
+          cpu: 5
+          memory: 9Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
