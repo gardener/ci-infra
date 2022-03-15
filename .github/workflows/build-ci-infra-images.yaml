@@ -7,7 +7,6 @@ on:
     paths-ignore:
     - 'docs/**'
     - '**/*.md'
-    - '*.md'
     - 'config/**'
     - 'hack/**'
 
