@@ -29,8 +29,6 @@ postsubmits:
         - --target=admission-controller
         - --target=seed-admission-controller
         - --target=resource-manager
-        - --target=landscaper-gardenlet
-        - --target=landscaper-controlplane
         - --target=gardener-extension-provider-local
         - --log-level=debug
         - --add-version-tag=true
@@ -53,7 +51,7 @@ postsubmits:
         resources:
           requests:
             cpu: 6
-            memory: 9000Mi
+            memory: 9Gi
       # Node selector is copied to build pods
       nodeSelector:
         dedicated: high-cpu
