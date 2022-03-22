@@ -21,10 +21,15 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/test-infra/prow/flagutil"
 	"k8s.io/test-infra/prow/logrusutil"
+	"sigs.k8s.io/controller-runtime/pkg/client/config"
+	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
 
 type options struct {
@@ -37,11 +42,11 @@ type options struct {
 	registry           string
 	cacheRegistry      string
 	kanikoImage        string
-	gitImage           string
 	addVersionTag      bool
 	addVersionSHATag   bool
 	addDateSHATag      bool
 	addLatestTag       bool
+	addFixTag          string
 
 	logLevel string
 }
@@ -74,11 +79,11 @@ func gatherOptions() options {
 	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are beeing pushed")
 	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are beeing pushed")
 	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.7.0", "kaniko image for kaniko build")
-	fs.StringVar(&o.gitImage, "git-image", "bitnami/git:latest", "git image for cloning github repositories")
 	fs.BoolVar(&o.addVersionTag, "add-version-tag", false, "Add label from VERSION file of git root directory to image tags")
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
 	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using YYYYMMDD-<rev short> scheme which is compatible to autobumper")
 	fs.BoolVar(&o.addLatestTag, "add-latest-tag", false, "Add 'latest' tag to images")
+	fs.StringVar(&o.addFixTag, "add-fix-tag", "", "Add a fix tag to images")
 
 	fs.StringVar(&o.logLevel, "log-level", "debug", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 
@@ -135,27 +140,41 @@ func main() {
 		log.Info("cache-registry parameter is not set. Building without using cache")
 	}
 
-	config, err := rest.InClusterConfig()
+	restConfig, err := rest.InClusterConfig()
 	if err != nil {
 		log.WithError(err).Fatal("Error getting kubernetes in cluster config")
 	}
 
-	clientset, err := kubernetes.NewForConfig(config)
+	clientset, err := kubernetes.NewForConfig(restConfig)
 	if err != nil {
 		log.WithError(err).Fatal("Error getting kubernetes clientset")
 	}
 
-	ctx := context.Background()
-
-	podConfig, err := newPodConfiguration(ctx, podName, podNamespace, clientset, o)
+	sc := runtime.NewScheme()
+	err = corev1.AddToScheme(sc)
 	if err != nil {
-		log.WithError(err).Fatal("Error determining pod configuration")
+		log.WithError(err).Fatal("Unable to add corev1 to scheme")
+	}
+	mgr, err := manager.New(config.GetConfigOrDie(), manager.Options{Scheme: sc, Namespace: podNamespace})
+	if err != nil {
+		log.WithError(err).Fatal("Unable to create controller manager")
 	}
 
-	err = buildTargets(ctx, log.WithField("context", "builder"), podConfig, o)
+	log.Info("Setting up build-controller")
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	controller, err := addImageBuilderController(ctx, mgr, clientset, cancelFunc, types.NamespacedName{Name: podName, Namespace: podNamespace}, o, log.WithContext(ctx))
 	if err != nil {
-		log.WithError(err).Fatal("Error building targets")
+		log.WithError(err).Fatal("Unable to setup build-controller")
 	}
 
+	log.Info("Starting controller manager")
+	err = mgr.Start(ctx)
+	if err != nil {
+		log.WithError(err).Fatal("Unable to start controller manager")
+	}
+
+	if controller.err != nil {
+		log.WithError(err).Panic("Build failed")
+	}
 	log.Info("Build successfull")
 }

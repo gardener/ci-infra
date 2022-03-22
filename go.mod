@@ -17,6 +17,8 @@ require (
 	k8s.io/apimachinery v0.22.2
 	k8s.io/client-go v11.0.1-0.20190805182717-6502b5e7b1b5+incompatible
 	k8s.io/test-infra v0.0.0-20220124171957-7b2249d65e1a
+	sigs.k8s.io/controller-runtime v0.10.3
+	sigs.k8s.io/yaml v1.2.0
 )
 
 require (
@@ -117,7 +119,5 @@ require (
 	k8s.io/kube-openapi v0.0.0-20210421082810-95288971da7e // indirect
 	k8s.io/utils v0.0.0-20210819203725-bdf08cb9a70a // indirect
 	knative.dev/pkg v0.0.0-20200711004937-22502028e31a // indirect
-	sigs.k8s.io/controller-runtime v0.10.3 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.1.2 // indirect
-	sigs.k8s.io/yaml v1.2.0 // indirect
 )
