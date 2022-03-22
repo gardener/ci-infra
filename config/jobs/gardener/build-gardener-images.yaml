@@ -1,6 +1,7 @@
 postsubmits:
   gardener/gardener:
   - name: post-build-gardener-images
+    cluster: gardener-prow-trusted
     branches:
     - ^master$
     annotations:
@@ -14,8 +15,7 @@ postsubmits:
       serviceAccountName: builder
       containers:
       - name: image-builder
-        # TODO: change before merge
-        image: ghcr.io/oliver-goetz/image-builder:latest
+        image: ghcr.io/gardener/ci-infra/image-builder:latest
         command:
         - /image-builder
         args:
@@ -30,7 +30,7 @@ postsubmits:
         - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
-        - --log-level=debug
+        - --log-level=info
         - --add-version-tag=true
         - --add-version-sha-tag=true
         - --add-latest-tag=true
