@@ -34,7 +34,7 @@ presubmits:
     max_concurrency: 5
     spec:
       containers:
-      - image: golang:1.17.7
+      - image: golang:1.17.8
         command:
         - make
         args:

@@ -15,7 +15,7 @@
 
 REGISTRY          := $(shell cat .REGISTRY 2>/dev/null)
 PUSH_LATEST_TAG   := true
-GOLANG_VERSION    := 1.17.7
+GOLANG_VERSION    := 1.17.8
 VERSION           := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
 OS                := linux
 ARCH              := amd64
@@ -43,9 +43,9 @@ ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
 	@echo "Building docker golang image for tests with version and tag $(GOLANG_VERSION)"
-	@docker build -t $(REG_GOLANG_TEST):$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):latest -f Dockerfile --target $(IMG_GOLANG_TEST) .
+	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):latest -f Dockerfile --target $(IMG_GOLANG_TEST) .
 	@echo "Building docker images with version and tag $(VERSION)"
-	@docker build --build-arg VERSION=$(VERSION) --build-arg ARCH=$(ARCH) --build-arg OS=$(OS) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
+	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) --build-arg VERSION=$(VERSION) --build-arg ARCH=$(ARCH) --build-arg OS=$(OS) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
 
 .PHONY: docker-push
 docker-push:

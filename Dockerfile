@@ -1,8 +1,9 @@
 # ----------------
 # Build container
 # ----------------
+ARG GOLANG_VERSION
 
-FROM golang:1.17.7 AS builder
+FROM golang:${GOLANG_VERSION} AS builder
 LABEL stage=intermediate
 ARG OS
 ARG ARCH
@@ -28,7 +29,7 @@ USER 65532
 # Executable containers
 # ----------------------
 
-FROM golang:1.17.7-bullseye AS golang-test
+FROM golang:${GOLANG_VERSION}-bullseye AS golang-test
 # install gardener unit/integration test related dependencies
 RUN set -eux; \
 	apt-get update; \
