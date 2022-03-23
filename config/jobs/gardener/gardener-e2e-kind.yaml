@@ -15,7 +15,7 @@ presubmits:
     max_concurrency: 5
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20220316-9d252673a0-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master
         command:
         - wrapper.sh
         - bash
@@ -71,7 +71,7 @@ periodics:
     preset-kind-volume-mounts: "true"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20220316-9d252673a0-master
+    - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master
       command:
       - wrapper.sh
       - bash
