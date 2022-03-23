@@ -288,6 +288,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 	// Next pods build the targets
 	for i, target := range r.options.targets.Strings() {
 
+		// Base configuration of build pod
 		var buildGroup string
 		pod := corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
@@ -309,6 +310,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 			},
 		}
 
+		// Base configuration of kaniko container
 		kanikoContainer := corev1.Container{
 			Name:  "kaniko",
 			Image: r.options.kanikoImage,
@@ -337,13 +339,20 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 			},
 		}
 
+		// Add destinations
 		destinations, err := r.defineDestinations(target)
 		if err != nil {
 			return errors.Wrap(err, "construct destinations")
 		}
-
 		kanikoContainer.Args = append(kanikoContainer.Args, destinations...)
 
+		// Add build args
+		for _, buildArg := range r.options.buildArgs.Strings() {
+			arg := fmt.Sprintf("--build-arg=%s", buildArg)
+			kanikoContainer.Args = append(kanikoContainer.Args, arg)
+		}
+
+		// Set caching options
 		if r.options.cacheRegistry != "" {
 			kanikoContainer.Args = append(
 				kanikoContainer.Args,
@@ -358,6 +367,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 			buildGroup = "parallelBuild"
 		}
 
+		// Append build container to build pod
 		pod.Spec.Containers = append(pod.Spec.Containers, kanikoContainer)
 
 		// Configure the build pod with PVC, node assignment and controller reference
@@ -381,6 +391,7 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod, pvc *corev1.Pers
 		return corev1.Pod{}, errors.Wrap(err, "parse zero quantity")
 	}
 
+	// Base configuration of clonerefs pod
 	pod := corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      r.getBuildPodName(ibPod, "clonerefs"),
@@ -407,6 +418,7 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod, pvc *corev1.Pers
 		return corev1.Pod{}, errors.Wrap(err, "set controller reference")
 	}
 
+	// Copy clonerefs image and environment variables from init container of image-builder pod
 	for _, ic := range ibPod.Spec.InitContainers {
 		if ic.Name == clonerefsContainerName {
 

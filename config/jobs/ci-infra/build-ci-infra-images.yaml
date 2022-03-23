@@ -24,6 +24,7 @@ postsubmits:
         - --cache-registry=eu.gcr.io/sap-cloud-platform-dev1/kaniko-cache
         - --target=cla-assistant
         - --target=image-builder
+        - --build-arg=GOLANG_VERSION=1.17.8
         - --log-level=info
         - --add-date-sha-tag=true
         - --add-latest-tag=true
@@ -77,10 +78,11 @@ postsubmits:
         - --docker-config-secret=k8s-playground-docker-config
         - --registry=eu.gcr.io/sap-cloud-platform-dev1/buildapp-ci-infra
         - --target=golang-test
+        - --build-arg=GOLANG_VERSION=1.17.8
+        - --add-fix-tag=1.17.8
         - --log-level=info
         - --add-date-sha-tag=true
         - --add-latest-tag=true
-        - --add-fix-tag=1.17.7
         env:
         - name: POD_NAMESPACE
           valueFrom:

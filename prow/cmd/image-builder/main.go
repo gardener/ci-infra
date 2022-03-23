@@ -39,6 +39,7 @@ type options struct {
 	pullBaseSHA        string
 	dockerfile         string
 	targets            flagutil.Strings
+	buildArgs          flagutil.Strings
 	registry           string
 	cacheRegistry      string
 	kanikoImage        string
@@ -76,6 +77,7 @@ func gatherOptions() options {
 	fs.StringVar(&o.dockerConfigSecret, "docker-config-secret", "", "secret which includes docker config.json file")
 	fs.StringVar(&o.dockerfile, "dockerfile", "Dockerfile", "path to dockerfile to be built")
 	fs.Var(&o.targets, "target", "target of dockerfile to be built")
+	fs.Var(&o.buildArgs, "build-arg", "build-arg for the build")
 	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are beeing pushed")
 	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are beeing pushed")
 	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.7.0", "kaniko image for kaniko build")

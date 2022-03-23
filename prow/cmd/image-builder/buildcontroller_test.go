@@ -137,6 +137,7 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 		addFixTag:          "test",
 		logLevel:           "debug",
 		targets:            flagutil.NewStrings("target1", "target2", "target3"),
+		buildArgs:          flagutil.NewStrings("buildarg1=abc", "buildarg1=xyz"),
 		pullBaseSHA:        "abcdef1234567890",
 	}
 
