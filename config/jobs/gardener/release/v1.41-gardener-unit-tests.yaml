@@ -1,0 +1,68 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-unit-release-v1.41
+    cluster: gardener-prow-build
+    skip_if_only_changed: "^docs/|\\.md$"
+    branches:
+    - release-v1.41
+    decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener developments in pull requests
+    max_concurrency: 5
+    spec:
+      containers:
+      # Run all tests sequentially in one container or as separete prow jobs.
+      # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+      - image: ghcr.io/gardener/ci-infra/golang-test:1.17.7
+        command:
+        - make
+        args:
+        - check-generate
+        - check
+        - format
+        - test
+        - test-prometheus
+        - check-docforge
+        resources:
+          limits:
+            memory: 16Gi
+          requests:
+            cpu: 5
+            memory: 8Gi
+periodics:
+- name: ci-gardener-unit-release-v1.41
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener
+    base_ref: release-v1.41
+  decorate: true
+  decoration_config:
+    timeout: 40m
+    grace_period: 10m
+  annotations:
+    description: Runs unit tests for gardener developments in pull requests
+  spec:
+    containers:
+    # Run all tests sequentially in one container or as separete prow jobs.
+    # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+    - image: ghcr.io/gardener/ci-infra/golang-test:1.17.7
+      command:
+      - make
+      args:
+      - check-generate
+      - check
+      - format
+      - test
+      - test-prometheus
+      - check-docforge
+      resources:
+        limits:
+          memory: 16Gi
+        requests:
+          cpu: 5
+          memory: 8Gi
