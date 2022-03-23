@@ -1,0 +1,69 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-unit-release
+    cluster: gardener-prow-build
+    skip_if_only_changed: "^docs/|\\.md$"
+    # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
+    skip_branches:
+    - master
+    decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener releases in pull requests
+    max_concurrency: 5
+    spec:
+      containers:
+      # Run all tests sequentially in one container or as separete prow jobs.
+      # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+      - image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+        command:
+        - make
+        args:
+        - check-generate
+        - check
+        - format
+        - test
+        - test-prometheus
+        - check-docforge
+        resources:
+          limits:
+            memory: 16Gi
+          requests:
+            cpu: 5
+            memory: 8Gi
+postsubmits:
+  gardener/gardener:
+  - name: post-gardener-unit-release
+    cluster: gardener-prow-build
+    # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
+    skip_branches:
+    - master
+    decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener releases when merging
+    max_concurrency: 5
+    spec:
+      containers:
+      # Run all tests sequentially in one container or as separete prow jobs.
+      # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+      - image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+        command:
+        - make
+        args:
+        - check-generate
+        - check
+        - format
+        - test
+        - test-prometheus
+        - check-docforge
+        resources:
+          limits:
+            memory: 16Gi
+          requests:
+            cpu: 5
+            memory: 8Gi
