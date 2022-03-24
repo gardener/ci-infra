@@ -1,0 +1,56 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-integration
+    cluster: gardener-prow-build
+    skip_if_only_changed: "^docs/|\\.md$"
+    skip_branches:
+    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs integration tests for gardener developments in pull requests
+    max_concurrency: 5
+    spec:
+      containers:
+      - name: test-integration
+        image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+        command:
+        - make
+        args:
+        - test-integration
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: 4
+            memory: 2Gi
+periodics:
+- name: ci-gardener-integration
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Runs integration tests for gardener developments in pull requests
+  spec:
+    containers:
+    - name: test-integration
+      image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+      command:
+      - make
+      args:
+      - test-integration
+      resources:
+        limits:
+          memory: 4Gi
+        requests:
+          cpu: 4
+          memory: 2Gi

@@ -1,0 +1,57 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-integration-release
+    cluster: gardener-prow-build
+    skip_if_only_changed: "^docs/|\\.md$"
+    # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
+    skip_branches:
+    - master
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs integration tests for gardener releases in pull requests
+    max_concurrency: 5
+    spec:
+      containers:
+      - name: test-integration
+        image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+        command:
+        - make
+        args:
+        - test-integration
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: 4
+            memory: 2Gi
+postsubmits:
+  gardener/gardener:
+  - name: post-gardener-integration-release
+    cluster: gardener-prow-build
+    # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
+    skip_branches:
+    - master
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs integration tests for gardener releases when merging
+    max_concurrency: 5
+    spec:
+      containers:
+      - name: test-integration
+        image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
+        command:
+        - make
+        args:
+        - test-integration
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: 4
+            memory: 2Gi
