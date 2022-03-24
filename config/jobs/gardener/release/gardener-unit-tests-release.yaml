@@ -11,7 +11,6 @@ presubmits:
       grace_period: 10m
     annotations:
       description: Runs unit tests for gardener releases in pull requests
-    max_concurrency: 5
     spec:
       containers:
       # Run all tests sequentially in one container or as separete prow jobs.
@@ -45,7 +44,6 @@ postsubmits:
       grace_period: 10m
     annotations:
       description: Runs unit tests for gardener releases when merging
-    max_concurrency: 5
     spec:
       containers:
       # Run all tests sequentially in one container or as separete prow jobs.

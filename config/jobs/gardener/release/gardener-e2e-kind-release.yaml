@@ -12,7 +12,6 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    max_concurrency: 5
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master
@@ -68,7 +67,6 @@ postsubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    max_concurrency: 5
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master

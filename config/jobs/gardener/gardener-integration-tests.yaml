@@ -10,7 +10,6 @@ presubmits:
       grace_period: 10m
     annotations:
       description: Runs integration tests for gardener developments in pull requests
-    max_concurrency: 5
     spec:
       containers:
       - name: test-integration
