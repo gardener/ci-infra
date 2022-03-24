@@ -2,7 +2,6 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-integration-release
     cluster: gardener-prow-build
-    skip_if_only_changed: "^docs/|\\.md$"
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     skip_branches:
     - master

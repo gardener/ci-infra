@@ -2,7 +2,6 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-integration
     cluster: gardener-prow-build
-    skip_if_only_changed: "^docs/|\\.md$"
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
