@@ -2,7 +2,6 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-e2e-kind
     cluster: gardener-prow-build
-    skip_if_only_changed: "^docs/|\\.md$"
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
@@ -12,7 +11,6 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    max_concurrency: 5
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master

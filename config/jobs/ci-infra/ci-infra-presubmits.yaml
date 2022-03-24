@@ -31,7 +31,6 @@ presubmits:
     always_run: true
     annotations:
       description: Runs go tests for prow developments in ci-infra 
-    max_concurrency: 5
     spec:
       containers:
       - image: golang:1.17.8

@@ -2,7 +2,6 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-e2e-kind-release
     cluster: gardener-prow-build
-    skip_if_only_changed: "^docs/|\\.md$"
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     skip_branches:
     - master
@@ -13,7 +12,6 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    max_concurrency: 5
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master
@@ -69,7 +67,6 @@ postsubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    max_concurrency: 5
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220322-c5eee43783-master
