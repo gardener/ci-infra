@@ -2,6 +2,7 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-unit
     cluster: gardener-prow-build
+    always_run: true
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
