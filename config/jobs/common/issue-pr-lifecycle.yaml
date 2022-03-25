@@ -16,6 +16,7 @@ periodics:
       args:
       - |-
         --query=repo:gardener/ci-infra
+        repo:gardener/gardener
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=720h
@@ -60,6 +61,7 @@ periodics:
       args:
       - |-
         --query=repo:gardener/ci-infra
+        repo:gardener/gardener
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
@@ -105,6 +107,7 @@ periodics:
       args:
       - |-
         --query=repo:gardener/ci-infra
+        repo:gardener/gardener
         -label:lifecycle/frozen
         -label:lifecycle/stale
         -label:lifecycle/rotten
