@@ -194,9 +194,9 @@ spec:
       annotations:
         message: token {{ $labels.token_hash }} will run out of API quota before the next reset.
       expr: |
-        github_token_usage{job="ghproxy", resource!="search"} <  1500
+        github_token_usage{job="ghproxy", ratelimit_resource!="search"} <  1500
         and
-        predict_linear(github_token_usage{job="ghproxy", resource!="search"}[30m], 1 * 3600) < 0
+        predict_linear(github_token_usage{job="ghproxy", ratelimit_resource!="search"}[30m], 1 * 3600) < 0
       for: 5m
       labels:
         severity: high
