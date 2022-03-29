@@ -136,7 +136,7 @@ branch-protection:
             contexts:
             - license/cla
             - concourse-ci/publish
-            - check-release-milestone
+            - "Check Release Milestone"
           restrictions: # prevent everyone from pushing/merging
             # NB: tide is running as GitHub App, which currently cannot be configured here to be excluded from branch
             # protections (see https://github.com/kubernetes/test-infra/issues/24530).

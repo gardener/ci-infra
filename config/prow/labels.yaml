@@ -10,67 +10,67 @@ repos:
   gardener/ci-infra:
     labels:
       # area
-      - name:  area/audit-logging
+      - name: area/audit-logging
         color: 0052cc
         description: Audit logging related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/auto-scaling
+      - name: area/auto-scaling
         color: 0052cc
         description: Auto-scaling (CA/HPA/VPA/HVPA, predominantly control plane, but also otherwise) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/backup
+      - name: area/backup
         color: 0052cc
         description: Backup related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/certification
+      - name: area/certification
         color: 0052cc
         description: Certification related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/control-plane
+      - name: area/control-plane
         color: 0052cc
         description: Control plane related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/control-plane-migration
+      - name: area/control-plane-migration
         color: 0052cc
         description: Control plane migration related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/cost
+      - name: area/cost
         color: 0052cc
         description: Cost related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/delivery
+      - name: area/delivery
         color: 0052cc
         description: Delivery related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/dev-productivity
+      - name: area/dev-productivity
         color: 0052cc
         description: Developer productivity related (how to improve development)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/disaster-recovery
+      - name: area/disaster-recovery
         color: 0052cc
         description: Disaster recovery related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/documentation
+      - name: area/documentation
         color: 0052cc
         description: Documentation related
         target: both
@@ -78,183 +78,183 @@ repos:
         addedBy: anyone
         previously:
           - name: documentation
-      - name:  area/high-availability
+      - name: area/high-availability
         color: 0052cc
         description: High availability related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/logging
+      - name: area/logging
         color: 0052cc
         description: Logging related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/metering
+      - name: area/metering
         color: 0052cc
         description: Metering related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/monitoring
+      - name: area/monitoring
         color: 0052cc
         description: Monitoring (including availability monitoring and alerting) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/networking
+      - name: area/networking
         color: 0052cc
         description: Networking related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/open-source
+      - name: area/open-source
         color: 0052cc
         description: Open Source (community, enablement, contributions, conferences, CNCF, etc.) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/ops-productivity
+      - name: area/ops-productivity
         color: 0052cc
         description: Operator productivity related (how to improve operations)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/os
+      - name: area/os
         color: 0052cc
         description: Operator system related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/performance
+      - name: area/performance
         color: 0052cc
         description: Performance (across all domains, such as control plane, networking, storage, etc.) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/quality
+      - name: area/quality
         color: 0052cc
         description: Output qualification (tests, checks, scans, automation in general, etc.) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/robustness
+      - name: area/robustness
         color: 0052cc
         description: Robustness, reliability, resilience related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/scalability
+      - name: area/scalability
         color: 0052cc
         description: Scalability related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/security
+      - name: area/security
         color: 0052cc
         description: Security related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/storage
+      - name: area/storage
         color: 0052cc
         description: Storage related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/testing
+      - name: area/testing
         color: 0052cc
         description: Testing related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/usability
+      - name: area/usability
         color: 0052cc
         description: Usability related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/user-management
+      - name: area/user-management
         color: 0052cc
         description: User-management related
         target: both
         prowPlugin: label
         addedBy: anyone
       # component
-      - name:  component/cicd
+      - name: component/cicd
         color: 25399e
         description: Continuous integration/delivery (tooling and processes)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/dashboard
+      - name: component/dashboard
         color: 25399e
         description: Gardener Dashboard
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/documentation
+      - name: component/documentation
         color: 25399e
         description: Gardener Documentation
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/etcd-backup-restore
+      - name: component/etcd-backup-restore
         color: 25399e
         description: ETCD Backup & Restore
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/etcd-druid
+      - name: component/etcd-druid
         color: 25399e
         description: ETCD Druid
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/gardenctl
+      - name: component/gardenctl
         color: 25399e
         description: Gardener CLI
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/gardener
+      - name: component/gardener
         color: 25399e
         description: Gardener
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/hvpa
+      - name: component/hvpa
         color: 25399e
         description: HVPA
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/kubify
+      - name: component/kubify
         color: 25399e
         description: Kubify
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/landscaper
+      - name: component/landscaper
         color: 25399e
         description: Landscape Installer
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/mcm
+      - name: component/mcm
         color: 25399e
         description: Machine Controller Manager (including Node Problem Detector, Cluster Auto Scaler, etc.)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/tm
+      - name: component/tm
         color: 25399e
         description: Test machinery (tooling and processes)
         target: both
         prowPlugin: label
         addedBy: anyone
       # kind
-      - name:  kind/epic
+      - name: kind/epic
         color: c7def8
         description: Large multi-story topic
         target: both
@@ -262,7 +262,7 @@ repos:
         addedBy: anyone
         previously:
           - name: epic
-      - name:  kind/bug
+      - name: kind/bug
         color: e11d21
         description: Bug
         target: both
@@ -270,37 +270,37 @@ repos:
         addedBy: anyone
         previously:
           - name: bug
-      - name:  kind/regression
+      - name: kind/regression
         color: e11d21
         description: Bug that hit us already in the past and that is reappearing/requires a proper solution
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/post-mortem
+      - name: kind/post-mortem
         color: e11d21
         description: Bug that requires deeper analysis after immediate issues were resolved (usually after downtime)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/impediment
+      - name: kind/impediment
         color: eb6420
         description: Something that impedes developers, operators, users or others in their work
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/technical-debt
+      - name: kind/technical-debt
         color: eb6420
         description: Something that is only solved on the surface, but requires more (re)work to be done properly
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/api-change
+      - name: kind/api-change
         color: eb6420
         description: API change with impact on API users
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/enhancement
+      - name: kind/enhancement
         color: c7def8
         description: Enhancement, improvement, extension
         target: both
@@ -308,37 +308,37 @@ repos:
         addedBy: anyone
         previously:
           - name: enhancement
-      - name:  kind/poc
+      - name: kind/poc
         color: c7def8
         description: Proof of concept or prototype
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/task
+      - name: kind/task
         color: c7def8
         description: General task
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/test
+      - name: kind/test
         color: c7def8
         description: Test
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/flake
+      - name: kind/flake
         color: f7c6c7
         description: Tracking or fixing a flaky test
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/cleanup
+      - name: kind/cleanup
         color: c7def8
         description: Something that is not needed anymore and can be cleaned up
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/question
+      - name: kind/question
         color: c7def8
         description: Question (asking for help, advice, or technical detail)
         target: issues
@@ -346,7 +346,7 @@ repos:
         addedBy: anyone
         previously:
           - name: question
-      - name:  kind/discussion
+      - name: kind/discussion
         color: c7def8
         description: Discussion (enaging others in deciding about multiple options)
         target: issues
@@ -355,115 +355,115 @@ repos:
         previously:
           - name: discussion
       # os
-      - name:  os/garden-linux
+      - name: os/garden-linux
         color: 187c00
         description: Related to Garden Linux OS
         target: both
         addedBy: anyone
-      - name:  os/suse-chost
+      - name: os/suse-chost
         color: 187c00
         description: Related to SUSE Container Host OS
         target: both
         addedBy: anyone
-      - name:  os/ubuntu
+      - name: os/ubuntu
         color: 187c00
         description: Related to Ubuntu OS
         target: both
         addedBy: anyone
       # platform
-      - name:  platform/alicloud
+      - name: platform/alicloud
         color: 006b75
         description: Alicloud platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/aws
+      - name: platform/aws
         color: 006b75
         description: Amazon web services platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/aws-gov
+      - name: platform/aws-gov
         color: 006b75
         description: Amazon web services (government) platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/azure
+      - name: platform/azure
         color: 006b75
         description: Microsoft Azure platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/metal
+      - name: platform/metal
         color: 006b75
         description: Bare metal platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/kubevirt
+      - name: platform/kubevirt
         color: 006b75
         description: Container Native Virtualization (CNV) KubeVirt platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/converged-cloud
+      - name: platform/converged-cloud
         color: 006b75
         description: Converged Cloud (CC) platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/gcp
+      - name: platform/gcp
         color: 006b75
         description: Google cloud platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/gmp
+      - name: platform/gmp
         color: 006b75
         description: GMP (SEN) platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/openstack
+      - name: platform/openstack
         color: 006b75
         description: OpenStack platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/equinix-metal
+      - name: platform/equinix-metal
         color: 006b75
         description: Equinix Metal platform/infrastructure (previously Packet)
         target: both
         addedBy: anyone
-      - name:  platform/vsphere
+      - name: platform/vsphere
         color: 006b75
         description: VMware vSphere platform/infrastructure
         target: both
         addedBy: anyone
       # priority
-      - name:  priority/1
+      - name: priority/1
         color: e11d21
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/2
+      - name: priority/2
         color: e54014
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/3
+      - name: priority/3
         color: e96f0b
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/4
+      - name: priority/4
         color: ec9a04
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/5
+      - name: priority/5
         color: fbca04
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
       # roadmap
-      - name:  roadmap/cloud
+      - name: roadmap/cloud
         color: 4c38a5
         description: Roadmap for the (managed) cloud delivery, i.e. gardener.cloud.sap
         target: both
@@ -471,7 +471,7 @@ repos:
         addedBy: anyone
         previously:
           - name: roadmap/cloud-sap
-      - name:  roadmap/standalone
+      - name: roadmap/standalone
         color: 4c38a5
         description: Roadmap for the (on-prem) standalone delivery, e.g. CDC, NS2, etc.
         target: both
@@ -479,7 +479,7 @@ repos:
         addedBy: anyone
         previously:
           - name: roadmap/on-prem
-      - name:  roadmap/internal
+      - name: roadmap/internal
         color: 4c38a5
         description: Roadmap for our team-internal goals, e.g. drive up seed utilization
         target: both
@@ -730,67 +730,67 @@ repos:
   gardener/gardener:
     labels:
       # area
-      - name:  area/audit-logging
+      - name: area/audit-logging
         color: 0052cc
         description: Audit logging related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/auto-scaling
+      - name: area/auto-scaling
         color: 0052cc
         description: Auto-scaling (CA/HPA/VPA/HVPA, predominantly control plane, but also otherwise) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/backup
+      - name: area/backup
         color: 0052cc
         description: Backup related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/certification
+      - name: area/certification
         color: 0052cc
         description: Certification related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/control-plane
+      - name: area/control-plane
         color: 0052cc
         description: Control plane related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/control-plane-migration
+      - name: area/control-plane-migration
         color: 0052cc
         description: Control plane migration related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/cost
+      - name: area/cost
         color: 0052cc
         description: Cost related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/delivery
+      - name: area/delivery
         color: 0052cc
         description: Delivery related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/dev-productivity
+      - name: area/dev-productivity
         color: 0052cc
         description: Developer productivity related (how to improve development)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/disaster-recovery
+      - name: area/disaster-recovery
         color: 0052cc
         description: Disaster recovery related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/documentation
+      - name: area/documentation
         color: 0052cc
         description: Documentation related
         target: both
@@ -798,183 +798,183 @@ repos:
         addedBy: anyone
         previously:
           - name: documentation
-      - name:  area/high-availability
+      - name: area/high-availability
         color: 0052cc
         description: High availability related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/logging
+      - name: area/logging
         color: 0052cc
         description: Logging related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/metering
+      - name: area/metering
         color: 0052cc
         description: Metering related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/monitoring
+      - name: area/monitoring
         color: 0052cc
         description: Monitoring (including availability monitoring and alerting) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/networking
+      - name: area/networking
         color: 0052cc
         description: Networking related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/open-source
+      - name: area/open-source
         color: 0052cc
         description: Open Source (community, enablement, contributions, conferences, CNCF, etc.) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/ops-productivity
+      - name: area/ops-productivity
         color: 0052cc
         description: Operator productivity related (how to improve operations)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/os
+      - name: area/os
         color: 0052cc
         description: Operator system related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/performance
+      - name: area/performance
         color: 0052cc
         description: Performance (across all domains, such as control plane, networking, storage, etc.) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/quality
+      - name: area/quality
         color: 0052cc
         description: Output qualification (tests, checks, scans, automation in general, etc.) related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/robustness
+      - name: area/robustness
         color: 0052cc
         description: Robustness, reliability, resilience related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/scalability
+      - name: area/scalability
         color: 0052cc
         description: Scalability related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/security
+      - name: area/security
         color: 0052cc
         description: Security related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/storage
+      - name: area/storage
         color: 0052cc
         description: Storage related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/testing
+      - name: area/testing
         color: 0052cc
         description: Testing related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/usability
+      - name: area/usability
         color: 0052cc
         description: Usability related
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  area/user-management
+      - name: area/user-management
         color: 0052cc
         description: User-management related
         target: both
         prowPlugin: label
         addedBy: anyone
       # component
-      - name:  component/cicd
+      - name: component/cicd
         color: 25399e
         description: Continuous integration/delivery (tooling and processes)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/dashboard
+      - name: component/dashboard
         color: 25399e
         description: Gardener Dashboard
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/documentation
+      - name: component/documentation
         color: 25399e
         description: Gardener Documentation
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/etcd-backup-restore
+      - name: component/etcd-backup-restore
         color: 25399e
         description: ETCD Backup & Restore
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/etcd-druid
+      - name: component/etcd-druid
         color: 25399e
         description: ETCD Druid
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/gardenctl
+      - name: component/gardenctl
         color: 25399e
         description: Gardener CLI
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/gardener
+      - name: component/gardener
         color: 25399e
         description: Gardener
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/hvpa
+      - name: component/hvpa
         color: 25399e
         description: HVPA
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/kubify
+      - name: component/kubify
         color: 25399e
         description: Kubify
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/landscaper
+      - name: component/landscaper
         color: 25399e
         description: Landscape Installer
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/mcm
+      - name: component/mcm
         color: 25399e
         description: Machine Controller Manager (including Node Problem Detector, Cluster Auto Scaler, etc.)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  component/tm
+      - name: component/tm
         color: 25399e
         description: Test machinery (tooling and processes)
         target: both
         prowPlugin: label
         addedBy: anyone
       # kind
-      - name:  kind/epic
+      - name: kind/epic
         color: c7def8
         description: Large multi-story topic
         target: both
@@ -982,7 +982,7 @@ repos:
         addedBy: anyone
         previously:
           - name: epic
-      - name:  kind/bug
+      - name: kind/bug
         color: e11d21
         description: Bug
         target: both
@@ -990,37 +990,37 @@ repos:
         addedBy: anyone
         previously:
           - name: bug
-      - name:  kind/regression
+      - name: kind/regression
         color: e11d21
         description: Bug that hit us already in the past and that is reappearing/requires a proper solution
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/post-mortem
+      - name: kind/post-mortem
         color: e11d21
         description: Bug that requires deeper analysis after immediate issues were resolved (usually after downtime)
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/impediment
+      - name: kind/impediment
         color: eb6420
         description: Something that impedes developers, operators, users or others in their work
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/technical-debt
+      - name: kind/technical-debt
         color: eb6420
         description: Something that is only solved on the surface, but requires more (re)work to be done properly
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/api-change
+      - name: kind/api-change
         color: eb6420
         description: API change with impact on API users
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/enhancement
+      - name: kind/enhancement
         color: c7def8
         description: Enhancement, improvement, extension
         target: both
@@ -1028,37 +1028,37 @@ repos:
         addedBy: anyone
         previously:
           - name: enhancement
-      - name:  kind/poc
+      - name: kind/poc
         color: c7def8
         description: Proof of concept or prototype
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/task
+      - name: kind/task
         color: c7def8
         description: General task
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/test
+      - name: kind/test
         color: c7def8
         description: Test
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/flake
+      - name: kind/flake
         color: f7c6c7
         description: Tracking or fixing a flaky test
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/cleanup
+      - name: kind/cleanup
         color: c7def8
         description: Something that is not needed anymore and can be cleaned up
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name:  kind/question
+      - name: kind/question
         color: c7def8
         description: Question (asking for help, advice, or technical detail)
         target: issues
@@ -1066,7 +1066,7 @@ repos:
         addedBy: anyone
         previously:
           - name: question
-      - name:  kind/discussion
+      - name: kind/discussion
         color: c7def8
         description: Discussion (enaging others in deciding about multiple options)
         target: issues
@@ -1075,115 +1075,115 @@ repos:
         previously:
           - name: discussion
       # os
-      - name:  os/garden-linux
+      - name: os/garden-linux
         color: 187c00
         description: Related to Garden Linux OS
         target: both
         addedBy: anyone
-      - name:  os/suse-chost
+      - name: os/suse-chost
         color: 187c00
         description: Related to SUSE Container Host OS
         target: both
         addedBy: anyone
-      - name:  os/ubuntu
+      - name: os/ubuntu
         color: 187c00
         description: Related to Ubuntu OS
         target: both
         addedBy: anyone
       # platform
-      - name:  platform/alicloud
+      - name: platform/alicloud
         color: 006b75
         description: Alicloud platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/aws
+      - name: platform/aws
         color: 006b75
         description: Amazon web services platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/aws-gov
+      - name: platform/aws-gov
         color: 006b75
         description: Amazon web services (government) platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/azure
+      - name: platform/azure
         color: 006b75
         description: Microsoft Azure platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/metal
+      - name: platform/metal
         color: 006b75
         description: Bare metal platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/kubevirt
+      - name: platform/kubevirt
         color: 006b75
         description: Container Native Virtualization (CNV) KubeVirt platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/converged-cloud
+      - name: platform/converged-cloud
         color: 006b75
         description: Converged Cloud (CC) platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/gcp
+      - name: platform/gcp
         color: 006b75
         description: Google cloud platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/gmp
+      - name: platform/gmp
         color: 006b75
         description: GMP (SEN) platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/openstack
+      - name: platform/openstack
         color: 006b75
         description: OpenStack platform/infrastructure
         target: both
         addedBy: anyone
-      - name:  platform/equinix-metal
+      - name: platform/equinix-metal
         color: 006b75
         description: Equinix Metal platform/infrastructure (previously Packet)
         target: both
         addedBy: anyone
-      - name:  platform/vsphere
+      - name: platform/vsphere
         color: 006b75
         description: VMware vSphere platform/infrastructure
         target: both
         addedBy: anyone
       # priority
-      - name:  priority/1
+      - name: priority/1
         color: e11d21
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/2
+      - name: priority/2
         color: e54014
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/3
+      - name: priority/3
         color: e96f0b
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/4
+      - name: priority/4
         color: ec9a04
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/5
+      - name: priority/5
         color: fbca04
         description: Priority (lower number equals higher priority)
         target: issues
         prowPlugin: label
         addedBy: anyone
       # roadmap
-      - name:  roadmap/cloud
+      - name: roadmap/cloud
         color: 4c38a5
         description: Roadmap for the (managed) cloud delivery, i.e. gardener.cloud.sap
         target: both
@@ -1191,7 +1191,7 @@ repos:
         addedBy: anyone
         previously:
           - name: roadmap/cloud-sap
-      - name:  roadmap/standalone
+      - name: roadmap/standalone
         color: 4c38a5
         description: Roadmap for the (on-prem) standalone delivery, e.g. CDC, NS2, etc.
         target: both
@@ -1199,7 +1199,7 @@ repos:
         addedBy: anyone
         previously:
           - name: roadmap/on-prem
-      - name:  roadmap/internal
+      - name: roadmap/internal
         color: 4c38a5
         description: Roadmap for our team-internal goals, e.g. drive up seed utilization
         target: both
