@@ -354,23 +354,82 @@ repos:
         addedBy: anyone
         previously:
           - name: discussion
-      - name:  kind/consulting
-        color: 33cc3f
-        description: Consulting (requiring support to solve a problem)
-        target: issues
-        prowPlugin: label
+      # os
+      - name:  os/garden-linux
+        color: 187c00
+        description: Related to Garden Linux OS
+        target: both
         addedBy: anyone
-      - name:  kind/onboarding
-        color: 33cc3f
-        description: Onboarding
-        target: issues
-        prowPlugin: label
+      - name:  os/suse-chost
+        color: 187c00
+        description: Related to SUSE Container Host OS
+        target: both
         addedBy: anyone
-      - name:  kind/quota-request
-        color: c7def8
-        description: Resource quota related changes
-        target: issues
-        prowPlugin: label
+      - name:  os/ubuntu
+        color: 187c00
+        description: Related to Ubuntu OS
+        target: both
+        addedBy: anyone
+      # platform
+      - name:  platform/alicloud
+        color: 006b75
+        description: Alicloud platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/aws
+        color: 006b75
+        description: Amazon web services platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/aws-gov
+        color: 006b75
+        description: Amazon web services (government) platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/azure
+        color: 006b75
+        description: Microsoft Azure platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/metal
+        color: 006b75
+        description: Bare metal platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/kubevirt
+        color: 006b75
+        description: Container Native Virtualization (CNV) KubeVirt platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/converged-cloud
+        color: 006b75
+        description: Converged Cloud (CC) platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/gcp
+        color: 006b75
+        description: Google cloud platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/gmp
+        color: 006b75
+        description: GMP (SEN) platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/openstack
+        color: 006b75
+        description: OpenStack platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/equinix-metal
+        color: 006b75
+        description: Equinix Metal platform/infrastructure (previously Packet)
+        target: both
+        addedBy: anyone
+      - name:  platform/vsphere
+        color: 006b75
+        description: VMware vSphere platform/infrastructure
+        target: both
         addedBy: anyone
       # priority
       - name:  priority/1
@@ -403,28 +462,10 @@ repos:
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/blocker
-        color: e11d21
-        description: Needs to be resolved now, because it breaks the service
-        target: both
-        prowPlugin: label
-        addedBy: anyone
-      - name:  priority/critical
-        color: e54014
-        description: Needs to be resolved soon, because it impacts users negatively
-        target: both
-        prowPlugin: label
-        addedBy: anyone
-      - name:  priority/normal
-        color: fbca04
-        description: Has no particular urgency
-        target: issues
-        prowPlugin: label
-        addedBy: anyone
       # roadmap
       - name:  roadmap/cloud
         color: 4c38a5
-        purpose: Roadmap for the (managed) cloud delivery, i.e. gardener.cloud.sap
+        description: Roadmap for the (managed) cloud delivery, i.e. gardener.cloud.sap
         target: both
         prowPlugin: label
         addedBy: anyone
@@ -432,7 +473,7 @@ repos:
           - name: roadmap/cloud-sap
       - name:  roadmap/standalone
         color: 4c38a5
-        purpose: Roadmap for the (on-prem) standalone delivery, e.g. CDC, NS2, etc.
+        description: Roadmap for the (on-prem) standalone delivery, e.g. CDC, NS2, etc.
         target: both
         prowPlugin: label
         addedBy: anyone
@@ -440,7 +481,7 @@ repos:
           - name: roadmap/on-prem
       - name:  roadmap/internal
         color: 4c38a5
-        purpose: Roadmap for our team-internal goals, e.g. drive up seed utilization
+        description: Roadmap for our team-internal goals, e.g. drive up seed utilization
         target: both
         prowPlugin: label
         addedBy: anyone
@@ -1033,23 +1074,82 @@ repos:
         addedBy: anyone
         previously:
           - name: discussion
-      - name:  kind/consulting
-        color: 33cc3f
-        description: Consulting (requiring support to solve a problem)
-        target: issues
-        prowPlugin: label
+      # os
+      - name:  os/garden-linux
+        color: 187c00
+        description: Related to Garden Linux OS
+        target: both
         addedBy: anyone
-      - name:  kind/onboarding
-        color: 33cc3f
-        description: Onboarding
-        target: issues
-        prowPlugin: label
+      - name:  os/suse-chost
+        color: 187c00
+        description: Related to SUSE Container Host OS
+        target: both
         addedBy: anyone
-      - name:  kind/quota-request
-        color: c7def8
-        description: Resource quota related changes
-        target: issues
-        prowPlugin: label
+      - name:  os/ubuntu
+        color: 187c00
+        description: Related to Ubuntu OS
+        target: both
+        addedBy: anyone
+      # platform
+      - name:  platform/alicloud
+        color: 006b75
+        description: Alicloud platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/aws
+        color: 006b75
+        description: Amazon web services platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/aws-gov
+        color: 006b75
+        description: Amazon web services (government) platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/azure
+        color: 006b75
+        description: Microsoft Azure platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/metal
+        color: 006b75
+        description: Bare metal platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/kubevirt
+        color: 006b75
+        description: Container Native Virtualization (CNV) KubeVirt platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/converged-cloud
+        color: 006b75
+        description: Converged Cloud (CC) platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/gcp
+        color: 006b75
+        description: Google cloud platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/gmp
+        color: 006b75
+        description: GMP (SEN) platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/openstack
+        color: 006b75
+        description: OpenStack platform/infrastructure
+        target: both
+        addedBy: anyone
+      - name:  platform/equinix-metal
+        color: 006b75
+        description: Equinix Metal platform/infrastructure (previously Packet)
+        target: both
+        addedBy: anyone
+      - name:  platform/vsphere
+        color: 006b75
+        description: VMware vSphere platform/infrastructure
+        target: both
         addedBy: anyone
       # priority
       - name:  priority/1
@@ -1082,28 +1182,10 @@ repos:
         target: issues
         prowPlugin: label
         addedBy: anyone
-      - name:  priority/blocker
-        color: e11d21
-        description: Needs to be resolved now, because it breaks the service
-        target: both
-        prowPlugin: label
-        addedBy: anyone
-      - name:  priority/critical
-        color: e54014
-        description: Needs to be resolved soon, because it impacts users negatively
-        target: both
-        prowPlugin: label
-        addedBy: anyone
-      - name:  priority/normal
-        color: fbca04
-        description: Has no particular urgency
-        target: issues
-        prowPlugin: label
-        addedBy: anyone
       # roadmap
       - name:  roadmap/cloud
         color: 4c38a5
-        purpose: Roadmap for the (managed) cloud delivery, i.e. gardener.cloud.sap
+        description: Roadmap for the (managed) cloud delivery, i.e. gardener.cloud.sap
         target: both
         prowPlugin: label
         addedBy: anyone
@@ -1111,7 +1193,7 @@ repos:
           - name: roadmap/cloud-sap
       - name:  roadmap/standalone
         color: 4c38a5
-        purpose: Roadmap for the (on-prem) standalone delivery, e.g. CDC, NS2, etc.
+        description: Roadmap for the (on-prem) standalone delivery, e.g. CDC, NS2, etc.
         target: both
         prowPlugin: label
         addedBy: anyone
@@ -1119,7 +1201,7 @@ repos:
           - name: roadmap/on-prem
       - name:  roadmap/internal
         color: 4c38a5
-        purpose: Roadmap for our team-internal goals, e.g. drive up seed utilization
+        description: Roadmap for our team-internal goals, e.g. drive up seed utilization
         target: both
         prowPlugin: label
         addedBy: anyone
