@@ -132,6 +132,9 @@ branch-protection:
           enforce_admins: true # protections apply to admins as well
         gardener:
           protect: true
+          include:
+          - "master"
+          - "release-.*"
           required_status_checks:
             contexts:
             - license/cla
