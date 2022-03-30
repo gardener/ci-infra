@@ -43,6 +43,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 prow_components=(
 "prow_namespace.yaml"
 "test-pods_namespace.yaml"
+"cherrypicker_deployment.yaml"
+"cherrypicker_service.yaml"
 "cla_assistant_deployment.yaml"
 "cla_assistant_service.yaml"
 "cpu-limit-range_limitrange.yaml"
