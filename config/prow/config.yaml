@@ -146,7 +146,8 @@ branch-protection:
             # Hence, remember to manually add the `gardener-prow` GitHub App to all branch protection rules
             # to allow tide to push/merge.
             users: []
-            teams: []
+            teams:
+            - gardener/ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: true # protections apply to admins as well
 
 tide:
