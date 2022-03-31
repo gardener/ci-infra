@@ -28,6 +28,7 @@ periodics:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        
         You can:
         - Reopen this issue or PR with `/reopen`
         - Mark this issue or PR as fresh with `/remove-lifecycle rotten`
@@ -74,6 +75,7 @@ periodics:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        
         You can:
         - Mark this issue or PR as fresh with `/remove-lifecycle rotten`
         - Close this issue or PR with `/close`
@@ -120,6 +122,7 @@ periodics:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        
         You can:
         - Mark this issue or PR as fresh with `/remove-lifecycle stale`
         - Mark this issue or PR as rotten with `/lifecycle rotten`
