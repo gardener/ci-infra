@@ -83,9 +83,6 @@ prow_components=(
 "tide_deployment.yaml"
 "tide_rbac.yaml"
 "tide_service.yaml"
-"webserver_config.yaml"
-"webserver_deployment.yaml"
-"webserver_service.yaml"
 )
 
 prow_components_build=(

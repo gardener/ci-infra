@@ -93,8 +93,8 @@ deck:
       - 5415312 # ci-infra-maintainers
   branding:
     header_color: "#0b8062"
-    logo: "/static-files/gardener.svg"
-    favicon: "/static-files/gardener-favicon.png"
+    logo: "/static/gardener/gardener.svg"
+    favicon: "gardener/gardener-favicon.png"
 
 prowjob_namespace: prow
 pod_namespace: test-pods

@@ -27,13 +27,6 @@ spec:
             name: hook
             port:
               number: 8888
-      - path: /static-files
-        pathType: Prefix
-        backend:
-          service:
-            name: webserver
-            port:
-              number: 80
   tls:
   - hosts:
     - prow.gardener.cloud
