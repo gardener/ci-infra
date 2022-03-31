@@ -78,6 +78,8 @@ spec:
         - name: gcs-credentials
           mountPath: /etc/gcs-credentials
           readOnly: true
+        - mountPath: /var/run/ko/static/gardener
+          name: webserver-static-files
         livenessProbe:
           httpGet:
             path: /healthz
@@ -129,3 +131,6 @@ spec:
       - name: gcs-credentials
         secret:
           secretName: gardener-prow-storage
+      - name: webserver-static-files
+        configMap:
+          name: webserver-static-files
