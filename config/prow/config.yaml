@@ -140,7 +140,7 @@ branch-protection:
             - license/cla
             - concourse-ci/publish
             - "Check Release Milestone"
-          restrictions: # prevent everyone from pushing/merging
+          restrictions: # prevent everyone from pushing/merging (except admins)
             # NB: tide is running as GitHub App, which currently cannot be configured here to be excluded from branch
             # protections (see https://github.com/kubernetes/test-infra/issues/24530).
             # Hence, remember to manually add the `gardener-prow` GitHub App to all branch protection rules
@@ -148,7 +148,7 @@ branch-protection:
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: true # protections apply to admins as well
+          enforce_admins: false # protections don't apply to admins
 
 tide:
   sync_period: 2m
