@@ -12,7 +12,7 @@ postsubmits:
         channel: "gardener-prow-alerts"
     max_concurrency: 5
     spec:
-      serviceAccountName: builder
+      serviceAccountName: image-builder
       containers:
       - name: image-builder
         image: ghcr.io/gardener/ci-infra/image-builder:latest
@@ -68,7 +68,7 @@ postsubmits:
         channel: "gardener-prow-alerts"
     max_concurrency: 5
     spec:
-      serviceAccountName: builder
+      serviceAccountName: image-builder
       containers:
       - name: image-builder
         image: ghcr.io/gardener/ci-infra/image-builder:latest
