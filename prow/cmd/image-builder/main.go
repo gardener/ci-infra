@@ -15,19 +15,22 @@
 package main
 
 import (
-	"context"
+	"bufio"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 	"k8s.io/test-infra/prow/flagutil"
+	"k8s.io/test-infra/prow/interrupts"
 	"k8s.io/test-infra/prow/logrusutil"
+	"k8s.io/test-infra/prow/pod-utils/downwardapi"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
@@ -36,18 +39,17 @@ type options struct {
 	dockerConfigSecret string
 	org                string
 	repo               string
-	pullBaseSHA        string
+	baseSHA            string
 	dockerfile         string
 	targets            flagutil.Strings
-	buildArgs          flagutil.Strings
+	kanikoArgs         flagutil.Strings
 	registry           string
 	cacheRegistry      string
 	kanikoImage        string
 	addVersionTag      bool
 	addVersionSHATag   bool
 	addDateSHATag      bool
-	addLatestTag       bool
-	addFixTag          string
+	addFixedTags       flagutil.Strings
 
 	logLevel string
 }
@@ -65,8 +67,19 @@ func (o *options) Validate() error {
 	if o.registry == "" {
 		return fmt.Errorf("\"registry\" parameter must not be empty")
 	}
-	if !o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && !o.addLatestTag {
+	if !o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && len(o.addFixedTags.Strings()) == 0 {
 		return fmt.Errorf("please choose at least one tagging scheme")
+	}
+	for _, kanikoArg := range o.kanikoArgs.Strings() {
+		if strings.HasPrefix(kanikoArg, "--cache=") || strings.HasPrefix(kanikoArg, "--cache-repo=") {
+			return fmt.Errorf("please use --cache-registry option to enable/disable cache")
+		}
+		if strings.HasPrefix(kanikoArg, "--destination=") || strings.HasPrefix(kanikoArg, "--target=") {
+			return fmt.Errorf("please use --registry, --target and --add-[xyz]-tag options to define targets and destinations")
+		}
+		if strings.HasPrefix(kanikoArg, "--dockerfile=") {
+			return fmt.Errorf("please use --dockerfile option to define the path to the dockerfile")
+		}
 	}
 	return nil
 }
@@ -77,23 +90,62 @@ func gatherOptions() options {
 	fs.StringVar(&o.dockerConfigSecret, "docker-config-secret", "", "secret which includes docker config.json file")
 	fs.StringVar(&o.dockerfile, "dockerfile", "Dockerfile", "path to dockerfile to be built")
 	fs.Var(&o.targets, "target", "target of dockerfile to be built")
-	fs.Var(&o.buildArgs, "build-arg", "build-arg for the build")
-	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are beeing pushed")
-	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are beeing pushed")
-	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.7.0", "kaniko image for kaniko build")
+	fs.Var(&o.kanikoArgs, "kaniko-arg", "kaniko-arg for the build")
+	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are being pushed. Cache is disabled for empty value")
+	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are being pushed")
+	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.8.0", "kaniko image for kaniko build")
 	fs.BoolVar(&o.addVersionTag, "add-version-tag", false, "Add label from VERSION file of git root directory to image tags")
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
-	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using YYYYMMDD-<rev short> scheme which is compatible to autobumper")
-	fs.BoolVar(&o.addLatestTag, "add-latest-tag", false, "Add 'latest' tag to images")
-	fs.StringVar(&o.addFixTag, "add-fix-tag", "", "Add a fix tag to images")
+	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using vYYYYMMDD-<rev short> scheme which is compatible to autobumper")
+	fs.Var(&o.addFixedTags, "add-fixed-tag", "Add a fixed tag to images")
 
-	fs.StringVar(&o.logLevel, "log-level", "debug", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
+	fs.StringVar(&o.logLevel, "log-level", "info", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 
 	err := fs.Parse(os.Args[1:])
 	if err != nil {
 		logrus.Fatalf("Unable to parse command line flags: %v", err)
 	}
+
+	jobSpec, err := downwardapi.ResolveSpecFromEnv()
+	if err != nil {
+		logrus.Fatalf("Unable to resolve prow job spec: %v", err)
+	}
+
+	if jobSpec.Refs != nil {
+		o.org = jobSpec.Refs.Org
+		o.repo = jobSpec.Refs.Repo
+		o.baseSHA = jobSpec.Refs.BaseSHA
+	} else {
+		logrus.Fatal("Unable to find a valid git ref")
+	}
+
 	return o
+}
+
+func getPodNamespace() (string, error) {
+	var namespace string
+
+	versionFile, err := os.Open("/var/run/secrets/kubernetes.io/serviceaccount/namespace")
+	if err != nil {
+		return "", errors.Wrap(err, "open /var/run/secrets/kubernetes.io/serviceaccount/namespace")
+	}
+	defer versionFile.Close()
+
+	scanner := bufio.NewScanner(versionFile)
+
+	for scanner.Scan() {
+		namespace = scanner.Text()
+		break
+	}
+	if scanner.Err() != nil {
+		return "", errors.Wrap(err, "scan namespace file")
+	}
+
+	if namespace == "" {
+		return "", errors.New("no namespace in namespace file")
+	}
+
+	return namespace, nil
 }
 
 func main() {
@@ -113,39 +165,23 @@ func main() {
 	logrus.SetLevel(logLevel)
 	log := logrus.StandardLogger()
 
-	podName := os.Getenv("POD_NAME")
-	if podName == "" {
-		log.Fatal("Environment variable \"POD_NAME\" is not set")
+	jobSpec, err := downwardapi.ResolveSpecFromEnv()
+	if err != nil {
+		log.Fatalf("Unable to resolve prow job spec: %v", err)
 	}
 
-	podNamespace := os.Getenv("POD_NAMESPACE")
-	if podNamespace == "" {
-		log.Fatal("Environment variable \"POD_NAMESPACE\" is not set")
-	}
+	podName := jobSpec.ProwJobID
 
-	o.org = os.Getenv("REPO_OWNER")
-	if o.org == "" {
-		log.Fatal("Environment variable \"REPO_OWNER\" is not set")
-	}
-
-	o.repo = os.Getenv("REPO_NAME")
-	if o.repo == "" {
-		log.Fatal("Environment variable \"REPO_NAME\" is not set")
-	}
-
-	o.pullBaseSHA = os.Getenv("PULL_BASE_SHA")
-	if o.pullBaseSHA == "" {
-		log.Fatal("Environment variable \"PULL_BASE_SHA\" is not set")
+	podNamespace, err := getPodNamespace()
+	if err != nil {
+		log.Fatalf("Unable to identify pod namespace %v", err)
 	}
 
 	if o.cacheRegistry == "" {
 		log.Info("cache-registry parameter is not set. Building without using cache")
 	}
 
-	restConfig, err := rest.InClusterConfig()
-	if err != nil {
-		log.WithError(err).Fatal("Error getting kubernetes in cluster config")
-	}
+	restConfig := config.GetConfigOrDie()
 
 	clientset, err := kubernetes.NewForConfig(restConfig)
 	if err != nil {
@@ -157,14 +193,14 @@ func main() {
 	if err != nil {
 		log.WithError(err).Fatal("Unable to add corev1 to scheme")
 	}
-	mgr, err := manager.New(config.GetConfigOrDie(), manager.Options{Scheme: sc, Namespace: podNamespace})
+	mgr, err := manager.New(restConfig, manager.Options{Scheme: sc, Namespace: podNamespace})
 	if err != nil {
 		log.WithError(err).Fatal("Unable to create controller manager")
 	}
 
 	log.Info("Setting up build-controller")
-	ctx, cancelFunc := context.WithCancel(context.Background())
-	controller, err := addImageBuilderController(ctx, mgr, clientset, cancelFunc, types.NamespacedName{Name: podName, Namespace: podNamespace}, o, log.WithContext(ctx))
+	ctx := interrupts.Context()
+	controller, err := addImageBuilderController(ctx, mgr, clientset, types.NamespacedName{Name: podName, Namespace: podNamespace}, o, log.WithContext(ctx))
 	if err != nil {
 		log.WithError(err).Fatal("Unable to setup build-controller")
 	}
@@ -178,5 +214,5 @@ func main() {
 	if controller.err != nil {
 		log.WithError(err).Panic("Build failed")
 	}
-	log.Info("Build successfull")
+	log.Info("Build successful")
 }

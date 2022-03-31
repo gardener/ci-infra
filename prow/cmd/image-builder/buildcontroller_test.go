@@ -26,6 +26,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	clgofake "k8s.io/client-go/kubernetes/fake"
 	"k8s.io/test-infra/prow/flagutil"
+	"k8s.io/test-infra/prow/interrupts"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlfake "sigs.k8s.io/controller-runtime/pkg/client/fake"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
@@ -110,7 +111,7 @@ spec:
 func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *buildReconciler {
 	t.Helper()
 
-	ctx, cancelFunc := context.WithCancel(context.Background())
+	ctx := interrupts.Context()
 	logrus.SetLevel(logrus.DebugLevel)
 	log := logrus.StandardLogger().WithContext(ctx)
 
@@ -133,19 +134,17 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 		addVersionTag:      false,
 		addVersionSHATag:   false,
 		addDateSHATag:      true,
-		addLatestTag:       true,
-		addFixTag:          "test",
+		addFixedTags:       flagutil.NewStrings("test"),
 		logLevel:           "debug",
 		targets:            flagutil.NewStrings("target1", "target2", "target3"),
-		buildArgs:          flagutil.NewStrings("buildarg1=abc", "buildarg1=xyz"),
-		pullBaseSHA:        "abcdef1234567890",
+		kanikoArgs:         flagutil.NewStrings("--build-arg=buildarg1=abc", "--build-arg=buildarg1=xyz"),
+		baseSHA:            "abcdef1234567890",
 	}
 
 	r := &buildReconciler{
 		client:          client,
 		scheme:          sc,
 		clientset:       clientset,
-		cancelFunc:      cancelFunc,
 		imageBuilderPod: testImageBuilderPod,
 		buildPodPhase:   make(map[types.NamespacedName]corev1.PodPhase),
 		options:         options,

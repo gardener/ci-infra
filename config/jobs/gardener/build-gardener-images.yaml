@@ -10,7 +10,6 @@ postsubmits:
     reporter_config:
       slack:
         channel: "gardener-prow-alerts"
-    max_concurrency: 5
     spec:
       serviceAccountName: image-builder
       containers:
@@ -19,6 +18,7 @@ postsubmits:
         command:
         - /image-builder
         args:
+        - --log-level=info
         - --docker-config-secret=k8s-playground-docker-config
         - --registry=eu.gcr.io/sap-cloud-platform-dev1/buildapp-gardener
         - --cache-registry=eu.gcr.io/sap-cloud-platform-dev1/kaniko-cache
@@ -30,19 +30,9 @@ postsubmits:
         - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
-        - --log-level=info
         - --add-version-tag=true
         - --add-version-sha-tag=true
-        - --add-latest-tag=true
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+        - --add-fixed-tag=latest
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.

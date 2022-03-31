@@ -17,6 +17,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"os"
@@ -30,8 +31,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/test-infra/prow/interrupts"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -62,11 +63,10 @@ type buildPod struct {
 
 // buildReconciler controls build process
 type buildReconciler struct {
-	client     client.Client
-	scheme     *runtime.Scheme
-	clientset  kubernetes.Interface
-	cancelFunc context.CancelFunc
-	canceled   bool
+	client    client.Client
+	scheme    *runtime.Scheme
+	clientset kubernetes.Interface
+	canceled  bool
 
 	imageBuilderPod types.NamespacedName
 	buildPods       []buildPod
@@ -79,17 +79,16 @@ type buildReconciler struct {
 	log     *logrus.Entry
 }
 
-// Verifiy that Reconciler interface is implemented
+// Verify that Reconciler interface is implemented
 var _ reconcile.Reconciler = &buildReconciler{}
 
-// addImageBuilderController adds a new instace of buildReconciler to the manager
-func addImageBuilderController(ctx context.Context, mgr manager.Manager, clientset kubernetes.Interface, cancelFunc context.CancelFunc, imageBuilderPod types.NamespacedName, options options, log *logrus.Entry) (*buildReconciler, error) {
+// addImageBuilderController adds a new instance of buildReconciler to the manager
+func addImageBuilderController(ctx context.Context, mgr manager.Manager, clientset kubernetes.Interface, imageBuilderPod types.NamespacedName, options options, log *logrus.Entry) (*buildReconciler, error) {
 
 	r := &buildReconciler{
 		client:          mgr.GetClient(),
 		scheme:          mgr.GetScheme(),
 		clientset:       clientset,
-		cancelFunc:      cancelFunc,
 		imageBuilderPod: imageBuilderPod,
 		buildPodPhase:   make(map[types.NamespacedName]corev1.PodPhase),
 		options:         options,
@@ -103,7 +102,7 @@ func addImageBuilderController(ctx context.Context, mgr manager.Manager, clients
 	// Index OwnerReferences.UID
 	err = mgr.GetCache().IndexField(ctx, &corev1.Pod{}, ownerReferencesUID, indexOwnerReferences)
 	if err != nil {
-		return nil, errors.Wrap(err, "add owenerReferences IndexField")
+		return nil, errors.Wrap(err, "add ownerReferences IndexField")
 	}
 
 	// Watch build pods
@@ -194,7 +193,7 @@ func (r *buildReconciler) stop(err error) {
 		if err != nil {
 			r.err = err
 		}
-		r.cancelFunc()
+		interrupts.Terminate()
 		r.canceled = true
 	}
 }
@@ -211,8 +210,8 @@ func (r *buildReconciler) ensureBuildPodDefinition(ctx context.Context, ibPod *c
 	err := r.client.Get(ctx, types.NamespacedName{Namespace: ibPod.Namespace, Name: ibPod.Namespace}, pvc)
 	if k8serrors.IsNotFound(err) {
 		r.log.Info("Creating PVC for image build pods")
-		pvc, err = r.createPVC(ctx, ibPod)
-		if err != nil {
+		_, err = r.createPVC(ctx, ibPod)
+		if err != nil && !k8serrors.IsAlreadyExists(err) {
 			return errors.Wrap(err, "create PVC")
 
 		}
@@ -220,7 +219,7 @@ func (r *buildReconciler) ensureBuildPodDefinition(ctx context.Context, ibPod *c
 		return errors.Wrap(err, "get PVC")
 	}
 
-	err = r.defineBuildPods(ibPod, pvc)
+	err = r.defineBuildPods(ibPod)
 	if err != nil {
 		r.buildPods = nil
 		return errors.Wrap(err, "define build pods")
@@ -237,7 +236,7 @@ func (r *buildReconciler) createPVC(ctx context.Context, ibPod *corev1.Pod) (*co
 	storageClassName := "gce-ssd"
 	storageSize, err := resource.ParseQuantity("10Gi")
 	if err != nil {
-		return nil, errors.Wrap(err, "parse storage quantitiy")
+		return nil, errors.Wrap(err, "parse storage quantity")
 	}
 
 	pvc := &corev1.PersistentVolumeClaim{
@@ -271,7 +270,7 @@ func (r *buildReconciler) createPVC(ctx context.Context, ibPod *corev1.Pod) (*co
 	return pvc, nil
 }
 
-func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.PersistentVolumeClaim) error {
+func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod) error {
 
 	qtyZero, err := resource.ParseQuantity("0")
 	if err != nil {
@@ -279,7 +278,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 	}
 
 	// First pod clones git repository
-	clonerefsPod, err := r.defineCloneRefsPod(ibPod, pvc)
+	clonerefsPod, err := r.defineCloneRefsPod(ibPod)
 	if err != nil {
 		return errors.Wrap(err, "define clonerefs pod")
 	}
@@ -346,11 +345,8 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 		}
 		kanikoContainer.Args = append(kanikoContainer.Args, destinations...)
 
-		// Add build args
-		for _, buildArg := range r.options.buildArgs.Strings() {
-			arg := fmt.Sprintf("--build-arg=%s", buildArg)
-			kanikoContainer.Args = append(kanikoContainer.Args, arg)
-		}
+		// Add kaniko args
+		kanikoContainer.Args = append(kanikoContainer.Args, r.options.kanikoArgs.Strings()...)
 
 		// Set caching options
 		if r.options.cacheRegistry != "" {
@@ -371,7 +367,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 		pod.Spec.Containers = append(pod.Spec.Containers, kanikoContainer)
 
 		// Configure the build pod with PVC, node assignment and controller reference
-		r.assignPVC(pvc, &pod)
+		r.assignPVC(&pod)
 		r.setNodeAssignment(ibPod, &pod)
 		err = controllerutil.SetControllerReference(ibPod, &pod, r.scheme)
 		if err != nil {
@@ -384,7 +380,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod, pvc *corev1.Persist
 	return nil
 }
 
-func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod, pvc *corev1.PersistentVolumeClaim) (corev1.Pod, error) {
+func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod) (corev1.Pod, error) {
 
 	qtyZero, err := resource.ParseQuantity("0")
 	if err != nil {
@@ -411,7 +407,7 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod, pvc *corev1.Pers
 	}
 
 	// Configure the build pod with PVC, node assignment and controller reference
-	r.assignPVC(pvc, &pod)
+	r.assignPVC(&pod)
 	r.setNodeAssignment(ibPod, &pod)
 	err = controllerutil.SetControllerReference(ibPod, &pod, r.scheme)
 	if err != nil {
@@ -489,27 +485,23 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 		}
 
 		if r.options.addVersionSHATag {
-			tag := fmt.Sprintf("%s-%s", version, r.options.pullBaseSHA)
+			tag := fmt.Sprintf("%s-%s", version, r.options.baseSHA)
 			destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 			destinations = append(destinations, destination)
 		}
 	}
 
 	if r.options.addDateSHATag {
-		if len(r.options.pullBaseSHA) < 7 {
-			return destinations, fmt.Errorf("pullBaseSHA %v is it a correct SHA", r.options.pullBaseSHA)
+		if len(r.options.baseSHA) < 7 {
+			return destinations, fmt.Errorf("baseSHA %v is it a correct SHA", r.options.baseSHA)
 		}
-		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.pullBaseSHA[:7])
+		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.baseSHA[:7])
 		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 		destinations = append(destinations, destination)
 	}
 
-	if r.options.addLatestTag {
-		destinations = append(destinations, fmt.Sprintf("--destination=%s/%s:latest", r.options.registry, target))
-	}
-
-	if r.options.addFixTag != "" {
-		destinations = append(destinations, fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, r.options.addFixTag))
+	for _, tag := range r.options.addFixedTags.Strings() {
+		destinations = append(destinations, fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag))
 	}
 
 	return destinations, nil
@@ -524,28 +516,31 @@ func (r *buildReconciler) getBuildPodName(ibPod *corev1.Pod, target string) stri
 	suffix := fmt.Sprintf("%s-%s", r.options.repo, target)
 	suffixLen := len(suffix)
 
+	parentSuffix := fmt.Sprintf("%s-%s", parent, suffix)
+
 	var name string
 
 	switch {
 	case parentLen+suffixLen <= 64:
-		name = fmt.Sprintf("%s-%s", parent, suffix)
+		name = parentSuffix
 	case parentLen+9 <= 64:
-		name = fmt.Sprintf("%s-%s", parent, suffix)
-		name = fmt.Sprintf("%s-%s", name[:59], rand.SafeEncodeString(rand.String(3)))
+		name = parentSuffix
+		name = fmt.Sprintf("%s-%x", name[:59], sha256.Sum256([]byte(suffix)))[:64]
 	default:
-		name = rand.SafeEncodeString(rand.String(64))
+		name = fmt.Sprintf("%x", sha256.Sum256([]byte(parentSuffix)))
 	}
 
 	return name
 }
 
-func (r *buildReconciler) assignPVC(pvc *corev1.PersistentVolumeClaim, pod *corev1.Pod) {
+func (r *buildReconciler) assignPVC(pod *corev1.Pod) {
 
 	pod.Spec.Volumes = append(pod.Spec.Volumes, corev1.Volume{
 		Name: codeVolume,
 		VolumeSource: corev1.VolumeSource{
 			PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-				ClaimName: pvc.Name,
+				// PVC has always the same name as the image-builder pod
+				ClaimName: r.imageBuilderPod.Name,
 			},
 		},
 	})
@@ -608,6 +603,11 @@ func (r *buildReconciler) reconcileBuildPods(ctx context.Context, ibPod *corev1.
 			r.stop(errors.New("build pods ended in phase failed"))
 			return nil
 		}
+		expectedPods := r.whichPodShouldRun()
+		if len(expectedPods) != 0 {
+			return fmt.Errorf("started build pods not found: %v", expectedPods)
+		}
+
 		podsStarted, err := r.startNextBuildPods(ctx)
 		if err != nil {
 			return errors.Wrap(err, "start build pods")
@@ -619,6 +619,16 @@ func (r *buildReconciler) reconcileBuildPods(ctx context.Context, ibPod *corev1.
 	}
 
 	return nil
+}
+
+func (r *buildReconciler) whichPodShouldRun() []types.NamespacedName {
+	var pods []types.NamespacedName
+	for pod, status := range r.buildPodPhase {
+		if status == corev1.PodPending || status == corev1.PodRunning {
+			pods = append(pods, pod)
+		}
+	}
+	return pods
 }
 
 func (r *buildReconciler) collectBuildPodLogs(ctx context.Context, namespacedName types.NamespacedName) error {
