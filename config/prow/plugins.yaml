@@ -53,11 +53,19 @@ slack:
   mergewarnings:
   - repos:
     - gardener/ci-infra
+    channels:
+    - gardener-prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+  - repos:
     - gardener/gardener
     channels:
     - gardener-prow-alerts
     exempt_users:
     - gardener-prow[bot]
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
 
 repo_milestone:
   # You can curl the following endpoint in order to determine the github ID of your team
