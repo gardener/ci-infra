@@ -32,7 +32,7 @@ spec:
       enableBasicAuthentication: false
     kubeProxy:
       mode: IPTables
-    version: 1.21.8
+    version: 1.21.9
     verticalPodAutoscaler:
       enabled: true
   maintenance:
@@ -42,6 +42,11 @@ spec:
     timeWindow:
       begin: 030000+0200
       end: 040000+0200
+  networking:
+    type: calico
+    pods: 100.96.0.0/11
+    nodes: 10.250.0.0/16
+    services: 100.64.0.0/13
   provider:
     type: gcp
     controlPlaneConfig:
