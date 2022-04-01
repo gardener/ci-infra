@@ -4,6 +4,7 @@ triggers:
 - repos:
   - gardener/ci-infra
   - gardener/gardener
+  - gardener/gardener-extension-shoot-oidc-service
   only_org_members: true
 
 approve:
@@ -190,6 +191,11 @@ plugins:
     - welcome
     - wip
     - yuks
+  gardener/gardener-extension-shoot-oidc-service:
+    plugins:
+    - override
+    - skip
+    - trigger
 
 external_plugins:
   gardener/ci-infra:
