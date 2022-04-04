@@ -23,7 +23,7 @@ prefixes:
     summarise: true
     consistentImages: true
   - name: "Prow - ci-infra"
-    prefix: "ghcr.io/gardener/ci-infra/"
+    prefix: "eu.gcr.io/gardener-project/ci-infra/"
     refConfigFile: "config/prow/cluster/cla_assistant_deployment.yaml"
     repo: "https://github.com/gardener/ci-infra"
     summarise: true

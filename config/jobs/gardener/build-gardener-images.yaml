@@ -14,13 +14,13 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: ghcr.io/gardener/ci-infra/image-builder:latest
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20220404-cd3d9f4
         command:
         - /image-builder
         args:
         - --log-level=info
         - --docker-config-secret=k8s-playground-docker-config
-        - --registry=eu.gcr.io/sap-cloud-platform-dev1/buildapp-gardener
+        - --registry=eu.gcr.io/sap-cloud-platform-dev1/gardener
         - --cache-registry=eu.gcr.io/sap-cloud-platform-dev1/kaniko-cache
         - --target=apiserver
         - --target=controller-manager

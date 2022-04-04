@@ -1,13 +1,12 @@
 postsubmits:
   gardener/ci-infra:
-  - name: post-build-ci-infra-images
+  - name: post-build-golang-test-image
     cluster: gardener-prow-trusted
-    # skip config/prow folder that build and autobumper do not end up in an endless loop
-    skip_if_only_changed: '^config/prow/'
+    run_if_changed: '^Dockerfile|^Makefile|^config\/jobs\/ci-infra\/build-golang-test-image.yaml'
     branches:
     - ^master$
     annotations:
-      description: Build ci-infra images on master branch
+      description: Build golang-test image on master branch
     decorate: true
     reporter_config:
       slack:
@@ -23,12 +22,12 @@ postsubmits:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
         - --registry=eu.gcr.io/gardener-project/ci-infra
-        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
-        - --target=cla-assistant
-        - --target=image-builder
+        - --target=golang-test
         - --kaniko-arg=--build-arg=GOLANG_VERSION=1.17.8
-        - --add-date-sha-tag=true
+        - --add-fixed-tag=1.17.8
+        - --add-fixed-tag=1.17
         - --add-fixed-tag=latest
+        - --add-date-sha-tag=true
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.
@@ -36,7 +35,7 @@ postsubmits:
         # use them. The resource requests of build pods themselves are "0"
         resources:
           requests:
-            cpu: 6
+            cpu: 2
             memory: 2000Mi
       # Node selector is copied to build pods
       nodeSelector:
