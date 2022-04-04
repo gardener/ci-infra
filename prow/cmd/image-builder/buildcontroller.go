@@ -33,14 +33,13 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/test-infra/prow/interrupts"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 const (
@@ -94,7 +93,14 @@ func addImageBuilderController(ctx context.Context, mgr manager.Manager, clients
 		options:         options,
 		log:             log,
 	}
-	c, err := controller.New("image-builder-controller", mgr, controller.Options{Reconciler: r})
+
+	err := ctrl.NewControllerManagedBy(mgr).Named("image-builder-controller").
+		For(&corev1.Pod{}, builder.WithPredicates(predicate.NewPredicateFuncs(
+			func(obj client.Object) bool {
+				return client.ObjectKeyFromObject(obj) == r.imageBuilderPod
+			}))).
+		Owns(&corev1.Pod{}).
+		Complete(r)
 	if err != nil {
 		return nil, errors.Wrap(err, "create controller")
 	}
@@ -103,30 +109,6 @@ func addImageBuilderController(ctx context.Context, mgr manager.Manager, clients
 	err = mgr.GetCache().IndexField(ctx, &corev1.Pod{}, ownerReferencesUID, indexOwnerReferences)
 	if err != nil {
 		return nil, errors.Wrap(err, "add ownerReferences IndexField")
-	}
-
-	// Watch build pods
-	err = c.Watch(
-		&source.Kind{Type: &corev1.Pod{}},
-		&handler.EnqueueRequestForOwner{OwnerType: &corev1.Pod{}, IsController: true},
-	)
-	if err != nil {
-		return nil, errors.Wrap(err, "watch build pods")
-	}
-
-	// Watch image-builder pod
-	err = c.Watch(
-		&source.Kind{Type: &corev1.Pod{}},
-		&handler.EnqueueRequestForObject{},
-		predicate.NewPredicateFuncs(func(o client.Object) bool {
-			if o.GetName() == r.imageBuilderPod.Name && o.GetNamespace() == r.imageBuilderPod.Namespace {
-				return true
-			}
-			return false
-		}),
-	)
-	if err != nil {
-		return nil, errors.Wrap(err, "watch image-builder pod")
 	}
 
 	return r, nil
