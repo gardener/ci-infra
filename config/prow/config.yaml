@@ -153,6 +153,7 @@ branch-protection:
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: false # protections don't apply to admins
+          allow_deletions: true # allow maintainers to delete outdated release branches
 
 tide:
   sync_period: 2m
