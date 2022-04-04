@@ -35,7 +35,7 @@ periodics:
     timeout: 20m
     grace_period: 10m
   annotations:
-    description: Runs unit tests for extension-shoot-oidc-service developments in pull requests
+    description: Periodically runs unit tests for extension-shoot-oidc-service master branch
   spec:
     containers:
     - image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
