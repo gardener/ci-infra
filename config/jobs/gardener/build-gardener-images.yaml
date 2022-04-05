@@ -1,6 +1,6 @@
 postsubmits:
   gardener/gardener:
-  - name: post-build-gardener-images
+  - name: post-gardener-build-images
     cluster: gardener-prow-trusted
     branches:
     - ^master$

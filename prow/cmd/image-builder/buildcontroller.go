@@ -453,7 +453,7 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 			version = scanner.Text()
 			break
 		}
-		if scanner.Err() != nil {
+		if err := scanner.Err(); err != nil {
 			return destinations, errors.Wrap(err, "scan VERSION file")
 		}
 

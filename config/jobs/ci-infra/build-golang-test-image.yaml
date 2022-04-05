@@ -1,8 +1,8 @@
 postsubmits:
   gardener/ci-infra:
-  - name: post-build-golang-test-image
+  - name: post-ci-infra-build-golang-test-image
     cluster: gardener-prow-trusted
-    run_if_changed: '^Dockerfile|^Makefile|^config\/jobs\/ci-infra\/build-golang-test-image.yaml'
+    run_if_changed: '^Dockerfile|^Makefile|^config\/jobs\/ci-infra\/build-golang-test-image\.yaml'
     branches:
     - ^master$
     annotations:

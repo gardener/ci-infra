@@ -137,7 +137,7 @@ func getPodNamespace() (string, error) {
 		namespace = scanner.Text()
 		break
 	}
-	if scanner.Err() != nil {
+	if err := scanner.Err(); err != nil {
 		return "", errors.Wrap(err, "scan namespace file")
 	}
 
