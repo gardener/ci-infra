@@ -1,0 +1,49 @@
+postsubmits:
+  gardener/ci-infra:
+  - name: post-ci-infra-build-images
+    cluster: gardener-prow-trusted
+    # skip config/prow folder that build and autobumper do not end up in an endless loop
+    skip_if_only_changed: '^config\/mkpj\.sh|^config\/prow\/|^hack\/(bootstrap|check)-config\.sh'
+    branches:
+    - ^master$
+    annotations:
+      description: Build ci-infra images on master branch
+    decorate: true
+    reporter_config:
+      slack:
+        channel: "gardener-prow-alerts"
+    spec:
+      serviceAccountName: image-builder
+      containers:
+      - name: image-builder
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20220404-cd3d9f4
+        command:
+        - /image-builder
+        args:
+        - --log-level=info
+        - --docker-config-secret=gardener-prow-gcr-docker-config
+        - --registry=eu.gcr.io/gardener-project/ci-infra
+        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
+        - --target=cla-assistant
+        - --target=image-builder
+        - --kaniko-arg=--build-arg=GOLANG_VERSION=1.17.8
+        - --add-date-sha-tag=true
+        - --add-fixed-tag=latest
+        # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
+        # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
+        # to multiple build pods in parallel.
+        # For a proper scheduling the combined resource requests of all build pods are assigned to this pod, even though it does not
+        # use them. The resource requests of build pods themselves are "0"
+        resources:
+          requests:
+            cpu: 6
+            memory: 2000Mi
+      # Node selector is copied to build pods
+      nodeSelector:
+        dedicated: high-cpu
+      # Tolerations are copied to build pods
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "high-cpu"
+        effect: "NoSchedule"

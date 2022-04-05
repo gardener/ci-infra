@@ -45,6 +45,7 @@ prow_components=(
 "test-pods_namespace.yaml"
 "cherrypicker_deployment.yaml"
 "cherrypicker_service.yaml"
+"builder_serviceaccount.yaml"
 "cla_assistant_deployment.yaml"
 "cla_assistant_service.yaml"
 "cpu-limit-range_limitrange.yaml"

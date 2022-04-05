@@ -5,14 +5,12 @@ ARG GOLANG_VERSION
 
 FROM golang:${GOLANG_VERSION} AS builder
 LABEL stage=intermediate
-ARG OS
-ARG ARCH
 # Copy entire repository to image
 COPY . /code
 WORKDIR /code
 # Build go executables into binaries
 RUN mkdir /build && GOBIN=/build \
-    GO111MODULE=on CGO_ENABLED=0 GOOS=${OS} GOARCH=${ARCH} go install -mod vendor -a ./...
+    GO111MODULE=on CGO_ENABLED=0 GOOS=$(go env GOOS) GOARCH=$(go env GOARCH) go install -mod vendor -a ./...
 
 # --------------------------
 # Executable container base
@@ -41,10 +39,14 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 FROM ssl_runner AS cla-assistant
-ARG VERSION
 LABEL app=cla-assistant
-LABEL version=${VERSION}
 WORKDIR /
 COPY --from=builder /build/cla-assistant /cla-assistant
 EXPOSE 8080
 ENTRYPOINT [ "/cla-assistant" ]
+
+FROM ssl_runner AS image-builder
+LABEL app=image-builder
+WORKDIR /
+COPY --from=builder /build/image-builder /image-builder
+ENTRYPOINT [ "/image-builder" ]
