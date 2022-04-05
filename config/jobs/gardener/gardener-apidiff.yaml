@@ -13,5 +13,5 @@ presubmits:
         image: ghcr.io/gardener/ci-infra/golang-test:1.17.8
         command:
         - make
-        arge:
+        args:
         - check-apidiff
