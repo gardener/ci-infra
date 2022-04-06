@@ -46,6 +46,10 @@ blunderbuss:
   max_request_count: 2
   use_status_availability: true
 
+owners:
+  skip_collaborators:
+  - "gardener"  # Rely on OWNERS file for the whole organization
+
 heart:
   commentregexp: ".*"
 
