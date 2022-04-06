@@ -3,12 +3,13 @@ postsubmits:
   - name: post-ci-infra-build-images
     cluster: gardener-prow-trusted
     # skip config/prow folder that build and autobumper do not end up in an endless loop
-    skip_if_only_changed: '^config\/mkpj\.sh|^config\/prow\/|^hack\/(bootstrap|check)-config\.sh'
+    skip_if_only_changed: '^config\/|^hack\/(bootstrap|check)-config\.sh'
     branches:
     - ^master$
     annotations:
       description: Build ci-infra images on master branch
     decorate: true
+    max_concurrency: 1
     reporter_config:
       slack:
         channel: "gardener-prow-alerts"

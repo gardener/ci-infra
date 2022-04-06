@@ -8,6 +8,7 @@ postsubmits:
     annotations:
       description: Build golang-test image on master branch
     decorate: true
+    max_concurrency: 1
     reporter_config:
       slack:
         channel: "gardener-prow-alerts"
