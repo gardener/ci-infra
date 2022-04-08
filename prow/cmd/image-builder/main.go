@@ -93,7 +93,7 @@ func gatherOptions() options {
 	fs.Var(&o.kanikoArgs, "kaniko-arg", "kaniko-arg for the build")
 	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are being pushed. Cache is disabled for empty value")
 	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are being pushed")
-	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.8.0", "kaniko image for kaniko build")
+	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.8.1", "kaniko image for kaniko build")
 	fs.BoolVar(&o.addVersionTag, "add-version-tag", false, "Add label from VERSION file of git root directory to image tags")
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
 	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using vYYYYMMDD-<rev short> scheme which is compatible to autobumper")
