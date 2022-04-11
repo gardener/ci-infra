@@ -28,8 +28,3 @@ prefixes:
     repo: "https://github.com/kubernetes/test-infra"
     summarise: false
     consistentImages: false
-  - name: "Prow - ci-infra"
-    prefix: "eu.gcr.io/gardener-project/ci-infra/"
-    repo: "https://github.com/gardener/ci-infra"
-    summarise: true
-    consistentImages: false
