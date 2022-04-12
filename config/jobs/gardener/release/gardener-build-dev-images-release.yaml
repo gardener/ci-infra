@@ -49,17 +49,3 @@ postsubmits:
         operator: "Equal"
         value: "high-cpu"
         effect: "NoSchedule"
-      # Affinity is not copied to build pods
-      # Unpacking cache layers makes build quite IO intense. Thus, try to schedule builds to different nodes if available
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: prow.k8s.io/job
-                  operator: In
-                  values:
-                  - post-gardener-build-dev-images-release
-              topologyKey: kubernetes.io/hostname
