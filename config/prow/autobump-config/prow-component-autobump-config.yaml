@@ -27,4 +27,4 @@ prefixes:
     refConfigFile: "config/prow/cluster/cla_assistant_deployment.yaml"
     repo: "https://github.com/gardener/ci-infra"
     summarise: true
-    consistentImages: true
+    consistentImages: false
