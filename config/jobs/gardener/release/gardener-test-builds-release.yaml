@@ -7,7 +7,7 @@ presubmits:
     branches:
     - release-v\d+.\d+
     annotations:
-      description: Verify gardener image build on pull requests
+      description: Verify gardener image build on pull requests to release branch
     decorate: true
     spec:
       containers:
@@ -83,5 +83,5 @@ presubmits:
                 - key: prow.k8s.io/job
                   operator: In
                   values:
-                  - post-build-gardener-images
+                  - pull-gardener-publish-test-images-release
               topologyKey: kubernetes.io/hostname

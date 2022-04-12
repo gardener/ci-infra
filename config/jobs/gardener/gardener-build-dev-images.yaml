@@ -1,35 +1,14 @@
-presubmits:
+postsubmits:
   gardener/gardener:
-  - name: pull-gardener-verify-image-build
-    cluster: gardener-prow-build
-    always_run: true
-    skip_branches:
-    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
-    annotations:
-      description: Verify gardener image build on pull requests to master branch
-    decorate: true
-    spec:
-      containers:
-      - name: kaniko
-        image: gcr.io/kaniko-project/executor:v1.8.1
-        command:
-        - /kaniko/executor
-        args:
-        - --context=/home/prow/go/src/github.com/gardener/gardener
-        - --dockerfile=Dockerfile
-        - --no-push
-        resources:
-          requests:
-            cpu: 6
-            memory: 9Gi
-  - name: pull-gardener-publish-test-images
+  - name: post-gardener-build-dev-images
     cluster: gardener-prow-trusted
-    skip_branches:
-    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+    skip_if_only_changed: '^VERSION$'
+    branches:
+    - ^master$
     annotations:
-      description: Publish gardener development images on pull requests
+      description: Gardener development image build on master branch
     decorate: true
-    optional: true
+    max_concurrency: 1
     spec:
       serviceAccountName: image-builder
       containers:
@@ -50,6 +29,7 @@ presubmits:
         - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
+        - --add-version-tag=true
         - --add-version-sha-tag=true
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
@@ -81,5 +61,5 @@ presubmits:
                 - key: prow.k8s.io/job
                   operator: In
                   values:
-                  - pull-gardener-publish-test-images
+                  - post-gardener-build-dev-images
               topologyKey: kubernetes.io/hostname

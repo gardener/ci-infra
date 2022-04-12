@@ -1,12 +1,12 @@
 postsubmits:
   gardener/gardener:
-  - name: post-gardener-build-dev-images
+  - name: post-gardener-build-dev-images-release
     cluster: gardener-prow-trusted
-    skip_if_only_changed: '^VERSION'
+    skip_if_only_changed: '^VERSION$'
     branches:
-    - ^master$
+    - release-v\d+.\d+
     annotations:
-      description: Gardener development image build on master branch
+      description: Gardener development image build on release branch
     decorate: true
     max_concurrency: 1
     spec:
@@ -61,5 +61,5 @@ postsubmits:
                 - key: prow.k8s.io/job
                   operator: In
                   values:
-                  - post-build-gardener-images
+                  - post-gardener-build-dev-images-release
               topologyKey: kubernetes.io/hostname
