@@ -142,7 +142,6 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-            - concourse-ci/publish
             - "Check Release Milestone"
           restrictions: # prevent everyone from pushing/merging (except admins)
             # NB: tide is running as GitHub App, which currently cannot be configured here to be excluded from branch

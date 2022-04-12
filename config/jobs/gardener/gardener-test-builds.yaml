@@ -1,16 +1,35 @@
-postsubmits:
+presubmits:
   gardener/gardener:
-  - name: post-gardener-build-images
-    cluster: gardener-prow-trusted
-    branches:
-    - ^master$
+  - name: pull-gardener-verify-image-build
+    cluster: gardener-prow-build
+    always_run: true
+    skip_branches:
+    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     annotations:
-      description: Testing gardener image build on master branch
+      description: Verify gardener image build on pull requests to master branch
     decorate: true
-    max_concurrency: 1
-    reporter_config:
-      slack:
-        channel: "gardener-prow-alerts"
+    spec:
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:v1.8.1
+        command:
+        - /kaniko/executor
+        args:
+        - --context=/home/prow/go/src/github.com/gardener/gardener
+        - --dockerfile=Dockerfile
+        - --no-push
+        resources:
+          requests:
+            cpu: 6
+            memory: 9Gi
+  - name: pull-gardener-publish-test-images
+    cluster: gardener-prow-trusted
+    skip_branches:
+    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+    annotations:
+      description: Publish gardener development images on pull requests
+    decorate: true
+    optional: true
     spec:
       serviceAccountName: image-builder
       containers:
@@ -20,9 +39,9 @@ postsubmits:
         - /image-builder
         args:
         - --log-level=info
-        - --docker-config-secret=k8s-playground-docker-config
-        - --registry=eu.gcr.io/sap-cloud-platform-dev1/gardener
-        - --cache-registry=eu.gcr.io/sap-cloud-platform-dev1/kaniko-cache
+        - --docker-config-secret=gardener-prow-gcr-docker-config
+        - --registry=eu.gcr.io/gardener-project/gardener
+        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
         - --target=apiserver
         - --target=controller-manager
         - --target=scheduler
@@ -31,9 +50,7 @@ postsubmits:
         - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
-        - --add-version-tag=true
         - --add-version-sha-tag=true
-        - --add-fixed-tag=latest
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.
@@ -52,17 +69,3 @@ postsubmits:
         operator: "Equal"
         value: "high-cpu"
         effect: "NoSchedule"
-      # Affinity is not copied to build pods
-      # Unpacking cache layers makes build quite IO intense. Thus, try to schedule builds to different nodes if available
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: prow.k8s.io/job
-                  operator: In
-                  values:
-                  - post-build-gardener-images
-              topologyKey: kubernetes.io/hostname

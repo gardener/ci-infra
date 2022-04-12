@@ -1,0 +1,51 @@
+postsubmits:
+  gardener/gardener:
+  - name: post-gardener-build-dev-images
+    cluster: gardener-prow-trusted
+    skip_if_only_changed: '^VERSION$'
+    branches:
+    - ^master$
+    annotations:
+      description: Gardener development image build on master branch
+    decorate: true
+    max_concurrency: 1
+    spec:
+      serviceAccountName: image-builder
+      containers:
+      - name: image-builder
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20220407-1704ddf
+        command:
+        - /image-builder
+        args:
+        - --log-level=info
+        - --docker-config-secret=gardener-prow-gcr-docker-config
+        - --registry=eu.gcr.io/gardener-project/gardener
+        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
+        - --target=apiserver
+        - --target=controller-manager
+        - --target=scheduler
+        - --target=gardenlet
+        - --target=admission-controller
+        - --target=seed-admission-controller
+        - --target=resource-manager
+        - --target=gardener-extension-provider-local
+        - --add-version-tag=true
+        - --add-version-sha-tag=true
+        # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
+        # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
+        # to multiple build pods in parallel.
+        # For a proper scheduling the combined resource requests of all build pods are assigned to this pod, even though it does not
+        # use them. The resource requests of build pods themselves are "0"
+        resources:
+          requests:
+            cpu: 6
+            memory: 9Gi
+      # Node selector is copied to build pods
+      nodeSelector:
+        dedicated: high-cpu
+      # Tolerations are copied to build pods
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "high-cpu"
+        effect: "NoSchedule"
