@@ -1,0 +1,48 @@
+presubmits:
+  gardener/gardener-extension-shoot-oidc-service:
+  - name: pull-extension-shoot-oidc-service-e2e-kind
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 60m
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    spec:
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220404-0178a71d18-master
+        command:
+        - wrapper.sh
+        - bash
+        - -c
+        - |
+          set -o nounset
+          set -o pipefail
+          set -o errexit
+
+          # https://github.com/kubernetes/test-infra/issues/23741
+          iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+          # install kind
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
+          chmod +x ./kind
+          mv ./kind /usr/local/bin
+
+          # run test
+          make test-e2e-local
+        # we need privileged mode in order to do docker in docker
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 18Gi
+          requests:
+            cpu: 5
+            memory: 9Gi
+        env:
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
