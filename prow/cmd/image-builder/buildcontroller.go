@@ -438,7 +438,7 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 
 	var destinations []string
 
-	if r.options.addVersionTag || r.options.addVersionSHATag {
+	if r.options.addVersionTag || r.options.addVersionSHATag || r.options.injectEffectiveVersion {
 		var version string
 
 		versionFile, err := os.Open(fmt.Sprintf("/home/prow/go/src/github.com/%s/%s/VERSION", r.options.org, r.options.repo))
@@ -466,18 +466,23 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 			destinations = append(destinations, destination)
 		}
 
+		effectiveVersion := fmt.Sprintf("%s-%s", version, r.options.headSHA)
 		if r.options.addVersionSHATag {
-			tag := fmt.Sprintf("%s-%s", version, r.options.baseSHA)
-			destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
+			destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, effectiveVersion)
 			destinations = append(destinations, destination)
+		}
+
+		// this is a hack, inject effective version build arg here, as we already have calculated it here
+		if r.options.injectEffectiveVersion {
+			destinations = append(destinations, fmt.Sprintf("--build-arg=EFFECTIVE_VERSION=%s", effectiveVersion))
 		}
 	}
 
 	if r.options.addDateSHATag {
-		if len(r.options.baseSHA) < 7 {
-			return destinations, fmt.Errorf("baseSHA %v is it a correct SHA", r.options.baseSHA)
+		if len(r.options.headSHA) < 7 {
+			return destinations, fmt.Errorf("baseSHA %v is it a correct SHA", r.options.headSHA)
 		}
-		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.baseSHA[:7])
+		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7])
 		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 		destinations = append(destinations, destination)
 	}

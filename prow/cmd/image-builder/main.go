@@ -27,6 +27,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
+	prowjobv1 "k8s.io/test-infra/prow/apis/prowjobs/v1"
 	"k8s.io/test-infra/prow/flagutil"
 	"k8s.io/test-infra/prow/interrupts"
 	"k8s.io/test-infra/prow/logrusutil"
@@ -36,20 +37,21 @@ import (
 )
 
 type options struct {
-	dockerConfigSecret string
-	org                string
-	repo               string
-	baseSHA            string
-	dockerfile         string
-	targets            flagutil.Strings
-	kanikoArgs         flagutil.Strings
-	registry           string
-	cacheRegistry      string
-	kanikoImage        string
-	addVersionTag      bool
-	addVersionSHATag   bool
-	addDateSHATag      bool
-	addFixedTags       flagutil.Strings
+	dockerConfigSecret     string
+	org                    string
+	repo                   string
+	headSHA                string
+	dockerfile             string
+	targets                flagutil.Strings
+	kanikoArgs             flagutil.Strings
+	registry               string
+	cacheRegistry          string
+	kanikoImage            string
+	addVersionTag          bool
+	addVersionSHATag       bool
+	addDateSHATag          bool
+	addFixedTags           flagutil.Strings
+	injectEffectiveVersion bool
 
 	logLevel string
 }
@@ -69,6 +71,9 @@ func (o *options) Validate() error {
 	}
 	if !o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && len(o.addFixedTags.Strings()) == 0 {
 		return fmt.Errorf("please choose at least one tagging scheme")
+	}
+	if o.headSHA == "" {
+		return errors.New("Head SHA must not be empty")
 	}
 	for _, kanikoArg := range o.kanikoArgs.Strings() {
 		if strings.HasPrefix(kanikoArg, "--cache=") || strings.HasPrefix(kanikoArg, "--cache-repo=") {
@@ -98,6 +103,7 @@ func gatherOptions() options {
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
 	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using vYYYYMMDD-<rev short> scheme which is compatible to autobumper")
 	fs.Var(&o.addFixedTags, "add-fixed-tag", "Add a fixed tag to images")
+	fs.BoolVar(&o.injectEffectiveVersion, "inject-effective-version", true, "Inject EFFECTIVE_VERSION build-arg")
 
 	fs.StringVar(&o.logLevel, "log-level", "info", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 
@@ -111,12 +117,20 @@ func gatherOptions() options {
 		logrus.Fatalf("Unable to resolve prow job spec: %v", err)
 	}
 
-	if jobSpec.Refs != nil {
+	switch jobSpec.Type {
+	case prowjobv1.PeriodicJob:
+		logrus.Fatal("Image-builder cannot be used in periodic prow jobs")
+	case prowjobv1.BatchJob:
+		logrus.Info("Skip build in batch job")
+		os.Exit(0)
+	case prowjobv1.PostsubmitJob:
 		o.org = jobSpec.Refs.Org
 		o.repo = jobSpec.Refs.Repo
-		o.baseSHA = jobSpec.Refs.BaseSHA
-	} else {
-		logrus.Fatal("Unable to find a valid git ref")
+		o.headSHA = jobSpec.Refs.BaseSHA
+	case prowjobv1.PresubmitJob:
+		o.org = jobSpec.Refs.Org
+		o.repo = jobSpec.Refs.Repo
+		o.headSHA = jobSpec.Refs.Pulls[0].SHA
 	}
 
 	return o
