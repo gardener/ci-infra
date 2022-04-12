@@ -127,14 +127,14 @@ kubectl config use-context gardener-prow-trusted
 kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/prowjob_customresourcedefinition.yaml"
 
 for c in "${prow_components[@]}"; do
-  kubectl apply -f "$SCRIPT_DIR/cluster/$c"
+  kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/$c"
 done
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying prow components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
 for c in "${prow_components_build[@]}"; do
-  kubectl apply -f "$SCRIPT_DIR/cluster/$c"
+  kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/$c"
 done
 echo "$(color-green done)"
 
