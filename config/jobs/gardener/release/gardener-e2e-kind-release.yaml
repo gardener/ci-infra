@@ -28,11 +28,6 @@ presubmits:
           # https://github.com/kubernetes/test-infra/issues/23741
           iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 
-          # install kind
-          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
-          chmod +x ./kind
-          mv ./kind /usr/local/bin
-
           # test setup
           make kind-up
           export KUBECONFIG=$PWD/example/provider-local/base/kubeconfig
@@ -82,11 +77,6 @@ postsubmits:
 
           # https://github.com/kubernetes/test-infra/issues/23741
           iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-
-          # install kind
-          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
-          chmod +x ./kind
-          mv ./kind /usr/local/bin
 
           # test setup
           make kind-up
