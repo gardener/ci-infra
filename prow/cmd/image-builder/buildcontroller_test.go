@@ -138,7 +138,7 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 		logLevel:           "debug",
 		targets:            flagutil.NewStrings("target1", "target2", "target3"),
 		kanikoArgs:         flagutil.NewStrings("--build-arg=buildarg1=abc", "--build-arg=buildarg1=xyz"),
-		baseSHA:            "abcdef1234567890",
+		headSHA:            "abcdef1234567890",
 	}
 
 	r := &buildReconciler{
