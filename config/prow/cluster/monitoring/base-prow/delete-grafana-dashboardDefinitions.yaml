@@ -1,0 +1,20 @@
+$patch: delete
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-apiserver
+  namespace: monitoring
+---
+$patch: delete
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-controller-manager
+  namespace: monitoring
+---
+$patch: delete
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-scheduler
+  namespace: monitoring

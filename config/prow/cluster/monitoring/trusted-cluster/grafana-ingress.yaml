@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+    cert.gardener.cloud/issuer: ci-issuer
+    cert.gardener.cloud/purpose: managed
+    dns.gardener.cloud/class: garden
+    dns.gardener.cloud/dnsnames: monitoring.prow.gardener.cloud
+spec:
+  rules:
+  - host: monitoring.prow.gardener.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana
+            port:
+              name: http
+  tls:
+  - hosts:
+    - monitoring.prow.gardener.cloud
+    secretName: monitoring-ingress-tls

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  template:
+    spec:
+      containers:
+      - name: grafana
+        env:
+        - name: GF_ANALYTICS_CHECK_FOR_UPDATES
+          value: "false"
+        - name: GF_AUTH_ANONYMOUS_ENABLED
+          value: "true"
+        - name: GF_AUTH_ORG_ROLE
+          value: Viewer
+        - name: GF_SECURITY_ADMIN_USER
+          value: admin
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-admin
+              key: admin_password
+        - name: GF_SECURITY_DISABLE_GRAVATAR
+          value: "true"
+        volumeMounts:
+        - $patch: delete
+          name: grafana-dashboard-apiserver
+          mountPath: /grafana-dashboard-definitions/0/apiserver
+        - $patch: delete
+          name: grafana-dashboard-controller-manager
+          mountPath: /grafana-dashboard-definitions/0/controller-manager
+        - $patch: delete
+          name: grafana-dashboard-scheduler
+          mountPath: /grafana-dashboard-definitions/0/scheduler
+      volumes:
+      - $patch: delete 
+        name: grafana-dashboard-apiserver
+      - $patch: delete 
+        name: grafana-dashboard-controller-manager
+      - $patch: delete 
+        name: grafana-dashboard-scheduler

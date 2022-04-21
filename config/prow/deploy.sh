@@ -90,6 +90,7 @@ prow_components_build=(
 "test-pods_namespace.yaml"
 "cpu-limit-range_limitrange.yaml"
 "mem-limit-range_limitrange.yaml"
+"gce-ssd_storageclass.yaml"
 )
 
 if ! [ -x "$(command -v "kubectl")" ]; then
@@ -145,7 +146,17 @@ echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring"
+kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring/trusted-cluster"
+echo "$(color-green done)"
+
+echo "$(color-step "Deploying ingress-nginx components to gardener-prow-build cluster...")"
+kubectl config use-context gardener-prow-build
+kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/ingress-nginx"
+echo "$(color-green done)"
+
+echo "$(color-step "Deploying monitoring components to gardener-prow-build cluster...")"
+kubectl config use-context gardener-prow-build
+kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring/build-cluster"
 echo "$(color-green done)"
 
 echo "$(color-green SUCCESS)"

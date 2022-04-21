@@ -1,0 +1,9 @@
+{{ define "custom_slack_title" }}
+[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+{{ end }}
+
+{{ define "custom_slack_text" }}
+{{ range .Alerts -}}
+{{ .Annotations.description }} (`{{ .Labels.severity }}`)
+{{ end }}
+{{ end }}
