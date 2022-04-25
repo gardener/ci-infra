@@ -76,12 +76,15 @@ All job configs are located in [`config/jobs`](config/jobs).
             token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
         ```
     - `slack-token` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter))
-    - `alertmanager-prow-slack` (needs to be present in the prow-monitoring namespace of the prow cluster)
+    - `alertmanager-prow-slack` (needs to be present in the `monitoring` namespace of the prow trusted and build cluster)
       - Follow https://api.slack.com/incoming-webhooks and setup a webhook.
       - Create the secret including the Webhook URL under key `api_url`.
     - `grafana` (admin user password)
       ```bash
-      $ kubectl -n prow-monitoring create secret generic grafana --from-literal=admin_password=$(openssl rand -base64 32)
+      $ kubectl config use-context gardener-prow-trusted
+      $ kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
+      $ kubectl config use-context gardener-prow-build
+      $ kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
       ```
 1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
@@ -94,7 +97,7 @@ All job configs are located in [`config/jobs`](config/jobs).
 
 ## Monitoring
 
-A basic monitoring stack is installed in the prow cluster consisting of:
+A monitoring stack based on [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus) plus [test-infra monitoring](https://github.com/kubernetes/test-infra/tree/master/config/prow/cluster/monitoring) capabilities is installed in the prow clusters:
 - [prometheus-operator](https://github.com/prometheus-operator/prometheus-operator)
 - alertmanager (cluster with 3 replicas for HA)
 - prometheus (2 replicas for HA)
@@ -104,4 +107,4 @@ A basic monitoring stack is installed in the prow cluster consisting of:
 
 Alertmanager will send Slack alerts in `#gardener-prow-alerts` (SAP-internal workspace).
 
-Grafana is available publicly at https://monitoring.prow.gardener.cloud.
+Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted cluster) and https://monitoring-build.prow.gardener.cloud (build cluster).

@@ -1,0 +1,48 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-prow-rules
+  namespace: monitoring
+  labels:
+    prometheus: prow
+    role: alert-rules
+spec:
+  groups:
+  - name: prow-monitoring-absent
+    rules:
+    - alert: ServiceLostHA
+      annotations:
+        description: The service {{ $labels.job }} has at most 1 instance for 5 minutes.
+      expr: |
+        sum(up{job=~"prometheus-k8s|alertmanager-main"}) by (job) <= 1
+      for: 5m
+      labels:
+        severity: critical
+        slo: monitoring
+    - alert: alertmanagerDown
+      annotations:
+        description: The service alertmanager-main has been down for 5 minutes.
+      expr: |
+        absent(up{job="alertmanager-main"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        slo: monitoring
+    - alert: prometheusDown
+      annotations:
+        description: The service prometheus-k8s has been down for 5 minutes.
+      expr: |
+        absent(up{job="prometheus-k8s"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        slo: monitoring
+    - alert: grafanaDown
+      annotations:
+        description: The service grafana has been down for 5 minutes.
+      expr: |
+        absent(up{job="grafana"} == 1)
+      for: 5m
+      labels:
+        severity: critical
+        slo: monitoring

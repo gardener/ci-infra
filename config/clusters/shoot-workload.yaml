@@ -11,6 +11,19 @@ spec:
     nginxIngress:
       enabled: false
   cloudProfileName: gcp
+  dns:
+    providers:
+      - secretName: aws-route53-ci
+        type: aws-route53
+  extensions:
+    - type: shoot-cert-service
+      providerConfig:
+        apiVersion: service.cert.extensions.gardener.cloud/v1alpha1
+        issuers:
+          - email: tim.ebert@sap.com
+            name: ci-issuer
+            server: 'https://acme-v02.api.letsencrypt.org/directory'
+        kind: CertConfig
   kubernetes:
     allowPrivilegedContainers: true
     kubeAPIServer:

@@ -1,0 +1,6 @@
+# this would override metrics-server APIService (conflicts with gardener-resource-manager), delete it
+$patch: delete
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1beta1.metrics.k8s.io

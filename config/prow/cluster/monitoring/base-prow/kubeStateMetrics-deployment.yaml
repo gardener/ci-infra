@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-state-metrics
+  namespace: monitoring
+spec:
+  template:
+    spec:
+      containers:
+      - name: kube-rbac-proxy-main
+        resources:
+          limits:
+            # Increased CPU limit
+            cpu: 100m
+      - name: kube-rbac-proxy-self
+        resources:
+          limits:
+            # Increased CPU limit
+            cpu: 50m

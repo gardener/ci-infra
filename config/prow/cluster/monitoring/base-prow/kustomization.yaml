@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+bases:
+- ../base
+
+resources:
+  - kubernetes-podMonitorKubeProxy.yaml
+
+patchesStrategicMerge:
+- delete-grafana-dashboardDefinitions.yaml
+- delete-prometheusAdapter-apiService.yaml
+- alertmanager-alertmanager.yaml
+- blackboxExporter-deployment.yaml
+- grafana-deployment.yaml
+- kubeStateMetrics-deployment.yaml
+- nodeExporter-daemonset.yaml
+- prometheus.yaml
+
+secretGenerator:
+- name: alertmanager-main
+  namespace: monitoring
+  behavior: merge
+  files:
+  - alertmanager.yaml=alertmanager/config.yaml
+  - alertmanager/slack-messages.tmpl
