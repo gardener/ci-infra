@@ -33,7 +33,7 @@ presubmits:
       description: Runs go tests for prow developments in ci-infra 
     spec:
       containers:
-      - image: golang:1.17.8
+      - image: golang:1.17.9
         command:
         - make
         args:

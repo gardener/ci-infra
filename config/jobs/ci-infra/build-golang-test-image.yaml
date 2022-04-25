@@ -24,8 +24,8 @@ postsubmits:
         - --docker-config-secret=gardener-prow-gcr-docker-config
         - --registry=eu.gcr.io/gardener-project/ci-infra
         - --target=golang-test
-        - --kaniko-arg=--build-arg=GOLANG_VERSION=1.17.8
-        - --add-fixed-tag=1.17.8
+        - --kaniko-arg=--build-arg=GOLANG_VERSION=1.17.9
+        - --add-fixed-tag=1.17.9
         - --add-fixed-tag=1.17
         - --add-fixed-tag=latest
         - --add-date-sha-tag=true
