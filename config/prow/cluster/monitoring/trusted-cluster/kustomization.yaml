@@ -12,6 +12,7 @@ resources:
 - grafana-ingress.yaml
 - prow_prometheusrule.yaml
 - prow_servicemonitors.yaml
+- prow_prometheus_rbac.yaml
 
 patchesStrategicMerge:
 - grafana-deployment.yaml
