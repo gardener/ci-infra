@@ -9,6 +9,13 @@ route:
   repeat_interval: 4h
   receiver: 'slack-warnings'
   routes:
+  - receiver: 'null-receiver'
+    matchers:
+      - alertname=Watchdog
+  # Metrics not visible in shoot cluster
+  - receiver: 'null-receiver'
+    matchers:
+      - alertname=~"KubeSchedulerDown|KubeControllerManagerDown|KubeAggregatedAPIDown"
   - receiver: 'slack-alerts'
     group_interval: 5m
     repeat_interval: 2h
@@ -36,6 +43,8 @@ receivers:
     # TODO: use a slack group instead
     text: '{{ if eq .Status "firing" }}<@W8V9YC6PQ> {{ end }}{{ template "custom_slack_text" . }}'
     link_names: true
+# Null receiver for unimportant alerts
+- name: 'null-receiver'
 
 templates:
 - slack-messages.tmpl

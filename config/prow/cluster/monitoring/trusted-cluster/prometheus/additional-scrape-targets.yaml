@@ -7,6 +7,7 @@
     # ATTENTION: Keep this in sync with the Blackbox Prober alerts in prow_prometheusrule.yaml
     - https://prow.gardener.cloud
     - https://monitoring.prow.gardener.cloud
+    - https://monitoring-build.prow.gardener.cloud
     - https://storage.googleapis.com/gardener-prow/tide-history.json
   relabel_configs:
   - source_labels: [__address__]

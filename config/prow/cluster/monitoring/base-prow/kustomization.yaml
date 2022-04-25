@@ -16,7 +16,6 @@ patchesStrategicMerge:
 - alertmanager-alertmanager.yaml
 - blackboxExporter-deployment.yaml
 - grafana-deployment.yaml
-- kubernetesControlPlane-prometheusRule.yaml
 - kubeStateMetrics-deployment.yaml
 - nodeExporter-daemonset.yaml
 - prometheus.yaml

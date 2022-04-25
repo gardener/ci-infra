@@ -46,14 +46,3 @@ spec:
       labels:
         severity: critical
         slo: monitoring
-  - name: Blackbox Prober
-    rules:
-    - alert: 'Site unavailable: https://monitoring-build.prow.gardener.cloud'
-      annotations:
-        description: 'The blackbox_exporter HTTP probe has detected that the following site has been unhealthy (not 2xx HTTP response) for at least 2 minutes: <https://monitoring-build.prow.gardener.cloud|https://monitoring-build.prow.gardener.cloud>.'
-      expr: |
-        min(probe_success{instance="https://monitoring-build.prow.gardener.cloud"}) == 0
-      for: 2m
-      labels:
-        severity: critical
-        slo: monitoring

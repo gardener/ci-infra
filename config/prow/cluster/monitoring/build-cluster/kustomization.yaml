@@ -15,16 +15,6 @@ patchesStrategicMerge:
 - grafana-deployment.yaml
 
 secretGenerator:
-- name: prometheus-prow-additional-scrape-configs
-  namespace: monitoring
-  options:
-    labels:
-      app.kubernetes.io/component: prometheus
-      app.kubernetes.io/instance: k8s
-      app.kubernetes.io/name: prometheus
-      app.kubernetes.io/part-of: kube-prometheus
-  files:
-  - prometheus/additional-scrape-targets.yaml
 - name: alertmanager-main
   namespace: monitoring
   behavior: merge
