@@ -15,7 +15,7 @@ route:
   # Metrics not visible in shoot cluster
   - receiver: 'null-receiver'
     matchers:
-      - alertname=~"KubeSchedulerDown|KubeControllerManagerDown|KubeAggregatedAPIDown"
+      - alertname=~"KubeSchedulerDown|KubeControllerManagerDown|KubeAggregatedAPIErrors"
   - receiver: 'slack-alerts'
     group_interval: 5m
     repeat_interval: 2h
