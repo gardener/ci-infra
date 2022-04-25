@@ -20,3 +20,11 @@ patchesStrategicMerge:
 - kubeStateMetrics-deployment.yaml
 - nodeExporter-daemonset.yaml
 - prometheus.yaml
+
+secretGenerator:
+- name: alertmanager-main
+  namespace: monitoring
+  behavior: merge
+  files:
+  - alertmanager.yaml=alertmanager/config.yaml
+  - alertmanager/slack-messages.tmpl

@@ -28,6 +28,5 @@ secretGenerator:
 - name: alertmanager-main
   namespace: monitoring
   behavior: merge
-  files:
-  - alertmanager.yaml=alertmanager/config.yaml
-  - alertmanager/slack-messages.tmpl
+  literals:
+  - 'cluster-name.tmpl={{ define "cluster_name" }}Build Cluster{{ end }}'

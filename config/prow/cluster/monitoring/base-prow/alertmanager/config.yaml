@@ -21,7 +21,7 @@ receivers:
   - channel: '#gardener-prow-alerts'
     send_resolved: true
     icon_url: https://avatars3.githubusercontent.com/u/3380462
-    username: Gardener Prow Alertmanager
+    username: Gardener Prow Alertmanager ({{ template "cluster_name" . }})
     color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
     title: '{{ template "custom_slack_title" . }}'
     text: '{{ template "custom_slack_text" . }}'
@@ -30,7 +30,7 @@ receivers:
   - channel: '#gardener-prow-alerts'
     send_resolved: true
     icon_url: https://avatars3.githubusercontent.com/u/3380462
-    username: Gardener Prow Alertmanager
+    username: Gardener Prow Alertmanager ({{ template "cluster_name" . }})
     title: '{{ template "custom_slack_title" . }}'
     # notify oliver-goetz for firing critical alerts
     # TODO: use a slack group instead
@@ -39,3 +39,4 @@ receivers:
 
 templates:
 - slack-messages.tmpl
+- cluster-name.tmpl
