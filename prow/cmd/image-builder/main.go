@@ -103,7 +103,7 @@ func gatherOptions() options {
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
 	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using vYYYYMMDD-<rev short> scheme which is compatible to autobumper")
 	fs.Var(&o.addFixedTags, "add-fixed-tag", "Add a fixed tag to images")
-	fs.BoolVar(&o.injectEffectiveVersion, "inject-effective-version", true, "Inject EFFECTIVE_VERSION build-arg")
+	fs.BoolVar(&o.injectEffectiveVersion, "inject-effective-version", false, "Inject EFFECTIVE_VERSION build-arg")
 
 	fs.StringVar(&o.logLevel, "log-level", "info", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 
