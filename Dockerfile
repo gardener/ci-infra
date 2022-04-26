@@ -27,18 +27,6 @@ USER 65532
 # Executable containers
 # ----------------------
 
-FROM golang:${GOLANG_VERSION}-bullseye AS golang-test
-# install gardener unit/integration test related dependencies
-LABEL GOLANG_VERSION=${GOLANG_VERSION}
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		unzip \
-		jq \
-		parallel \
-	; \
-	rm -rf /var/lib/apt/lists/*
-
 FROM ssl_runner AS cla-assistant
 LABEL app=cla-assistant
 WORKDIR /

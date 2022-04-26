@@ -27,7 +27,6 @@ postsubmits:
         - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
         - --target=cla-assistant
         - --target=image-builder
-        - --kaniko-arg=--build-arg=GOLANG_VERSION=1.17.9
         - --add-date-sha-tag=true
         - --add-fixed-tag=latest
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
