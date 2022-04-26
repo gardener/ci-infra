@@ -478,11 +478,36 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 		}
 	}
 
-	if r.options.addDateSHATag {
+	validateBaseSHA := func() error {
 		if len(r.options.headSHA) < 7 {
-			return destinations, fmt.Errorf("baseSHA %v is it a correct SHA", r.options.headSHA)
+			return fmt.Errorf("baseSHA %v is it a correct SHA", r.options.headSHA)
+		}
+		return nil
+	}
+
+	if r.options.addDateSHATag {
+		if err := validateBaseSHA(); err != nil {
+			return destinations, err
 		}
 		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7])
+		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
+		destinations = append(destinations, destination)
+	}
+
+	for _, prefix := range r.options.addDateSHAWithPrefix.Strings() {
+		if err := validateBaseSHA(); err != nil {
+			return destinations, err
+		}
+		tag := fmt.Sprintf("%s-v%s-%s", prefix, time.Now().Format("20060102"), r.options.headSHA[:7])
+		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
+		destinations = append(destinations, destination)
+	}
+
+	for _, suffix := range r.options.addDateSHAWithSuffix.Strings() {
+		if err := validateBaseSHA(); err != nil {
+			return destinations, err
+		}
+		tag := fmt.Sprintf("v%s-%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7], suffix)
 		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 		destinations = append(destinations, destination)
 	}
