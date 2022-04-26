@@ -22,19 +22,21 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 
 	gerrit "github.com/andygrunwald/go-gerrit"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 )
 
 const (
-	// CodeReview is the default gerrit code review label
+	// CodeReview is the default (soon to be removed) gerrit code review label
 	CodeReview = "Code-Review"
 
 	// GerritID identifies a gerrit change
@@ -59,7 +61,27 @@ const (
 	ReadyForReviewMessageFixed = "Set Ready For Review"
 	// This message will be sent if users press the `SEND AND START REVIEW` button.
 	ReadyForReviewMessageCustomizable = "This change is ready for review."
+
+	ResultError   = "ERROR"
+	ResultSuccess = "SUCCESS"
 )
+
+var clientMetrics = struct {
+	queryResults *prometheus.CounterVec
+}{
+	queryResults: prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "gerrit_query_results",
+		Help: "Count of Gerrit API queries by instance, repo, and result.",
+	}, []string{
+		"instance",
+		"repo",
+		"result",
+	}),
+}
+
+func init() {
+	prometheus.MustRegister(clientMetrics.queryResults)
+}
 
 // ProjectsFlag is the flag type for gerrit projects when initializing a gerrit client
 type ProjectsFlag map[string][]string
@@ -325,6 +347,25 @@ func (c *Client) GetChange(instance, id string) (*ChangeInfo, error) {
 	return info, nil
 }
 
+func (c *Client) ChangeExist(instance, id string) (bool, error) {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	h, ok := c.handlers[instance]
+	if !ok {
+		return false, fmt.Errorf("not activated gerrit instance: %s", instance)
+	}
+
+	_, resp, err := h.changeService.GetChange(id, nil)
+	if err != nil {
+		if resp.StatusCode == http.StatusNotFound {
+			return false, nil
+		}
+		return false, fmt.Errorf("error getting current change: %w", responseBodyError(err, resp))
+	}
+
+	return true, nil
+}
+
 // responseBodyError returns the error with the response body text appended if there is any.
 func responseBodyError(err error, resp *gerrit.Response) error {
 	if resp == nil || resp.Response == nil {
@@ -407,6 +448,7 @@ func (h *gerritInstanceHandler) queryAllChanges(lastState map[string]time.Time, 
 		}
 		changes, err := h.queryChangesForProject(log, project, lastUpdate, rateLimit)
 		if err != nil {
+			clientMetrics.queryResults.WithLabelValues(h.instance, project, ResultError).Inc()
 			// don't halt on error from one project, log & continue
 			log.WithError(err).WithFields(logrus.Fields{
 				"lastUpdate": lastUpdate,
@@ -414,6 +456,7 @@ func (h *gerritInstanceHandler) queryAllChanges(lastState map[string]time.Time, 
 			}).Error("Failed to query changes")
 			continue
 		}
+		clientMetrics.queryResults.WithLabelValues(h.instance, project, ResultSuccess).Inc()
 		result = append(result, changes...)
 	}
 
