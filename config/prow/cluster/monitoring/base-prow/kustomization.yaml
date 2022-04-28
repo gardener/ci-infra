@@ -7,6 +7,10 @@ generatorOptions:
 bases:
 - ../base
 
+images:
+- name: grafana/grafana
+  newTag: 7.5.15
+
 resources:
   - kubernetes-podMonitorKubeProxy.yaml
 

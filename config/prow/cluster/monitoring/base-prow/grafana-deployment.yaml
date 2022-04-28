@@ -8,7 +8,6 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana/grafana:7.5.15
         env:
         - name: GF_ANALYTICS_CHECK_FOR_UPDATES
           value: "false"
