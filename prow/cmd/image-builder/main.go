@@ -44,6 +44,8 @@ type options struct {
 	dockerfile             string
 	targets                flagutil.Strings
 	kanikoArgs             flagutil.Strings
+	buildDefintion         string
+	buildVariant           string
 	registry               string
 	cacheRegistry          string
 	kanikoImage            string
@@ -59,8 +61,14 @@ type options struct {
 }
 
 func (o *options) Validate() error {
-	if o.dockerfile == "" {
-		return fmt.Errorf("\"dockerfile\" parameter must not be empty")
+	if o.dockerfile == "" && o.buildDefintion == "" {
+		return fmt.Errorf("specify either \"dockerfile\" or \"build-definition\" parameter")
+	}
+	if o.buildDefintion != "" && o.dockerfile != "" && o.dockerfile != "Dockerfile" {
+		return fmt.Errorf("\"dockerfile\" and \"build-definition\" parameters are mutually exclusive")
+	}
+	if o.buildVariant != "" && o.buildDefintion == "" {
+		return fmt.Errorf("specify a \"build-definition\" when setting \"build-variant\" parameter")
 	}
 	if o.dockerConfigSecret == "" {
 		return fmt.Errorf("\"docker-config-secret\" parameter must not be empty")
@@ -71,8 +79,11 @@ func (o *options) Validate() error {
 	if o.registry == "" {
 		return fmt.Errorf("\"registry\" parameter must not be empty")
 	}
-	if !o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && len(o.addFixedTags.Strings()) == 0 {
+	if (!o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && len(o.addFixedTags.Strings()) == 0) && o.buildDefintion == "" {
 		return fmt.Errorf("please choose at least one tagging scheme")
+	}
+	if (o.addVersionTag || o.addVersionSHATag || o.addDateSHATag || len(o.addFixedTags.Strings()) > 0) && o.buildDefintion != "" {
+		return fmt.Errorf("\"add-*\" and \"build-definition\" parameters are mutually exclusive")
 	}
 	if o.headSHA == "" {
 		return errors.New("Head SHA must not be empty")
@@ -98,6 +109,8 @@ func gatherOptions() options {
 	fs.StringVar(&o.dockerfile, "dockerfile", "Dockerfile", "path to dockerfile to be built")
 	fs.Var(&o.targets, "target", "target of dockerfile to be built")
 	fs.Var(&o.kanikoArgs, "kaniko-arg", "kaniko-arg for the build")
+	fs.StringVar(&o.buildDefintion, "build-definition", "", "(optional) folder of github repository which includes the build definition (dockerfile, variants")
+	fs.StringVar(&o.buildVariant, "build-variant", "", "variant of build-definition which should be built. Builds all variants if empty")
 	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are being pushed. Cache is disabled for empty value")
 	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are being pushed")
 	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.8.1", "kaniko image for kaniko build")
