@@ -275,8 +275,8 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod) error {
 
 	var variants []buildVariant
 
-	if r.options.buildDefintion != "" {
-		// Get variants for build-definition case
+	if r.options.context != "" {
+		// Get variants for build context case
 		variants, err = r.getVariants()
 		if err != nil {
 			return errors.Wrap(err, "get build variants")
@@ -291,7 +291,7 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod) error {
 	for _, variant := range variants {
 		for i, target := range r.options.targets.Strings() {
 
-			pod, err := r.definePodForTarget(ibPod, target, variant.name, variant.buildArgs)
+			pod, err := r.definePodForTarget(ibPod, target, variant)
 			if err != nil {
 				return errors.Wrapf(err, "define build pod for target %s", target)
 			}
@@ -388,15 +388,15 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod) (corev1.Pod, err
 }
 
 // definePodForTarget return a build pod for the given target.
-func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, variant *string, buildArgs map[string]string) (corev1.Pod, error) {
+func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, variant buildVariant) (corev1.Pod, error) {
 	qtyZero, err := resource.ParseQuantity("0")
 	if err != nil {
 		return corev1.Pod{}, errors.Wrap(err, "parse zero quantity")
 	}
 
 	var podName string
-	if variant != nil {
-		podName = r.getBuildPodName(ibPod, fmt.Sprintf("%s-%s", *variant, target))
+	if variant.name != nil {
+		podName = r.getBuildPodName(ibPod, fmt.Sprintf("%s-%s", *variant.name, target))
 	} else {
 		podName = r.getBuildPodName(ibPod, target)
 	}
@@ -423,8 +423,8 @@ func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, v
 	}
 
 	dockerfile := r.options.dockerfile
-	if variant != nil {
-		dockerfile = fmt.Sprintf("%s/Dockerfile", r.options.buildDefintion)
+	if variant.name != nil {
+		dockerfile = fmt.Sprintf("%s/%s", r.options.context, r.options.dockerfile)
 	}
 
 	// Base configuration of kaniko container
@@ -458,8 +458,8 @@ func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, v
 
 	// Add destinations
 	var destinations []string
-	if variant != nil {
-		destinations, err = r.defineDestinationsForVariant(target, *variant)
+	if variant.name != nil {
+		destinations, err = r.defineDestinationsForVariant(target, *variant.name)
 	} else {
 		destinations, err = r.defineDestinations(target)
 	}
@@ -472,7 +472,7 @@ func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, v
 	kanikoContainer.Args = append(kanikoContainer.Args, r.options.kanikoArgs.Strings()...)
 
 	// Add build args
-	for arg, value := range buildArgs {
+	for arg, value := range variant.buildArgs {
 		kanikoContainer.Args = append(kanikoContainer.Args, fmt.Sprintf("--build-arg=%s=%s", arg, value))
 	}
 
@@ -499,11 +499,9 @@ func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, v
 	return pod, nil
 }
 
-type variants map[string]map[string]string
-
 func (r *buildReconciler) getVariants() ([]buildVariant, error) {
 
-	fileContent, err := ioutil.ReadFile(path.Join(r.options.buildDefintion, variantsFile))
+	fileContent, err := ioutil.ReadFile(path.Join(r.options.context, variantsFile))
 	if os.IsNotExist(err) {
 		return nil, fmt.Errorf("%s not found", variantsFile)
 	} else if err != nil {
@@ -511,23 +509,18 @@ func (r *buildReconciler) getVariants() ([]buildVariant, error) {
 	}
 
 	variants := struct {
-		Variants variants `json:"variants"`
+		Variants map[string]map[string]string
 	}{}
 
 	if err := yaml.UnmarshalStrict(fileContent, &variants); err != nil {
 		return nil, fmt.Errorf("failed reading %s", variantsFile)
 	}
 
-	if r.options.buildVariant != "" {
-		for v := range variants.Variants {
-			if v != r.options.buildVariant {
-				delete(variants.Variants, v)
-			}
-		}
-	}
-
 	var buildVariants []buildVariant
 	for variant, buildArgs := range variants.Variants {
+		if r.options.buildVariant != "" && variant != r.options.buildVariant {
+			continue
+		}
 		v := variant
 		buildVariants = append(buildVariants, buildVariant{name: &v, buildArgs: buildArgs})
 	}
@@ -580,7 +573,7 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 	}
 
 	if r.options.addDateSHATag {
-		if err := r.validateBaseSHA(); err != nil {
+		if err := r.validateHeadSHA(); err != nil {
 			return destinations, err
 		}
 		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7])
@@ -588,8 +581,8 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 		destinations = append(destinations, destination)
 	}
 
-	for _, prefix := range r.options.addDateSHAWithPrefix.Strings() {
-		if err := r.validateBaseSHA(); err != nil {
+	for _, prefix := range r.options.addDateSHATagWithPrefix.Strings() {
+		if err := r.validateHeadSHA(); err != nil {
 			return destinations, err
 		}
 		tag := fmt.Sprintf("%s-v%s-%s", prefix, time.Now().Format("20060102"), r.options.headSHA[:7])
@@ -597,8 +590,8 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 		destinations = append(destinations, destination)
 	}
 
-	for _, suffix := range r.options.addDateSHAWithSuffix.Strings() {
-		if err := r.validateBaseSHA(); err != nil {
+	for _, suffix := range r.options.addDateSHATagWithSuffix.Strings() {
+		if err := r.validateHeadSHA(); err != nil {
 			return destinations, err
 		}
 		tag := fmt.Sprintf("v%s-%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7], suffix)
@@ -617,7 +610,7 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 func (r *buildReconciler) defineDestinationsForVariant(target, variant string) ([]string, error) {
 	var destinations []string
 
-	if err := r.validateBaseSHA(); err != nil {
+	if err := r.validateHeadSHA(); err != nil {
 		return destinations, err
 	}
 	tag := fmt.Sprintf("%s-v%s-%s", variant, time.Now().Format("20060102"), r.options.headSHA[:7])
@@ -630,9 +623,9 @@ func (r *buildReconciler) defineDestinationsForVariant(target, variant string) (
 	return destinations, nil
 }
 
-func (r *buildReconciler) validateBaseSHA() error {
+func (r *buildReconciler) validateHeadSHA() error {
 	if len(r.options.headSHA) < 7 {
-		return fmt.Errorf("baseSHA %v is it a correct SHA", r.options.headSHA)
+		return fmt.Errorf("headSHA %v is not a correct SHA", r.options.headSHA)
 	}
 	return nil
 }
