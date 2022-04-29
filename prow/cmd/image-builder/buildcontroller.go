@@ -20,14 +20,13 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/fs"
 	"os"
 	"path"
 	"time"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v2"
 	corev1 "k8s.io/api/core/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -43,6 +42,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"sigs.k8s.io/yaml"
 )
 
 const (
@@ -50,6 +50,7 @@ const (
 	dockerConfigVolume   string = "docker-config"
 	logArtifactDirectory string = "/logs/artifacts"
 	variantsFile         string = "variants.yaml"
+	prowGoSrcPath        string = "/home/prow/go/src"
 
 	ownerReferencesUID string = "metadata.ownerReferences.uid"
 
@@ -87,6 +88,9 @@ type buildReconciler struct {
 	err        error
 	errorCount int
 
+	fileSystem fs.FS
+	readFiler  func(string) ([]byte, error)
+
 	options options
 	log     *logrus.Entry
 }
@@ -104,6 +108,8 @@ func addImageBuilderController(ctx context.Context, mgr manager.Manager, clients
 		imageBuilderPod: imageBuilderPod,
 		buildPodPhase:   make(map[types.NamespacedName]corev1.PodPhase),
 		options:         options,
+		fileSystem:      os.DirFS(prowGoSrcPath),
+		readFiler:       os.ReadFile,
 		log:             log,
 	}
 
@@ -362,7 +368,7 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod) (corev1.Pod, err
 						VolumeMounts: []corev1.VolumeMount{
 							{
 								Name:      codeVolume,
-								MountPath: fmt.Sprintf("/home/prow/go/src/github.com/%s/%s", r.options.org, r.options.repo),
+								MountPath: fmt.Sprintf("%s/github.com/%s/%s", prowGoSrcPath, r.options.org, r.options.repo),
 								SubPath:   "code",
 							},
 							{
@@ -500,8 +506,7 @@ func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, v
 }
 
 func (r *buildReconciler) getVariants() ([]buildVariant, error) {
-
-	fileContent, err := ioutil.ReadFile(path.Join(r.options.context, variantsFile))
+	fileContent, err := r.readFiler(path.Join(r.options.context, variantsFile))
 	if os.IsNotExist(err) {
 		return nil, fmt.Errorf("%s not found", variantsFile)
 	} else if err != nil {
@@ -535,7 +540,7 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 	if r.options.addVersionTag || r.options.addVersionSHATag || r.options.injectEffectiveVersion {
 		var version string
 
-		versionFile, err := os.Open(fmt.Sprintf("/home/prow/go/src/github.com/%s/%s/VERSION", r.options.org, r.options.repo))
+		versionFile, err := r.fileSystem.Open(fmt.Sprintf("github.com/%s/%s/VERSION", r.options.org, r.options.repo))
 		if err != nil {
 			return destinations, errors.Wrap(err, "open VERSION file from git root directory")
 		}

@@ -16,8 +16,12 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"io/fs"
 	"strings"
 	"testing"
+	"testing/fstest"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
@@ -36,6 +40,48 @@ import (
 var (
 	testImageBuilderPod types.NamespacedName = types.NamespacedName{Namespace: "test-pods", Name: "prow-job-image-build-pod"}
 )
+
+const (
+	testContext string = "images/test"
+	testGitOrg  string = "git-org"
+	testGitRepo string = "git-repo"
+)
+
+func createTestFileSystem(t *testing.T) fstest.MapFS {
+	t.Helper()
+
+	version := "1.1-test"
+
+	versionFile := fstest.MapFile{
+		Data:    []byte(version),
+		Mode:    fs.ModePerm,
+		ModTime: time.Now(),
+	}
+
+	variantsYaml := `
+variants:
+  v1:
+    BUILD_ARG1: v1
+    BUILD_ARG2: v1
+  v2:
+    BUILD_ARG1: v2
+    BUILD_ARG2: v2
+  `
+
+	variantsYamlFile := fstest.MapFile{
+		Data:    []byte(variantsYaml),
+		Mode:    fs.ModePerm,
+		ModTime: time.Now(),
+	}
+
+	mapFS := fstest.MapFS{
+		fmt.Sprintf("github.com/%s/%s/VERSION", testGitOrg, testGitRepo): &versionFile,
+		fmt.Sprintf("%s/%s", testContext, variantsFile):                  &variantsYamlFile,
+	}
+
+	return mapFS
+
+}
 
 func unmarshalYAML(t *testing.T, v interface{}, s string) {
 	t.Helper()
@@ -123,22 +169,26 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 	client := ctrlfake.NewClientBuilder().WithScheme(sc).WithObjects(initObjs...).Build()
 	clientset := clgofake.NewSimpleClientset()
 
+	mapFS := createTestFileSystem(t)
+
 	options := options{
-		org:                "git-org",
-		repo:               "git-repo",
-		kanikoImage:        "registry.xyz/kaniko:latest",
-		dockerConfigSecret: "docker-config-secret",
-		dockerfile:         "dockerfile",
-		registry:           "registry.xyz/build",
-		cacheRegistry:      "registry.xyz/cache",
-		addVersionTag:      false,
-		addVersionSHATag:   false,
-		addDateSHATag:      true,
-		addFixedTags:       flagutil.NewStrings("test"),
-		logLevel:           "debug",
-		targets:            flagutil.NewStrings("target1", "target2", "target3"),
-		kanikoArgs:         flagutil.NewStrings("--build-arg=buildarg1=abc", "--build-arg=buildarg1=xyz"),
-		headSHA:            "abcdef1234567890",
+		org:                     testGitOrg,
+		repo:                    testGitRepo,
+		kanikoImage:             "registry.xyz/kaniko:latest",
+		dockerConfigSecret:      "docker-config-secret",
+		dockerfile:              "Dockerfile.test",
+		registry:                "registry.xyz/build",
+		cacheRegistry:           "registry.xyz/cache",
+		addVersionTag:           true,
+		addVersionSHATag:        true,
+		addDateSHATag:           true,
+		addDateSHATagWithPrefix: flagutil.NewStrings("pre"),
+		addDateSHATagWithSuffix: flagutil.NewStrings("suf"),
+		addFixedTags:            flagutil.NewStrings("test"),
+		logLevel:                "debug",
+		targets:                 flagutil.NewStrings("target1", "target2", "target3"),
+		kanikoArgs:              flagutil.NewStrings("--build-arg=buildarg1=abc", "--build-arg=buildarg1=xyz"),
+		headSHA:                 "abcdef1234567890",
 	}
 
 	r := &buildReconciler{
@@ -148,6 +198,8 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 		imageBuilderPod: testImageBuilderPod,
 		buildPodPhase:   make(map[types.NamespacedName]corev1.PodPhase),
 		options:         options,
+		fileSystem:      mapFS,
+		readFiler:       mapFS.ReadFile,
 		log:             log,
 	}
 	return r
@@ -155,39 +207,67 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 
 func TestEnsureBuildPodDefinition(t *testing.T) {
 
-	// Preparation
+	type testCase struct {
+		name    string
+		context string
+	}
+
+	tests := []testCase{
+		{
+			name:    "empty context",
+			context: "",
+		},
+		{
+			name:    "non-empty context",
+			context: testContext,
+		},
+	}
+
 	ctx := context.Background()
-	testPod := createTestImageBuilderPod(t)
-	r := createTestImageBuildController(t, &testPod)
-	var ibPod corev1.Pod
-	err := r.client.Get(ctx, testImageBuilderPod, &ibPod)
-	if err != nil {
-		t.Fatal(err)
+
+	for _, test := range tests {
+		t.Run(
+			test.name,
+			func(t *testing.T) {
+				// Preparation
+				testPod := createTestImageBuilderPod(t)
+				r := createTestImageBuildController(t, &testPod)
+				r.options.context = test.context
+				var ibPod corev1.Pod
+				err := r.client.Get(ctx, testImageBuilderPod, &ibPod)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				// Test
+				err = r.ensureBuildPodDefinition(ctx, &ibPod)
+				assert.NoError(t, err)
+
+				if test.context == "" {
+					// One pod per target + one clonerefs pod
+					assert.Len(t, r.buildPods, len(r.options.targets.Strings())+1)
+				} else {
+					// One pod per target * number of variants (2 defined in createTestReadFiler()) + one clonerefs pod
+					assert.Len(t, r.buildPods, len(r.options.targets.Strings())*2+1)
+				}
+
+				// Build pods must include an owner reference, node selector and tolerations from build pod
+				for _, buildPod := range r.buildPods {
+					if len(buildPod.pod.OwnerReferences) > 0 {
+						assert.Equal(t, ibPod.UID, buildPod.pod.OwnerReferences[0].UID)
+					} else {
+						assert.Fail(t, "No owner reference in build pod")
+					}
+					assert.Equal(t, ibPod.Spec.NodeSelector, buildPod.pod.Spec.NodeSelector)
+					assert.Equal(t, ibPod.Spec.Tolerations, buildPod.pod.Spec.Tolerations)
+				}
+
+				// pvc for build pods should be created with the same name as image-builder pod
+				var pvc corev1.PersistentVolumeClaim
+				err = r.client.Get(ctx, testImageBuilderPod, &pvc)
+				assert.NoError(t, err)
+			})
 	}
-
-	// Test
-	err = r.ensureBuildPodDefinition(ctx, &ibPod)
-	assert.NoError(t, err)
-
-	// One pod per target + one clonerefs pod
-	assert.Len(t, r.buildPods, len(r.options.targets.Strings())+1)
-
-	// Build pods must include an owner reference, node selector and tolerations from build pod
-	for _, buildPod := range r.buildPods {
-		if len(buildPod.pod.OwnerReferences) > 0 {
-			assert.Equal(t, ibPod.UID, buildPod.pod.OwnerReferences[0].UID)
-		} else {
-			assert.Fail(t, "No owner reference in build pod")
-		}
-		assert.Equal(t, ibPod.Spec.NodeSelector, buildPod.pod.Spec.NodeSelector)
-		assert.Equal(t, ibPod.Spec.Tolerations, buildPod.pod.Spec.Tolerations)
-	}
-
-	// pvc for build pods should be created with the same name as image-builder pod
-	var pvc corev1.PersistentVolumeClaim
-	err = r.client.Get(ctx, testImageBuilderPod, &pvc)
-	assert.NoError(t, err)
-
 }
 
 func TestGetBuildPodName(t *testing.T) {
@@ -276,4 +356,59 @@ func TestReconcile(t *testing.T) {
 	var pvc corev1.PersistentVolumeClaim
 	err = r.client.Get(ctx, testImageBuilderPod, &pvc)
 	assert.NoError(t, err)
+}
+
+func TestGetVariants(t *testing.T) {
+	type testCase struct {
+		name         string
+		buildVariant string
+
+		expectedVariants int
+	}
+
+	tests := []testCase{
+		{
+			name:         "all variants",
+			buildVariant: "",
+
+			expectedVariants: 2,
+		},
+		{
+			name:         "variant v1",
+			buildVariant: "v1",
+
+			expectedVariants: 1,
+		},
+		{
+			name:         "non existing variant",
+			buildVariant: "xyz",
+
+			expectedVariants: 0,
+		},
+	}
+
+	ctx := context.Background()
+
+	for _, test := range tests {
+		t.Run(
+			test.name,
+			func(t *testing.T) {
+				// Preparation
+				testPod := createTestImageBuilderPod(t)
+				r := createTestImageBuildController(t, &testPod)
+				r.options.context = testContext
+				r.options.buildVariant = test.buildVariant
+				var ibPod corev1.Pod
+				err := r.client.Get(ctx, testImageBuilderPod, &ibPod)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				// Test
+				variants, err := r.getVariants()
+				assert.NoError(t, err)
+
+				assert.Len(t, variants, test.expectedVariants)
+			})
+	}
 }
