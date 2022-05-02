@@ -95,13 +95,14 @@ type Client interface {
 	ForPlugin(plugin string) Client
 	ForSubcomponent(subcomponent string) Client
 	WithFields(fields logrus.Fields) Client
+	Used() bool
 
 	// SearchBugs returns all bugs that meet the given criteria
 	SearchBugs(filters map[string]string) ([]*Bug, error)
 }
 
 // NewClient returns a bugzilla client.
-func NewClient(getAPIKey func() []byte, endpoint string, githubExternalTrackerId uint) Client {
+func NewClient(getAPIKey func() []byte, endpoint string, githubExternalTrackerId uint, authMethod string) Client {
 	return &client{
 		logger: logrus.WithField("client", "bugzilla"),
 		delegate: &delegate{
@@ -109,6 +110,7 @@ func NewClient(getAPIKey func() []byte, endpoint string, githubExternalTrackerId
 			endpoint:                endpoint,
 			githubExternalTrackerId: githubExternalTrackerId,
 			getAPIKey:               getAPIKey,
+			authMethod:              authMethod,
 		},
 	}
 }
@@ -161,7 +163,13 @@ type client struct {
 	logger *logrus.Entry
 	// identifier is used to add more identification to the user-agent header
 	identifier string
+	used       bool
 	*delegate
+}
+
+// Used determines whether the client has been used
+func (c *client) Used() bool {
+	return c.used
 }
 
 // ForPlugin clones the client, keeping the underlying delegate the same but adding
@@ -687,6 +695,7 @@ func (c *client) GetComments(bugID int) ([]Comment, error) {
 }
 
 func (c *client) request(req *http.Request, logger *logrus.Entry) ([]byte, error) {
+	c.used = true
 	if apiKey := c.getAPIKey(); len(apiKey) > 0 {
 		switch c.authMethod {
 		case "bearer":
@@ -821,7 +830,6 @@ func (c *client) AddPullRequestAsExternalBug(id int, org, repo string, num int) 
 		Method:  "ExternalBugs.add_external_bug",
 		ID:      "identifier", // this is useful when fielding asynchronous responses, but not here
 		Parameters: []AddExternalBugParameters{{
-			APIKey:       string(c.getAPIKey()),
 			BugIDs:       []int{id},
 			ExternalBugs: []ExternalBugIdentifier{bugIdentifier},
 		}},
@@ -905,7 +913,6 @@ func (c *client) RemovePullRequestAsExternalBug(id int, org, repo string, num in
 		Method:  "ExternalBugs.remove_external_bug",
 		ID:      "identifier", // this is useful when fielding asynchronous responses, but not here
 		Parameters: []RemoveExternalBugParameters{{
-			APIKey: string(c.getAPIKey()),
 			BugIDs: []int{id},
 			ExternalBugIdentifier: ExternalBugIdentifier{
 				Type: "https://github.com/",

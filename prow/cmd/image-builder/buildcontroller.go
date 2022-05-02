@@ -20,7 +20,9 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
+	"path"
 	"time"
 
 	"github.com/pkg/errors"
@@ -40,12 +42,15 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"sigs.k8s.io/yaml"
 )
 
 const (
 	codeVolume           string = "code"
 	dockerConfigVolume   string = "docker-config"
 	logArtifactDirectory string = "/logs/artifacts"
+	variantsFile         string = "variants.yaml"
+	prowGoSrcPath        string = "/home/prow/go/src"
 
 	ownerReferencesUID string = "metadata.ownerReferences.uid"
 
@@ -58,6 +63,15 @@ const (
 type buildPod struct {
 	pod        corev1.Pod
 	buildGroup string
+}
+
+type buildVariant struct {
+	name      *string
+	buildArgs map[string]string
+}
+
+func (b buildVariant) String() string {
+	return fmt.Sprintf("{name: %s buildArgs: %v}", *b.name, b.buildArgs)
 }
 
 // buildReconciler controls build process
@@ -73,6 +87,9 @@ type buildReconciler struct {
 
 	err        error
 	errorCount int
+
+	fileSystem fs.FS
+	readFiler  func(string) ([]byte, error)
 
 	options options
 	log     *logrus.Entry
@@ -91,6 +108,8 @@ func addImageBuilderController(ctx context.Context, mgr manager.Manager, clients
 		imageBuilderPod: imageBuilderPod,
 		buildPodPhase:   make(map[types.NamespacedName]corev1.PodPhase),
 		options:         options,
+		fileSystem:      os.DirFS(prowGoSrcPath),
+		readFiler:       os.ReadFile,
 		log:             log,
 	}
 
@@ -253,12 +272,6 @@ func (r *buildReconciler) createPVC(ctx context.Context, ibPod *corev1.Pod) (*co
 }
 
 func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod) error {
-
-	qtyZero, err := resource.ParseQuantity("0")
-	if err != nil {
-		return errors.Wrap(err, "parse zero quantity")
-	}
-
 	// First pod clones git repository
 	clonerefsPod, err := r.defineCloneRefsPod(ibPod)
 	if err != nil {
@@ -266,97 +279,43 @@ func (r *buildReconciler) defineBuildPods(ibPod *corev1.Pod) error {
 	}
 	r.buildPods = append(r.buildPods, buildPod{pod: clonerefsPod, buildGroup: "clonerefs"})
 
-	// Next pods build the targets
-	for i, target := range r.options.targets.Strings() {
+	var variants []buildVariant
 
-		// Base configuration of build pod
-		var buildGroup string
-		pod := corev1.Pod{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      r.getBuildPodName(ibPod, target),
-				Namespace: ibPod.Namespace,
-			},
-			Spec: corev1.PodSpec{
-				RestartPolicy: corev1.RestartPolicyNever,
-				Volumes: []corev1.Volume{
-					{
-						Name: dockerConfigVolume,
-						VolumeSource: corev1.VolumeSource{
-							Secret: &corev1.SecretVolumeSource{
-								SecretName: r.options.dockerConfigSecret,
-							},
-						},
-					},
-				},
-			},
-		}
-
-		// Base configuration of kaniko container
-		kanikoContainer := corev1.Container{
-			Name:  "kaniko",
-			Image: r.options.kanikoImage,
-			Args: []string{
-				"--skip-unused-stages",
-				"--context=/code",
-				fmt.Sprintf("--dockerfile=%s", r.options.dockerfile),
-				fmt.Sprintf("--target=%s", target),
-			},
-			VolumeMounts: []corev1.VolumeMount{
-				{
-					Name:      codeVolume,
-					MountPath: "/code",
-					SubPath:   "code",
-				},
-				{
-					Name:      dockerConfigVolume,
-					MountPath: "/kaniko/.docker",
-				},
-			},
-			Resources: corev1.ResourceRequirements{
-				Requests: corev1.ResourceList{
-					corev1.ResourceCPU:    qtyZero,
-					corev1.ResourceMemory: qtyZero,
-				},
-			},
-		}
-
-		// Add destinations
-		destinations, err := r.defineDestinations(target)
+	if r.options.context != "" {
+		// Get variants for build context case
+		variants, err = r.getVariants()
 		if err != nil {
-			return errors.Wrap(err, "construct destinations")
+			return errors.Wrap(err, "get build variants")
 		}
-		kanikoContainer.Args = append(kanikoContainer.Args, destinations...)
+		r.log.Infof("Selected variants for this build: %+v", variants)
+	} else {
+		// Empty variant for the regular build case
+		variants = append(variants, buildVariant{name: nil, buildArgs: nil})
+	}
 
-		// Add kaniko args
-		kanikoContainer.Args = append(kanikoContainer.Args, r.options.kanikoArgs.Strings()...)
+	// Next pods build the targets for the variants
+	for _, variant := range variants {
+		for i, target := range r.options.targets.Strings() {
 
-		// Set caching options
-		if r.options.cacheRegistry != "" {
-			kanikoContainer.Args = append(
-				kanikoContainer.Args,
-				"--cache=true",
-				fmt.Sprintf("--cache-repo=%s", r.options.cacheRegistry),
-			)
+			pod, err := r.definePodForTarget(ibPod, target, variant)
+			if err != nil {
+				return errors.Wrapf(err, "define build pod for target %s", target)
+			}
+
+			// Set build group
+			var buildGroup string
+			if i == 0 && r.options.cacheRegistry != "" {
+				buildGroup = "createCache"
+				if variant.name != nil {
+					buildGroup = fmt.Sprintf("%s-%s", buildGroup, *variant.name)
+				}
+			} else {
+				buildGroup = "parallelBuild"
+			}
+
+			// Append the pod to buildPods
+			r.buildPods = append(r.buildPods, buildPod{pod: pod, buildGroup: buildGroup})
 		}
-
-		if i == 0 && r.options.cacheRegistry != "" {
-			buildGroup = "createCache"
-		} else {
-			buildGroup = "parallelBuild"
-		}
-
-		// Append build container to build pod
-		pod.Spec.Containers = append(pod.Spec.Containers, kanikoContainer)
-
-		// Configure the build pod with PVC, node assignment and controller reference
-		r.assignPVC(&pod)
-		r.setNodeAssignment(ibPod, &pod)
-		err = controllerutil.SetControllerReference(ibPod, &pod, r.scheme)
-		if err != nil {
-			return errors.Wrap(err, "set controller reference")
-		}
-
-		r.buildPods = append(r.buildPods, buildPod{pod: pod, buildGroup: buildGroup})
 	}
 
 	return nil
@@ -409,7 +368,7 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod) (corev1.Pod, err
 						VolumeMounts: []corev1.VolumeMount{
 							{
 								Name:      codeVolume,
-								MountPath: fmt.Sprintf("/home/prow/go/src/github.com/%s/%s", r.options.org, r.options.repo),
+								MountPath: fmt.Sprintf("%s/github.com/%s/%s", prowGoSrcPath, r.options.org, r.options.repo),
 								SubPath:   "code",
 							},
 							{
@@ -434,6 +393,146 @@ func (r *buildReconciler) defineCloneRefsPod(ibPod *corev1.Pod) (corev1.Pod, err
 	return corev1.Pod{}, errors.New("no clonerefs init container in image-builder pod")
 }
 
+// definePodForTarget return a build pod for the given target.
+func (r *buildReconciler) definePodForTarget(ibPod *corev1.Pod, target string, variant buildVariant) (corev1.Pod, error) {
+	qtyZero, err := resource.ParseQuantity("0")
+	if err != nil {
+		return corev1.Pod{}, errors.Wrap(err, "parse zero quantity")
+	}
+
+	var podName string
+	if variant.name != nil {
+		podName = r.getBuildPodName(ibPod, fmt.Sprintf("%s-%s", *variant.name, target))
+	} else {
+		podName = r.getBuildPodName(ibPod, target)
+	}
+
+	// Base configuration of build pod
+	pod := corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      podName,
+			Namespace: ibPod.Namespace,
+		},
+		Spec: corev1.PodSpec{
+			RestartPolicy: corev1.RestartPolicyNever,
+			Volumes: []corev1.Volume{
+				{
+					Name: dockerConfigVolume,
+					VolumeSource: corev1.VolumeSource{
+						Secret: &corev1.SecretVolumeSource{
+							SecretName: r.options.dockerConfigSecret,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	dockerfile := r.options.dockerfile
+	if variant.name != nil {
+		dockerfile = fmt.Sprintf("%s/%s", r.options.context, r.options.dockerfile)
+	}
+
+	// Base configuration of kaniko container
+	kanikoContainer := corev1.Container{
+		Name:  "kaniko",
+		Image: r.options.kanikoImage,
+		Args: []string{
+			"--skip-unused-stages",
+			"--context=/code",
+			fmt.Sprintf("--dockerfile=%s", dockerfile),
+			fmt.Sprintf("--target=%s", target),
+		},
+		VolumeMounts: []corev1.VolumeMount{
+			{
+				Name:      codeVolume,
+				MountPath: "/code",
+				SubPath:   "code",
+			},
+			{
+				Name:      dockerConfigVolume,
+				MountPath: "/kaniko/.docker",
+			},
+		},
+		Resources: corev1.ResourceRequirements{
+			Requests: corev1.ResourceList{
+				corev1.ResourceCPU:    qtyZero,
+				corev1.ResourceMemory: qtyZero,
+			},
+		},
+	}
+
+	// Add destinations
+	var destinations []string
+	if variant.name != nil {
+		destinations, err = r.defineDestinationsForVariant(target, *variant.name)
+	} else {
+		destinations, err = r.defineDestinations(target)
+	}
+	if err != nil {
+		return corev1.Pod{}, errors.Wrap(err, "construct destinations")
+	}
+	kanikoContainer.Args = append(kanikoContainer.Args, destinations...)
+
+	// Add kaniko args
+	kanikoContainer.Args = append(kanikoContainer.Args, r.options.kanikoArgs.Strings()...)
+
+	// Add build args
+	for arg, value := range variant.buildArgs {
+		kanikoContainer.Args = append(kanikoContainer.Args, fmt.Sprintf("--build-arg=%s=%s", arg, value))
+	}
+
+	// Set caching options
+	if r.options.cacheRegistry != "" {
+		kanikoContainer.Args = append(
+			kanikoContainer.Args,
+			"--cache=true",
+			fmt.Sprintf("--cache-repo=%s", r.options.cacheRegistry),
+		)
+	}
+
+	// Append build container to build pod
+	pod.Spec.Containers = append(pod.Spec.Containers, kanikoContainer)
+
+	// Configure the build pod with PVC, node assignment and controller reference
+	r.assignPVC(&pod)
+	r.setNodeAssignment(ibPod, &pod)
+	err = controllerutil.SetControllerReference(ibPod, &pod, r.scheme)
+	if err != nil {
+		return corev1.Pod{}, errors.Wrap(err, "set controller reference")
+	}
+
+	return pod, nil
+}
+
+func (r *buildReconciler) getVariants() ([]buildVariant, error) {
+	fileContent, err := r.readFiler(path.Join(r.options.context, variantsFile))
+	if os.IsNotExist(err) {
+		return nil, fmt.Errorf("%s not found", variantsFile)
+	} else if err != nil {
+		return nil, errors.Wrapf(err, "failed to load %s", variantsFile)
+	}
+
+	variants := struct {
+		Variants map[string]map[string]string
+	}{}
+
+	if err := yaml.UnmarshalStrict(fileContent, &variants); err != nil {
+		return nil, fmt.Errorf("failed reading %s", variantsFile)
+	}
+
+	var buildVariants []buildVariant
+	for variant, buildArgs := range variants.Variants {
+		if r.options.buildVariant != "" && variant != r.options.buildVariant {
+			continue
+		}
+		v := variant
+		buildVariants = append(buildVariants, buildVariant{name: &v, buildArgs: buildArgs})
+	}
+
+	return buildVariants, nil
+}
+
 func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 
 	var destinations []string
@@ -441,7 +540,7 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 	if r.options.addVersionTag || r.options.addVersionSHATag || r.options.injectEffectiveVersion {
 		var version string
 
-		versionFile, err := os.Open(fmt.Sprintf("/home/prow/go/src/github.com/%s/%s/VERSION", r.options.org, r.options.repo))
+		versionFile, err := r.fileSystem.Open(fmt.Sprintf("github.com/%s/%s/VERSION", r.options.org, r.options.repo))
 		if err != nil {
 			return destinations, errors.Wrap(err, "open VERSION file from git root directory")
 		}
@@ -479,10 +578,28 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 	}
 
 	if r.options.addDateSHATag {
-		if len(r.options.headSHA) < 7 {
-			return destinations, fmt.Errorf("baseSHA %v is it a correct SHA", r.options.headSHA)
+		if err := r.validateHeadSHA(); err != nil {
+			return destinations, err
 		}
 		tag := fmt.Sprintf("v%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7])
+		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
+		destinations = append(destinations, destination)
+	}
+
+	for _, prefix := range r.options.addDateSHATagWithPrefix.Strings() {
+		if err := r.validateHeadSHA(); err != nil {
+			return destinations, err
+		}
+		tag := fmt.Sprintf("%s-v%s-%s", prefix, time.Now().Format("20060102"), r.options.headSHA[:7])
+		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
+		destinations = append(destinations, destination)
+	}
+
+	for _, suffix := range r.options.addDateSHATagWithSuffix.Strings() {
+		if err := r.validateHeadSHA(); err != nil {
+			return destinations, err
+		}
+		tag := fmt.Sprintf("v%s-%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7], suffix)
 		destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 		destinations = append(destinations, destination)
 	}
@@ -493,6 +610,29 @@ func (r *buildReconciler) defineDestinations(target string) ([]string, error) {
 
 	return destinations, nil
 
+}
+
+func (r *buildReconciler) defineDestinationsForVariant(target, variant string) ([]string, error) {
+	var destinations []string
+
+	if err := r.validateHeadSHA(); err != nil {
+		return destinations, err
+	}
+	tag := fmt.Sprintf("%s-v%s-%s", variant, time.Now().Format("20060102"), r.options.headSHA[:7])
+	destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
+	destinations = append(destinations, destination)
+
+	destination = fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, variant)
+	destinations = append(destinations, destination)
+
+	return destinations, nil
+}
+
+func (r *buildReconciler) validateHeadSHA() error {
+	if len(r.options.headSHA) < 7 {
+		return fmt.Errorf("headSHA %v is not a correct SHA", r.options.headSHA)
+	}
+	return nil
 }
 
 func (r *buildReconciler) getBuildPodName(ibPod *corev1.Pod, target string) string {

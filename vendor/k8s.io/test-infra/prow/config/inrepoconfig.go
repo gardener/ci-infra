@@ -30,6 +30,7 @@ import (
 	"github.com/sirupsen/logrus"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 
+	"k8s.io/test-infra/prow/git/types"
 	"k8s.io/test-infra/prow/git/v2"
 	"sigs.k8s.io/yaml"
 )
@@ -106,13 +107,33 @@ func prowYAMLGetter(
 		return nil, err
 	}
 
-	mergeMethod := c.Tide.MergeMethod(orgRepo)
+	// TODO(mpherman): This is to hopefully mittigate issue with gerrit merges. Need to come up with a solution that checks
+	// each CLs merge strategy as they can differ. ifNecessary is just the gerrit default
+	var mergeMethod types.PullRequestMergeType
+	if c.Gerrit.OrgReposConfig != nil {
+		mergeMethod = types.MergeIfNecessary
+	} else {
+		mergeMethod = c.Tide.MergeMethod(orgRepo)
+	}
+
 	log.Debugf("Using merge strategy %q.", mergeMethod)
+	if err := ensureHeadCommits(repo, headSHAs...); err != nil {
+		return nil, fmt.Errorf("failed to fetch headSHAs: %v", err)
+	}
 	if err := repo.MergeAndCheckout(baseSHA, string(mergeMethod), headSHAs...); err != nil {
 		return nil, fmt.Errorf("failed to merge: %w", err)
 	}
 
 	return ReadProwYAML(log, repo.Directory(), false)
+}
+
+func ensureHeadCommits(repo git.RepoClient, headSHAs ...string) error {
+	for _, sha := range headSHAs {
+		if err := repo.Fetch(sha); err != nil {
+			return fmt.Errorf("failed to fetch headSHA: %s: %v", sha, err)
+		}
+	}
+	return nil
 }
 
 // ReadProwYAML parses the .prow.yaml file or .prow directory, no commit checkout or defaulting is included.

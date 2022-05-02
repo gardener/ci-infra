@@ -160,6 +160,9 @@ type Blunderbuss struct {
 	// additional token per successful reviewer (and potentially more depending on
 	// how many busy reviewers it had to pass over).
 	UseStatusAvailability bool `json:"use_status_availability,omitempty"`
+	// IgnoreDrafts instructs the plugin to ignore assigning reviewers
+	// to the PR that is in Draft state. Default it's false.
+	IgnoreDrafts bool `json:"ignore_drafts,omitempty"`
 }
 
 // Owners contains configuration related to handling OWNERS files.
@@ -429,6 +432,10 @@ type AssignOnLabel struct {
 type Trigger struct {
 	// Repos is either of the form org/repos or just org.
 	Repos []string `json:"repos,omitempty"`
+	// TrustedApps is the explicit list of GitHub apps whose PRs will be automatically
+	// considered as trusted. The list should contain usernames of each GitHub App without [bot] suffix.
+	// By default, trigger will ignore this list.
+	TrustedApps []string `json:"trusted_apps,omitempty"`
 	// TrustedOrg is the org whose members' PRs will be automatically built for
 	// PRs to the above repos. The default is the PR's org.
 	//
@@ -660,6 +667,10 @@ type Welcome struct {
 type Dco struct {
 	// SkipDCOCheckForMembers is used to skip DCO check for trusted org members
 	SkipDCOCheckForMembers bool `json:"skip_dco_check_for_members,omitempty"`
+	// TrustedApps defines list of apps which commits will not be checked for DCO singoff.
+	// The list should contain usernames of each GitHub App without [bot] suffix.
+	// By default, this option is ignored.
+	TrustedApps []string `json:"trusted_apps,omitempty"`
 	// TrustedOrg is the org whose members' commits will not be checked for DCO signoff
 	// if the skip DCO option is enabled. The default is the PR's org.
 	TrustedOrg string `json:"trusted_org,omitempty"`
@@ -1864,7 +1875,7 @@ type Override struct {
 
 func (c *Configuration) mergeFrom(other *Configuration) error {
 	var errs []error
-	if diff := cmp.Diff(other, &Configuration{Approve: other.Approve, Bugzilla: other.Bugzilla, ExternalPlugins: other.ExternalPlugins, Label: Label{RestrictedLabels: other.Label.RestrictedLabels}, Lgtm: other.Lgtm, Plugins: other.Plugins}); diff != "" {
+	if diff := cmp.Diff(other, &Configuration{Approve: other.Approve, Bugzilla: other.Bugzilla, ExternalPlugins: other.ExternalPlugins, Label: Label{RestrictedLabels: other.Label.RestrictedLabels}, Lgtm: other.Lgtm, Plugins: other.Plugins, Triggers: other.Triggers}); diff != "" {
 		errs = append(errs, fmt.Errorf("supplemental plugin configuration has config that doesn't support merging: %s", diff))
 	}
 
@@ -1881,6 +1892,7 @@ func (c *Configuration) mergeFrom(other *Configuration) error {
 
 	c.Approve = append(c.Approve, other.Approve...)
 	c.Lgtm = append(c.Lgtm, other.Lgtm...)
+	c.Triggers = append(c.Triggers, other.Triggers...)
 
 	if err := c.mergeExternalPluginsFrom(other.ExternalPlugins); err != nil {
 		errs = append(errs, fmt.Errorf("failed to merge .external-plugins from supplemental config: %w", err))
@@ -2009,7 +2021,7 @@ func getLabelConfigFromRestrictedLabelsSlice(s []RestrictedLabel, label string) 
 }
 
 func (c *Configuration) HasConfigFor() (global bool, orgs sets.String, repos sets.String) {
-	if !reflect.DeepEqual(c, &Configuration{Approve: c.Approve, Bugzilla: c.Bugzilla, ExternalPlugins: c.ExternalPlugins, Label: Label{RestrictedLabels: c.Label.RestrictedLabels}, Lgtm: c.Lgtm, Plugins: c.Plugins}) || c.Bugzilla.Default != nil {
+	if !reflect.DeepEqual(c, &Configuration{Approve: c.Approve, Bugzilla: c.Bugzilla, ExternalPlugins: c.ExternalPlugins, Label: Label{RestrictedLabels: c.Label.RestrictedLabels}, Lgtm: c.Lgtm, Plugins: c.Plugins, Triggers: c.Triggers}) || c.Bugzilla.Default != nil {
 		global = true
 	}
 	orgs = sets.String{}
@@ -2056,6 +2068,16 @@ func (c *Configuration) HasConfigFor() (global bool, orgs sets.String, repos set
 
 	for _, lgtm := range c.Lgtm {
 		for _, orgOrRepo := range lgtm.Repos {
+			if strings.Contains(orgOrRepo, "/") {
+				repos.Insert(orgOrRepo)
+			} else {
+				orgs.Insert(orgOrRepo)
+			}
+		}
+	}
+
+	for _, trigger := range c.Triggers {
+		for _, orgOrRepo := range trigger.Repos {
 			if strings.Contains(orgOrRepo, "/") {
 				repos.Insert(orgOrRepo)
 			} else {

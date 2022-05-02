@@ -43,7 +43,7 @@ ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
 	@echo "Building docker golang image for tests with version and tag $(GOLANG_VERSION)"
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):latest -f Dockerfile --target $(IMG_GOLANG_TEST) .
+	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):latest -f images/golang-test/Dockerfile --target $(IMG_GOLANG_TEST) .
 	@echo "Building docker images with version and tag $(VERSION)"
 	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
 	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_IMAGE_BUILDER):$(VERSION) -t $(REG_IMAGE_BUILDER):latest -f Dockerfile --target $(IMG_IMAGE_BUILDER) .

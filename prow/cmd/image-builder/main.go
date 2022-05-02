@@ -37,21 +37,25 @@ import (
 )
 
 type options struct {
-	dockerConfigSecret     string
-	org                    string
-	repo                   string
-	headSHA                string
-	dockerfile             string
-	targets                flagutil.Strings
-	kanikoArgs             flagutil.Strings
-	registry               string
-	cacheRegistry          string
-	kanikoImage            string
-	addVersionTag          bool
-	addVersionSHATag       bool
-	addDateSHATag          bool
-	addFixedTags           flagutil.Strings
-	injectEffectiveVersion bool
+	dockerConfigSecret      string
+	org                     string
+	repo                    string
+	headSHA                 string
+	context                 string
+	dockerfile              string
+	targets                 flagutil.Strings
+	kanikoArgs              flagutil.Strings
+	buildVariant            string
+	registry                string
+	cacheRegistry           string
+	kanikoImage             string
+	addVersionTag           bool
+	addVersionSHATag        bool
+	addDateSHATag           bool
+	addDateSHATagWithPrefix flagutil.Strings
+	addDateSHATagWithSuffix flagutil.Strings
+	addFixedTags            flagutil.Strings
+	injectEffectiveVersion  bool
 
 	logLevel string
 }
@@ -59,6 +63,9 @@ type options struct {
 func (o *options) Validate() error {
 	if o.dockerfile == "" {
 		return fmt.Errorf("\"dockerfile\" parameter must not be empty")
+	}
+	if o.buildVariant != "" && o.context == "" {
+		return fmt.Errorf("specify a \"context\" when setting \"build-variant\" parameter")
 	}
 	if o.dockerConfigSecret == "" {
 		return fmt.Errorf("\"docker-config-secret\" parameter must not be empty")
@@ -69,8 +76,11 @@ func (o *options) Validate() error {
 	if o.registry == "" {
 		return fmt.Errorf("\"registry\" parameter must not be empty")
 	}
-	if !o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && len(o.addFixedTags.Strings()) == 0 {
+	if (!o.addVersionTag && !o.addVersionSHATag && !o.addDateSHATag && len(o.addFixedTags.Strings()) == 0) && o.context == "" {
 		return fmt.Errorf("please choose at least one tagging scheme")
+	}
+	if (o.addVersionTag || o.addVersionSHATag || o.addDateSHATag || len(o.addFixedTags.Strings()) > 0) && o.context != "" {
+		return fmt.Errorf("\"add-*\" and \"context\" parameters are mutually exclusive")
 	}
 	if o.headSHA == "" {
 		return errors.New("Head SHA must not be empty")
@@ -96,12 +106,16 @@ func gatherOptions() options {
 	fs.StringVar(&o.dockerfile, "dockerfile", "Dockerfile", "path to dockerfile to be built")
 	fs.Var(&o.targets, "target", "target of dockerfile to be built")
 	fs.Var(&o.kanikoArgs, "kaniko-arg", "kaniko-arg for the build")
-	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are being pushed. Cache is disabled for empty value")
-	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are being pushed")
+	fs.StringVar(&o.context, "context", "", "(optional) context in github repository which includes the build definition (dockerfile, variants)")
+	fs.StringVar(&o.buildVariant, "build-variant", "", "variant of a context which should be built. Builds all variants if empty")
+	fs.StringVar(&o.registry, "registry", "", "container registry where build artifacts are being pushed")
+	fs.StringVar(&o.cacheRegistry, "cache-registry", "", "container registry where cache artifacts are being pushed. Cache is disabled for empty value")
 	fs.StringVar(&o.kanikoImage, "kaniko-image", "gcr.io/kaniko-project/executor:v1.8.1", "kaniko image for kaniko build")
 	fs.BoolVar(&o.addVersionTag, "add-version-tag", false, "Add label from VERSION file of git root directory to image tags")
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
 	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using vYYYYMMDD-<rev short> scheme which is compatible to autobumper")
+	fs.Var(&o.addDateSHATagWithPrefix, "add-date-sha-tag-with-prefix", "Add a <prefix>-vYYYYMMDD-<rev short> tag which is compatible to autobumper")
+	fs.Var(&o.addDateSHATagWithSuffix, "add-date-sha-tag-with-suffix", "Add a vYYYYMMDD-<rev short>-<suffix> tag which is compatible to autobumper")
 	fs.Var(&o.addFixedTags, "add-fixed-tag", "Add a fixed tag to images")
 	fs.BoolVar(&o.injectEffectiveVersion, "inject-effective-version", false, "Inject EFFECTIVE_VERSION build-arg")
 
