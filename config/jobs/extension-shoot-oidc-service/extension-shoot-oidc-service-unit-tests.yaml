@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for extension-shoot-oidc-service developments in pull requests
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:1.17-v20220425-f5c338c
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220426-56901c3
         command:
         - make
         args:
@@ -38,7 +38,7 @@ periodics:
     description: Periodically runs unit tests for extension-shoot-oidc-service master branch
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:1.17-v20220425-f5c338c
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220426-56901c3
       command:
       - make
       args:
