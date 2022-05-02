@@ -114,7 +114,7 @@ func gatherOptions() options {
 	fs.BoolVar(&o.addVersionTag, "add-version-tag", false, "Add label from VERSION file of git root directory to image tags")
 	fs.BoolVar(&o.addVersionSHATag, "add-version-sha-tag", false, "Add label from VERSION file of git root directory plus SHA from git HEAD to image tags")
 	fs.BoolVar(&o.addDateSHATag, "add-date-sha-tag", false, "Using vYYYYMMDD-<rev short> scheme which is compatible to autobumper")
-	fs.Var(&o.addDateSHATagWithPrefix, "add-date-sha-tag-with-prefix", "Add a <prefix>-vYYYYMMDD-<rev short> tag which is compatible to autobumper")
+	fs.Var(&o.addDateSHATagWithPrefix, "add-date-sha-tag-with-prefix", "Add a <prefix>-vYYYYMMDD-<rev short> tag")
 	fs.Var(&o.addDateSHATagWithSuffix, "add-date-sha-tag-with-suffix", "Add a vYYYYMMDD-<rev short>-<suffix> tag which is compatible to autobumper")
 	fs.Var(&o.addFixedTags, "add-fixed-tag", "Add a fixed tag to images")
 	fs.BoolVar(&o.injectEffectiveVersion, "inject-effective-version", false, "Inject EFFECTIVE_VERSION build-arg")

@@ -618,7 +618,9 @@ func (r *buildReconciler) defineDestinationsForVariant(target, variant string) (
 	if err := r.validateHeadSHA(); err != nil {
 		return destinations, err
 	}
-	tag := fmt.Sprintf("%s-v%s-%s", variant, time.Now().Format("20060102"), r.options.headSHA[:7])
+	// tag format with build variant as suffix (v<data>-<headSHA>-<suffix>) is compatible to autobumper
+	// https://github.com/kubernetes/test-infra/blob/884bcd554bcdb87c5d9b28401a37ed6cf086d360/experiment/image-bumper/bumper/bumper.go#L176-L178
+	tag := fmt.Sprintf("v%s-%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7], variant)
 	destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 	destinations = append(destinations, destination)
 
