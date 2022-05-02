@@ -618,7 +618,7 @@ func (r *buildReconciler) defineDestinationsForVariant(target, variant string) (
 	if err := r.validateHeadSHA(); err != nil {
 		return destinations, err
 	}
-	tag := fmt.Sprintf("%s-v%s-%s", variant, time.Now().Format("20060102"), r.options.headSHA[:7])
+	tag := fmt.Sprintf("v%s-%s-%s", time.Now().Format("20060102"), r.options.headSHA[:7], variant)
 	destination := fmt.Sprintf("--destination=%s/%s:%s", r.options.registry, target, tag)
 	destinations = append(destinations, destination)
 
