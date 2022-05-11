@@ -61,11 +61,11 @@ deck:
           highlight_regexes:
           - timed out
           - "ERROR:"
-          - (FAIL|Failure \[)\b
+          - (FAIL|Failure \[|FAILED)\b
           - panic\b
           - ^E\d{4} \d\d:\d\d:\d\d\.\d\d\d]
-          # This highlights the start of bazel tests/runs to skip go importing noise.
-          - "^INFO: Analyzed \\d+ targets"
+          # This highlights the start of tests to skip noise in build log
+          - "^> (Test|Test Cover|Integration Tests|E2E Tests)$"
       required_files:
         - ^.*build-log\.txt$
     - lens:
