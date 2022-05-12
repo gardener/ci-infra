@@ -66,7 +66,7 @@ deck:
           - level=fatal\b
           - "fatal:"
           - ^E\d{4} \d\d:\d\d:\d\d\.\d\d\d]
-          - make:.*Error 2
+          - make:.*Error\b
           # This highlights the start of tests to skip noise in build log
           - "^> (Test|Test Cover|Integration Tests|E2E Tests)$"
       required_files:
