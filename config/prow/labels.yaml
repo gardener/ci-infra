@@ -729,6 +729,103 @@ repos:
         prowPlugin: cla-assistant
         isExternalPlugin: true
         addedBy: prow
+      # cleanup old labels added by gardener-robot
+      - name: effort/1d
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/1m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/1w
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/1y
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/2d
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/2m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/2w
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/3m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/6m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/9m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: exp/beginner
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: exp/expert
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: exp/intermediate
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: kind/consulting
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: lifecycle/icebox
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: merge/keep-commits
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: merge/squash
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/changes
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/cherry-pick
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/documentation
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/help
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/lgtm
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/ok-to-test
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/rebase
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/release-notes
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/review
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/second-opinion
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/tests
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: priority/blocker
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: priority/critical
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: reviewed/do-not-merge
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: reviewed/lgtm
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: reviewed/ok-to-test
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/accepted
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/author-action
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/blocked
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/closed
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/external-action
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/in-delivery
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/in-progress
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/new
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/on-hold
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/overdue
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/under-investigation
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/consulting
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/invalid
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/upstream
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/wont-fix
+        deleteAfter: 2022-05-16T00:00:00Z
   gardener/gardener:
     labels:
       # area
@@ -1476,6 +1573,103 @@ repos:
         prowPlugin: cla-assistant
         isExternalPlugin: true
         addedBy: prow
+      # cleanup old labels added by gardener-robot
+      - name: effort/1d
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/1m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/1w
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/1y
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/2d
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/2m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/2w
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/3m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/6m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: effort/9m
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: exp/beginner
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: exp/expert
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: exp/intermediate
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: kind/consulting
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: lifecycle/icebox
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: merge/keep-commits
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: merge/squash
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/changes
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/cherry-pick
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/documentation
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/help
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/lgtm
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/ok-to-test
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/rebase
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/release-notes
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/review
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/second-opinion
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: needs/tests
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: priority/blocker
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: priority/critical
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: reviewed/do-not-merge
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: reviewed/lgtm
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: reviewed/ok-to-test
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/accepted
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/author-action
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/blocked
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/closed
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/external-action
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/in-delivery
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/in-progress
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/new
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/on-hold
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/overdue
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: status/under-investigation
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/consulting
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/invalid
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/upstream
+        deleteAfter: 2022-05-16T00:00:00Z
+      - name: triage/wont-fix
+        deleteAfter: 2022-05-16T00:00:00Z
 gardener/gardener-extension-shoot-oidc-service:
   labels:
     - color: b60205
