@@ -1426,6 +1426,31 @@ repos:
         name: tide/merge-blocker
         target: issues
         addedBy: humans
+      - color: 66b5c1
+        description: Affects Garden clusters
+        name: topology/garden
+        target: both
+        addedBy: humans
+      - color: 66b5c1
+        description: Affects Soil clusters
+        name: topology/soil
+        target: both
+        addedBy: humans
+      - color: 66b5c1
+        description: Affects Seed clusters
+        name: topology/seed
+        target: both
+        addedBy: humans
+      - color: 66b5c1
+        description: Affects Shoot clusters
+        name: topology/shoot
+        target: both
+        addedBy: humans
+      - color: 66b5c1
+        description: Affects Plant clusters
+        name: topology/plant
+        target: both
+        addedBy: humans
       - color: 0ffa16
         description: Indicates a PR is trusted, used by tide for auto-merging PRs.
         name: skip-review
