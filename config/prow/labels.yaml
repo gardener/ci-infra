@@ -28,12 +28,14 @@ repos:
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name: area/certification
+      - name: area/compliance
         color: 0052cc
-        description: Certification related
+        description: Compliance related
         target: both
         prowPlugin: label
         addedBy: anyone
+        previously:
+        - name: 'area/certification'
       - name: area/control-plane
         color: 0052cc
         description: Control plane related
@@ -748,12 +750,14 @@ repos:
         target: both
         prowPlugin: label
         addedBy: anyone
-      - name: area/certification
+      - name: area/compliance
         color: 0052cc
-        description: Certification related
+        description: Compliance related
         target: both
         prowPlugin: label
         addedBy: anyone
+        previously:
+        - name: 'area/certification'
       - name: area/control-plane
         color: 0052cc
         description: Control plane related
