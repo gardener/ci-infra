@@ -10,7 +10,7 @@ presubmits:
     spec:
       containers:
       - name: test
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220502-286e1eb-1.18
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.18
         command:
         - make
         args:
