@@ -1,5 +1,5 @@
 # Image based on golang for gardener unit and integration tests
-ARG GOLANG_VERSION=1.17.9
+ARG GOLANG_VERSION
 
 FROM golang:${GOLANG_VERSION}-bullseye AS golang-test
 # install gardener unit/integration test related dependencies
