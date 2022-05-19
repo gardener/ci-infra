@@ -1,11 +1,11 @@
 presubmits:
   gardener/gardener:
-  - name: pull-gardener-unit-release
+  - name: pull-gardener-unit-release-previous-golang
     cluster: gardener-prow-build
     always_run: true
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
-    - release-v\d+.(4[7-9]|[5-9][0-9])
+    - release-v\d+.([1-3][0-9]|4[0-6])
     decorate: true
     decoration_config:
       timeout: 40m
@@ -16,7 +16,7 @@ presubmits:
       containers:
       # Run all tests sequentially in one container or as separete prow jobs.
       # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.18
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.17
         command:
         - make
         args:
@@ -34,11 +34,11 @@ presubmits:
             memory: 8Gi
 postsubmits:
   gardener/gardener:
-  - name: post-gardener-unit-release
+  - name: post-gardener-unit-release-previous-golang
     cluster: gardener-prow-build
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
-    - release-v\d+.(4[7-9]|[5-9][0-9])
+    - release-v\d+.([1-3][0-9]|4[0-6])
     decorate: true
     decoration_config:
       timeout: 40m
@@ -49,7 +49,7 @@ postsubmits:
       containers:
       # Run all tests sequentially in one container or as separete prow jobs.
       # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.18
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.17
         command:
         - make
         args:
