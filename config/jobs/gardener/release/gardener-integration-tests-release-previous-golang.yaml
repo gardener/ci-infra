@@ -5,7 +5,7 @@ presubmits:
     always_run: true
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
-    - release-v\d+.([1-3][0-9]|4[0-6])
+    - release-v1.([1-3][0-9]|4[0-6])
     decorate: true
     decoration_config:
       timeout: 20m
@@ -32,7 +32,7 @@ postsubmits:
     cluster: gardener-prow-build
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
-    - release-v\d+.([1-3][0-9]|4[0-6])
+    - release-v1.([1-3][0-9]|4[0-6])
     decorate: true
     decoration_config:
       timeout: 20m
