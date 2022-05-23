@@ -12,7 +12,7 @@ presubmits:
       containers:
       - image: "gcr.io/k8s-prow/transfigure:v20220519-c750e0df24"
         command:
-        - "/transfigure.sh"
+        - "/ko-app/transfigure"
         args:
         - "test"
         - "config/prow/config.yaml"
@@ -38,7 +38,7 @@ postsubmits:
       containers:
       - image: "gcr.io/k8s-prow/transfigure:v20220519-c750e0df24"
         command:
-        - "/transfigure.sh"
+        - "/ko-app/transfigure"
         args:
         - "/etc/github-token/token"
         - "config/prow/config.yaml"
