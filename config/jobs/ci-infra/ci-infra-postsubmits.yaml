@@ -23,6 +23,7 @@ postsubmits:
           *<{{.Status.URL}}|Spyglass> | <https://prow.gardener.cloud/?job={{.Spec.Job}}|Deck>*
     annotations:
       description: Deploys the configured version of prow by running config/prow/deploy.sh
+      testgrid-create-test-group: "false"
     spec:
       serviceAccountName: deployer
       containers:

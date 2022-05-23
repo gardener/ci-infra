@@ -1,0 +1,60 @@
+presubmits: 
+  gardener/ci-infra:
+  - name: pull-ci-infra-validate-testgrid-config
+    cluster: gardener-prow-build
+    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/prow\/gardener-testgrid.yaml)$'
+    branches:
+    - ^master$
+    annotations:
+      testgrid-create-test-group: "false"
+    decorate: true
+    spec:
+      containers:
+      - image: "gcr.io/k8s-prow/transfigure:v20220519-c750e0df24"
+        command:
+        - "/transfigure.sh"
+        args:
+        - "test"
+        - "config/prow/config.yaml"
+        - "config/jobs"
+        - "config/prow/gardener-testgrid.yaml"
+        - "gardener"
+        - "kubernetes-test-infra"
+        resources:
+          requests:
+            memory: 1.5Gi
+            cpu: 1
+postsubmits:
+  gardener/ci-infra:
+  - name: post-ci-infra-update-testgrid-config
+    cluster: gardener-prow-trusted
+    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/prow\/gardener-testgrid.yaml)$'
+    branches:
+    - ^master$
+    annotations:
+      testgrid-create-test-group: "false"
+    decorate: true
+    spec:
+      containers:
+      - image: "gcr.io/k8s-prow/transfigure:v20220519-c750e0df24"
+        command:
+        - "/transfigure.sh"
+        args:
+        - "/etc/github-token/token"
+        - "config/prow/config.yaml"
+        - "config/jobs"
+        - "config/prow/gardener-testgrid.yaml"
+        - "gardener"
+        - "kubernetes-test-infra"
+        resources:
+          requests:
+            memory: 1.5Gi
+            cpu: 1
+        volumeMounts:
+        - name: github-token
+          mountPath: /etc/github-token
+          readOnly: true
+      volumes:
+      - name: github-token
+        secret:
+          secretName: github-token

@@ -14,6 +14,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs label_sync to synchronize GitHub repo labels with the label config defined in config/prow/labels.yaml
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/label_sync:v20220519-c750e0df24
@@ -50,6 +51,7 @@ periodics:
     base_ref: master
   annotations:
     description: Runs Prow's branchprotector to apply configured GitHub status context requirements and merge policies
+    testgrid-create-test-group: "false"
   labels:
     app: branchprotector
   spec:
@@ -86,6 +88,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs autobumper to create/update a PR that bumps prow images to the latest published version
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20220519-c750e0df24
@@ -116,6 +119,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs autobumper to create/update and auto-merge a PR that bumps prow images to the latest published version
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20220519-c750e0df24
@@ -146,6 +150,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs autobumper to create/update a PR that bumps prowjob images to latest published version
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20220519-c750e0df24
@@ -176,6 +181,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs autobumper to create/update and auto-merge a PR that bumps prowjob images to latest published version
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/generic-autobumper:v20220519-c750e0df24
@@ -209,6 +215,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/checkconfig:v20220519-c750e0df24
@@ -240,6 +247,7 @@ periodics:
       channel: "gardener-prow-alerts"
   annotations:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
+    testgrid-create-test-group: "false"
   spec:
     containers:
     - image: gcr.io/k8s-prow/checkconfig:v20220519-c750e0df24
@@ -270,7 +278,9 @@ periodics:
       channel: "gardener-prow-alerts"
   decorate: true
   annotations:
-    description: Runs go tests for prow developments in ci-infra 
+    description: Runs go tests for prow developments in ci-infra
+    testgrid-dashboards: gardener-ci-infra
+    testgrid-days-of-results: "60"
   spec:
     containers:
     - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.17
