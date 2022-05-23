@@ -36,7 +36,7 @@ periodics:
     grace_period: 10m
   annotations:
     description: Periodically runs unit tests for extension-shoot-oidc-service master branch
-    testgrid-dashboards: gardener-gardener-extension-shoot-oidc-service
+    testgrid-dashboards: gardener-extension-shoot-oidc-service
     testgrid-days-of-results: "60"
   spec:
     containers:

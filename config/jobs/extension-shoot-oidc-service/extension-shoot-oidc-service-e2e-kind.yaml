@@ -60,7 +60,7 @@ periodics:
     preset-kind-volume-mounts: "true"
   annotations:
     description: Runs end-to-end tests for gardener-extension-shoot-oidc-service developments periodically
-    testgrid-dashboards: gardener-gardener-extension-shoot-oidc-service
+    testgrid-dashboards: gardener-extension-shoot-oidc-service
     testgrid-days-of-results: "60"
   spec:
     containers:
