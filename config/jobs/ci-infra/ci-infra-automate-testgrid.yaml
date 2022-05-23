@@ -10,7 +10,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: "gcr.io/k8s-prow/transfigure:v20220519-c750e0df24"
+      - image: "gcr.io/k8s-prow/transfigure:v20220523-6e12e42c76"
         command:
         - "/ko-app/transfigure"
         args:
@@ -36,7 +36,7 @@ postsubmits:
     decorate: true
     spec:
       containers:
-      - image: "gcr.io/k8s-prow/transfigure:v20220519-c750e0df24"
+      - image: "gcr.io/k8s-prow/transfigure:v20220523-6e12e42c76"
         command:
         - "/ko-app/transfigure"
         args:
