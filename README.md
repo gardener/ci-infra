@@ -12,6 +12,34 @@ Gardener uses a [`prow`](https://github.com/kubernetes/test-infra/blob/master/pr
 Everyone can participate in a self-service PR-based workflow, where changes are automatically deployed after they have been reviewed and merged.
 All job configs are located in [`config/jobs`](config/jobs).
 
+### TestGrid
+The results of prow jobs can be visualized in TestGrid in dashboards at [testgrid.k8s.io/gardener](https://testgrid.k8s.io/gardener). We don't run our own TestGrid installation, but include our dashboards into the TestGrid installation of Kubernetes.
+
+We configured dashboards for each of our repositories where we run tests with prow. You find them at [config/prow/gardener-testgrid.yaml](./config/prow/gardener-testgrid.yaml).
+
+When the desired dashboard is defined, you can add your prow job to a dashboard annotating them like in the example below.
+
+```yaml
+annotations:
+  testgrid-dashboards: dashboard-name      # [Required] A dashboard already defined in gardener-testgrid.yaml.
+  testgrid-tab-name: some-short-name       # [Optional] A shorter name for the tab. If omitted, just uses the job name.
+  testgrid-alert-email: me@me.com          # [Optional] An alert email that will be applied to the tab created in the first dashboard specified in testgrid-dashboards.
+  description: Words about your job.       # [Optional] A description of your job. If omitted, only the job name is used.
+  testgrid-num-columns-recent: "10"        # [Optional] The number of runs in a row that can be omitted before the run is considered stale. The default value is 10.
+  testgrid-num-failures-to-alert: "3"      # [Optional] The number of continuous failures before sending an email. The default value is 3.
+  testgrid-days-of-results: "15"           # [Optional] The number of days for which the results are visible. The default value is 15.
+  testgrid-alert-stale-results-hours: "12" # [Optional] The number of hours that pass with no results after which the email is sent. The default value is 12.
+```
+
+For `postsubmit` and `periodic` prow jobs there will be a test-group created automatically. If you don't want to add them to TestGrid please use this annotation to disable creation of a test-group. For `presubmit` prow jobs no test-group will be created unless you annotate them as in the previous example.
+```yaml
+annotations:
+  testgrid-create-test-group: "false"
+```
+
+When your configuration is finalized and merged into `ci-infra` repository `gardener-ci-robot` automatically creates a PR for `kubernetes/test-infra` repository to update our configuration there. Once this PR is merged the new configuration is active.
+
+
 ## How to setup
 
 1. Create the prow cluster and prow workload cluster.
