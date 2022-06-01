@@ -37,7 +37,7 @@ annotations:
   testgrid-create-test-group: "false"
 ```
 
-When your configuration is finalized and merged into `ci-infra` repository `gardener-ci-robot` automatically creates a PR for `kubernetes/test-infra` repository to update our configuration there. Once this PR is merged the new configuration is active.
+When your configuration is finalized and merged into `ci-infra` repository `gardener-ci-robot` automatically creates a PR for `kubernetes/test-infra` repository to update [our configuration there](https://github.com/kubernetes/test-infra/tree/master/config/testgrids/gardener). Once this PR is merged the new configuration is active.
 
 
 ## How to setup
