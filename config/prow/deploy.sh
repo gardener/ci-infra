@@ -76,7 +76,7 @@ echo "$(color-green done)"
 
 echo "$(color-step "Deploying prow components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/build"
+kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/base"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-trusted cluster...")"

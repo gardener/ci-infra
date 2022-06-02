@@ -1,23 +1,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+bases:
+- ./base
+
 resources:
 - prowjob_customresourcedefinition.yaml
 - prow_namespace.yaml
-- test-pods_namespace.yaml
 - cherrypicker_deployment.yaml
 - cherrypicker_service.yaml
 - builder_serviceaccount.yaml
 - cla_assistant_deployment.yaml
 - cla_assistant_service.yaml
-- cpu-limit-range_limitrange.yaml
 - crier_deployment.yaml
 - crier_rbac.yaml
 - crier_service.yaml
 - deck_deployment.yaml
 - deck_rbac.yaml
 - deck_service.yaml
-- gce-ssd_storageclass.yaml
 - gcsweb_namespace.yaml
 - gcsweb_deployment.yaml
 - gcsweb_service.yaml
@@ -32,7 +32,6 @@ resources:
 - horologium_rbac.yaml
 - horologium_service.yaml
 - prow_ingress.yaml
-- mem-limit-range_limitrange.yaml
 - needs-rebase_deployment.yaml
 - needs-rebase_service.yaml
 - prow_controller_manager_deployment.yaml
