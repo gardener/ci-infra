@@ -15,7 +15,7 @@
 
 REGISTRY          := $(shell cat .REGISTRY 2>/dev/null)
 PUSH_LATEST_TAG   := true
-GOLANG_VERSION    := 1.17.10
+GOLANG_VERSION    := 1.17.11
 VERSION           := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
 
 IMG_GOLANG_TEST := golang-test
