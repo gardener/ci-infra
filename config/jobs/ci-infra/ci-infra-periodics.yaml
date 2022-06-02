@@ -273,7 +273,7 @@ periodics:
     description: Runs go tests for prow developments in ci-infra 
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220517-f80c2bf-1.17
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220602-5b23dfb-1.17
       command:
       - make
       args:
