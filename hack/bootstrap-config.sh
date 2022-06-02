@@ -37,10 +37,6 @@ color-missing() { # Yellow
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-bootstrap_trusted_components=(
-"trusted_serviceaccounts.yaml"
-)
-
 if ! [ -x "$(command -v "kubectl")" ]; then
   echo "ERROR: kubectl is not present. Exiting..."
   exit 1
@@ -72,9 +68,7 @@ echo " $(color-green done)"
 
 echo "$(color-step "Deploying bootstrap components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-for c in "${bootstrap_trusted_components[@]}"; do
-  kubectl apply --server-side=true -f "$SCRIPT_DIR/../config/prow/cluster/bootstrap-trusted/$c"
-done
+kubectl apply --server-side=true -k "$SCRIPT_DIR/../config/prow/cluster/bootstrap-trusted"
 echo " $(color-green done)"
 
 echo "$(color-step "Bootstrapping prow to gardener-prow-trusted cluster...")"
