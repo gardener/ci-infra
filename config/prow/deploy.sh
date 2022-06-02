@@ -141,7 +141,7 @@ echo "$(color-green done)"
 
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/ingress-nginx"
+kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/ingress-nginx"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-trusted cluster...")"
@@ -151,7 +151,7 @@ echo "$(color-green done)"
 
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
-kubectl apply --server-side=true -f "$SCRIPT_DIR/cluster/ingress-nginx"
+kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/ingress-nginx"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-build cluster...")"
