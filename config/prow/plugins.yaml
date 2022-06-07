@@ -10,11 +10,6 @@ triggers:
 approve:
 - repos:
   - gardener/ci-infra
-  lgtm_acts_as_approve: true
-  require_self_approval: true
-  commandHelpLink: "https://prow.gardener.cloud/command-help"
-  pr_process_link: "https://gardener.cloud/docs/contribute/#pull-request-checklist"
-- repos:
   - gardener/gardener
   lgtm_acts_as_approve: false
   require_self_approval: true
