@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+- ./base
+
+resources:
+- prowjob_customresourcedefinition.yaml
+- prow_namespace.yaml
+- cherrypicker_deployment.yaml
+- cherrypicker_service.yaml
+- builder_serviceaccount.yaml
+- cla_assistant_deployment.yaml
+- cla_assistant_service.yaml
+- crier_deployment.yaml
+- crier_rbac.yaml
+- crier_service.yaml
+- deck_deployment.yaml
+- deck_rbac.yaml
+- deck_service.yaml
+- gcsweb_namespace.yaml
+- gcsweb_deployment.yaml
+- gcsweb_service.yaml
+- gcsweb_ingress.yaml
+- ghproxy_deployment.yaml
+- ghproxy_pvc.yaml
+- ghproxy_service.yaml
+- hook_deployment.yaml
+- hook_rbac.yaml
+- hook_service.yaml
+- horologium_deployment.yaml
+- horologium_rbac.yaml
+- horologium_service.yaml
+- prow_ingress.yaml
+- needs-rebase_deployment.yaml
+- needs-rebase_service.yaml
+- prow_controller_manager_deployment.yaml
+- prow_controller_manager_rbac.yaml
+- prow_controller_manager_service.yaml
+- sinker_deployment.yaml
+- sinker_rbac.yaml
+- sinker_service.yaml
+- statusreconciler_deployment.yaml
+- statusreconciler_rbac.yaml
+- tide_deployment.yaml
+- tide_rbac.yaml
+- tide_service.yaml
