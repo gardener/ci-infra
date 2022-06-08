@@ -41,7 +41,7 @@ defaultBackend:
   enabled: true
   resources:
     limits:
-      cpu: 10m
+      cpu: 20m
       memory: 20Mi
     requests:
       cpu: 10m
