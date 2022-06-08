@@ -30,7 +30,7 @@ spec:
       enableBasicAuthentication: false
     kubeProxy:
       mode: IPTables
-    version: 1.21.9
+    version: 1.22.7
     verticalPodAutoscaler:
       enabled: true
   maintenance:
@@ -64,7 +64,7 @@ spec:
           type: n2d-standard-16
           image:
             name: gardenlinux
-            version: 576.3.0
+            version: 576.8.0
         maximum: 10
         minimum: 1
         maxSurge: 1
