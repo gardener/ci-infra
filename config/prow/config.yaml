@@ -69,6 +69,8 @@ deck:
           - make:.*Error\b
           # This highlights the start of tests to skip noise in build log
           - "^> (Test|Test Cover|Integration Tests|E2E Tests)$"
+          # This is the standard ginkgo error in e2e tests
+          - "Expected success, but got an error"
       required_files:
         - ^.*build-log\.txt$
     - lens:
