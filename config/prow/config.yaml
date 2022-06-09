@@ -59,7 +59,7 @@ deck:
         name: buildlog
         config:
           highlight_regexes:
-          - timed out
+          - "[tT]imed out"
           - "ERROR:"
           - (FAIL|Failure \[|FAILED)\b
           - panic\b
