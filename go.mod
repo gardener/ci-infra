@@ -1,6 +1,6 @@
 module github.com/gardener/ci-infra
 
-go 1.17
+go 1.18
 
 // Pin all k8s.io staging repositories to kubernetes v0.18.6 to make module import work
 // as in https://github.com/kubernetes/test-infra/blob/master/go.mod
