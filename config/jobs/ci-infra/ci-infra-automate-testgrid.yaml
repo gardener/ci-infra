@@ -50,7 +50,6 @@ postsubmits:
         - --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs
         - --update-description
         - --output=gs://gardener-prow/testgrid/config
-        - --world-readable=true
         - --oneshot
         resources:
           requests:
