@@ -997,11 +997,13 @@ k8s.io/test-infra/prow/config/secret
 k8s.io/test-infra/prow/crier/reporters/criercommonlib
 k8s.io/test-infra/prow/crier/reporters/github
 k8s.io/test-infra/prow/entrypoint
+k8s.io/test-infra/prow/external-plugins/cherrypicker/lib
 k8s.io/test-infra/prow/flagutil
 k8s.io/test-infra/prow/flagutil/plugins
 k8s.io/test-infra/prow/gcsupload
 k8s.io/test-infra/prow/gerrit/client
 k8s.io/test-infra/prow/git
+k8s.io/test-infra/prow/git/localgit
 k8s.io/test-infra/prow/git/types
 k8s.io/test-infra/prow/git/v2
 k8s.io/test-infra/prow/github
