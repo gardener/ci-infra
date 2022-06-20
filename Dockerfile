@@ -27,6 +27,12 @@ USER 65532
 # Executable containers
 # ----------------------
 
+FROM ssl_runner AS cherrypicker
+LABEL app=cherrypicker
+WORKDIR /
+COPY --from=builder /build/cherrypicker /cherrypicker
+ENTRYPOINT [ "/cherrypicker" ]
+
 FROM ssl_runner AS cla-assistant
 LABEL app=cla-assistant
 WORKDIR /
