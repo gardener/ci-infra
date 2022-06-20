@@ -1,60 +1,56 @@
-presubmits: 
+presubmits:
   gardener/ci-infra:
-  - name: pull-ci-infra-validate-testgrid-config
+  - name: pull-ci-infra-check-testgrid-config
     cluster: gardener-prow-build
-    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/prow\/gardener-testgrid.yaml)$'
     branches:
     - ^master$
+    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/testgrids\/.*.yaml)$'
+    decorate: true
     annotations:
       testgrid-create-test-group: "false"
-    decorate: true
     spec:
       containers:
-      - image: "gcr.io/k8s-prow/transfigure:v20220523-6e12e42c76"
+      - image: gcr.io/k8s-prow/configurator:v20220618-82a6661467
         command:
-        - "/ko-app/transfigure"
+        - /ko-app/configurator
         args:
-        - "test"
-        - "config/prow/config.yaml"
-        - "config/jobs"
-        - "config/prow/gardener-testgrid.yaml"
-        - "gardener"
-        - "kubernetes-test-infra"
+        - --yaml=config/testgrids/config.yaml
+        - --default=config/testgrids/default.yaml
+        - --prow-config=config/prow/config.yaml
+        - --prow-job-config=config/jobs
+        - --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs
+        - --update-description
+        - --validate-config-file
+        - --oneshot
         resources:
           requests:
-            memory: 1.5Gi
-            cpu: 1
+            memory: "1Gi"
 postsubmits:
   gardener/ci-infra:
-  - name: post-ci-infra-update-testgrid-config
-    cluster: gardener-prow-trusted
-    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/prow\/gardener-testgrid.yaml)$'
+  - name: post-ci-infra-upload-testgrid-config
+    cluster: gardener-prow-build
     branches:
     - ^master$
+    max_concurrency: 1
+    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/testgrids\/.*.yaml)$'
+    decorate: true
     annotations:
       testgrid-create-test-group: "false"
-    decorate: true
     spec:
+      serviceAccountName: gardener-prow-storage
       containers:
-      - image: "gcr.io/k8s-prow/transfigure:v20220523-6e12e42c76"
+      - image: gcr.io/k8s-prow/configurator:v20220618-82a6661467
         command:
-        - "/ko-app/transfigure"
+        - /ko-app/configurator
         args:
-        - "/etc/github-token/token"
-        - "config/prow/config.yaml"
-        - "config/jobs"
-        - "config/prow/gardener-testgrid.yaml"
-        - "gardener"
-        - "kubernetes-test-infra"
+        - --yaml=config/testgrids/config.yaml
+        - --default=config/testgrids/default.yaml
+        - --prow-config=config/prow/config.yaml
+        - --prow-job-config=config/jobs
+        - --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs
+        - --update-description
+        - --output=gs://gardener-prow/testgrid/config
+        - --oneshot
         resources:
           requests:
-            memory: 1.5Gi
-            cpu: 1
-        volumeMounts:
-        - name: github-token
-          mountPath: /etc/github-token
-          readOnly: true
-      volumes:
-      - name: github-token
-        secret:
-          secretName: github-token
+            memory: "1Gi"

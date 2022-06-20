@@ -1,4 +1,0 @@
-dashboards:
-- name: gardener-gardener
-- name: gardener-ci-infra
-- name: gardener-extension-shoot-oidc-service

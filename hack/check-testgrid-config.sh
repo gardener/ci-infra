@@ -20,10 +20,12 @@ set -o pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  gcr.io/k8s-prow/transfigure:v20220523-6e12e42c76 \
-  test \
-  config/prow/config.yaml \
-  config/jobs \
-  config/prow/gardener-testgrid.yaml \
-  gardener \
-  kubernetes-test-infra
+  gcr.io/k8s-prow/configurator:v20220618-82a6661467 \
+  --yaml=config/testgrids/config.yaml \
+  --default=config/testgrids/default.yaml \
+  --prow-config=config/prow/config.yaml \
+  --prow-job-config=config/jobs \
+  --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs \
+  --update-description \
+  --validate-config-file \
+  --oneshot

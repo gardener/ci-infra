@@ -15,7 +15,7 @@ All job configs are located in [`config/jobs`](config/jobs).
 ### TestGrid
 The results of prow jobs can be visualized in TestGrid in dashboards at [testgrid.k8s.io/gardener](https://testgrid.k8s.io/gardener). We don't run our own TestGrid installation, but include our dashboards into the TestGrid installation of Kubernetes.
 
-We configured dashboards for each of our repositories where we run tests with prow. You find them at [config/prow/gardener-testgrid.yaml](./config/prow/gardener-testgrid.yaml).
+We configured dashboards for each of our repositories where we run tests with prow. You find them at [config/testgrids/config.yaml](./config/testgrids/config.yaml).
 
 When the desired dashboard is defined, you can add your prow job to a dashboard annotating them like in the example below.
 
@@ -37,7 +37,7 @@ annotations:
   testgrid-create-test-group: "false"
 ```
 
-When your configuration is finalized and merged into `ci-infra` repository `gardener-ci-robot` automatically creates a PR for `kubernetes/test-infra` repository to update [our configuration there](https://github.com/kubernetes/test-infra/tree/master/config/testgrids/gardener). Once this PR is merged the new configuration is active.
+You can test your TestGrid configuration locally with the `./hack/check-testgrid-config.sh`. Please open a PR for `ci-infra` repository for your new configuration. When it is merged the new configuration will be pushed to `gs://gardener-prow/testgrid/config` automatically and your jobs will become visible at [testgrid.k8s.io/gardener](https://testgrid.k8s.io/gardener) soon.
 
 
 ## How to setup
