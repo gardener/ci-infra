@@ -37,12 +37,12 @@ postsubmits:
     annotations:
       testgrid-create-test-group: "false"
     spec:
-      serviceAccountName: gardener-prow-storage
       containers:
       - image: gcr.io/k8s-prow/configurator:v20220618-82a6661467
         command:
         - /ko-app/configurator
         args:
+        - --gcp-service-account=/secrets/gcs/gcs-credentials
         - --yaml=config/testgrids/config.yaml
         - --default=config/testgrids/default.yaml
         - --prow-config=config/prow/config.yaml
@@ -50,6 +50,7 @@ postsubmits:
         - --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs
         - --update-description
         - --output=gs://gardener-prow/testgrid/config
+        - --world-readable=true
         - --oneshot
         resources:
           requests:
