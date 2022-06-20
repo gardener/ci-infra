@@ -42,7 +42,7 @@ postsubmits:
         command:
         - /ko-app/configurator
         args:
-        - --gcp-service-account=/secrets/gcs/gcs-credentials/service-account.json
+        - --gcp-service-account=/etc/gcp-service-account/service-account.json
         - --yaml=config/testgrids/config.yaml
         - --default=config/testgrids/default.yaml
         - --prow-config=config/prow/config.yaml
@@ -55,3 +55,11 @@ postsubmits:
         resources:
           requests:
             memory: "1Gi"
+        volumeMounts:
+        - name: gcp-service-account
+          mountPath: /etc/gcp-service-account
+          readOnly: true
+      volumes:
+      - name: gcp-service-account
+        secret:
+          secretName: gardener-prow-storage
