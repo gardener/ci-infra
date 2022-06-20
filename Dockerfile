@@ -23,11 +23,18 @@ RUN apk add --no-cache ca-certificates
 RUN addgroup -g 65532 -S nonroot && adduser -u 65532 -S nonroot -G nonroot
 USER 65532
 
+FROM alpine:3.15.4 AS ssl_git_runner
+# Install SSL ca certificates
+RUN apk add --no-cache ca-certificates git
+# Create nonroot user and group to be used in executable containers
+RUN addgroup -g 65532 -S nonroot && adduser -u 65532 -S nonroot -G nonroot
+USER 65532
+
 # ----------------------
 # Executable containers
 # ----------------------
 
-FROM ssl_runner AS cherrypicker
+FROM ssl_git_runner AS cherrypicker
 LABEL app=cherrypicker
 WORKDIR /
 COPY --from=builder /build/cherrypicker /cherrypicker
