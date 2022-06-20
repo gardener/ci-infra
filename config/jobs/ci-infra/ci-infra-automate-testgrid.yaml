@@ -42,7 +42,7 @@ postsubmits:
         command:
         - /ko-app/configurator
         args:
-        - --gcp-service-account=/secrets/gcs/gcs-credentials
+        - --gcp-service-account=/secrets/gcs/gcs-credentials/service-account.json
         - --yaml=config/testgrids/config.yaml
         - --default=config/testgrids/default.yaml
         - --prow-config=config/prow/config.yaml
