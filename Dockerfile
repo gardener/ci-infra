@@ -1,7 +1,7 @@
 # ----------------
 # Build container
 # ----------------
-ARG GOLANG_VERSION=1.17.11
+ARG GOLANG_VERSION=1.18.3
 
 FROM golang:${GOLANG_VERSION} AS builder
 LABEL stage=intermediate
@@ -26,6 +26,12 @@ USER 65532
 # ----------------------
 # Executable containers
 # ----------------------
+
+FROM ssl_runner AS cherrypicker
+LABEL app=cherrypicker
+WORKDIR /
+COPY --from=builder /build/cherrypicker /cherrypicker
+ENTRYPOINT [ "/cherrypicker" ]
 
 FROM ssl_runner AS cla-assistant
 LABEL app=cla-assistant

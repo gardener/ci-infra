@@ -256,8 +256,12 @@ func (o *GitHubOptions) githubClient(dryRun bool) (github.Client, error) {
 	fields := logrus.Fields{}
 	options := o.baseClientOptions()
 	options.DryRun = dryRun
-	if o.TokenPath == "" {
+
+	if o.TokenPath == "" && o.AppPrivateKeyPath == "" {
 		logrus.Warn("empty -github-token-path, will use anonymous github client")
+	}
+
+	if o.TokenPath == "" {
 		options.GetToken = func() []byte {
 			return []byte{}
 		}
@@ -289,7 +293,10 @@ func (o *GitHubOptions) githubClient(dryRun bool) (github.Client, error) {
 		return c, nil
 	}
 
-	tokenGenerator, userGenerator, client := github.NewClientFromOptions(fields, options)
+	tokenGenerator, userGenerator, client, err := github.NewClientFromOptions(fields, options)
+	if err != nil {
+		return nil, fmt.Errorf("failed to construct github client: %w", err)
+	}
 	o.tokenGenerator = tokenGenerator
 	o.userGenerator = userGenerator
 	return optionallyThrottled(client)
@@ -316,12 +323,12 @@ func (o *GitHubOptions) GitHubClient(dryRun bool) (github.Client, error) {
 }
 
 // GitHubClientWithAccessToken creates a GitHub client from an access token.
-func (o *GitHubOptions) GitHubClientWithAccessToken(token string) github.Client {
+func (o *GitHubOptions) GitHubClientWithAccessToken(token string) (github.Client, error) {
 	options := o.baseClientOptions()
 	options.GetToken = func() []byte { return []byte(token) }
 	options.AppID = "" // Since we are using a token, we should not use the app auth
-	_, _, client := github.NewClientFromOptions(logrus.Fields{}, options)
-	return client
+	_, _, client, err := github.NewClientFromOptions(logrus.Fields{}, options)
+	return client, err
 }
 
 // GitClient returns a Git client.
@@ -365,16 +372,19 @@ func (o *GitHubOptions) getGitAuthentication(dryRun bool) (string, git.GitTokenG
 }
 
 func (o *GitHubOptions) appPrivateKeyGenerator() (func() *rsa.PrivateKey, error) {
-	if err := secret.Add(o.AppPrivateKeyPath); err != nil {
+	generator, err := secret.AddWithParser(
+		o.AppPrivateKeyPath,
+		func(raw []byte) (*rsa.PrivateKey, error) {
+			privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(raw)
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse rsa key from pem: %w", err)
+			}
+			return privateKey, nil
+		},
+	)
+	if err != nil {
 		return nil, fmt.Errorf("failed to add the the key from --app-private-key-path to secret agent: %w", err)
 	}
-	return func() *rsa.PrivateKey {
-		raw := secret.GetTokenGenerator(o.AppPrivateKeyPath)()
-		privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(raw)
-		// TODO alvaroaleman: Add hooks to the SecretAgent
-		if err != nil {
-			panic(fmt.Sprintf("failed to parse private key: %v", err))
-		}
-		return privateKey
-	}, nil
+
+	return generator, nil
 }

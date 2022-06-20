@@ -25,6 +25,7 @@ postsubmits:
         - --docker-config-secret=gardener-prow-gcr-docker-config
         - --registry=eu.gcr.io/gardener-project/ci-infra
         - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
+        - --target=cherrypicker
         - --target=cla-assistant
         - --target=image-builder
         - --add-date-sha-tag=true
