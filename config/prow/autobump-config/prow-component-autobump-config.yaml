@@ -14,6 +14,7 @@ extraFiles:
   - "config/mkpj.sh"
   - "hack/bootstrap-config.sh"
   - "hack/check-config.sh"
+  - "hack/check-testgrid-config.sh"
 targetVersion: "latest"
 prefixes:
   - name: "Prow"

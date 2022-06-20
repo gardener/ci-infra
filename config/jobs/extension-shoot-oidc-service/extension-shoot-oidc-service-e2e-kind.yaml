@@ -10,6 +10,8 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs end-to-end tests for gardener-extension-shoot-oidc-service developments in pull requests
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220607-4b3fb50c36-master
@@ -56,6 +58,10 @@ periodics:
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
+  annotations:
+    description: Runs end-to-end tests for gardener-extension-shoot-oidc-service developments periodically
+    testgrid-dashboards: gardener-extension-shoot-oidc-service
+    testgrid-days-of-results: "60"
   spec:
     containers:
     - image: gcr.io/k8s-staging-test-infra/krte:v20220607-4b3fb50c36-master

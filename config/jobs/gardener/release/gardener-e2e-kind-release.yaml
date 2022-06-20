@@ -13,6 +13,8 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs end-to-end tests for gardener developments in pull requests
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220607-4b3fb50c36-master
@@ -63,6 +65,10 @@ postsubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs end-to-end tests for gardener developments periodically
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220607-4b3fb50c36-master

@@ -8,6 +8,8 @@ postsubmits:
     - ^master$
     annotations:
       description: Build ci-infra images on master branch
+      testgrid-dashboards: gardener-ci-infra
+      testgrid-days-of-results: "60" 
     decorate: true
     max_concurrency: 1
     reporter_config:

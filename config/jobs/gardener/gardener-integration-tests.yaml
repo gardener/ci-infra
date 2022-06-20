@@ -38,7 +38,9 @@ periodics:
     timeout: 20m
     grace_period: 10m
   annotations:
-    description: Runs integration tests for gardener developments in pull requests
+    description: Runs integration tests for gardener developments periodically
+    testgrid-dashboards: gardener-gardener
+    testgrid-days-of-results: "60"
   spec:
     containers:
     - name: test-integration

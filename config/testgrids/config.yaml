@@ -1,0 +1,11 @@
+dashboard_groups:
+- name: gardener
+  dashboard_names:
+    - gardener-gardener
+    - gardener-ci-infra
+    - gardener-extension-shoot-oidc-service
+
+dashboards:
+- name: gardener-gardener
+- name: gardener-ci-infra
+- name: gardener-extension-shoot-oidc-service

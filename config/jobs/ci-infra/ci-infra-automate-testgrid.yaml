@@ -1,0 +1,65 @@
+presubmits:
+  gardener/ci-infra:
+  - name: pull-ci-infra-check-testgrid-config
+    cluster: gardener-prow-build
+    branches:
+    - ^master$
+    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/testgrids\/.*.yaml)$'
+    decorate: true
+    annotations:
+      testgrid-create-test-group: "false"
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/configurator:v20220618-82a6661467
+        command:
+        - /ko-app/configurator
+        args:
+        - --yaml=config/testgrids/config.yaml
+        - --default=config/testgrids/default.yaml
+        - --prow-config=config/prow/config.yaml
+        - --prow-job-config=config/jobs
+        - --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs
+        - --update-description
+        - --validate-config-file
+        - --oneshot
+        resources:
+          requests:
+            memory: "1Gi"
+postsubmits:
+  gardener/ci-infra:
+  - name: post-ci-infra-upload-testgrid-config
+    cluster: gardener-prow-build
+    branches:
+    - ^master$
+    max_concurrency: 1
+    run_if_changed: '^(config\/jobs\/.*.yaml)|(config\/testgrids\/.*.yaml)$'
+    decorate: true
+    annotations:
+      testgrid-create-test-group: "false"
+    spec:
+      containers:
+      - image: gcr.io/k8s-prow/configurator:v20220618-82a6661467
+        command:
+        - /ko-app/configurator
+        args:
+        - --gcp-service-account=/etc/gcp-service-account/service-account.json
+        - --yaml=config/testgrids/config.yaml
+        - --default=config/testgrids/default.yaml
+        - --prow-config=config/prow/config.yaml
+        - --prow-job-config=config/jobs
+        - --prowjob-url-prefix=https://github.com/gardener/ci-infra/tree/master/config/jobs
+        - --update-description
+        - --output=gs://gardener-prow/testgrid/config
+        - --world-readable=true
+        - --oneshot
+        resources:
+          requests:
+            memory: "1Gi"
+        volumeMounts:
+        - name: gcp-service-account
+          mountPath: /etc/gcp-service-account
+          readOnly: true
+      volumes:
+      - name: gcp-service-account
+        secret:
+          secretName: gardener-prow-storage

@@ -39,6 +39,8 @@ postsubmits:
       grace_period: 10m
     annotations:
       description: Runs integration tests for gardener releases when merging
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
     spec:
       containers:
       - name: test-integration

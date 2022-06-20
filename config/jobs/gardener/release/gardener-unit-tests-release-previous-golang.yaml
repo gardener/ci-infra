@@ -45,6 +45,8 @@ postsubmits:
       grace_period: 10m
     annotations:
       description: Runs unit tests for gardener releases when merging
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
     spec:
       containers:
       # Run all tests sequentially in one container or as separete prow jobs.
