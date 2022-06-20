@@ -77,7 +77,10 @@ func gatherOptions() options {
 	for _, group := range []flagutil.OptionGroup{&o.github, &o.instrumentationOptions} {
 		group.AddFlags(fs)
 	}
-	fs.Parse(os.Args[1:])
+	err := fs.Parse(os.Args[1:])
+	if err != nil {
+		logrus.Fatalf("Unable to parse command line flags: %v", err)
+	}
 	return o
 }
 

@@ -43,7 +43,7 @@ const pluginName = "cherrypick"
 const defaultLabelPrefix = "cherrypick/"
 
 var cherryPickRe = regexp.MustCompile(`(?m)^(?:/cherrypick|/cherry-pick)\s+(.+)$`)
-var releaseNoteRe = regexp.MustCompile(`(?s)(?:Release note\*\*:\s*(?:<!--[^<>]*-->\s*)?` + "```(?:release-note)?|```release-note)(.+?)```")
+var releaseNoteRe = regexp.MustCompile("(?s)(```(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)\\s(.+?)```)")
 var titleTargetBranchIndicatorTemplate = `[%s] `
 
 type githubClient interface {
@@ -627,5 +627,5 @@ func releaseNoteFromParentPR(body string) string {
 	if potentialMatch == nil {
 		return ""
 	}
-	return fmt.Sprintf("```release-note\n%s\n```", strings.TrimSpace(potentialMatch[1]))
+	return fmt.Sprintf("```%s %s\n%s\n```", strings.TrimSpace(potentialMatch[2]), strings.TrimSpace(potentialMatch[3]), strings.TrimSpace(potentialMatch[4]))
 }

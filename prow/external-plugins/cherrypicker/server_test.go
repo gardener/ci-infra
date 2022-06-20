@@ -41,7 +41,6 @@ type fghc struct {
 	prs        []github.PullRequest
 	prComments []github.IssueComment
 	prLabels   []github.Label
-	labels     []github.Label
 	orgMembers []github.TeamMember
 	issues     []github.Issue
 }
@@ -221,7 +220,7 @@ index 1ea52dc..5bd70a9 100644
  }
 `)
 
-var body = "This PR updates the magic number.\n\n```release-note\nUpdate the magic number from 42 to 49\n```"
+var body = "This PR updates the magic number.\n\n```feature developer\nUpdate the magic number from 42 to 49\n```"
 
 func TestCherryPickIC(t *testing.T) {
 	t.Parallel()
@@ -292,7 +291,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 	expectedTitle := "[stage] This is a fix for X"
-	expectedBody := "This is an automated cherry-pick of #2\n\n/assign wiseguy\n\n```release-note\nUpdate the magic number from 42 to 49\n```"
+	expectedBody := "This is an automated cherry-pick of #2\n\n/assign wiseguy\n\n```feature developer\nUpdate the magic number from 42 to 49\n```"
 	expectedBase := "stage"
 	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, 2, expectedBase)
 	expectedLabels := []string{}
