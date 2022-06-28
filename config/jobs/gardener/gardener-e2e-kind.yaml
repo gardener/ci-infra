@@ -21,21 +21,7 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - |
-          set -o nounset
-          set -o pipefail
-          set -o errexit
-
-          # https://github.com/kubernetes/test-infra/issues/23741
-          iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-
-          # test setup
-          make kind-up
-          export KUBECONFIG=$PWD/example/provider-local/base/kubeconfig
-          make gardener-up
-
-          # run test
-          make test-e2e-local
+        - make ci-e2e-kind
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -76,21 +62,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - |
-        set -o nounset
-        set -o pipefail
-        set -o errexit
-
-        # https://github.com/kubernetes/test-infra/issues/23741
-        iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-
-        # test setup
-        make kind-up
-        export KUBECONFIG=$PWD/example/provider-local/base/kubeconfig
-        make gardener-up
-
-        # run test
-        make test-e2e-local
+      - make ci-e2e-kind
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
