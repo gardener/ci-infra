@@ -6,6 +6,8 @@ presubmits:
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
     - release-v\d+.\d+
+    skip_branches:
+    - release-v1.4\d
     decorate: true
     decoration_config:
       timeout: 60m
@@ -15,6 +17,45 @@ presubmits:
       preset-kind-volume-mounts: "true"
     annotations:
       description: Runs end-to-end tests for gardener developments in pull requests
+    spec:
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220623-1a63fdd9f2-master
+        command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        # we need privileged mode in order to do docker in docker
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 18Gi
+          requests:
+            cpu: 5
+            memory: 9Gi
+        env:
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
+  # TODO (plkokanov): this job can be removed once `release-1.4\d` branches are deleted. Currently this is necessary because `make ci-e2e-kind`
+  # is only available for releases >= v1.50
+  - name: pull-gardener-e2e-kind-release-previous-e2e-setup
+    cluster: gardener-prow-build
+    always_run: true
+    # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
+    branches:
+    - release-v1.4\d
+    decorate: true
+    decoration_config:
+      timeout: 60m
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs end-to-end tests for gardener developments in pull requests for releases <= v1.49
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220623-1a63fdd9f2-master
@@ -58,6 +99,8 @@ postsubmits:
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
     - release-v\d+.\d+
+    skip_branches:
+    - release-v1.4\d
     decorate: true
     decoration_config:
       timeout: 60m
@@ -66,7 +109,47 @@ postsubmits:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs end-to-end tests for gardener developments periodically
+      description: Runs end-to-end tests for gardener developments on push events
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
+    spec:
+      containers:
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220623-1a63fdd9f2-master
+        command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        # we need privileged mode in order to do docker in docker
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 18Gi
+          requests:
+            cpu: 5
+            memory: 9Gi
+        env:
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
+  # TODO (plkokanov): this job can be removed once `release-1.4\d` branches are deleted. Currently this is necessary because `make ci-e2e-kind`
+  # is only available for releases >= v1.50
+  - name: post-gardener-e2e-kind-release-previous-e2e-setup
+    cluster: gardener-prow-build
+    # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
+    branches:
+    - release-v1.4\d
+    decorate: true
+    decoration_config:
+      timeout: 60m
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs end-to-end tests for gardener developments on push events for releases <= v1.49
       testgrid-dashboards: gardener-gardener
       testgrid-days-of-results: "60"
     spec:

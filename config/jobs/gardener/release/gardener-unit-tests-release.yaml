@@ -6,8 +6,6 @@ presubmits:
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
     - release-v\d+.\d+
-    skip_branches:
-    - release-v1.([1-3][0-9]|4[0-6])
     decorate: true
     decoration_config:
       timeout: 40m
@@ -41,8 +39,6 @@ postsubmits:
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
     - release-v\d+.\d+
-    skip_branches:
-    - release-v1.([1-3][0-9]|4[0-6])
     decorate: true
     decoration_config:
       timeout: 40m
