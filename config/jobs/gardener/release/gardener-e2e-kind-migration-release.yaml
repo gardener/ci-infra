@@ -5,9 +5,10 @@ presubmits:
     always_run: true
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     # TODO (plkokanov): Use regex that specifies only branches for releases >= v1.50 because the migration e2e test is not available in earlier releases.
-    # Once `release-v1.4\d` branches are dropped, the regex can be set to `release-v\d+.\d+`
     branches:
-    - release-v1.5\d
+    - release-v\d+.\d+
+    skip_branches:
+    - release-v1.4\d
     decorate: true
     optional: true
     decoration_config:
@@ -46,9 +47,10 @@ postsubmits:
     cluster: gardener-prow-build
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     # TODO (plkokanov): Use regex that specifies only branches for releases >= v1.50 because the migration e2e test is not available in earlier releases.
-    # Once `release-v1.4\d` branches are dropped, the regex can be set to `release-v\d+.\d+`
     branches:
-    - release-v1.5\d
+    - release-v\d+.\d+
+    skip_branches:
+    - release-v1.4\d
     decorate: true
     decoration_config:
       timeout: 60m
