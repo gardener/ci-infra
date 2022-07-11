@@ -69,14 +69,17 @@ export KUBECONFIG="$temp_kubeconfig"
 echo -n "$(color-step "Ensuring contexts exist"):"
 ensure-context gardener-prow-trusted
 ensure-context gardener-prow-build
+ensure-context garden-garden-ci
 echo " $(color-green done)"
 
 # create temporary files for service account keys and ensure that they are cleaned up finally
 temp_gcr_serviceaccount=$(mktemp)
 temp_storage_serviceaccount=$(mktemp)
+temp_infrastructure_serviceaccount=$(mktemp)
 cleanup-temp-serviceaccount-files() {
   rm -f "$temp_gcr_serviceaccount"
   rm -f "$temp_storage_serviceaccount"
+  rm -f "$temp_infrastructure_serviceaccount"
 }
 trap cleanup-temp-serviceaccount-files EXIT
 
@@ -129,6 +132,29 @@ echo "$(color-green done)"
 echo "$(color-step "Rolling prow deployments...")"
 kubectl config use-context gardener-prow-trusted
 kubectl -n prow rollout restart deployments
+echo "$(color-green done)"
+
+# Updating service account key of garden-ci infrastructure secret
+echo "$(color-step "Updating service account key of garden-ci infrastructure secret...")"
+
+gcloud iam service-accounts keys create $temp_infrastructure_serviceaccount \
+    --iam-account=gardener-prow@gardener-project.iam.gserviceaccount.com \
+    --project=gardener-project
+
+kubectl config use-context garden-garden-ci
+# Secrets modified via gardener dashboard write service account into serviceaccount.json
+kubectl create secret generic -n garden-garden-ci gcp-gardener-prow \
+    --from-file=serviceaccount.json=$temp_infrastructure_serviceaccount \
+    --dry-run=client -o yaml \
+    | kubectl apply --server-side=true --force-conflicts -f -
+
+echo "$(color-green done)"
+
+# Start reconciling trusted and build prow clusters to enable using the new infrastructure secret
+echo "$(color-step "Start reconciling trusted and build prow clusters to enable using the new infrastructure secret...")"
+kubectl config use-context garden-garden-ci
+kubectl annotate shoot -n garden-garden-ci prow gardener.cloud/operation=reconcile
+kubectl annotate shoot -n garden-garden-ci prow-work gardener.cloud/operation=reconcile
 echo "$(color-green done)"
 
 echo "$(color-green SUCCESS)"
