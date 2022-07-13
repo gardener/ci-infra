@@ -30,7 +30,7 @@ presubmits:
           limits:
             memory: 16Gi
           requests:
-            cpu: 5
+            cpu: 12
             memory: 8Gi
 postsubmits:
   gardener/gardener:
@@ -65,5 +65,5 @@ postsubmits:
           limits:
             memory: 16Gi
           requests:
-            cpu: 5
+            cpu: 12
             memory: 8Gi
