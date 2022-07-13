@@ -23,7 +23,7 @@ presubmits:
           limits:
             memory: 16Gi
           requests:
-            cpu: 10
+            cpu: 5
             memory: 8Gi
 periodics:
 - name: ci-gardener-integration
@@ -53,5 +53,5 @@ periodics:
         limits:
           memory: 16Gi
         requests:
-          cpu: 10
+          cpu: 5
           memory: 8Gi

@@ -29,7 +29,7 @@ presubmits:
           limits:
             memory: 18Gi
           requests:
-            cpu: 5
+            cpu: 12
             memory: 9Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
@@ -70,7 +70,7 @@ periodics:
         limits:
           memory: 18Gi
         requests:
-          cpu: 5
+          cpu: 12
           memory: 9Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
