@@ -29,7 +29,7 @@ presubmits:
           limits:
             memory: 16Gi
           requests:
-            cpu: 5
+            cpu: 12
             memory: 8Gi
 periodics:
 - name: ci-gardener-unit
@@ -65,5 +65,5 @@ periodics:
         limits:
           memory: 16Gi
         requests:
-          cpu: 5
+          cpu: 12
           memory: 8Gi
