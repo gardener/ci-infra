@@ -34,7 +34,7 @@ presubmits:
           limits:
             memory: 18Gi
           requests:
-            cpu: 6
+            cpu: 12
             memory: 9Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
@@ -77,7 +77,7 @@ postsubmits:
           limits:
             memory: 18Gi
           requests:
-            cpu: 6
+            cpu: 12
             memory: 9Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
