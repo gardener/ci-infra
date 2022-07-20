@@ -21,7 +21,7 @@ presubmits:
       description: Runs control plane migration end-to-end tests for gardener developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20220623-1a63fdd9f2-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220720-66e8b57c40-master
         command:
         - wrapper.sh
         - bash
@@ -64,7 +64,7 @@ postsubmits:
       testgrid-days-of-results: "60"
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20220623-1a63fdd9f2-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220720-66e8b57c40-master
         command:
         - wrapper.sh
         - bash
