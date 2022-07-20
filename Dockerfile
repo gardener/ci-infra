@@ -16,14 +16,9 @@ RUN mkdir /build && GOBIN=/build \
 # Executable container base
 # --------------------------
 
-FROM alpine:3.15.4 AS ssl_runner
-# Install SSL ca certificates
-RUN apk add --no-cache ca-certificates
-# Create nonroot user and group to be used in executable containers
-RUN addgroup -g 65532 -S nonroot && adduser -u 65532 -S nonroot -G nonroot
-USER 65532
+FROM gcr.io/distroless/static-debian11:nonroot AS base_nonroot
 
-FROM alpine:3.15.4 AS ssl_git_runner
+FROM alpine:3.16.1 AS ssl_git_runner
 # Install SSL ca certificates
 RUN apk add --no-cache ca-certificates git
 # Create nonroot user and group to be used in executable containers
@@ -40,14 +35,14 @@ WORKDIR /
 COPY --from=builder /build/cherrypicker /cherrypicker
 ENTRYPOINT [ "/cherrypicker" ]
 
-FROM ssl_runner AS cla-assistant
+FROM base_nonroot AS cla-assistant
 LABEL app=cla-assistant
 WORKDIR /
 COPY --from=builder /build/cla-assistant /cla-assistant
 EXPOSE 8080
 ENTRYPOINT [ "/cla-assistant" ]
 
-FROM ssl_runner AS image-builder
+FROM base_nonroot AS image-builder
 LABEL app=image-builder
 WORKDIR /
 COPY --from=builder /build/image-builder /image-builder
