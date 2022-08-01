@@ -40,33 +40,94 @@ annotations:
 You can test your TestGrid configuration locally with the `./hack/check-testgrid-config.sh`. Please open a PR for `ci-infra` repository for your new configuration. When it is merged the new configuration will be pushed to `gs://gardener-prow/testgrid/config` automatically and your jobs will become visible at [testgrid.k8s.io/gardener](https://testgrid.k8s.io/gardener) soon.
 
 
+## Combined kubeconfig for prow clusters and Gardener project
+
+The scripts from this repository rely on a combined `kubeconfig`. It contains two contextes for the prow clusters `gardener-prow-trusted`, `gardener-prow-build` and one for the Gardener project the clusters are created in.
+Please create your config based on this template:
+
+```yaml
+apiVersion: v1
+clusters:
+- cluster:
+    server: https://api.live.gardener.cloud.sap
+  name: garden-garden-ci
+- cluster:
+    certificate-authority-data: <<Get from your gardener project>>
+    server: <<Get from your gardener project>>
+  name: shoot--garden-ci--prow
+- cluster:
+    certificate-authority-data: <<Get from your gardener project>>
+    server: <<Get from your gardener project>>
+  name: shoot--garden-ci--prow-work
+contexts:
+- context:
+    cluster: garden-garden-ci
+    namespace: garden-garden-ci
+    user: oidc-login
+  name: garden-garden-ci
+- context:
+    cluster: shoot--garden-ci--prow-work
+    user: shoot--garden-ci--prow-work-token
+  name: gardener-prow-build
+- context:
+    cluster: shoot--garden-ci--prow
+    user: shoot--garden-ci--prow-token
+  name: gardener-prow-trusted
+current-context: gardener-prow-trusted
+kind: Config
+users:
+- name: oidc-login
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - <<Get from your gardener project>>
+      command: kubectl
+- name: shoot--garden-ci--prow-token
+  user:
+    token: <<Get from your gardener project>>
+- name: shoot--garden-ci--prow-work-token
+  user:
+    token: <<Get from your gardener project>>
+```
+
+
 ## How to setup
+
+The following commands assume you are using the combined `kubeconfig` which introduced in the previous section. When you create new clusters the configuration of `gardener-prow-trusted`, `gardener-prow-build`  contextes will be incomplete in the beginning. They are completed in step 2 when the clusters are created.
+
 
 1. Create the prow cluster and prow workload cluster.
    ```bash
-   $ kubectl apply -f config/clusters/shoot.yaml
-   $ kubectl apply -f config/clusters/shoot-workload.yaml
+   kubectl config use-context garden-garden-ci
+   kubectl apply -f config/clusters/shoot.yaml
+   kubectl apply -f config/clusters/shoot-workload.yaml
    ```
+1. Complete your combined kubeconfig with the data of the clusters created in the previous step
 1. Create the `prow` namespace in the prow cluster:
    ```bash
-   $ kubectl apply -f config/prow/cluster/prow_namespace.yaml
+   kubectl config use-context gardener-prow-trusted
+   kubectl apply --server-side=true -f config/prow/cluster/prow_namespace.yaml
    ```
 1. Create the `test-pods` namespace in the workload/build cluster:
    ```bash
-   $ kubectl apply -f config/prow/cluster/build
+   kubectl config use-context gardener-prow-build
+   kubectl apply --server-side=true -f config/prow/cluster/build
    ```   
 1. Create the required secrets (mainly in the prow cluster):
-    - `gardener-prow-storage` (Service account with `Storage Admin` permissions for GCS bucket, according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#configure-a-gcs-bucket), needs to be present in the `prow` namespace and in the `test-pods` namespace in both clusters)
+    - the secrets for GCP service accounts can be created by our credentials rotation script `./hack/rotate-secrets.sh`. Please see Rotate [credentials section](#rotate-credentials) for more details.
     - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
     - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`, needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
     - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
     - `hmac-token`
       ```bash
-      $ kubectl -n prow create secret generic hmac-token --from-literal=hmac=$(openssl rand -hex 20)
+      kubectl config use-context gardener-prow-trusted
+      kubectl -n prow create secret generic hmac-token --from-literal=hmac=$(openssl rand -hex 20)
       ```
     - `oauth-cookie-secret`
       ```bash
-      $ kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
+      kubectl config use-context gardener-prow-trusted
+      kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
       ```
     - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
       - add two contexts: the prow cluster as `gardener-prow-trusted` and the build/workload cluster as `gardener-prow-build`
@@ -109,19 +170,21 @@ You can test your TestGrid configuration locally with the `./hack/check-testgrid
       - Create the secret including the Webhook URL under key `api_url`.
     - `grafana` (admin user password)
       ```bash
-      $ kubectl config use-context gardener-prow-trusted
-      $ kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
-      $ kubectl config use-context gardener-prow-build
-      $ kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
+      kubectl config use-context gardener-prow-trusted
+      kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
+      kubectl config use-context gardener-prow-build
+      kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
       ```
 1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
-   $ ./config/prow/deploy.sh
+   ./config/prow/deploy.sh
    ```
 1. Bootstrap Prow configuration/jobs. This initial configuration has to be done manually, later on changes to configuration and jobs will be automatically applied by the [`updateconfig`](https://github.com/kubernetes/test-infra/tree/master/prow/plugins/updateconfig) plugin once merged into master.
    ```bash
-   $ ./hack/boostrap-config.sh
+   ./hack/boostrap-config.sh
    ```
+
+The [getting started guide](https://github.com/kubernetes/test-infra/blob/master/prow/getting_started_deploy.md) in `kubernetes/test-infra` is a good starting point for further investigations.
 
 ## Monitoring
 
@@ -136,3 +199,10 @@ A monitoring stack based on [kube-prometheus](https://github.com/prometheus-oper
 Alertmanager will send Slack alerts in `#gardener-prow-alerts` (SAP-internal workspace).
 
 Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted cluster) and https://monitoring-build.prow.gardener.cloud (build cluster).
+
+## Rotate credentials
+
+Service account tokens of the GCP service accounts we are using can be rotated using the `./hack/rotate-secrets.sh` script. It includes the service accounts.
+- GCP infrastructure service account
+- GCP storage service account
+- Service account for gcr.io
