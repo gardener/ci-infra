@@ -13,8 +13,9 @@ spec:
   cloudProfileName: gcp
   dns:
     providers:
-      - secretName: aws-route53-ci
-        type: aws-route53
+    - secretName: gardener-cloud-route53-user
+      type: aws-route53
+      primary: false
   extensions:
     - type: shoot-cert-service
       providerConfig:
@@ -106,4 +107,3 @@ spec:
   purpose: production
   region: europe-west1
   secretBindingName: gcp-gardener-prow
-  
