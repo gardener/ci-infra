@@ -13,9 +13,9 @@ presubmits:
       description: Runs unit tests for gardener developments in pull requests
     spec:
       containers:
-      # Run all tests sequentially in one container or as separete prow jobs.
+      # Run all tests sequentially in one container or as separate prow jobs.
       # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.18
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.19
         command:
         - make
         args:
@@ -49,9 +49,9 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    # Run all tests sequentially in one container or as separete prow jobs.
+    # Run all tests sequentially in one container or as separate prow jobs.
     # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.18
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.19
       command:
       - make
       args:
