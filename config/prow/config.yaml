@@ -5,6 +5,9 @@ plank:
       [Full PR test history](https://prow.gardener.cloud/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}).
       [Your PR dashboard](https://prow.gardener.cloud/pr?query=is%3Apr%20state%3Aopen%20author%3A{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
       [Command help for this repository](https://prow.gardener.cloud/command-help?repo={{.Spec.Refs.Org}}%2F{{.Spec.Refs.Repo}}).
+
+      Please help us cut down on flakes by linking this test failure to an [open flake report](https://github.com/{{.Spec.Refs.Org}}/{{.Spec.Refs.Repo}}/issues?q=is:issue+is:open+label:kind/flake) or filing a [new flake report](https://github.com/{{.Spec.Refs.Org}}/{{.Spec.Refs.Repo}}/issues/new?template=flaking-test.md&title=%5BFlaky+Test%5D+FLAKING+TEST%2FSUITE) if you can't find an existing one.
+      Also see our [testing guideline](https://github.com/gardener/gardener/blob/master/docs/development/testing.md) for how to avoid and hunt flakes.
   job_url_prefix_config:
     '*': https://prow.gardener.cloud/view/
   pod_pending_timeout: 15m
