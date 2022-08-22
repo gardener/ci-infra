@@ -134,11 +134,9 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-          restrictions: # prevent everyone from pushing/merging
-            # NB: tide is running as GitHub App, which currently cannot be configured here to be excluded from branch
-            # protections (see https://github.com/kubernetes/test-infra/issues/24530).
-            # Hence, remember to manually add the `gardener-prow` GitHub App to all branch protection rules
-            # to allow tide to push/merge.
+          restrictions: # prevent everyone except gardener-prow from pushing/merging
+            apps:
+            - gardener-prow
             users: []
             teams: []
           enforce_admins: true # protections apply to admins as well
@@ -151,11 +149,9 @@ branch-protection:
             contexts:
             - license/cla
             - "Check Release Milestone"
-          restrictions: # prevent everyone from pushing/merging (except admins)
-            # NB: tide is running as GitHub App, which currently cannot be configured here to be excluded from branch
-            # protections (see https://github.com/kubernetes/test-infra/issues/24530).
-            # Hence, remember to manually add the `gardener-prow` GitHub App to all branch protection rules
-            # to allow tide to push/merge.
+          restrictions: # prevent everyone from pushing/merging (except admins and gardener-prow)
+            apps:
+            - gardener-prow
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
