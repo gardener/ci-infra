@@ -62,6 +62,7 @@ periodics:
       args:
       - --config-path=config/prow/config.yaml
       - --confirm
+      - --enable-apps-restrictions=true
       - --job-config-path=config/jobs
       - --github-endpoint=http://ghproxy.prow.svc
       - --github-endpoint=https://api.github.com
