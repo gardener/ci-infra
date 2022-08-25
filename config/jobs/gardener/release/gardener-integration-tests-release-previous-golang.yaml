@@ -1,12 +1,10 @@
 presubmits:
   gardener/gardener:
-  - name: pull-gardener-integration-release
+  - name: pull-gardener-integration-release-previous-golang
     cluster: gardener-prow-build
     always_run: true
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
-    - release-v\d+.\d+
-    skip_branches:
     - release-v1.5[0-3]
     decorate: true
     decoration_config:
@@ -17,7 +15,7 @@ presubmits:
     spec:
       containers:
       - name: test-integration
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.19
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.18
         command:
         - make
         args:
@@ -30,12 +28,10 @@ presubmits:
             memory: 8Gi
 postsubmits:
   gardener/gardener:
-  - name: post-gardener-integration-release
+  - name: post-gardener-integration-release-previous-golang
     cluster: gardener-prow-build
     # Run on release branches / adapt this setting and create a new job in case of incompatible changes in tests or go version between the releases
     branches:
-    - release-v\d+.\d+
-    skip_branches:
     - release-v1.5[0-3]
     decorate: true
     decoration_config:
@@ -48,7 +44,7 @@ postsubmits:
     spec:
       containers:
       - name: test-integration
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.19
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220816-52db243-1.18
         command:
         - make
         args:
