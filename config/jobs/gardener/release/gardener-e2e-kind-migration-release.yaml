@@ -7,7 +7,6 @@ presubmits:
     branches:
     - release-v\d+.\d+
     decorate: true
-    optional: true
     decoration_config:
       timeout: 60m
       grace_period: 15m

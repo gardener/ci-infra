@@ -6,7 +6,6 @@ presubmits:
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
-    optional: true
     decoration_config:
       timeout: 60m
       grace_period: 15m
