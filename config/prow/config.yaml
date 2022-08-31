@@ -17,10 +17,10 @@ plank:
       timeout: 2h
       grace_period: 15m
       utility_images:
-        clonerefs: "gcr.io/k8s-prow/clonerefs:v20220829-2a23042d12"
-        initupload: "gcr.io/k8s-prow/initupload:v20220829-2a23042d12"
-        entrypoint: "gcr.io/k8s-prow/entrypoint:v20220829-2a23042d12"
-        sidecar: "gcr.io/k8s-prow/sidecar:v20220829-2a23042d12"
+        clonerefs: "gcr.io/k8s-prow/clonerefs:v20220830-c2bffe0c7a"
+        initupload: "gcr.io/k8s-prow/initupload:v20220830-c2bffe0c7a"
+        entrypoint: "gcr.io/k8s-prow/entrypoint:v20220830-c2bffe0c7a"
+        sidecar: "gcr.io/k8s-prow/sidecar:v20220830-c2bffe0c7a"
       gcs_configuration:
         bucket: "gardener-prow"
         path_strategy: explicit
