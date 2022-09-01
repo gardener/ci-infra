@@ -159,7 +159,7 @@ branch-protection:
           allow_deletions: true # allow maintainers to delete outdated release branches
 
 tide:
-  sync_period: 2m
+  sync_period: 1m
   queries:
   - repos:
     - gardener/ci-infra
