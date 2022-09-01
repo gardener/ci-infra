@@ -13,6 +13,7 @@ resources:
 
 patchesStrategicMerge:
 - grafana-deployment.yaml
+- prometheus.yaml
 
 secretGenerator:
 - name: alertmanager-main
