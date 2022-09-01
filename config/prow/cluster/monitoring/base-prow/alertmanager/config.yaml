@@ -12,6 +12,10 @@ route:
   - receiver: 'null-receiver'
     matchers:
       - alertname=Watchdog
+  # InfoInhibitor is very noisy
+  - receiver: 'null-receiver'
+    matchers:
+      - alertname=InfoInhibitor
   # Metrics not visible in shoot cluster
   - receiver: 'null-receiver'
     matchers:
