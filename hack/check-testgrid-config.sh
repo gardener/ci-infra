@@ -20,7 +20,7 @@ set -o pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  gcr.io/k8s-prow/configurator:v20220901-daa94f4c38 \
+  gcr.io/k8s-prow/configurator:v20220903-c481b28dc8 \
   --yaml=config/testgrids/config.yaml \
   --default=config/testgrids/default.yaml \
   --prow-config=config/prow/config.yaml \
