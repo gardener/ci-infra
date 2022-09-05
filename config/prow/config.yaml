@@ -163,7 +163,6 @@ tide:
   queries:
   - repos:
     - gardener/ci-infra
-    - gardener/gardener
     labels:
     - lgtm
     - approved
@@ -195,6 +194,45 @@ tide:
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
+  - repos:
+    - gardener/gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+    excludedBranches:
+    - master
+  - repos:
+    - gardener/gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+    milestone: v1.55
+    includedBranches:
+    - master
 
   context_options:
     # Use branch protection options to define required and optional contexts
