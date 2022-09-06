@@ -158,4 +158,4 @@ kubectl annotate shoot -n garden-garden-ci prow-work gardener.cloud/operation=re
 echo "$(color-green done)"
 
 echo "$(color-green SUCCESS)"
-echo "$(color-missing Old service account keys are not deleted automatically. Please check service accounts gardener-prow-gcr and gardener-prow-storage.)"
+echo "$(color-missing Old service account keys are not deleted automatically. Please check service accounts gardener-prow, gardener-prow-gcr, and gardener-prow-storage.)"

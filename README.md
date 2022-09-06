@@ -42,55 +42,12 @@ You can test your TestGrid configuration locally with the `./hack/check-testgrid
 
 ## Combined kubeconfig for prow clusters and Gardener project
 
-The scripts from this repository rely on a combined `kubeconfig`. It contains two contextes for the prow clusters `gardener-prow-trusted`, `gardener-prow-build` and one for the Gardener project the clusters are created in.
-Please create your config based on this template:
-
-```yaml
-apiVersion: v1
-clusters:
-- cluster:
-    server: https://api.live.gardener.cloud.sap
-  name: garden-garden-ci
-- cluster:
-    certificate-authority-data: <<Get from your gardener project>>
-    server: <<Get from your gardener project>>
-  name: shoot--garden-ci--prow
-- cluster:
-    certificate-authority-data: <<Get from your gardener project>>
-    server: <<Get from your gardener project>>
-  name: shoot--garden-ci--prow-work
-contexts:
-- context:
-    cluster: garden-garden-ci
-    namespace: garden-garden-ci
-    user: oidc-login
-  name: garden-garden-ci
-- context:
-    cluster: shoot--garden-ci--prow-work
-    user: shoot--garden-ci--prow-work-token
-  name: gardener-prow-build
-- context:
-    cluster: shoot--garden-ci--prow
-    user: shoot--garden-ci--prow-token
-  name: gardener-prow-trusted
-current-context: gardener-prow-trusted
-kind: Config
-users:
-- name: oidc-login
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1beta1
-      args:
-      - <<Get from your gardener project>>
-      command: kubectl
-- name: shoot--garden-ci--prow-token
-  user:
-    token: <<Get from your gardener project>>
-- name: shoot--garden-ci--prow-work-token
-  user:
-    token: <<Get from your gardener project>>
+The scripts from this repository rely on a combined `kubeconfig`. It contains two contexts for the prow clusters `gardener-prow-trusted`, `gardener-prow-build` and one for the Gardener project the clusters are created in.
+Please setup your local kubeconfig file by using the `hack/setup-prow-kubeconfig.sh` script. Afterwards, you find it here:
+```bash
+export KUBECONFIG=~/.gardener-prow/kubeconfig/kubeconfig--gardener--prow-combined.yaml
 ```
-
+The kubeconfig contains absolute paths. Thus, it won't work anymore, if you move it to a different location.
 
 ## How to setup
 
@@ -112,7 +69,7 @@ The following commands assume you are using the combined `kubeconfig` which intr
 1. Create the `test-pods` namespace in the workload/build cluster:
    ```bash
    kubectl config use-context gardener-prow-build
-   kubectl apply --server-side=true -f config/prow/cluster/build
+   kubectl apply --server-side=true -f config/prow/cluster/base/test-pods_namespace.yaml
    ```   
 1. Create the required secrets (mainly in the prow cluster):
     - the secrets for GCP service accounts can be created by our credentials rotation script `./hack/rotate-secrets.sh`. Please see Rotate [credentials section](#rotate-credentials) for more details.

@@ -1,0 +1,29 @@
+gardens:
+  - identity: sap-landscape-live
+    kubeconfig: ~/.gardener-prow/kubeconfig/kubeconfig--gardener--prow-combined.yaml
+    context: garden-garden-ci
+    patterns:
+      - ^((live|sap-landscape-live)/)?shoot--(?P<project>[^.]+)--(?P<shoot>[^.]+)$
+      - (live\.(k8s\.ondemand\.com|gardener\.cloud\.sap))(/namespace/(?P<namespace>[^/]+))?(/shoots/(?P<shoot>[^/]+))?
+      - (?P<shoot>[^.]+)\.(?P<project>[^.]+)\.shoot\.live\.k8s-hana\.ondemand\.com
+    accessRestrictions:
+    - key: seed.gardener.cloud/eu-access
+      notifyIf: true
+      msg: |-
+        Do not migrate the cluster to a data center outside the 
+        EEA or Switzerland without the customer's prior written 
+        consent (email permitted).
+        The service is offered with the regular SLAs and 24x7 
+        support for the control plane of the cluster. 
+        24x7 support for cluster add-ons and nodes is only 
+        available if the user complies to the conditions
+      options:
+        - key: support.gardener.cloud/eu-access-for-cluster-nodes
+          notifyIf: true
+          msg: |-
+            Do not access all node-related components such as Docker 
+            and Kubelet, the operating system, and everything else that 
+            would require direct inspection of the nodes through 
+            a privileged pod or SSH in case you are not located in EEA. 
+            Only third-level/dev support at usual 8x5 working hours 
+            in EEA does apply in this case
