@@ -148,7 +148,6 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-            - "Check Release Milestone"
           restrictions: # prevent everyone from pushing/merging (except admins and gardener-prow)
             apps:
             - gardener-prow
