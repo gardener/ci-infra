@@ -51,7 +51,7 @@ The kubeconfig contains absolute paths. Thus, it won't work anymore, if you move
 
 ## How to setup
 
-The following commands assume you are using the combined `kubeconfig` which introduced in the previous section. When you create new clusters the configuration of `gardener-prow-trusted`, `gardener-prow-build`  contextes will be incomplete in the beginning. They are completed in step 2 when the clusters are created.
+The following commands assume you are using the combined `kubeconfig` generated in the previous section. When you create new clusters the configuration of `gardener-prow-trusted`, `gardener-prow-build`  contexts will be incomplete in the beginning. They are completed in step 2 when the clusters have been created.
 
 
 1. Create the prow cluster and prow workload cluster.
