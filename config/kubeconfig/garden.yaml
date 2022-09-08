@@ -1,0 +1,4 @@
+gardens:
+  - identity: sap-landscape-live
+    kubeconfig: ~/.gardener-prow/kubeconfig/kubeconfig--gardener--prow-combined.yaml
+    context: garden-garden-ci
