@@ -30,6 +30,10 @@ periodics:
   decoration_config:
     timeout: 15m
     grace_period: 5m
+  annotations:
+    description: Runs go vulnerability checker for gardener developments periodically
+    testgrid-dashboards: gardener-gardener
+    testgrid-days-of-results: "60"
   spec:
     containers:
     - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220908-2a8314f-1.19
