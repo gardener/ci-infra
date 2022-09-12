@@ -10,7 +10,7 @@ presubmits:
       testgrid-create-test-group: "false"
     spec:
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20220907-aef2c49444
+      - image: gcr.io/k8s-prow/configurator:v20220912-2b319e1ac8
         command:
         - /ko-app/configurator
         args:
@@ -38,7 +38,7 @@ postsubmits:
       testgrid-create-test-group: "false"
     spec:
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20220907-aef2c49444
+      - image: gcr.io/k8s-prow/configurator:v20220912-2b319e1ac8
         command:
         - /ko-app/configurator
         args:
