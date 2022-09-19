@@ -16,7 +16,7 @@ presubmits:
       description: Runs end-to-end tests for gardener developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20220915-f0ff885869-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20220916-2cde602c65-master
         command:
         - wrapper.sh
         - bash
@@ -57,7 +57,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20220915-f0ff885869-master
+    - image: gcr.io/k8s-staging-test-infra/krte:v20220916-2cde602c65-master
       command:
       - wrapper.sh
       - bash
