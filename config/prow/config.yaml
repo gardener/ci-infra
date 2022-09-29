@@ -131,6 +131,8 @@ branch-protection:
       repos:
         ci-infra:
           protect: true
+          include:
+          - "master"
           required_status_checks:
             contexts:
             - license/cla
@@ -156,6 +158,19 @@ branch-protection:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: false # protections don't apply to admins
           allow_deletions: true # allow maintainers to delete outdated release branches
+        gardener-extension-registry-cache:
+          protect: true
+          include:
+          - "main"
+          required_status_checks:
+            contexts:
+            - license/cla
+          restrictions: # prevent everyone except gardener-prow from pushing/merging
+            apps:
+            - gardener-prow
+            users: []
+            teams: []
+          enforce_admins: true # protections apply to admins as well
 
 tide:
   sync_period: 1m
@@ -195,6 +210,23 @@ tide:
     - "cla: no"
   - repos:
     - gardener/gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
+    - gardener/gardener-extension-registry-cache
     labels:
     - lgtm
     - approved
