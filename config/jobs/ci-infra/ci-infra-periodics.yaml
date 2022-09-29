@@ -23,7 +23,7 @@ periodics:
       args:
       - --config=config/prow/labels.yaml
       - --confirm=true
-      - --only=gardener/ci-infra,gardener/gardener,gardener-extension-registry-cache,gardener/gardener-extension-shoot-oidc-service
+      - --only=gardener/ci-infra,gardener/gardener,gardener/gardener-extension-registry-cache,gardener/gardener-extension-shoot-oidc-service
       - --endpoint=http://ghproxy.prow.svc
       - --endpoint=https://api.github.com
       # TODO: switch to GitHub App Auth, once it's implemented in label_sync
