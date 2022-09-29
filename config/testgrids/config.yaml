@@ -3,9 +3,11 @@ dashboard_groups:
   dashboard_names:
     - gardener-gardener
     - gardener-ci-infra
+    - gardener-extension-registry-cache
     - gardener-extension-shoot-oidc-service
 
 dashboards:
 - name: gardener-gardener
 - name: gardener-ci-infra
+- name: gardener-extension-registry-cache
 - name: gardener-extension-shoot-oidc-service
