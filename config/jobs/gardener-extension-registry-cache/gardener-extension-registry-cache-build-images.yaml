@@ -20,7 +20,7 @@ postsubmits:
         args:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/gardener-extension-registry-cache
+        - --registry=eu.gcr.io/gardener-project/gardener/extensions
         - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
         - --target=gardener-extension-registry-cache
         - --target=gardener-extension-registry-cache-admission
