@@ -225,23 +225,6 @@ tide:
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
-  - repos:
-    - gardener/gardener-extension-registry-cache
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
   ### Please uncomment when setting a Release Milestone for gardener/gardener
@@ -271,6 +254,23 @@ tide:
   ##############################################################################
   ### End of Release Milestone section
   ##############################################################################
+  - repos:
+    - gardener/gardener-extension-registry-cache
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
 
   context_options:
     # Use branch protection options to define required and optional contexts
