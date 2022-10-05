@@ -1,0 +1,63 @@
+presubmits:
+  gardener/gardener-extension-registry-cache:
+  - name: pull-gardener-extension-registry-cache-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for Gardener extension registry-cache developments in pull requests
+    spec:
+      containers:
+      # Run all tests sequentially in one container or as separate prow jobs.
+      # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220908-2a8314f-1.19
+        command:
+        - make
+        args:
+        - check-generate
+        - check
+        - format
+        - test
+        resources:
+          limits:
+            memory: 16Gi
+          requests:
+            cpu: 4
+            memory: 8Gi
+periodics:
+- name: ci-gardener-extension-registry-cache-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-registry-cache
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 40m
+    grace_period: 10m
+  annotations:
+    description: Runs unit tests for Gardener extension registry-cache developments periodically
+    testgrid-dashboards: gardener-extension-registry-cache
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    # Run all tests sequentially in one container or as separate prow jobs.
+    # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220908-2a8314f-1.19
+      command:
+      - make
+      args:
+      - check-generate
+      - check
+      - format
+      - test
+      resources:
+        limits:
+          memory: 16Gi
+        requests:
+          cpu: 4
+          memory: 8Gi
