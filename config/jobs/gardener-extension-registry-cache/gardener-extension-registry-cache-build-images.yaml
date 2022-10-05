@@ -22,8 +22,8 @@ postsubmits:
         - --docker-config-secret=gardener-prow-gcr-docker-config
         - --registry=eu.gcr.io/gardener-project/gardener/extensions
         - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
-        - --target=gardener-extension-registry-cache
-        - --target=gardener-extension-registry-cache-admission
+        - --target=registry-cache
+        - --target=registry-cache-admission
         - --add-version-tag=true
         - --add-version-sha-tag=true
         - --add-fixed-tag=latest
