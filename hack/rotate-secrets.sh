@@ -35,8 +35,6 @@ color-missing() { # Yellow
   echo -e "\x1B[1;33m${@}\x1B[0m"
 }
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
 if ! [ -x "$(command -v "gcloud")" ]; then
   echo "ERROR: gcloud is not present. Exiting..."
   exit 1
@@ -69,7 +67,7 @@ export KUBECONFIG="$temp_kubeconfig"
 echo -n "$(color-step "Ensuring contexts exist"):"
 ensure-context gardener-prow-trusted
 ensure-context gardener-prow-build
-ensure-context garden-garden-ci
+ensure-context garden-cluster
 echo " $(color-green done)"
 
 # create temporary files for service account keys and ensure that they are cleaned up finally
@@ -141,9 +139,9 @@ gcloud iam service-accounts keys create $temp_infrastructure_serviceaccount \
     --iam-account=gardener-prow@gardener-project.iam.gserviceaccount.com \
     --project=gardener-project
 
-kubectl config use-context garden-garden-ci
+kubectl config use-context garden-cluster
 # Secrets modified via gardener dashboard write service account into serviceaccount.json
-kubectl create secret generic -n garden-garden-ci gcp-gardener-prow \
+kubectl create secret generic gcp-gardener-prow \
     --from-file=serviceaccount.json=$temp_infrastructure_serviceaccount \
     --dry-run=client -o yaml \
     | kubectl apply --server-side=true --force-conflicts -f -
@@ -152,9 +150,9 @@ echo "$(color-green done)"
 
 # Start reconciling trusted and build prow clusters to enable using the new infrastructure secret
 echo "$(color-step "Start reconciling trusted and build prow clusters to enable using the new infrastructure secret...")"
-kubectl config use-context garden-garden-ci
-kubectl annotate shoot -n garden-garden-ci prow gardener.cloud/operation=reconcile
-kubectl annotate shoot -n garden-garden-ci prow-work gardener.cloud/operation=reconcile
+kubectl config use-context garden-cluster
+kubectl annotate shoot prow gardener.cloud/operation=reconcile
+kubectl annotate shoot prow-work gardener.cloud/operation=reconcile
 echo "$(color-green done)"
 
 echo "$(color-green SUCCESS)"
