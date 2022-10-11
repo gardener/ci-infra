@@ -3,6 +3,7 @@ presubmits:
   - name: pull-gardener-e2e-kind-ha-single-zone
     cluster: gardener-prow-build
     always_run: true
+    optional: true
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
@@ -13,7 +14,7 @@ presubmits:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs end-to-end tests for gardener developments in pull requests
+      description: Runs HA single-zone end-to-end tests for gardener developments in pull requests
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20220916-2cde602c65-master
@@ -52,7 +53,7 @@ periodics:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
   annotations:
-    description: Runs end-to-end tests for gardener developments periodically
+    description: Runs HA single-zone end-to-end tests for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
   spec:
