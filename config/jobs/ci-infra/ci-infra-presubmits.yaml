@@ -9,7 +9,7 @@ presubmits:
       description: Runs checkconfig to validate changes to job configs, config.yaml and friends
     spec:
       containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20221011-c2d8edcd15
+      - image: gcr.io/k8s-prow/checkconfig:v20221011-5d4db25b24
         command:
         - checkconfig
         args:
@@ -33,7 +33,7 @@ presubmits:
       description: Runs go tests for prow developments in ci-infra 
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220908-2a8314f-1.18
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221012-3f7c056-1.18
         command:
         - make
         args:
