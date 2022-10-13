@@ -31,13 +31,11 @@ color-context() { # Bold blue
   echo -e "\x1B[1;34m${@}\x1B[0m"
 }
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
 echo "$(color-step "Copy prow kubeconfig to ~/.gardener-prow/kubeconfig/kubeconfig--gardener--prow-combined.yaml")"
 mkdir -p ~/.gardener-prow/kubeconfig/
-cp -p $SCRIPT_DIR/../config/kubeconfig/garden.yaml ~/.gardener-prow/kubeconfig/
+gsutil cp gs://gardener-prow-config/kubeconfig/garden.yaml ~/.gardener-prow/kubeconfig/
 # Credential plugin does not get environment variable from shell. Thus, $HOME is empty and "~/" paths do not work in this context
-cat $SCRIPT_DIR/../config/kubeconfig/kubeconfig--gardener--prow-combined.yaml |\
+gsutil cat gs://gardener-prow-config/kubeconfig/kubeconfig--gardener--prow-combined.yaml |\
   sed "s:{{ garden-path }}:$(realpath ~/.gardener-prow/kubeconfig/garden.yaml):g" \
   > ~/.gardener-prow/kubeconfig/kubeconfig--gardener--prow-combined.yaml
 chmod 600 ~/.gardener-prow/kubeconfig/*.yaml
