@@ -6,6 +6,7 @@ triggers:
   - gardener/gardener
   - gardener/gardener-extension-registry-cache
   - gardener/gardener-extension-shoot-oidc-service
+  - gardener/dependency-watchdog
   only_org_members: true
 
 approve:
@@ -234,6 +235,31 @@ plugins:
     - override
     - skip
     - trigger
+  gardener/dependency-watchdog:
+    plugins:
+      - approve
+      - assign
+      - blunderbuss
+      - golint
+      - heart
+      - help
+      - hold
+      - invalidcommitmsg
+      - label
+      - lgtm
+      - lifecycle
+      - mergecommitblocker
+      - milestone
+      - override
+      - owners-label
+      - require-matching-label
+      - retitle
+      - size
+      - skip
+      - trigger
+      - verify-owners
+      - welcome
+      - wip
 
 external_plugins:
   gardener/ci-infra:
