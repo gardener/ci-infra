@@ -1,5 +1,5 @@
 presubmits:
-  gardener/gardener:
+  gardener/dependency-watchdog:
   - name: pull-dependency-watchdog-check-vulnerabilities
     cluster: gardener-prow-build
     skip_if_only_changed: "^docs/|\\.(md|yaml)$"

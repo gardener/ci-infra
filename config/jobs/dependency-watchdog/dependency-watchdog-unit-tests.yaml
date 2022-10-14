@@ -1,5 +1,5 @@
 presubmits:
-  gardener/gardener-extension-registry-cache:
+  gardener/dependency-watchdog:
   - name: pull-dependency-watchdog-unit
     cluster: gardener-prow-build
     always_run: true
