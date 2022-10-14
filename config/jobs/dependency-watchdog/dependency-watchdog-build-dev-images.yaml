@@ -1,5 +1,5 @@
 postsubmits:
-  gardener/gardener:
+  gardener/dependency-watchdog:
   - name: post-dependency-watchdog-build-dev-images
     cluster: gardener-prow-trusted
     skip_if_only_changed: '^VERSION$'

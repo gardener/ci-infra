@@ -1,5 +1,5 @@
 presubmits:
-  gardener/gardener:
+  gardener/dependency-watchdog:
   - name: pull-dependency-watchdog-verify-image-build
     cluster: gardener-prow-build
     always_run: true
