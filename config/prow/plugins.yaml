@@ -237,29 +237,9 @@ plugins:
     - trigger
   gardener/dependency-watchdog:
     plugins:
-      - approve
-      - assign
-      - blunderbuss
-      - golint
-      - heart
-      - help
-      - hold
-      - invalidcommitmsg
-      - label
-      - lgtm
-      - lifecycle
-      - mergecommitblocker
-      - milestone
-      - override
-      - owners-label
-      - require-matching-label
-      - retitle
-      - size
-      - skip
-      - trigger
-      - verify-owners
-      - welcome
-      - wip
+    - override
+    - skip
+    - trigger
 
 external_plugins:
   gardener/ci-infra:
