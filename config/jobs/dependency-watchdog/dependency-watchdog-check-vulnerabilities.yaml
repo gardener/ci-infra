@@ -1,0 +1,43 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-dependency-watchdog-check-vulnerabilities
+    cluster: gardener-prow-build
+    skip_if_only_changed: "^docs/|\\.(md|yaml)$"
+    decorate: true
+    decoration_config:
+      timeout: 15m
+      grace_period: 5m
+    optional: true
+    branches:
+    - ^master$
+    spec:
+      containers:
+      - name: test
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220908-2a8314f-1.19
+        command:
+        - make
+        args:
+        - check-vulnerabilities
+periodics:
+- name: ci-dependency-watchdog-check-vulnerabilities
+  cluster: gardener-prow-build
+  interval: 24h
+  extra_refs:
+  - org: gardener
+    repo: dependency-watchdog
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 15m
+    grace_period: 5m
+  annotations:
+    description: Runs go vulnerability checker for dependency-watchdog periodically
+    testgrid-dashboards: gardener-dependency-watchdog
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20220908-2a8314f-1.19
+      command:
+      - make
+      args:
+      - check-vulnerabilities

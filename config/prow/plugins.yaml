@@ -6,6 +6,7 @@ triggers:
   - gardener/gardener
   - gardener/gardener-extension-registry-cache
   - gardener/gardener-extension-shoot-oidc-service
+  - gardener/dependency-watchdog
   only_org_members: true
 
 approve:
@@ -230,6 +231,11 @@ plugins:
     - wip
     - yuks
   gardener/gardener-extension-shoot-oidc-service:
+    plugins:
+    - override
+    - skip
+    - trigger
+  gardener/dependency-watchdog:
     plugins:
     - override
     - skip
