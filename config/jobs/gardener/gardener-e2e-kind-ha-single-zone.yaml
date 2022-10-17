@@ -27,11 +27,9 @@ presubmits:
         securityContext:
           privileged: true
         resources:
-          limits:
-            memory: 18Gi
           requests:
             cpu: 12
-            memory: 9Gi
+            memory: 64Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
@@ -68,11 +66,9 @@ periodics:
       securityContext:
         privileged: true
       resources:
-        limits:
-          memory: 18Gi
         requests:
           cpu: 12
-          memory: 9Gi
+          memory: 64Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
