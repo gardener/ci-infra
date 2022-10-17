@@ -20,10 +20,6 @@ spec:
         resources:
           requests:
             storage: 100Gi
-  retention: 90d
-  additionalScrapeConfigs:
-    name: prometheus-prow-additional-scrape-configs
-    key: additional-scrape-targets.yaml
   affinity: 
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
