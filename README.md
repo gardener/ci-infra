@@ -55,23 +55,25 @@ The following commands assume you are using the combined `kubeconfig` generated 
 
 
 1. Create the prow cluster and prow workload cluster.
+
+   Please copy cluster spec from prow config GCS bucket to your /tmp folder and run these commands. 
    ```bash
-   kubectl config use-context garden-garden-ci
-   kubectl apply -f config/clusters/shoot.yaml
-   kubectl apply -f config/clusters/shoot-workload.yaml
+   kubectl config use-context garden-cluster
+   kubectl apply -f /tmp/clusters/prow-trusted.yaml
+   kubectl apply -f /tmp/clusters/prow-build.yaml
    ```
-1. Complete your combined kubeconfig with the data of the clusters created in the previous step
-1. Create the `prow` namespace in the prow cluster:
+2. Complete your combined kubeconfig with the data of the clusters created in the previous step
+3. Create the `prow` namespace in the prow cluster:
    ```bash
    kubectl config use-context gardener-prow-trusted
    kubectl apply --server-side=true -f config/prow/cluster/prow_namespace.yaml
    ```
-1. Create the `test-pods` namespace in the workload/build cluster:
+4. Create the `test-pods` namespace in the workload/build cluster:
    ```bash
    kubectl config use-context gardener-prow-build
    kubectl apply --server-side=true -f config/prow/cluster/base/test-pods_namespace.yaml
    ```   
-1. Create the required secrets (mainly in the prow cluster):
+5. Create the required secrets (mainly in the prow cluster):
     - the secrets for GCP service accounts can be created by our credentials rotation script `./hack/rotate-secrets.sh`. Please see Rotate [credentials section](#rotate-credentials) for more details.
     - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
     - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`, needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
@@ -86,7 +88,7 @@ The following commands assume you are using the combined `kubeconfig` generated 
       kubectl config use-context gardener-prow-trusted
       kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
       ```
-    - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
+    - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow-trusted cluster)
       - add two contexts: the prow cluster as `gardener-prow-trusted` and the build/workload cluster as `gardener-prow-build`
       - `gardener-prow-trusted` context should use the in-cluster `ServiceAccount` token and CA file, so that all Prow components are bound to their respective RBAC roles
       - `gardener-prow-build` needs to be bound to the `cluster-admin` role. The [gencred](https://github.com/kubernetes/test-infra/tree/master/gencred) utility can be used to easily create a `ServiceAccount` and `ClusterRoleBinding` and retrieve the `ServiceAccount` token.
@@ -122,21 +124,21 @@ The following commands assume you are using the combined `kubeconfig` generated 
             token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
         ```
     - `slack-token` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter))
-    - `alertmanager-prow-slack` (needs to be present in the `monitoring` namespace of the prow trusted and build cluster)
+    - `alertmanager-slack` (needs to be present in the `monitoring` namespace of the prow trusted and build cluster)
       - Follow https://api.slack.com/incoming-webhooks and setup a webhook.
       - Create the secret including the Webhook URL under key `api_url`.
-    - `grafana` (admin user password)
+    - `grafana-admin` (admin user password)
       ```bash
       kubectl config use-context gardener-prow-trusted
       kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
       kubectl config use-context gardener-prow-build
       kubectl -n monitoring create secret generic grafana-admin --from-literal=admin_password=$(openssl rand -base64 32)
       ```
-1. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
+6. Deploy Prow components. The initial deployment has to be done manually, later on changes to the components will be automatically deployed once merged into master.
    ```bash
    ./config/prow/deploy.sh
    ```
-1. Bootstrap Prow configuration/jobs. This initial configuration has to be done manually, later on changes to configuration and jobs will be automatically applied by the [`updateconfig`](https://github.com/kubernetes/test-infra/tree/master/prow/plugins/updateconfig) plugin once merged into master.
+7. Bootstrap Prow configuration/jobs. This initial configuration has to be done manually, later on changes to configuration and jobs will be automatically applied by the [`updateconfig`](https://github.com/kubernetes/test-infra/tree/master/prow/plugins/updateconfig) plugin once merged into master. The bootstrap tool does not work with the kubectl OIDC auth plugin. Thus, for the initial bootstrapping run, you will need a kubeconfig with a token for the trusted cluster.
    ```bash
    ./hack/boostrap-config.sh
    ```
