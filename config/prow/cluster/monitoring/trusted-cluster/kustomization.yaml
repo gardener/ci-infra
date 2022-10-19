@@ -16,6 +16,7 @@ resources:
 
 patchesStrategicMerge:
 - grafana-deployment.yaml
+- prometheus.yaml
 
 configMapGenerator:
 - name: grafana-prow-dashboards

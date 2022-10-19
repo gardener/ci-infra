@@ -151,8 +151,8 @@ echo "$(color-green done)"
 # Start reconciling trusted and build prow clusters to enable using the new infrastructure secret
 echo "$(color-step "Start reconciling trusted and build prow clusters to enable using the new infrastructure secret...")"
 kubectl config use-context garden-cluster
-kubectl annotate shoot prow gardener.cloud/operation=reconcile
-kubectl annotate shoot prow-work gardener.cloud/operation=reconcile
+kubectl annotate shoot prow-trusted gardener.cloud/operation=reconcile
+kubectl annotate shoot prow-build gardener.cloud/operation=reconcile
 echo "$(color-green done)"
 
 echo "$(color-green SUCCESS)"
