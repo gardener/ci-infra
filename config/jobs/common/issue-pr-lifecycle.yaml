@@ -5,7 +5,7 @@ periodics:
   decorate: true
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts" 
+      channel: prow-alerts
   annotations:
     description: Closes rotten issues after 30d of inactivity
     testgrid-create-test-group: "false"
@@ -52,7 +52,7 @@ periodics:
   decorate: true
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Adds lifecycle/rotten to stale issues after 30d of inactivity
     testgrid-create-test-group: "false"
@@ -100,7 +100,7 @@ periodics:
   decorate: true
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Adds lifecycle/stale to issues after 90d of inactivity
     testgrid-create-test-group: "false"

@@ -11,7 +11,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs label_sync to synchronize GitHub repo labels with the label config defined in config/prow/labels.yaml
     testgrid-create-test-group: "false"
@@ -86,7 +86,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs autobumper to create/update a PR that bumps prow images to the latest published version
     testgrid-create-test-group: "false"
@@ -117,7 +117,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs autobumper to create/update and auto-merge a PR that bumps prow images to the latest published version
     testgrid-create-test-group: "false"
@@ -148,7 +148,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs autobumper to create/update a PR that bumps prowjob images to latest published version
     testgrid-create-test-group: "false"
@@ -179,7 +179,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs autobumper to create/update and auto-merge a PR that bumps prowjob images to latest published version
     testgrid-create-test-group: "false"
@@ -213,7 +213,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
     testgrid-create-test-group: "false"
@@ -245,7 +245,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   annotations:
     description: Runs checkconfig to validate job configs, config.yaml and friends. Used as heartbeat job for alerts.
     testgrid-create-test-group: "false"
@@ -276,7 +276,7 @@ periodics:
     base_ref: master
   reporter_config:
     slack:
-      channel: "gardener-prow-alerts"
+      channel: prow-alerts
   decorate: true
   annotations:
     description: Runs go tests for prow developments in ci-infra
