@@ -123,10 +123,18 @@ The following commands assume you are using the combined `kubeconfig` generated 
           user:
             token: <<service-account-token-with-cluster-admin-permissions>> # generated via gencred
         ```
-    - `slack-token` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter))
-    - `alertmanager-slack` (needs to be present in the `monitoring` namespace of the prow trusted and build cluster)
-      - Follow https://api.slack.com/incoming-webhooks and setup a webhook.
-      - Create the secret including the Webhook URL under key `api_url`.
+    - `slack-token` for the `Gardener Prow` Slack App in the [Gardener Project workspace](https://gardener-cloud.slack.com/)
+      - follow the [test-infra guide](https://github.com/kubernetes/test-infra/blob/master/prow/cmd/crier/README.md#slack-reporter) for setting up the Slack App
+      - this is used by crier to report job status changes (e.g., test failures) to dedicated Slack channels
+      - generally, failures/errors of `periodic`, `postsubmit` and `batch` jobs are reported to [`#test-failures`](https://gardener-cloud.slack.com/archives/C046PHX7ACR)
+      - job status changes concerning the prow infrastructure itself (e.g., deploy and autobump jobs) are reported to [`#prow-alerts`](https://gardener-cloud.slack.com/archives/C04680KRF8D)
+      - this token is also used by hook (`slack` plugin) to post merge warnings to [`#prow-alerts`](https://gardener-cloud.slack.com/archives/C04680KRF8D)
+    - `alertmanager-slack`: URLs for incoming webhooks for the [#gardener-prow-alerts](https://sap-ti.slack.com/archives/C02P7MSTJHJ) channel in the SAP Slack workspace
+      - alertmanager instances in both clusters use an incoming webhook to post monitoring alerts to Slack
+      - different webhooks are used for the two instances
+      - for both clusters (prow-trusted and prow-build) do the following:
+        - follow https://api.slack.com/incoming-webhooks and set up a webhook for posting to `#gardener-prow-alerts`
+        - create a secret in the `monitoring` namespace of the respective cluster with the Webhook URL under key `api_url`
     - `grafana-admin` (admin user password)
       ```bash
       kubectl config use-context gardener-prow-trusted
@@ -155,7 +163,7 @@ A monitoring stack based on [kube-prometheus](https://github.com/prometheus-oper
 - kube-state-metrics
 - grafana
 
-Alertmanager will send Slack alerts in `#gardener-prow-alerts` (SAP-internal workspace).
+Alertmanager will send Slack alerts in [`#gardener-prow-alerts`](https://sap-ti.slack.com/archives/C02P7MSTJHJ) in the SAP Slack workspace.
 
 Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted cluster) and https://monitoring-build.prow.gardener.cloud (build cluster).
 

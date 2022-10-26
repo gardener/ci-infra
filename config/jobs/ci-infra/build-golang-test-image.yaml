@@ -13,7 +13,7 @@ postsubmits:
     max_concurrency: 1
     reporter_config:
       slack:
-        channel: "gardener-prow-alerts"
+        channel: prow-alerts
     spec:
       serviceAccountName: image-builder
       containers:

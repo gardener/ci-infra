@@ -117,7 +117,7 @@ slack_reporter_configs:
     job_states_to_report:
       - failure
       - error
-    channel: gardener-test-failures
+    channel: test-failures
     report_template: |
       *Job:* {{.Spec.Job}} ({{.Spec.Type}})
       *Status:* {{.Status.State}}

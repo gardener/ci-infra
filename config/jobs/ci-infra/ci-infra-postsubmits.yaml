@@ -9,7 +9,7 @@ postsubmits:
     max_concurrency: 1
     reporter_config:
       slack:
-        channel: "gardener-prow-alerts"
+        channel: prow-alerts
         job_states_to_report:
         - success
         - failure
