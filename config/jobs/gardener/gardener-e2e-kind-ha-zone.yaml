@@ -1,6 +1,6 @@
 presubmits:
   gardener/gardener:
-  - name: pull-gardener-e2e-kind-ha-multi-zone
+  - name: pull-gardener-e2e-kind-ha-zone
     cluster: gardener-prow-build
     always_run: true
     optional: true
@@ -14,7 +14,7 @@ presubmits:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs HA multi-zone end-to-end tests for gardener developments in pull requests
+      description: Runs end-to-end tests on a Seed with 3 zones with a Shoot with failure tolerance type 'zone' for gardener developments in pull requests
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20221007-a06f7d6a2c-master
@@ -22,7 +22,7 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-ha-multi-zone
+        - make ci-e2e-kind-ha-zone
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -36,7 +36,7 @@ presubmits:
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
 periodics:
-- name: ci-gardener-e2e-kind-ha-multi-zone
+- name: ci-gardener-e2e-kind-ha-zone
   cluster: gardener-prow-build
   interval: 4h
   extra_refs:
@@ -51,7 +51,7 @@ periodics:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
   annotations:
-    description: Runs HA multi-zone end-to-end tests for gardener developments periodically
+    description: Runs end-to-end tests on a Seed with 3 zones with a Shoot with failure tolerance type 'zone' for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
   spec:
@@ -61,7 +61,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-ha-multi-zone
+      - make ci-e2e-kind-ha-zone
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
