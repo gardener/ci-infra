@@ -29,7 +29,7 @@ presubmits:
         resources:
           requests:
             cpu: 12
-            memory: 64Gi
+            memory: 48Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
@@ -68,7 +68,7 @@ periodics:
       resources:
         requests:
           cpu: 12
-          memory: 64Gi
+          memory: 48Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
