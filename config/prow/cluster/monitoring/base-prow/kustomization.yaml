@@ -9,7 +9,7 @@ bases:
 
 images:
 - name: grafana/grafana
-  newTag: 7.5.16
+  newTag: 7.5.17
 
 resources:
   - kubernetes-podMonitorKubeProxy.yaml
