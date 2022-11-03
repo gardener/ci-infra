@@ -53,12 +53,12 @@ func (fgcf *FakeGitClientFactory) ClientFor(org, repo string) (git.RepoClient, e
 	return repoClient, nil
 }
 
-//--------------------------------------------------------------------------------------//
-
 // Clean is a fake for Clean
 func (fgcf *FakeGitClientFactory) Clean() error {
 	return nil
 }
+
+//--------------------------------------------------------------------------------------//
 
 // Commit is a fake for Commit
 func (fp *FakePublisher) Commit(title, body string) error {
@@ -90,6 +90,11 @@ func (fi *FakeInteractor) Directory() string {
 // Clean is a fake for Clean
 func (fi *FakeInteractor) Clean() error {
 	return nil
+}
+
+// CommitExists is a fake for CommitExists
+func (fi *FakeInteractor) CommitExists(sha string) (bool, error) {
+	return true, nil
 }
 
 // ResetHard is a fake for ResetHard

@@ -29,7 +29,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -95,6 +94,8 @@ type RequestThrottlingTimes struct {
 	throttlingTimeForGET uint
 	// maxDelayTime is applied when formed queue is too large, it allows to temporarily set max delay time provided by user instead of calculated value
 	maxDelayTime uint
+	// maxDelayTimeV4 is maxDelayTime for APIv4
+	maxDelayTimeV4 uint
 }
 
 func (rtt *RequestThrottlingTimes) isEnabled() bool {
@@ -109,12 +110,13 @@ func (rtt *RequestThrottlingTimes) getThrottlingTimeV4() uint {
 }
 
 // NewRequestThrottlingTimes creates a new RequestThrottlingTimes and returns it
-func NewRequestThrottlingTimes(requestThrottlingTime, requestThrottlingTimeV4, requestThrottlingTimeForGET, requestThrottlingMaxDelayTime uint) RequestThrottlingTimes {
+func NewRequestThrottlingTimes(requestThrottlingTime, requestThrottlingTimeV4, requestThrottlingTimeForGET, requestThrottlingMaxDelayTime, requestThrottlingMaxDelayTimeV4 uint) RequestThrottlingTimes {
 	return RequestThrottlingTimes{
 		throttlingTime:       requestThrottlingTime,
 		throttlingTimeV4:     requestThrottlingTimeV4,
 		throttlingTimeForGET: requestThrottlingTimeForGET,
 		maxDelayTime:         requestThrottlingMaxDelayTime,
+		maxDelayTimeV4:       requestThrottlingMaxDelayTimeV4,
 	}
 }
 
@@ -150,7 +152,7 @@ var pendingOutboundConnectionsGauge = prometheus.NewGauge(prometheus.GaugeOpts{
 var cachePartitionsCounter = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
 		Name: "ghcache_cache_parititions",
-		Help: "Which cache partitions exist",
+		Help: "Which cache partitions exist.",
 	},
 	[]string{"token_hash"},
 )
@@ -182,7 +184,7 @@ func newThrottlingTransport(maxConcurrency int, roundTripper http.RoundTripper, 
 		timeThrottlingEnabled: throttlingTimes.isEnabled(),
 		hasher:                hasher,
 		registryApiV3:         newTokensRegistry(throttlingTimes.throttlingTime, throttlingTimes.throttlingTimeForGET, throttlingTimes.maxDelayTime),
-		registryApiV4:         newTokensRegistry(throttlingTimes.getThrottlingTimeV4(), throttlingTimes.throttlingTimeForGET, throttlingTimes.maxDelayTime),
+		registryApiV4:         newTokensRegistry(throttlingTimes.getThrottlingTimeV4(), throttlingTimes.throttlingTimeForGET, throttlingTimes.maxDelayTimeV4),
 	}
 }
 
@@ -438,7 +440,7 @@ func Prune(baseDir string, now func() time.Time) {
 			metadataPath := path.Join(base, cachePartitionCandidate.Name(), cachePartitionMetadataFileName)
 
 			// Read optimistically and just ignore errors
-			raw, err := ioutil.ReadFile(metadataPath)
+			raw, err := os.ReadFile(metadataPath)
 			if err != nil {
 				continue
 			}
@@ -476,7 +478,7 @@ func writecachePartitionMetadata(basePath, tempDir string, expiresAt *time.Time)
 			errs = append(errs, fmt.Errorf("failed to create dir %s: %w", destBase, err))
 		}
 		dest := path.Join(destBase, cachePartitionMetadataFileName)
-		if err := ioutil.WriteFile(dest, serialized, 0644); err != nil {
+		if err := os.WriteFile(dest, serialized, 0644); err != nil {
 			errs = append(errs, fmt.Errorf("failed to write %s: %w", dest, err))
 		}
 	}

@@ -23,7 +23,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/url"
 	"os"
 	"path"
@@ -48,10 +48,10 @@ import (
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation"
+	gerritsource "k8s.io/test-infra/prow/gerrit/source"
 	"sigs.k8s.io/yaml"
 
 	prowapi "k8s.io/test-infra/prow/apis/prowjobs/v1"
-	gerrit "k8s.io/test-infra/prow/gerrit/client"
 	"k8s.io/test-infra/prow/git/types"
 	"k8s.io/test-infra/prow/git/v2"
 	"k8s.io/test-infra/prow/github"
@@ -213,68 +213,83 @@ type InRepoConfig struct {
 	AllowedClusters map[string][]string `json:"allowed_clusters,omitempty"`
 }
 
-func trimRepoPrefix(repo string) string {
-	repo = strings.TrimPrefix(repo, "http://")
-	repo = strings.TrimPrefix(repo, "https://")
-	return repo
-}
+func SplitRepoName(fullRepoName string) (string, string, error) {
+	// Gerrit org/repo contains https://, should be handled differently.
+	if gerritsource.IsGerritOrg(fullRepoName) {
+		return gerritsource.OrgRepoFromCloneURI(fullRepoName)
+	}
 
-// TODO(mpherman): Do not return error, just use org == ""
-func SplitRepoName(repo string) (string, string, error) {
-	// Normalize repo name to remove http:// or https://, this is the case for some
-	// of the gerrit instances.
-	repo = trimRepoPrefix(repo)
-	s := strings.SplitN(repo, "/", 2)
+	s := strings.SplitN(fullRepoName, "/", 2)
 	if len(s) != 2 {
-		return "", "", fmt.Errorf("repo %s cannot be split into org/repo", repo)
+		return "", "", fmt.Errorf("repo %s cannot be split into org/repo", fullRepoName)
 	}
 	return s[0], s[1], nil
 }
 
 // InRepoConfigEnabled returns whether InRepoConfig is enabled for a given repository.
-// Assumes that config will not include http:// or https://
+// There is no assumption that config will include http:// or https:// or not.
 func (c *Config) InRepoConfigEnabled(identifier string) bool {
-	normalizedIdentifier := trimRepoPrefix(identifier)
-
-	if c.InRepoConfig.Enabled[normalizedIdentifier] != nil {
-		return *c.InRepoConfig.Enabled[normalizedIdentifier]
-	}
-
-	// Errors if failed to split. We are ignoring this and just checking if org != "" instead.
-	if org, _, _ := SplitRepoName(identifier); org != "" && c.InRepoConfig.Enabled[org] != nil {
-		return *c.InRepoConfig.Enabled[org]
-	}
-	if c.InRepoConfig.Enabled["*"] != nil {
-		return *c.InRepoConfig.Enabled["*"]
+	for _, key := range keysForIdentifier(identifier) {
+		if c.InRepoConfig.Enabled[key] != nil {
+			return *c.InRepoConfig.Enabled[key]
+		}
 	}
 	return false
 }
 
 // InRepoConfigAllowsCluster determines if a given cluster may be used for a given repository
 // Assumes that config will not include http:// or https://
-func (c *Config) InRepoConfigAllowsCluster(clusterName, repoIdentifier string) bool {
-	normalizedIdentifier := trimRepoPrefix(repoIdentifier)
-	for _, allowedCluster := range c.InRepoConfig.AllowedClusters[normalizedIdentifier] {
-		if allowedCluster == clusterName {
-			return true
-		}
-	}
-
-	// Errors if failed to split. We are ignoring this and just checking if org != "" instead.
-	if org, _, _ := SplitRepoName(repoIdentifier); org != "" {
-		for _, allowedCluster := range c.InRepoConfig.AllowedClusters[org] {
+func (c *Config) InRepoConfigAllowsCluster(clusterName, identifier string) bool {
+	for _, key := range keysForIdentifier(identifier) {
+		for _, allowedCluster := range c.InRepoConfig.AllowedClusters[key] {
 			if allowedCluster == clusterName {
 				return true
 			}
 		}
 	}
-
-	for _, allowedCluster := range c.InRepoConfig.AllowedClusters["*"] {
-		if allowedCluster == clusterName {
-			return true
-		}
-	}
 	return false
+}
+
+// keysForIdentifier returns all possible identifiers for given keys. In
+// consideration of Gerrit identifiers that contain `https://` prefix, it
+// returns keys contain both `https://foo/bar` and `foo/bar` for identifier
+// `https://foo/bar`. The returned keys also include `https://foo`, `foo`, and
+// `*`.
+func keysForIdentifier(identifier string) []string {
+	var candidates []string
+
+	normalizedIdentifier := identifier
+	if gerritsource.IsGerritOrg(identifier) {
+		normalizedIdentifier = gerritsource.NormalizeCloneURI(identifier)
+	}
+
+	candidates = append(candidates, normalizedIdentifier)
+	// gerritsource.TrimHTTPSPrefix(identifier) trims https:// prefix, it
+	// doesn't hurt for identifier without https://
+	candidates = append(candidates, gerritsource.TrimHTTPSPrefix(identifier))
+
+	org, _, _ := SplitRepoName(normalizedIdentifier)
+	// Errors if failed to split. We are ignoring this and just checking if org != "" instead.
+	if org != "" {
+		candidates = append(candidates, org)
+		// gerritsource.TrimHTTPSPrefix(identifier) trims https:// prefix, it
+		// doesn't hurt for identifier without https://
+		candidates = append(candidates, gerritsource.TrimHTTPSPrefix(org))
+	}
+
+	candidates = append(candidates, "*")
+
+	var res []string
+	visited := sets.NewString()
+	for _, cand := range candidates {
+		if visited.Has(cand) {
+			continue
+		}
+		res = append(res, cand)
+		visited.Insert(cand)
+	}
+
+	return res
 }
 
 // RefGetter is used to retrieve a Git Reference. Its purpose is
@@ -383,7 +398,9 @@ func GetAndCheckRefs(
 		if err != nil {
 			return "", nil, fmt.Errorf("failed to get headRef: %v", err)
 		}
-		headSHAs = append(headSHAs, headSHA)
+		if headSHA != "" {
+			headSHAs = append(headSHAs, headSHA)
+		}
 	}
 
 	return baseSHA, headSHAs, nil
@@ -455,7 +472,17 @@ func (c *Config) GetPresubmits(gc git.ClientFactory, identifier string, baseSHAG
 
 // GetPresubmitsStatic will return presubmits for the given identifier that are versioned inside the tested repo.
 func (c *Config) GetPresubmitsStatic(identifier string) []Presubmit {
-	return c.PresubmitsStatic[identifier]
+	keys := []string{identifier}
+	if gerritsource.IsGerritOrg(identifier) {
+		// For Gerrit, allow users to define jobs without https:// prefix, which
+		// is what's supported right now.
+		keys = append(keys, gerritsource.TrimHTTPSPrefix(identifier))
+	}
+	var res []Presubmit
+	for _, key := range keys {
+		res = append(res, c.PresubmitsStatic[key]...)
+	}
+	return res
 }
 
 // GetPostsubmits will return all postsubmits for the given identifier. This includes
@@ -470,12 +497,22 @@ func (c *Config) GetPostsubmits(gc git.ClientFactory, identifier string, baseSHA
 		return nil, err
 	}
 
-	return append(c.PostsubmitsStatic[identifier], prowYAML.Postsubmits...), nil
+	return append(c.GetPostsubmitsStatic(identifier), prowYAML.Postsubmits...), nil
 }
 
 // GetPostsubmitsStatic will return postsubmits for the given identifier that are versioned inside the tested repo.
 func (c *Config) GetPostsubmitsStatic(identifier string) []Postsubmit {
-	return c.PostsubmitsStatic[identifier]
+	keys := []string{identifier}
+	if gerritsource.IsGerritOrg(identifier) {
+		// For Gerrit, allow users to define jobs without https:// prefix, which
+		// is what's supported right now.
+		keys = append(keys, gerritsource.TrimHTTPSPrefix(identifier))
+	}
+	var res []Postsubmit
+	for _, key := range keys {
+		res = append(res, c.PostsubmitsStatic[key]...)
+	}
+	return res
 }
 
 // OwnersDirDenylist is used to configure regular expressions matching directories
@@ -763,6 +800,13 @@ func (p *Plank) GuessDefaultDecorationConfig(repo, cluster string) *prowapi.Deco
 	return p.mergeDefaultDecorationConfig(repo, cluster, nil)
 }
 
+// GuessDefaultDecorationConfig attempts to find the resolved default decoration
+// config for a given repo, cluster and job DecorationConfig. It is primarily used for best effort
+// guesses about GCS configuration for undecorated jobs.
+func (p *Plank) GuessDefaultDecorationConfigWithJobDC(repo, cluster string, jobDC *prowapi.DecorationConfig) *prowapi.DecorationConfig {
+	return p.mergeDefaultDecorationConfig(repo, cluster, jobDC)
+}
+
 // defaultDecorationMapToSlice converts the old format
 // (map[string]*prowapi.DecorationConfig) to the new format
 // ([]*DefaultDecorationConfigEntry).
@@ -871,18 +915,41 @@ type GerritOrgRepoConfigs []GerritOrgRepoConfig
 
 // GerritOrgRepoConfig is config for repos.
 type GerritOrgRepoConfig struct {
-	Org        string   `json:"org,omitempty"`
-	Repos      []string `json:"repos,omitempty"`
-	OptOutHelp bool     `json:"opt_out_help,omitempty"`
+	// Org is the name of the Gerrit instance/host. It's required to keep the
+	// https:// or http:// prefix.
+	Org string `json:"org,omitempty"`
+	// Repos are a slice of repos under the `Org`.
+	Repos []string `json:"repos,omitempty"`
+	// OptOutHelp is the flag for determining whether the repos defined under
+	// here opting out of help or not. If this is true, Prow will not command
+	// the help message with comments like `/test ?`, `/retest ?`, `/test
+	// job-not-exist`, `/test job-only-available-from-another-prow`.
+	OptOutHelp bool `json:"opt_out_help,omitempty"`
+	// Filters are used for limiting the scope of querying the Gerrit server.
+	// Currently supports branches and excluded branches.
+	Filters *GerritQueryFilter `json:"filters,omitempty"`
 }
 
-func (goc *GerritOrgRepoConfigs) AllRepos() map[string][]string {
-	var res map[string][]string
+type GerritQueryFilter struct {
+	Branches         []string `json:"branches,omitempty"`
+	ExcludedBranches []string `json:"excluded_branches,omitempty"`
+	// OptInByDefault indicates that all of the PRs are considered by Tide from
+	// these repos, unless `Prow-Auto-Submit` label is voted -1.
+	OptInByDefault bool `json:"opt_in_by_default,omitempty"`
+}
+
+func (goc *GerritOrgRepoConfigs) AllRepos() map[string]map[string]*GerritQueryFilter {
+	var res map[string]map[string]*GerritQueryFilter
 	for _, orgConfig := range *goc {
 		if res == nil {
-			res = make(map[string][]string)
+			res = make(map[string]map[string]*GerritQueryFilter)
 		}
-		res[orgConfig.Org] = append(res[orgConfig.Org], orgConfig.Repos...)
+		for _, repo := range orgConfig.Repos {
+			if _, ok := res[orgConfig.Org]; !ok {
+				res[orgConfig.Org] = make(map[string]*GerritQueryFilter)
+			}
+			res[orgConfig.Org][repo] = orgConfig.Filters
+		}
 	}
 	return res
 }
@@ -1117,7 +1184,7 @@ type Deck struct {
 	// SkipStoragePathValidation skips validation that restricts artifact requests to specific buckets.
 	// By default, buckets listed in the GCSConfiguration are automatically allowed.
 	// Additional locations can be allowed via `AdditionalAllowedBuckets` fields.
-	// When unspecified (nil), it defaults to true (until ~Jan 2021).
+	// When unspecified (nil), it defaults to false
 	SkipStoragePathValidation *bool `json:"skip_storage_path_validation,omitempty"`
 	// AdditionalAllowedBuckets is a list of storage buckets to allow in artifact requests
 	// (in addition to those listed in the GCSConfiguration).
@@ -1185,7 +1252,7 @@ func (c *Config) ValidateStorageBucket(bucketName string) error {
 // Validation could be either enabled by default or explicitly turned off.
 func (d *Deck) shouldValidateStorageBuckets() bool {
 	if d.SkipStoragePathValidation == nil {
-		return true
+		return false
 	}
 	return !*d.SkipStoragePathValidation
 }
@@ -1281,16 +1348,18 @@ type DefaultRerunAuthConfigEntry struct {
 	Config *prowapi.RerunAuthConfig `json:"rerun_auth_configs,omitempty"`
 }
 
-func (d *Deck) GetRerunAuthConfig(refs *prowapi.Refs, cluster string) *prowapi.RerunAuthConfig {
+func (d *Deck) GetRerunAuthConfig(jobSpec *prowapi.ProwJobSpec) *prowapi.RerunAuthConfig {
 	var config *prowapi.RerunAuthConfig
 
 	var orgRepo string
-	if refs != nil {
-		orgRepo = refs.OrgRepoString()
+	if jobSpec.Refs != nil {
+		orgRepo = jobSpec.Refs.OrgRepoString()
+	} else if len(jobSpec.ExtraRefs) > 0 {
+		orgRepo = jobSpec.ExtraRefs[0].OrgRepoString()
 	}
 
 	for _, drac := range d.DefaultRerunAuthConfigs {
-		if drac.matches(orgRepo, cluster) {
+		if drac.matches(orgRepo, jobSpec.Cluster) {
 			config = drac.Config
 		}
 	}
@@ -1664,7 +1733,7 @@ func loadConfig(prowConfig, jobConfig string, additionalProwConfigDirs []string,
 
 	versionFilePath := filepath.Join(path.Dir(prowConfig), ConfigVersionFileName)
 	if _, errAccess := os.Stat(versionFilePath); errAccess == nil {
-		content, err := ioutil.ReadFile(versionFilePath)
+		content, err := os.ReadFile(versionFilePath)
 		if err != nil {
 			return nil, fmt.Errorf("failed to read versionfile %s: %w", versionFilePath, err)
 		}
@@ -1780,10 +1849,10 @@ func yamlToConfig(path string, nc interface{}, opts ...yaml.JSONOpt) error {
 	return nil
 }
 
-// ReadFileMaybeGZIP wraps ioutil.ReadFile, returning the decompressed contents
+// ReadFileMaybeGZIP wraps os.ReadFile, returning the decompressed contents
 // if the file is gzipped, or otherwise the raw contents.
 func ReadFileMaybeGZIP(path string) ([]byte, error) {
-	b, err := ioutil.ReadFile(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -1797,7 +1866,7 @@ func ReadFileMaybeGZIP(path string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ioutil.ReadAll(gzipReader)
+	return io.ReadAll(gzipReader)
 }
 
 func (c *Config) mergeJobConfig(jc JobConfig) error {
@@ -2179,21 +2248,67 @@ func (c Config) validatePostsubmits(postsubmits []Postsubmit) error {
 
 // validatePeriodics validates a set of periodics.
 func (c Config) validatePeriodics(periodics []Periodic) error {
+	var errs []error
 
 	// validate no duplicated periodics.
 	validPeriodics := sets.NewString()
 	// Ensure that the periodic durations are valid and specs exist.
-	for _, p := range periodics {
+	for j, p := range periodics {
 		if validPeriodics.Has(p.Name) {
-			return fmt.Errorf("duplicated periodic job : %s", p.Name)
+			errs = append(errs, fmt.Errorf("duplicated periodic job: %s", p.Name))
 		}
 		validPeriodics.Insert(p.Name)
 		if err := c.validateJobBase(p.JobBase, prowapi.PeriodicJob); err != nil {
-			return fmt.Errorf("invalid periodic job %s: %w", p.Name, err)
+			errs = append(errs, fmt.Errorf("invalid periodic job %s: %w", p.Name, err))
 		}
+
+		// Validate mutually exclusive properties
+		seen := 0
+		if p.Cron != "" {
+			seen += 1
+		}
+		if p.Interval != "" {
+			seen += 1
+		}
+		if p.MinimumInterval != "" {
+			seen += 1
+		}
+		if seen > 1 {
+			errs = append(errs, fmt.Errorf("cron, interval, and minimum_interval are mutually exclusive in periodic %s", p.Name))
+			continue
+		}
+		if seen == 0 {
+			errs = append(errs, fmt.Errorf("at least one of cron, interval, or minimum_interval must be set in periodic %s", p.Name))
+			continue
+		}
+
+		if p.Cron != "" {
+			if _, err := cron.Parse(p.Cron); err != nil {
+				errs = append(errs, fmt.Errorf("invalid cron string %s in periodic %s: %w", p.Cron, p.Name, err))
+			}
+		}
+
+		// Set the interval on the periodic jobs. It doesn't make sense to do this
+		// for child jobs.
+		if p.Interval != "" {
+			d, err := time.ParseDuration(periodics[j].Interval)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("cannot parse duration for %s: %w", periodics[j].Name, err))
+			}
+			periodics[j].interval = d
+		}
+
+		if p.MinimumInterval != "" {
+			d, err := time.ParseDuration(periodics[j].MinimumInterval)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("cannot parse duration for %s: %w", periodics[j].Name, err))
+			}
+			periodics[j].minimum_interval = d
+		}
+
 	}
 
-	return nil
+	return utilerrors.NewAggregate(errs)
 }
 
 // ValidateJobConfig validates if all the jobspecs/presets are valid
@@ -2216,28 +2331,9 @@ func (c *Config) ValidateJobConfig() error {
 		}
 	}
 
+	// Validate periodics.
 	if err := c.validatePeriodics(c.Periodics); err != nil {
 		errs = append(errs, err)
-	}
-
-	// Set the interval on the periodic jobs. It doesn't make sense to do this
-	// for child jobs.
-	for j, p := range c.Periodics {
-		if p.Cron != "" && p.Interval != "" {
-			errs = append(errs, fmt.Errorf("cron and interval cannot be both set in periodic %s", p.Name))
-		} else if p.Cron == "" && p.Interval == "" {
-			errs = append(errs, fmt.Errorf("cron and interval cannot be both empty in periodic %s", p.Name))
-		} else if p.Cron != "" {
-			if _, err := cron.Parse(p.Cron); err != nil {
-				errs = append(errs, fmt.Errorf("invalid cron string %s in periodic %s: %w", p.Cron, p.Name, err))
-			}
-		} else {
-			d, err := time.ParseDuration(c.Periodics[j].Interval)
-			if err != nil {
-				errs = append(errs, fmt.Errorf("cannot parse duration for %s: %w", c.Periodics[j].Name, err))
-			}
-			c.Periodics[j].interval = d
-		}
 	}
 
 	c.Deck.AllKnownStorageBuckets = calculateStorageBuckets(c)
@@ -2268,6 +2364,12 @@ func parseProwConfig(c *Config) error {
 
 	if c.Gerrit.RateLimit == 0 {
 		c.Gerrit.RateLimit = 5
+	}
+
+	if c.Tide.Gerrit != nil {
+		if c.Tide.Gerrit.RateLimit == 0 {
+			c.Tide.Gerrit.RateLimit = 5
+		}
 	}
 
 	if len(c.GitHubReporter.JobTypesToReport) == 0 {
@@ -2814,7 +2916,7 @@ func validateReporting(j JobBase, r Reporter) error {
 		return nil
 	}
 	for label, value := range j.Labels {
-		if label == gerrit.GerritReportLabel && value != "" {
+		if label == kube.GerritReportLabel && value != "" {
 			return fmt.Errorf("Gerrit report label %s set to non-empty string but job is configured to skip reporting.", label)
 		}
 	}
@@ -3053,7 +3155,7 @@ func StringsToOrgRepos(vs []string) []OrgRepo {
 func (pc *ProwConfig) mergeFrom(additional *ProwConfig) error {
 	emptyReference := &ProwConfig{
 		BranchProtection: additional.BranchProtection,
-		Tide:             Tide{MergeType: additional.Tide.MergeType, Queries: additional.Tide.Queries},
+		Tide:             Tide{TideGitHubConfig: TideGitHubConfig{MergeType: additional.Tide.MergeType, Queries: additional.Tide.Queries}},
 	}
 
 	var errs []error
@@ -3160,7 +3262,7 @@ func (pc *ProwConfig) hasGlobalConfig() bool {
 	}
 	emptyReference := &ProwConfig{
 		BranchProtection: pc.BranchProtection,
-		Tide:             Tide{MergeType: pc.Tide.MergeType, Queries: pc.Tide.Queries},
+		Tide:             Tide{TideGitHubConfig: TideGitHubConfig{MergeType: pc.Tide.MergeType, Queries: pc.Tide.Queries}},
 	}
 	return cmp.Diff(pc, emptyReference) != ""
 }
