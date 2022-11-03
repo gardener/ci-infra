@@ -7,6 +7,7 @@ presubmits:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     annotations:
       description: Verify gardener image build on pull requests to master branch
+      fork-per-release: "true"
     decorate: true
     spec:
       containers:
@@ -28,6 +29,7 @@ presubmits:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     annotations:
       description: Publish gardener development images on pull requests
+      fork-per-release: "true"
     decorate: true
     optional: true
     spec:

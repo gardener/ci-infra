@@ -14,6 +14,7 @@ presubmits:
       preset-kind-volume-mounts: "true"
     annotations:
       description: Runs end-to-end tests for gardener developments in pull requests
+      fork-per-release: "true"
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20221007-a06f7d6a2c-master
@@ -53,6 +54,7 @@ periodics:
     description: Runs end-to-end tests for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
+    fork-per-release: "true"
   spec:
     containers:
     - image: gcr.io/k8s-staging-test-infra/krte:v20221007-a06f7d6a2c-master
