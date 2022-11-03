@@ -35,6 +35,12 @@ WORKDIR /
 COPY --from=builder /build/cherrypicker /cherrypicker
 ENTRYPOINT [ "/cherrypicker" ]
 
+FROM ssl_git_runner AS job-forker
+LABEL app=job-forker
+WORKDIR /
+COPY --from=builder /build/job-forker /job-forker
+ENTRYPOINT [ "/job-forker" ]
+
 FROM base_nonroot AS cla-assistant
 LABEL app=cla-assistant
 WORKDIR /
