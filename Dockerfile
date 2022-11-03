@@ -36,7 +36,7 @@ COPY --from=builder /build/cherrypicker /cherrypicker
 ENTRYPOINT [ "/cherrypicker" ]
 
 FROM ssl_git_runner AS job-forker
-LABEL app=jobforker
+LABEL app=job-forker
 WORKDIR /
 COPY --from=builder /build/job-forker /job-forker
 ENTRYPOINT [ "/job-forker" ]
