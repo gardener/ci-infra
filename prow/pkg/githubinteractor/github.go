@@ -88,6 +88,7 @@ type GitClient interface {
 // CommitClient is a custom Client to overwrite the prow Git Commit functionality, because it isn't implemented there
 type CommitClient struct {
 	BotUser *github.UserData
+	Email   string
 }
 
 // GithubServer contains all components to interact with Git and GitHub
@@ -193,7 +194,12 @@ func executeCmd(directory, command string, args ...string) error {
 // Commit is a custom implementation of the Commit functionality. It works by setting the email and login of `Gh.BotUser`, staging all changes and committing them with `message`, all using the git binary.
 // Therefore a git binary must be present in `$PATH`
 func (gc *CommitClient) Commit(repoClient git.RepoClient, message string) error {
-	err := executeCmd(repoClient.Directory(), "git", "config", "user.email", gc.BotUser.Email)
+	email := gc.Email
+	if email == "" {
+		email = gc.BotUser.Email
+	}
+
+	err := executeCmd(repoClient.Directory(), "git", "config", "user.email", email)
 	if err != nil {
 		return err
 	}

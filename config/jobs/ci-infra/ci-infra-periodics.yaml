@@ -100,8 +100,8 @@ periodics:
       - --recursive=true
       - --upstream-repository=gardener/ci-infra
       - --upstream-branch=master
-      # Add skip-review to --override-labels when we tested it for a while
-      - --override-labels=kind/enhancement
+      # Add skip-review to --labels-override when we tested it for a while
+      - --labels-override=kind/enhancement
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token

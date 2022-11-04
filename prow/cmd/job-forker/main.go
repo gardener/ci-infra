@@ -46,7 +46,7 @@ type options struct {
 	// outputDirectory
 	outputDirectory      string
 	releaseBranchPattern string
-	overrideLabels       []string
+	labelsOverride       []string
 	dryRun               bool
 	recursive            bool
 	github               flagutil.GitHubOptions
@@ -75,7 +75,7 @@ func (o *options) validate() error {
 }
 
 func gatherOptions() options {
-	var overrideLabels string
+	var labelsOverride string
 	o := options{}
 	fs := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	fs.StringVar(&o.upstreamRepo, "upstream-repository", "", "upstream-repository includes the prow jobs which should be forked")
@@ -84,7 +84,7 @@ func gatherOptions() options {
 	fs.StringVar(&o.outputDirectory, "output-directory", "releases", "Output directory for forked prow jobs (relative path to the original prow job)")
 	fs.BoolVar(&o.recursive, "recursive", false, "When set to true, all sub-folders of job-directory will be searched for prow-jobs")
 	fs.StringVar(&o.releaseBranchPattern, "release-branch-pattern", "release-v\\d+\\.\\d+", "Pattern to identify release branches for which prow jobs should be forked")
-	fs.StringVar(&overrideLabels, "override-labels", "", "Labels which should be added to the PR")
+	fs.StringVar(&labelsOverride, "labels-override", "", "Labels which should be added to the PR")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "DryRun")
 	o.github.AddFlags(fs)
 
@@ -92,10 +92,10 @@ func gatherOptions() options {
 	if err != nil {
 		log.Fatalf("Unable to parse command line flags: %v\n", err)
 	}
-	if overrideLabels != "" {
-		o.overrideLabels = append(o.overrideLabels, strings.Split(overrideLabels, ",")...)
+	if labelsOverride != "" {
+		o.labelsOverride = append(o.labelsOverride, strings.Split(labelsOverride, ",")...)
 	} else {
-		o.overrideLabels = nil
+		o.labelsOverride = nil
 	}
 	return o
 }
@@ -120,6 +120,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting Git client: %v\n", err)
 	}
+	email, err := githubClient.Email()
+	if err != nil {
+		log.Fatalf("Error getting bot e-mail.")
+	}
 	botUser, err := githubClient.BotUser()
 	if err != nil {
 		log.Fatalf("Error getting bot name: %v\n", err)
@@ -128,7 +132,7 @@ func main() {
 	githubServer := ghi.GithubServer{
 		Ghc:     githubClient,
 		Gcf:     git.ClientFactoryFrom(gitClient),
-		Gc:      &ghi.CommitClient{BotUser: botUser},
+		Gc:      &ghi.CommitClient{BotUser: botUser, Email: email},
 		BotUser: botUser,
 	}
 
@@ -158,7 +162,7 @@ func main() {
 			fmt.Sprintf("%s-%s", TargetBranchPrefix, jobSpec.Job),
 			"Forked prow jobs for release branches",
 			fmt.Sprintf("Forked prow jobs for release branches created by prow job `%s`", jobSpec.Job),
-			o.overrideLabels)
+			o.labelsOverride)
 		if err != nil {
 			log.Fatalf("Error during pushing of changes: %v\n", err)
 		}
