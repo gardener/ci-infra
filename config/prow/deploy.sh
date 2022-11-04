@@ -82,6 +82,7 @@ echo "$(color-green done)"
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
 kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/ingress-nginx"
+kubectl wait --for=condition=available deployment -l app.kubernetes.io/component=controller -n ingress-nginx --timeout 2m
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-trusted cluster...")"
@@ -92,6 +93,7 @@ echo "$(color-green done)"
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
 kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/ingress-nginx"
+kubectl wait --for=condition=available deployment -l app.kubernetes.io/component=controller -n ingress-nginx --timeout 2m
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-build cluster...")"
