@@ -50,6 +50,7 @@ type options struct {
 	dryRun               bool
 	recursive            bool
 	github               flagutil.GitHubOptions
+	gitEmail             string
 }
 
 func (o *options) validate() error {
@@ -85,6 +86,7 @@ func gatherOptions() options {
 	fs.BoolVar(&o.recursive, "recursive", false, "When set to true, all sub-folders of job-directory will be searched for prow-jobs")
 	fs.StringVar(&o.releaseBranchPattern, "release-branch-pattern", "release-v\\d+\\.\\d+", "Pattern to identify release branches for which prow jobs should be forked")
 	fs.StringVar(&labelsOverride, "labels-override", "", "Labels which should be added to the PR")
+	fs.StringVar(&o.gitEmail, "git-email", "", "E-Mail the bot should use to commit changes")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "DryRun")
 	o.github.AddFlags(fs)
 
@@ -120,10 +122,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting Git client: %v\n", err)
 	}
-	email, err := githubClient.Email()
-	if err != nil {
-		log.Fatalf("Error getting bot e-mail.")
-	}
 	botUser, err := githubClient.BotUser()
 	if err != nil {
 		log.Fatalf("Error getting bot name: %v\n", err)
@@ -132,8 +130,9 @@ func main() {
 	githubServer := ghi.GithubServer{
 		Ghc:     githubClient,
 		Gcf:     git.ClientFactoryFrom(gitClient),
-		Gc:      &ghi.CommitClient{BotUser: botUser, Email: email},
+		Gc:      &ghi.CommitClient{},
 		BotUser: botUser,
+		Email:   o.gitEmail,
 	}
 
 	upstreamRepo, err := ghi.NewRepository(o.upstreamRepo, &githubServer)
