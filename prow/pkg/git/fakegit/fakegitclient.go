@@ -37,7 +37,7 @@ type FakeInteractor struct{}
 type FakeCommitClient struct{}
 
 // Commit is a fake for Commit
-func (gc *FakeCommitClient) Commit(repoClient git.RepoClient, message string) error {
+func (gc *FakeCommitClient) Commit(directory, name, email, message string, signoff bool) error {
 	return nil
 }
 

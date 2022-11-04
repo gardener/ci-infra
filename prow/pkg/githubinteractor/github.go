@@ -82,23 +82,50 @@ type GithubClient interface {
 
 // GitClient is used to swap the functions for faked functions during testing
 type GitClient interface {
-	Commit(repoClient git.RepoClient, message string) error
+	Commit(directory, name, email, message string, signoff bool) error
 }
 
 // CommitClient is a custom Client to overwrite the prow Git Commit functionality, because it isn't implemented there
 type CommitClient struct {
-	BotUser *github.UserData
-	Email   string
+}
+
+// Commit is a custom implementation of the Commit functionality. It works by setting the email and login of `Gh.BotUser`, staging all changes and committing them with `message`, all using the git binary.
+// Therefore a git binary must be present in `$PATH`
+func (gc *CommitClient) Commit(directory, name, email, message string, signoff bool) error {
+	if err := executeCmd(directory, "git", "add", "-A"); err != nil {
+		return fmt.Errorf("git add: %w", err)
+	}
+	commitArgs := []string{"commit", "-m", message}
+	if name != "" && email != "" {
+		commitArgs = append(commitArgs, "--author", fmt.Sprintf("%s <%s>", name, email))
+	}
+	if signoff {
+		commitArgs = append(commitArgs, "--signoff")
+	}
+	if err := executeCmd(directory, "git", commitArgs...); err != nil {
+		return fmt.Errorf("git commit: %w", err)
+	}
+
+	return nil
 }
 
 // GithubServer contains all components to interact with Git and GitHub
 type GithubServer struct {
 	Ghc GithubClient
 	Gcf git.ClientFactory
+	Gc  GitClient
 
 	BotUser *github.UserData
+	Email   string
+}
 
-	Gc GitClient
+// GetEmail tries to get the email of GithubServer from different sources
+func (g *GithubServer) GetEmail() string {
+	email := g.Email
+	if email == "" {
+		email = g.BotUser.Email
+	}
+	return email
 }
 
 // Repository handles the conversion between a fully qualified repository name and its organisation / repository name
@@ -183,47 +210,14 @@ func (r *Repository) ensureForkExists() (*Repository, error) {
 	return NewRepository(fmt.Sprintf("%s/%s", r.Gh.BotUser.Login, repo), r.Gh)
 }
 
-func executeCmd(directory, command string, args ...string) error {
-	cmd := exec.Command(command, args...)
-	cmd.Dir = directory
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
-}
-
-// Commit is a custom implementation of the Commit functionality. It works by setting the email and login of `Gh.BotUser`, staging all changes and committing them with `message`, all using the git binary.
-// Therefore a git binary must be present in `$PATH`
-func (gc *CommitClient) Commit(repoClient git.RepoClient, message string) error {
-	email := gc.Email
-	if email == "" {
-		email = gc.BotUser.Email
-	}
-
-	err := executeCmd(repoClient.Directory(), "git", "config", "user.email", email)
-	if err != nil {
-		return err
-	}
-
-	err = executeCmd(repoClient.Directory(), "git", "config", "user.name", gc.BotUser.Login)
-	if err != nil {
-		return err
-	}
-
-	err = executeCmd(repoClient.Directory(), "git", "add", "-A")
-	if err != nil {
-		return err
-	}
-
-	err = executeCmd(repoClient.Directory(), "git", "commit", "-m", message)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // PushChanges pushes changes to the `targetBranch` with `commitMessage` and opens a PR, if it is not open already
 func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, commitMessage, prTitle string, labels []string) error {
+	if err := r.RepoClient.Config("user.name", r.Gh.BotUser.Name); err != nil {
+		return fmt.Errorf("failed to configure git user: %w", err)
+	}
+	if err := r.RepoClient.Config("user.email", r.Gh.GetEmail()); err != nil {
+		return fmt.Errorf("failed to configure git email: %w", err)
+	}
 
 	fork, err := r.ensureForkExists()
 	if err != nil {
@@ -243,7 +237,7 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 			log.Printf("Error on cleaning up repo: %v\n", err)
 		}
 	}()
-	if err := r.Gh.Gc.Commit(r.RepoClient, commitMessage); err != nil {
+	if err := r.Gh.Gc.Commit(r.RepoClient.Directory(), r.Gh.BotUser.Name, r.Gh.GetEmail(), commitMessage, false); err != nil {
 		return err
 	}
 
@@ -290,4 +284,12 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 	}
 
 	return nil
+}
+
+func executeCmd(directory, command string, args ...string) error {
+	cmd := exec.Command(command, args...)
+	cmd.Dir = directory
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
