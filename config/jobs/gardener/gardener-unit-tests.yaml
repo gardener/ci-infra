@@ -11,6 +11,7 @@ presubmits:
       grace_period: 10m
     annotations:
       description: Runs unit tests for gardener developments in pull requests
+      fork-per-release: "true"
     spec:
       containers:
       # Run all tests sequentially in one container or as separate prow jobs.
@@ -47,6 +48,7 @@ periodics:
     description: Runs unit tests for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
+    fork-per-release: "true"
   spec:
     containers:
     # Run all tests sequentially in one container or as separate prow jobs.

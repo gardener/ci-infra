@@ -76,6 +76,41 @@ periodics:
       secret:
         secretName: github-token
 
+- cron: "44 * * * *"  # Every hour a couple of minutes before branchprotector
+  name: ci-job-forker-gardener-gardener
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Fork gardener/gardener prow jobs for release branches
+    testgrid-create-test-group: "false"
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  spec:
+    containers:
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20221103-fb04192
+      command:
+      - /job-forker
+      args:
+      - --github-token-path=/etc/github-token/token
+      - --github-endpoint=http://ghproxy
+      - --github-endpoint=https://api.github.com
+      - --dry-run=false
+      - --job-directory=config/jobs/gardener
+      - --recursive=true
+      - --upstream-repository=gardener/ci-infra
+      - --upstream-branch=master
+      # Add skip-review to --override-labels when we tested it for a while
+      - --override-labels=kind/enhancement
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
+
 - cron: "30 * * * 1-5"
   name: ci-prow-autobump
   cluster: gardener-prow-trusted

@@ -9,6 +9,7 @@ postsubmits:
       description: Gardener development image build on master branch
       testgrid-dashboards: gardener-gardener
       testgrid-days-of-results: "60"
+      fork-per-release: "true"
     decorate: true
     max_concurrency: 1
     spec:

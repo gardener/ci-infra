@@ -11,6 +11,7 @@ presubmits:
       grace_period: 10m
     annotations:
       description: Runs integration tests for gardener developments in pull requests
+      fork-per-release: "true"
     spec:
       containers:
       - name: test-integration
@@ -41,6 +42,7 @@ periodics:
     description: Runs integration tests for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
+    fork-per-release: "true"
   spec:
     containers:
     - name: test-integration
