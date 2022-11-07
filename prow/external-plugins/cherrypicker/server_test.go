@@ -33,6 +33,8 @@ import (
 
 var commentFormat = "%s/%s#%d %s"
 
+var fakePR prNumberGenerator
+
 type fghc struct {
 	sync.Mutex
 	pr       *github.PullRequest
@@ -138,7 +140,13 @@ func (f *fghc) CreateIssue(org, repo, title, body string, milestone int, labels,
 	var ghLabels []github.Label
 	var ghAssignees []github.User
 
-	num := len(f.issues) + 1
+	var num int
+	for _, issue := range f.issues {
+		if issue.Number > num {
+			num = issue.Number
+		}
+	}
+	num++
 
 	for _, label := range labels {
 		ghLabels = append(ghLabels, github.Label{Name: label})
@@ -162,7 +170,15 @@ func (f *fghc) CreateIssue(org, repo, title, body string, milestone int, labels,
 func (f *fghc) CreatePullRequest(org, repo, title, body, head, base string, canModify bool) (int, error) {
 	f.Lock()
 	defer f.Unlock()
-	num := len(f.prs) + 1
+
+	var num int
+	for _, pr := range f.prs {
+		if pr.Number > num {
+			num = pr.Number
+		}
+	}
+	num++
+
 	f.prs = append(f.prs, github.PullRequest{
 		Title:  title,
 		Body:   body,
@@ -267,6 +283,7 @@ func TestCherryPickICV2(t *testing.T) {
 }
 
 func testCherryPickIC(clients localgit.Clients, t *testing.T) {
+	iNumber := fakePR.GetPRNumber()
 	lg, c := makeFakeRepoWithCommit(clients, t)
 	if err := lg.CheckoutNewBranch("foo", "bar", "stage"); err != nil {
 		t.Fatalf("Checking out pull branch: %v", err)
@@ -294,7 +311,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 			FullName: "foo/bar",
 		},
 		Issue: github.Issue{
-			Number:      2,
+			Number:      iNumber,
 			State:       "closed",
 			PullRequest: &struct{}{},
 		},
@@ -308,9 +325,9 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 	expectedTitle := "[stage] This is a fix for X"
-	expectedBody := "This is an automated cherry-pick of #2\n\n/assign wiseguy\n\n```feature developer\nUpdate the magic number from 42 to 49\n```"
+	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer\nUpdate the magic number from 42 to 49\n```", iNumber)
 	expectedBase := "stage"
-	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, 2, expectedBase)
+	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, iNumber, expectedBase)
 	expectedLabels := []string{}
 	expected := fmt.Sprintf(expectedFmt, expectedTitle, expectedBody, expectedHead, expectedBase, expectedLabels)
 
@@ -350,6 +367,7 @@ func TestCherryPickPRV2(t *testing.T) {
 }
 
 func testCherryPickPR(clients localgit.Clients, t *testing.T) {
+	prNumber := fakePR.GetPRNumber()
 	lg, c := makeFakeRepoWithCommit(clients, t)
 	expectedBranches := []string{"release-1.5", "release-1.6", "release-1.8"}
 	for _, branch := range expectedBranches {
@@ -357,7 +375,7 @@ func testCherryPickPR(clients localgit.Clients, t *testing.T) {
 			t.Fatalf("Checking out pull branch: %v", err)
 		}
 	}
-	if err := lg.CheckoutNewBranch("foo", "bar", "cherry-pick-2-to-release-1.5"); err != nil {
+	if err := lg.CheckoutNewBranch("foo", "bar", fmt.Sprintf("cherry-pick-%d-to-release-1.5", prNumber)); err != nil {
 		t.Fatalf("Checking out existing PR branch: %v", err)
 	}
 
@@ -411,12 +429,12 @@ func testCherryPickPR(clients localgit.Clients, t *testing.T) {
 		prs: []github.PullRequest{
 			{
 				Title: "[release-1.5] This is a fix for Y",
-				Body:  "This is an automated cherry-pick of #2",
+				Body:  fmt.Sprintf("This is an automated cherry-pick of #%d", prNumber),
 				Base: github.PullRequestBranch{
 					Ref: "release-1.5",
 				},
 				Head: github.PullRequestBranch{
-					Ref: "ci-robot:cherry-pick-2-to-release-1.5",
+					Ref: fmt.Sprintf("ci-robot:cherry-pick-%d-to-release-1.5", prNumber),
 				},
 			},
 		},
@@ -435,7 +453,7 @@ func testCherryPickPR(clients localgit.Clients, t *testing.T) {
 					Name: "bar",
 				},
 			},
-			Number:   2,
+			Number:   prNumber,
 			Merged:   true,
 			MergeSHA: new(string),
 			Title:    "This is a fix for Y",
@@ -466,8 +484,8 @@ func testCherryPickPR(clients localgit.Clients, t *testing.T) {
 
 	var expectedFn = func(branch string) string {
 		expectedTitle := fmt.Sprintf("[%s] This is a fix for Y", branch)
-		expectedBody := "This is an automated cherry-pick of #2"
-		expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, 2, branch)
+		expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d", prNumber)
+		expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, prNumber, branch)
 		expectedLabels := s.labels
 		return fmt.Sprintf(expectedFmt, expectedTitle, expectedBody, expectedHead, branch, expectedLabels)
 	}
@@ -508,6 +526,7 @@ func TestCherryPickOfCherryPickPRV2(t *testing.T) {
 // function works as intended when the user performs a cherry-pick from
 // a branch that's already a cherry-pick branch
 func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
+	prNumber := fakePR.GetPRNumber()
 	lg, c := makeFakeRepoWithCommit(clients, t)
 	expectedBranches := []string{"release-1.5", "release-1.6", "release-1.8"}
 	for _, branch := range expectedBranches {
@@ -547,7 +566,7 @@ func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
 					Name: "bar",
 				},
 			},
-			Number:   2,
+			Number:   prNumber,
 			Merged:   true,
 			MergeSHA: new(string),
 			Title:    "This is a fix for Y",
@@ -595,8 +614,8 @@ func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
 
 	var expectedFn = func(branch string) string {
 		expectedTitle := fmt.Sprintf("[%s] This is a fix for Y", branch)
-		expectedBody := "This is an automated cherry-pick of #2"
-		expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, 2, branch)
+		expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d", prNumber)
+		expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, prNumber, branch)
 		expectedLabels := s.labels
 		return fmt.Sprintf(expectedFmt, expectedTitle, expectedBody, expectedHead, branch, expectedLabels)
 	}
@@ -634,6 +653,7 @@ func TestCherryPickPRWithLabelsV2(t *testing.T) {
 }
 
 func testCherryPickPRWithLabels(clients localgit.Clients, t *testing.T) {
+	prNumber := fakePR.GetPRNumber()
 	lg, c := makeFakeRepoWithCommit(clients, t)
 	if err := lg.CheckoutNewBranch("foo", "bar", "release-1.5"); err != nil {
 		t.Fatalf("Checking out pull branch: %v", err)
@@ -658,7 +678,7 @@ func testCherryPickPRWithLabels(clients localgit.Clients, t *testing.T) {
 						Name: "bar",
 					},
 				},
-				Number:   2,
+				Number:   prNumber,
 				Merged:   true,
 				MergeSHA: new(string),
 				Title:    "This is a fix for Y",
@@ -771,8 +791,8 @@ func testCherryPickPRWithLabels(clients localgit.Clients, t *testing.T) {
 
 					expectedFn := func(branch string) string {
 						expectedTitle := fmt.Sprintf("[%s] This is a fix for Y", branch)
-						expectedBody := "This is an automated cherry-pick of #2"
-						expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, 2, branch)
+						expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d", prNumber)
+						expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, prNumber, branch)
 						expectedLabels := s.labels
 						return fmt.Sprintf(expectedFmt, expectedTitle, expectedBody, expectedHead, branch, expectedLabels)
 					}
@@ -917,6 +937,7 @@ func TestCherryPickPRAssignmentsV2(t *testing.T) {
 }
 
 func testCherryPickPRAssignments(clients localgit.Clients, t *testing.T) {
+	iNumber := fakePR.GetPRNumber()
 	for _, prowAssignments := range []bool{true, false} {
 		lg, c := makeFakeRepoWithCommit(clients, t)
 		if err := lg.CheckoutNewBranch("foo", "bar", "stage"); err != nil {
@@ -948,7 +969,7 @@ func testCherryPickPRAssignments(clients localgit.Clients, t *testing.T) {
 				FullName: "foo/bar",
 			},
 			Issue: github.Issue{
-				Number:      2,
+				Number:      iNumber,
 				State:       "closed",
 				PullRequest: &struct{}{},
 			},
@@ -1089,4 +1110,16 @@ type threadUnsafeFGHC struct {
 func (tuf *threadUnsafeFGHC) EnsureFork(login, org, repo string) (string, error) {
 	tuf.orgRepoCountCalled++
 	return "", errors.New("that is enough")
+}
+
+type prNumberGenerator struct {
+	sync.Mutex
+	prNumber int
+}
+
+func (p *prNumberGenerator) GetPRNumber() int {
+	p.Lock()
+	defer p.Unlock()
+	p.prNumber = p.prNumber + 10
+	return p.prNumber
 }
