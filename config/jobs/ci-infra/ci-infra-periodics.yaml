@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20221104-67ba7ea
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20221108-4726e7e
       command:
       - /job-forker
       args:
