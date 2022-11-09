@@ -47,6 +47,7 @@ type options struct {
 	webhookSecretFile string
 	prowAssignments   bool
 	allowAll          bool
+	onlyOrgMembers    bool
 	issueOnConflict   bool
 	labelPrefix       string
 }
@@ -71,6 +72,7 @@ func gatherOptions() options {
 	fs.StringVar(&o.logLevel, "log-level", "debug", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 	fs.BoolVar(&o.prowAssignments, "use-prow-assignments", true, "Use prow commands to assign cherrypicked PRs.")
 	fs.BoolVar(&o.allowAll, "allow-all", false, "Allow anybody to use automated cherrypicks by skipping GitHub organization membership checks.")
+	fs.BoolVar(&o.onlyOrgMembers, "only-org-members", false, "Allow only users with a GitHub organization membership to use automated cherrypicks. Otherwise, collaborators are allowed to use it too.")
 	fs.BoolVar(&o.issueOnConflict, "create-issue-on-conflict", false, "Create a GitHub issue and assign it to the requestor on cherrypick conflict.")
 	fs.StringVar(&o.labelPrefix, "label-prefix", defaultLabelPrefix, "Set a custom label prefix.")
 	for _, group := range []flagutil.OptionGroup{&o.github, &o.instrumentationOptions} {
@@ -141,6 +143,7 @@ func main() {
 		labels:          o.labels.Strings(),
 		prowAssignments: o.prowAssignments,
 		allowAll:        o.allowAll,
+		onlyOrgMembers:  o.onlyOrgMembers,
 		issueOnConflict: o.issueOnConflict,
 		labelPrefix:     o.labelPrefix,
 
