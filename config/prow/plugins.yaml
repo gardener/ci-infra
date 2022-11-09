@@ -7,7 +7,6 @@ triggers:
   - gardener/gardener-extension-registry-cache
   - gardener/gardener-extension-shoot-oidc-service
   - gardener/dependency-watchdog
-  only_org_members: true
 
 approve:
 - repos:
