@@ -59,9 +59,11 @@ type githubClient interface {
 	GetPullRequests(org, repo string) ([]github.PullRequest, error)
 	GetRepo(owner, name string) (github.FullRepo, error)
 	IsMember(org, user string) (bool, error)
+	IsCollaborator(org, repo, user string) (bool, error)
 	ListIssueComments(org, repo string, number int) ([]github.IssueComment, error)
 	GetIssueLabels(org, repo string, number int) ([]github.Label, error)
 	ListOrgMembers(org, role string) ([]github.TeamMember, error)
+	ListCollaborators(org, repo string) ([]github.User, error)
 }
 
 // HelpProvider construct the pluginhelp.PluginHelp for this plugin.
@@ -99,6 +101,8 @@ type Server struct {
 	prowAssignments bool
 	// Allow anybody to do cherrypicks.
 	allowAll bool
+	// Only members of the Github organization are allowed to use cherrypicks. Otherwise, collaborators are allowed too.
+	onlyOrgMembers bool
 	// Create an issue on cherrypick conflict.
 	issueOnConflict bool
 	// Set a custom label prefix.
@@ -191,8 +195,8 @@ func (s *Server) handleIssueComment(l *logrus.Entry, ic github.IssueCommentEvent
 
 	if ic.Issue.State != "closed" {
 		if !s.allowAll {
-			// Only members should be able to do cherry-picks.
-			ok, err := s.ghc.IsMember(org, commentAuthor)
+			// Only members or collaborators should be able to do cherry-picks.
+			ok, err := s.isTrustedUser(org, repo, commentAuthor)
 			if err != nil {
 				return err
 			}
@@ -230,8 +234,8 @@ func (s *Server) handleIssueComment(l *logrus.Entry, ic github.IssueCommentEvent
 	}
 
 	if !s.allowAll {
-		// Only org members should be able to do cherry-picks.
-		ok, err := s.ghc.IsMember(org, commentAuthor)
+		// Only org members or collaborators should be able to do cherry-picks.
+		ok, err := s.isTrustedUser(org, repo, commentAuthor)
 		if err != nil {
 			return err
 		}
@@ -327,19 +331,19 @@ func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent)
 	// Figure out membership.
 	if !s.allowAll {
 		// TODO: Possibly cache this.
-		members, err := s.ghc.ListOrgMembers(org, "all")
+		logins, err := s.listTrustedUsers(org, repo)
 		if err != nil {
 			return err
 		}
 		for requestor := range requestorToComments {
-			isMember := false
-			for _, m := range members {
-				if requestor == m.Login {
-					isMember = true
+			isTrusted := false
+			for _, l := range logins {
+				if requestor == l {
+					isTrusted = true
 					break
 				}
 			}
-			if !isMember {
+			if !isTrusted {
 				delete(requestorToComments, requestor)
 			}
 		}
@@ -613,6 +617,39 @@ func (s *Server) getPatch(org, repo, targetBranch string, num int) (string, erro
 		return "", err
 	}
 	return localPath, nil
+}
+
+// Check if the user is trusted and should be allowed to perform cherry-picks
+func (s *Server) isTrustedUser(org, repo, login string) (bool, error) {
+	if s.onlyOrgMembers {
+		// Only members should be able to do cherry-picks.
+		return s.ghc.IsMember(org, login)
+	}
+	// Collaborators are allowed to do cherry-picks
+	return s.ghc.IsCollaborator(org, repo, login)
+}
+
+// List all trusted users of the repository
+func (s *Server) listTrustedUsers(org, repo string) ([]string, error) {
+	logins := []string{}
+	if s.onlyOrgMembers {
+		members, err := s.ghc.ListOrgMembers(org, "all")
+		if err != nil {
+			return nil, err
+		}
+		for _, member := range members {
+			logins = append(logins, member.Login)
+		}
+		return logins, nil
+	}
+	collaborators, err := s.ghc.ListCollaborators(org, repo)
+	if err != nil {
+		return nil, err
+	}
+	for _, collaborator := range collaborators {
+		logins = append(logins, collaborator.Login)
+	}
+	return logins, nil
 }
 
 func normalize(input string) string {

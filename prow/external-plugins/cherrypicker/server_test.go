@@ -107,6 +107,12 @@ func (f *fghc) IsMember(org, user string) (bool, error) {
 	return f.isMember, nil
 }
 
+func (f *fghc) IsCollaborator(org, repo, user string) (bool, error) {
+	f.Lock()
+	defer f.Unlock()
+	return f.isMember, nil
+}
+
 func (f *fghc) GetRepo(owner, name string) (github.FullRepo, error) {
 	f.Lock()
 	defer f.Unlock()
@@ -208,6 +214,17 @@ func (f *fghc) ListOrgMembers(org, role string) ([]github.TeamMember, error) {
 		return nil, fmt.Errorf("all is only supported role, not: %s", role)
 	}
 	return f.orgMembers, nil
+}
+
+func (f *fghc) ListCollaborators(org, repo string) ([]github.User, error) {
+	f.Lock()
+	defer f.Unlock()
+	githubUsers := []github.User{}
+	for _, user := range f.orgMembers {
+		githubUser := github.User{Login: user.Login}
+		githubUsers = append(githubUsers, githubUser)
+	}
+	return githubUsers, nil
 }
 
 func (f *fghc) CreateFork(org, repo string) (string, error) {
