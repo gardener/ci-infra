@@ -52,6 +52,7 @@ presubmits:
         - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
+        - --target=operator
         - --add-version-sha-tag=true
         - --inject-effective-version=true
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
