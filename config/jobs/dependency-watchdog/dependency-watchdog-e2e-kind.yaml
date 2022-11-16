@@ -1,6 +1,6 @@
 presubmits:
   gardener/dependency-watchdog:
-    - name: pull-dependency-watchdog-kind-unit-tests
+    - name: pull-dependency-watchdog-e2e-kind
       cluster: gardener-prow-build
       always_run: true
       skip_branches:
@@ -13,7 +13,7 @@ presubmits:
         preset-dind-enabled: "true"
         preset-kind-volume-mounts: "true"
       annotations:
-        description: Runs KIND cluster based unit tests for dependency watchdog developments in pull requests
+        description: Runs KIND cluster based e2e tests for dependency watchdog developments in pull requests
       spec:
         containers:
           - image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
@@ -30,7 +30,7 @@ presubmits:
                 cpu: 12
                 memory: 18Gi
 periodics:
-  - name: ci-dependency-watchdog-kind-unit-tests
+  - name: ci-dependency-watchdog-e2e-kind
     cluster: gardener-prow-build
     interval: 4h
     extra_refs:
@@ -45,7 +45,7 @@ periodics:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs KIND cluster based unit tests for dependency watchdog developments periodically
+      description: Runs KIND cluster based e2e tests for dependency watchdog developments periodically
       testgrid-dashboards: gardener-dependency-watchdog
       testgrid-days-of-results: "60"
     spec:
