@@ -14,7 +14,6 @@ presubmits:
         preset-kind-volume-mounts: "true"
       annotations:
         description: Runs KIND cluster based unit tests for dependency watchdog developments in pull requests
-        fork-per-release: "true"
       spec:
         containers:
           - image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
@@ -30,11 +29,6 @@ presubmits:
               requests:
                 cpu: 12
                 memory: 18Gi
-            env:
-              - name: SKAFFOLD_UPDATE_CHECK
-                value: "false"
-              - name: SKAFFOLD_INTERACTIVE
-                value: "false"
 periodics:
   - name: ci-dependency-watchdog-kind-unit-tests
     cluster: gardener-prow-build
@@ -54,7 +48,6 @@ periodics:
       description: Runs KIND cluster based unit tests for dependency watchdog developments periodically
       testgrid-dashboards: gardener-dependency-watchdog
       testgrid-days-of-results: "60"
-      fork-per-release: "true"
     spec:
       containers:
         - image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
@@ -70,8 +63,3 @@ periodics:
             requests:
               cpu: 12
               memory: 18Gi
-          env:
-            - name: SKAFFOLD_UPDATE_CHECK
-              value: "false"
-            - name: SKAFFOLD_INTERACTIVE
-              value: "false"
