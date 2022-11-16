@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
       name: ""
       resources:
         requests:
@@ -70,7 +70,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
       name: ""
       resources:
         requests:
@@ -222,7 +222,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
         name: ""
         resources:
           requests:
@@ -258,7 +258,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20221107-33c989e684-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
         name: ""
         resources:
           requests:
