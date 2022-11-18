@@ -253,7 +253,8 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 
 	for _, pr := range prs {
 		log.Printf("PR: %v, Head: %v, Base: %v\n", pr.Title, pr.Head.Repo.FullName, pr.Base.Repo.FullName)
-		if pr.Head.Repo.FullName == fork.FullRepoName && pr.Base.Repo.FullName == upstreamRepo {
+		if pr.Head.Repo.FullName == fork.FullRepoName && pr.Head.Ref == targetBranch &&
+			pr.Base.Repo.FullName == upstreamRepo && pr.Base.Ref == upstreamBranch {
 			log.Printf("There is already an open PR")
 			prNumber = pr.Number
 			prExists = true
