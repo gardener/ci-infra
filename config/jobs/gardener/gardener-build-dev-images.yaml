@@ -32,6 +32,7 @@ postsubmits:
         - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
+        - --target=operator
         - --add-version-tag=true
         - --add-version-sha-tag=true
         - --inject-effective-version=true
