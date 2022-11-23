@@ -49,7 +49,6 @@ presubmits:
         - --target=scheduler
         - --target=gardenlet
         - --target=admission-controller
-        - --target=seed-admission-controller
         - --target=resource-manager
         - --target=gardener-extension-provider-local
         - --target=operator
