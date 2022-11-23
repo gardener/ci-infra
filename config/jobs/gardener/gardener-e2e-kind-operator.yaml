@@ -3,7 +3,6 @@ presubmits:
   - name: pull-gardener-e2e-kind-operator
     cluster: gardener-prow-build
     always_run: true
-    optional: true
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
