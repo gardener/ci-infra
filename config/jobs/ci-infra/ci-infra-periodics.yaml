@@ -17,7 +17,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/label_sync:v20221128-3628adc270
       command:
       - label_sync
       args:
@@ -56,7 +56,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: gcr.io/k8s-prow/branchprotector:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/branchprotector:v20221128-3628adc270
       command:
       - branchprotector
       args:
@@ -128,7 +128,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/generic-autobumper:v20221128-3628adc270
       command:
       - generic-autobumper
       args:
@@ -159,7 +159,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/generic-autobumper:v20221128-3628adc270
       command:
       - generic-autobumper
       args:
@@ -190,7 +190,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/generic-autobumper:v20221128-3628adc270
       command:
       - generic-autobumper
       args:
@@ -221,7 +221,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/generic-autobumper:v20221128-3628adc270
       command:
       - generic-autobumper
       args:
@@ -255,7 +255,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/checkconfig:v20221128-3628adc270
       command:
       - checkconfig
       args:
@@ -287,7 +287,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20221123-4b1eb2a191
+    - image: gcr.io/k8s-prow/checkconfig:v20221128-3628adc270
       command:
       - checkconfig
       args:
