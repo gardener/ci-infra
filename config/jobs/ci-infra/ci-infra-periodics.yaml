@@ -101,8 +101,7 @@ periodics:
       - --upstream-repository=gardener/ci-infra
       - --upstream-branch=master
       - --git-email=gardener.ci.robot@gmail.com
-      # Add skip-review to --labels-override when we tested it for a while
-      - --labels-override=kind/enhancement
+      - --labels-override=kind/enhancement,skip-review
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token
