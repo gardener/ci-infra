@@ -366,7 +366,6 @@ presubmits:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-ha-single-zone-release-v1-61
-    optional: true
     run_before_merge: false
     spec:
       containers:
