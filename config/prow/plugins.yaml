@@ -39,6 +39,7 @@ lgtm:
   - gardener/gardener
   - gardener/gardener-extension-registry-cache
   review_acts_as_lgtm: true
+  store_tree_hash: true
 
 blunderbuss:
   max_request_count: 2
