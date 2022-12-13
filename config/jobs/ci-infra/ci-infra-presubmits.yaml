@@ -33,7 +33,7 @@ presubmits:
       description: Runs go tests for prow developments in ci-infra 
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221104-dd9ebd1-1.18
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221213-25de42a-1.18
         command:
         - make
         args:
