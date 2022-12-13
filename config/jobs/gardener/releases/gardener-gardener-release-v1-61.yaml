@@ -220,7 +220,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221104-dd9ebd1-1.19
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221213-25de42a-1.19
       name: test-integration
       resources:
         limits:
@@ -255,7 +255,7 @@ periodics:
       - check-docforge
       command:
       - make
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221104-dd9ebd1-1.19
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221213-25de42a-1.19
       name: ""
       resources:
         limits:
@@ -297,7 +297,7 @@ postsubmits:
         - --inject-effective-version=true
         command:
         - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20221118-f0839f0
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20221213-25de42a
         name: image-builder
         resources:
           requests:
@@ -516,7 +516,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221104-dd9ebd1-1.19
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221213-25de42a-1.19
         name: test-integration
         resources:
           limits:
@@ -578,7 +578,7 @@ presubmits:
         - --inject-effective-version=true
         command:
         - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20221118-f0839f0
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20221213-25de42a
         name: image-builder
         resources:
           requests:
@@ -616,7 +616,7 @@ presubmits:
         - check-docforge
         command:
         - make
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221104-dd9ebd1-1.19
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221213-25de42a-1.19
         name: ""
         resources:
           limits:
