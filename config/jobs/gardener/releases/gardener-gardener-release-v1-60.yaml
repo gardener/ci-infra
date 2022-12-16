@@ -35,8 +35,8 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "12"
-          memory: 48Gi
+          cpu: "6"
+          memory: 24Gi
       securityContext:
         privileged: true
 - annotations:
@@ -75,8 +75,8 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "12"
-          memory: 48Gi
+          cpu: "6"
+          memory: 24Gi
       securityContext:
         privileged: true
 - annotations:
@@ -115,7 +115,7 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "12"
+          cpu: "6"
           memory: 18Gi
       securityContext:
         privileged: true
@@ -154,7 +154,7 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "12"
+          cpu: "6"
           memory: 18Gi
       securityContext:
         privileged: true
@@ -221,7 +221,7 @@ periodics:
         limits:
           memory: 16Gi
         requests:
-          cpu: "7"
+          cpu: "6"
           memory: 8Gi
 postsubmits:
   gardener/gardener:
@@ -307,8 +307,8 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "12"
-            memory: 48Gi
+            cpu: "6"
+            memory: 24Gi
         securityContext:
           privileged: true
   - always_run: true
@@ -345,8 +345,8 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "12"
-            memory: 48Gi
+            cpu: "6"
+            memory: 24Gi
         securityContext:
           privileged: true
   - always_run: true
@@ -382,7 +382,7 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "12"
+            cpu: "6"
             memory: 18Gi
         securityContext:
           privileged: true
@@ -418,7 +418,7 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "12"
+            cpu: "6"
             memory: 18Gi
         securityContext:
           privileged: true
@@ -547,5 +547,5 @@ presubmits:
           limits:
             memory: 16Gi
           requests:
-            cpu: "7"
+            cpu: "6"
             memory: 8Gi
