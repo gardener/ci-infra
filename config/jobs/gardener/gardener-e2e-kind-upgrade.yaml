@@ -29,7 +29,7 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 12
+            cpu: 6
             memory: 18Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
@@ -69,7 +69,7 @@ periodics:
         privileged: true
       resources:
         requests:
-          cpu: 12
+          cpu: 6
           memory: 18Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK

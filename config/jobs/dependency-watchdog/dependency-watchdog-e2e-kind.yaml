@@ -27,7 +27,7 @@ presubmits:
               privileged: true
             resources:
               requests:
-                cpu: 12
+                cpu: 6
                 memory: 18Gi
 periodics:
   - name: ci-dependency-watchdog-e2e-kind
@@ -61,5 +61,5 @@ periodics:
             privileged: true
           resources:
             requests:
-              cpu: 12
+              cpu: 6
               memory: 18Gi
