@@ -17,3 +17,12 @@ spec:
           limits:
             # Increased CPU limit
             cpu: 100m
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker.gardener.cloud/system-components
+                operator: In
+                values:
+                - "true"

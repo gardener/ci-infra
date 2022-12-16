@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-adapter
+  namespace: monitoring
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker.gardener.cloud/system-components
+                operator: In
+                values:
+                - "true"
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - metrics-adapter
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - prometheus-adapter
+                - key: app.kubernetes.io/part-of
+                  operator: In
+                  values:
+                  - kube-prometheus
+              topologyKey: kubernetes.io/hostname
+            weight: 100
