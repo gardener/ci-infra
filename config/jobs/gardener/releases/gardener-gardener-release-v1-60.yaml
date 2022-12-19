@@ -35,8 +35,8 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "6"
-          memory: 24Gi
+          cpu: "12"
+          memory: 48Gi
       securityContext:
         privileged: true
 - annotations:
@@ -75,8 +75,8 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "6"
-          memory: 24Gi
+          cpu: "12"
+          memory: 48Gi
       securityContext:
         privileged: true
 - annotations:
@@ -116,7 +116,7 @@ periodics:
       resources:
         requests:
           cpu: "6"
-          memory: 18Gi
+          memory: 24Gi
       securityContext:
         privileged: true
 - annotations:
@@ -154,8 +154,8 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "6"
-          memory: 18Gi
+          cpu: "12"
+          memory: 48Gi
       securityContext:
         privileged: true
 - annotations:
@@ -307,8 +307,8 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "6"
-            memory: 24Gi
+            cpu: "12"
+            memory: 48Gi
         securityContext:
           privileged: true
   - always_run: true
@@ -345,8 +345,8 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "6"
-            memory: 24Gi
+            cpu: "12"
+            memory: 48Gi
         securityContext:
           privileged: true
   - always_run: true
@@ -383,7 +383,7 @@ presubmits:
         resources:
           requests:
             cpu: "6"
-            memory: 18Gi
+            memory: 24Gi
         securityContext:
           privileged: true
   - always_run: true
@@ -418,8 +418,8 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "6"
-            memory: 18Gi
+            cpu: "12"
+            memory: 48Gi
         securityContext:
           privileged: true
   - always_run: true
