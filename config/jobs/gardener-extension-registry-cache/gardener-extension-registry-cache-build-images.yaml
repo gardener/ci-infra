@@ -2,6 +2,7 @@ postsubmits:
   gardener/gardener-extension-registry-cache:
   - name: post-gardener-extension-registry-cache-build-images
     cluster: gardener-prow-trusted
+    skip_if_only_changed: '^VERSION$'
     branches:
     - ^main$
     annotations:
