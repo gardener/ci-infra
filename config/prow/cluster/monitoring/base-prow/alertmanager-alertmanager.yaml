@@ -23,7 +23,15 @@ spec:
         resources:
           requests:
             storage: 10Gi
-  affinity: 
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker.gardener.cloud/system-components
+            operator: In
+            values:
+            - "true"
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - podAffinityTerm:

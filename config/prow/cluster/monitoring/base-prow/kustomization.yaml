@@ -24,6 +24,7 @@ patchesStrategicMerge:
 - kubeStateMetrics-deployment.yaml
 - nodeExporter-daemonset.yaml
 - prometheus.yaml
+- prometheusAdapter-deployment.yaml
 - prometheusOperator-deployment.yaml
 
 secretGenerator:
