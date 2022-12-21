@@ -9,6 +9,14 @@ controller:
       cpu: 1000m
       memory: 500Mi
   affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker.gardener.cloud/system-components
+            operator: In
+            values:
+            - "true"
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 100
@@ -38,6 +46,15 @@ controller:
     enabled: true
     default: true
 defaultBackend:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: worker.gardener.cloud/system-components
+            operator: In
+            values:
+            - "true"
   enabled: true
   resources:
     limits:
