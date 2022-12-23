@@ -63,7 +63,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind
+      - make ci-e2e-kind-upgrade
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
