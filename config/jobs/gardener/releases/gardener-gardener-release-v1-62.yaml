@@ -265,7 +265,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind
+      - make ci-e2e-kind-upgrade
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
