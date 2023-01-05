@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
       name: ""
       resources:
         requests:
@@ -71,7 +71,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
       name: ""
       resources:
         requests:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
       name: ""
       resources:
         requests:
@@ -150,7 +150,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
       name: ""
       resources:
         requests:
@@ -303,7 +303,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
         name: ""
         resources:
           requests:
@@ -341,7 +341,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
         name: ""
         resources:
           requests:
@@ -378,7 +378,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
         name: ""
         resources:
           requests:
@@ -414,7 +414,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20221223-736a4da5ba-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230105-c1beb6cf98-master
         name: ""
         resources:
           requests:
