@@ -1,6 +1,4 @@
 variants:
-  1.17:
-    GOLANG_VERSION: 1.17.13
   1.18:
     GOLANG_VERSION: 1.18.10
   1.19:
