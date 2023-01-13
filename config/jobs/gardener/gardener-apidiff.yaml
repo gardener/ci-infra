@@ -11,7 +11,7 @@ presubmits:
       containers:
       - name: test
         # don't update go version here until a go-apidiff release is available with new go version support.
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20221213-25de42a-1.18
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230113-9189908-1.18
         command:
         - make
         args:
