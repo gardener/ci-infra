@@ -6,6 +6,7 @@ dashboard_groups:
     - gardener-extension-registry-cache
     - gardener-extension-shoot-oidc-service
     - gardener-dependency-watchdog
+    - gardener-etcd-druid
     - gardener-extension-networking-cilium
     - gardener-extension-networking-calico
 
@@ -15,5 +16,6 @@ dashboards:
 - name: gardener-extension-registry-cache
 - name: gardener-extension-shoot-oidc-service
 - name: gardener-dependency-watchdog
+- name: gardener-etcd-druid
 - name: gardener-extension-networking-cilium
 - name: gardener-extension-networking-calico

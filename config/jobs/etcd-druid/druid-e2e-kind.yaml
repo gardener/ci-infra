@@ -1,0 +1,65 @@
+presubmits:
+  gardener/etcd-druid:
+    - name: pull-etcd-druid-e2e-kind
+      cluster: gardener-prow-build
+      always_run: true
+      skip_branches:
+        - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+      decorate: true
+      decoration_config:
+        timeout: 60m
+        grace_period: 15m
+      labels:
+        preset-dind-enabled: "true"
+        preset-kind-volume-mounts: "true"
+      annotations:
+        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
+      spec:
+        containers:
+          - image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
+            command:
+              - wrapper.sh
+              - bash
+              - -c
+              - make ci-e2e-kind
+            # we need privileged mode in order to do docker in docker
+            securityContext:
+              privileged: true
+            resources:
+              requests:
+                cpu: 12
+                memory: 18Gi
+periodics:
+  - name: ci-etcd-druid-e2e-kind
+    cluster: gardener-prow-build
+    interval: 4h
+    extra_refs:
+      - org: gardener
+        repo: etcd-druid
+        base_ref: master
+    decorate: true
+    decoration_config:
+      timeout: 60m
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs KIND cluster based e2e tests for etcd druid developments periodically
+      testgrid-dashboards: gardener-etcd-druid
+      testgrid-days-of-results: "60"
+    spec:
+      containers:
+        - image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
+          command:
+            - wrapper.sh
+            - bash
+            - -c
+            - make ci-e2e-kind
+          # we need privileged mode in order to do docker in docker
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 12
+              memory: 18Gi
