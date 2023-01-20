@@ -278,6 +278,7 @@ tide:
   merge_method:
     gardener/ci-infra: squash
     gardener/gardener: squash
+    gardener/gardener-extension-registry-cache: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr
   blocker_label: tide/merge-blocker
