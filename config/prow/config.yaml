@@ -169,7 +169,8 @@ branch-protection:
             apps:
             - gardener-prow
             users: []
-            teams: []
+            teams:
+            - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: true # protections apply to admins as well
 
 tide:
@@ -278,6 +279,7 @@ tide:
   merge_method:
     gardener/ci-infra: squash
     gardener/gardener: squash
+    gardener/gardener-extension-registry-cache: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr
   blocker_label: tide/merge-blocker
