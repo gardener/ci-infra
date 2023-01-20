@@ -165,13 +165,13 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-          restrictions: # prevent everyone except gardener-prow from pushing/merging
+          restrictions: # prevent everyone from pushing/merging (except admins and gardener-prow)
             apps:
             - gardener-prow
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: true # protections apply to admins as well
+          enforce_admins: false # protections don't apply to admins
 
 tide:
   sync_period: 1m
