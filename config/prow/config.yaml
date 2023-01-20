@@ -169,7 +169,8 @@ branch-protection:
             apps:
             - gardener-prow
             users: []
-            teams: []
+            teams:
+            - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: true # protections apply to admins as well
 
 tide:
