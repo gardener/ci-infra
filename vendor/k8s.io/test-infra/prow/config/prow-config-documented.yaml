@@ -86,6 +86,13 @@ branch-protection:
 
                             # RequiredPullRequestReviews specifies github approval/review criteria.
                             required_pull_request_reviews:
+                                # BypassRestrictions appends users/teams that are allowed to bypass PR restrictions
+                                bypass_pull_request_allowances:
+                                    teams:
+                                      - ""
+                                    users:
+                                      - ""
+
                                 # DismissStale overrides whether new commits automatically dismiss old reviews if set
                                 dismiss_stale_reviews: false
 
@@ -144,6 +151,13 @@ branch-protection:
 
                     # RequiredPullRequestReviews specifies github approval/review criteria.
                     required_pull_request_reviews:
+                        # BypassRestrictions appends users/teams that are allowed to bypass PR restrictions
+                        bypass_pull_request_allowances:
+                            teams:
+                              - ""
+                            users:
+                              - ""
+
                         # DismissStale overrides whether new commits automatically dismiss old reviews if set
                         dismiss_stale_reviews: false
 
@@ -186,6 +200,13 @@ branch-protection:
 
             # RequiredPullRequestReviews specifies github approval/review criteria.
             required_pull_request_reviews:
+                # BypassRestrictions appends users/teams that are allowed to bypass PR restrictions
+                bypass_pull_request_allowances:
+                    teams:
+                      - ""
+                    users:
+                      - ""
+
                 # DismissStale overrides whether new commits automatically dismiss old reviews if set
                 dismiss_stale_reviews: false
 
@@ -240,6 +261,13 @@ branch-protection:
 
     # RequiredPullRequestReviews specifies github approval/review criteria.
     required_pull_request_reviews:
+        # BypassRestrictions appends users/teams that are allowed to bypass PR restrictions
+        bypass_pull_request_allowances:
+            teams:
+              - ""
+            users:
+              - ""
+
         # DismissStale overrides whether new commits automatically dismiss old reviews if set
         dismiss_stale_reviews: false
 
@@ -1033,11 +1061,12 @@ plank:
                 # sidecar is the pull spec used for the sidecar utility
                 sidecar: ' '
 
-    # JobQueueConcurrencies is an optional field used to define job queue max concurrency.
+    # JobQueueCapacities is an optional field used to define job queue max concurrency.
     # Each job can be assigned to a specific queue which has its own max concurrency,
-    # independent from the job's name. An example use case would be easier
-    # scheduling of jobs using boskos resources. This mechanism is separate from
-    # ProwJob's MaxConcurrency setting.
+    # independent from the job's name. Setting the concurrency to 0 will block any job
+    # from being triggered. Setting the concurrency to a negative value will remove the
+    # limit. An example use case would be easier scheduling of jobs using boskos resources.
+    # This mechanism is separate from ProwJob's MaxConcurrency setting.
     job_queue_capacities:
         "": 0
 
