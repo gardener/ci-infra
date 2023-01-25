@@ -15,7 +15,7 @@
 package githubinteractor_test
 
 import (
-	"log"
+	"fmt"
 
 	fgc "github.com/gardener/ci-infra/prow/pkg/git/fakegit"
 	fghc "github.com/gardener/ci-infra/prow/pkg/github/fakegithub"
@@ -78,13 +78,13 @@ var _ = Describe("Testing NewRepository()", func() {
 		Expect(repo.Org).To(Equal(testOrg))
 		Expect(repo.Repo).To(Equal(testRepo))
 
-		Expect(err).To(BeNil())
+		Expect(err).NotTo(HaveOccurred())
 	})
 
 	It("should not be able to split the repoName", func() {
 		repo, err := ghi.NewRepository(testOrg, fakeGithubServer)
 		Expect(repo).To(BeNil())
-		Expect(err).To(MatchError(ghi.ErrSplit))
+		Expect(err).To(MatchError(fmt.Sprintf("repo %s cannot be split into org/repo", testOrg)))
 	})
 })
 
@@ -137,14 +137,11 @@ var _ = Describe("Testing PushChanges()", func() {
 		}
 
 		rep, _ = ghi.NewRepository(testFullRepoName, fakeGithubServer)
-		err := rep.CloneRepo()
-		if err != nil {
-			log.Printf("Error cloning repo: %v", err)
-		}
+		Expect(rep.CloneRepo()).To(Succeed())
 	})
 
 	It("should commit and push changes", func() {
 		err := rep.PushChanges("test", "test", rep.FullRepoName, "test", "test", []string{"Label1", "Label2"})
-		Expect(err).To(BeNil())
+		Expect(err).NotTo(HaveOccurred())
 	})
 })

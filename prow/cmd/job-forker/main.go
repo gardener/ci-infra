@@ -17,12 +17,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"k8s.io/test-infra/prow/flagutil"
 	"k8s.io/test-infra/prow/git/v2"
+	"k8s.io/test-infra/prow/logrusutil"
 	"k8s.io/test-infra/prow/pod-utils/downwardapi"
 
 	ghi "github.com/gardener/ci-infra/prow/pkg/githubinteractor"
@@ -51,6 +52,8 @@ type options struct {
 	recursive            bool
 	github               flagutil.GitHubOptions
 	gitEmail             string
+
+	logLevel string
 }
 
 func (o *options) validate() error {
@@ -88,11 +91,12 @@ func gatherOptions() options {
 	fs.StringVar(&labelsOverride, "labels-override", "", "Labels which should be added to the PR")
 	fs.StringVar(&o.gitEmail, "git-email", "", "E-Mail the bot should use to commit changes")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "DryRun")
+	fs.StringVar(&o.logLevel, "log-level", "info", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 	o.github.AddFlags(fs)
 
 	err := fs.Parse(os.Args[1:])
 	if err != nil {
-		log.Fatalf("Unable to parse command line flags: %v\n", err)
+		logrus.WithError(err).Fatal("Unable to parse command line flags")
 	}
 	if labelsOverride != "" {
 		o.labelsOverride = append(o.labelsOverride, strings.Split(labelsOverride, ",")...)
@@ -103,28 +107,32 @@ func gatherOptions() options {
 }
 
 func main() {
-	o := gatherOptions()
+	logrusutil.Init(&logrusutil.DefaultFieldsFormatter{
+		PrintLineNumber:  true,
+		WrappedFormatter: &logrus.TextFormatter{},
+	})
 
+	o := gatherOptions()
 	if err := o.validate(); err != nil {
-		log.Fatalf("Invalid input: %v\n", err)
+		logrus.WithError(err).Fatal("Invalid input")
 	}
 
 	jobSpec, err := downwardapi.ResolveSpecFromEnv()
 	if err != nil {
-		log.Fatalf("Unable to resolve prow job spec: %v\n", err)
+		logrus.WithError(err).Fatal("Unable to resolve prow job spec")
 	}
 
 	githubClient, err := o.github.GitHubClient(o.dryRun)
 	if err != nil {
-		log.Fatalf("Error getting GitHubClient: %v\n", err)
+		logrus.WithError(err).Fatal("Error getting GitHubClient")
 	}
 	gitClient, err := o.github.GitClient(o.dryRun)
 	if err != nil {
-		log.Fatalf("Error getting Git client: %v\n", err)
+		logrus.WithError(err).Fatal("Error getting Git client")
 	}
 	botUser, err := githubClient.BotUser()
 	if err != nil {
-		log.Fatalf("Error getting bot name: %v\n", err)
+		logrus.WithError(err).Fatal("Error getting bot name")
 	}
 
 	githubServer := ghi.GithubServer{
@@ -137,21 +145,21 @@ func main() {
 
 	upstreamRepo, err := ghi.NewRepository(o.upstreamRepo, &githubServer)
 	if err != nil {
-		log.Fatalf("Couldn't create repository object: %v\n", err)
+		logrus.WithError(err).Fatal("Couldn't create repository object")
 	}
 	err = upstreamRepo.CloneRepo()
 	if err != nil {
-		log.Fatalf("Couldn't clone repository: %v\n", err)
+		logrus.WithError(err).Fatal("Couldn't clone repository")
 	}
 
 	err = upstreamRepo.RepoClient.Checkout(o.upstreamBranch)
 	if err != nil {
-		log.Fatalf("Couldn't checkout branch %s: %v\n", o.upstreamBranch, err)
+		logrus.WithError(err).Fatalf("Couldn't checkout branch %s", o.upstreamBranch)
 	}
 
 	changes, err := generateForkedConfigurations(upstreamRepo, o)
 	if err != nil {
-		log.Fatalf("Error during forking of configurations: %v\n", err)
+		logrus.WithError(err).Fatalf("Error during forking of configurations")
 	}
 
 	if changes {
@@ -163,9 +171,9 @@ func main() {
 			fmt.Sprintf("Forked prow jobs for release branches created by prow job `%s`", jobSpec.Job),
 			o.labelsOverride)
 		if err != nil {
-			log.Fatalf("Error during pushing of changes: %v\n", err)
+			logrus.WithError(err).Fatal("Error during pushing of changes")
 		}
 	} else {
-		log.Printf("No changes to commit")
+		logrus.Info("No changes to commit")
 	}
 }

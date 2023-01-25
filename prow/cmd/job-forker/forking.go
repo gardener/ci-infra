@@ -17,12 +17,12 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"k8s.io/test-infra/prow/config"
 	"k8s.io/test-infra/prow/github"
 	"sigs.k8s.io/yaml"
@@ -101,7 +101,7 @@ func generatePeriodics(j config.JobConfig, repository string, branch github.Bran
 }
 
 func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, outputDirectory string, filenames []string) (bool, error) {
-	log.Printf("Start forking for branch %s of repository %s", releaseBranch.Name, repository)
+	logrus.Infof("Start forking for branch %s of repository %s", releaseBranch.Name, repository)
 
 	presubmits := []config.Presubmit{}
 	postsubmits := []config.Postsubmit{}
@@ -112,7 +112,7 @@ func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, 
 	targetFile := path.Join(targetDir, filepath.Base(newFileName))
 
 	if _, err := os.Stat(targetFile); err == nil {
-		log.Printf("File %s is already existing, skip job forking for branch %s of repository %s", targetFile, releaseBranch.Name, repository)
+		logrus.Infof("File %s is already existing, skip job forking for branch %s of repository %s", targetFile, releaseBranch.Name, repository)
 		return false, nil
 	}
 
@@ -141,7 +141,7 @@ func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, 
 	}
 
 	if len(presubmits) == 0 && len(postsubmits) == 0 && len(periodics) == 0 {
-		log.Printf("No prow jobs found, which should be forked for branch %s of %s\n", releaseBranch.Name, repository)
+		logrus.Infof("No prow jobs found, which should be forked for branch %s of %s", releaseBranch.Name, repository)
 		return false, nil
 	}
 
@@ -164,7 +164,7 @@ func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, 
 	if _, err = newf.Write(data); err != nil {
 		return false, fmt.Errorf("couldn't write to outputFile: %w", err)
 	}
-	log.Printf("%v has forked %v Presubmits, %v Postsubmits, %v Periodics for release branch %s into %s\n",
+	logrus.Infof("%v has forked %v Presubmits, %v Postsubmits, %v Periodics for release branch %s into %s",
 		repository,
 		len(presubmits),
 		len(postsubmits),
@@ -178,7 +178,7 @@ func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, 
 func removeOrphanedJobs(repository string, releaseBranches []github.Branch, jobDirectoryPath, outputDirectory string) (bool, error) {
 	var changes bool
 
-	log.Printf("Start searching for orphaned jobs")
+	logrus.Info("Start searching for orphaned jobs")
 
 	repoString := strings.ReplaceAll(repository, "/", "-")
 	forkedDir := path.Join(jobDirectoryPath, outputDirectory)
@@ -186,18 +186,18 @@ func removeOrphanedJobs(repository string, releaseBranches []github.Branch, jobD
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
 		return false, fmt.Errorf("couldn't read from forked files Directory: %w", err)
 	}
-	log.Printf("Existing files in output-directory %s: %v\n", outputDirectory, forkedFiles)
+	logrus.Infof("Existing files in output-directory %s: %v", outputDirectory, forkedFiles)
 
 	for _, forkedFile := range forkedFiles {
 		if filepath.Ext(forkedFile) != ".yaml" && filepath.Ext(forkedFile) != ".yml" {
-			log.Printf("%s is not a yaml file\n", forkedFile)
+			logrus.Infof("%s is not a yaml file", forkedFile)
 			continue
 		}
 		if !strings.HasPrefix(filepath.Base(forkedFile), repoString) {
-			log.Printf("%s didn't match %s. It does not belong to repo %s\n", forkedFile, repository, repository)
+			logrus.Infof("%s didn't match %s. It does not belong to repo %s", forkedFile, repository, repository)
 			continue
 		}
-		log.Printf("%s appears to be created by job-forker\n", forkedFile)
+		logrus.Infof("%s appears to be created by job-forker", forkedFile)
 		// branched File belongs to repo
 		matches := false
 		for _, releaseBranch := range releaseBranches {
@@ -210,7 +210,7 @@ func removeOrphanedJobs(repository string, releaseBranches []github.Branch, jobD
 
 		if !matches {
 			// File is deprecated and has no corresponding branch to it anymore
-			log.Printf("Deleting %v, because its branch in repository %s does not exist anymore\n", forkedFile, repository)
+			logrus.Infof("Deleting %v, because its branch in repository %s does not exist anymore", forkedFile, repository)
 			if err = os.Remove(forkedFile); err != nil {
 				return false, err
 			}
@@ -218,7 +218,7 @@ func removeOrphanedJobs(repository string, releaseBranches []github.Branch, jobD
 		}
 	}
 	if !changes {
-		log.Printf("No orphaned jobs found")
+		logrus.Info("No orphaned jobs found")
 	}
 	return changes, nil
 }
@@ -256,7 +256,7 @@ func generateForkedConfigurations(upstreamRepo *ghi.Repository, o options) (bool
 	var changes bool
 	jobDirectoryPath := path.Join(upstreamRepo.RepoClient.Directory(), o.jobDirectory)
 	fileNames, err := ghi.GetFileNames(jobDirectoryPath, []string{o.outputDirectory}, o.recursive)
-	log.Printf("Files in prow job path: %v\n", fileNames)
+	logrus.Infof("Files in prow job path: %v", fileNames)
 	if err != nil {
 		return false, err
 	}
@@ -276,7 +276,7 @@ func generateForkedConfigurations(upstreamRepo *ghi.Repository, o options) (bool
 			return false, err
 		}
 
-		log.Printf("There are %v release branches for repo %v\n", len(releaseBranches), rep.FullRepoName)
+		logrus.Infof("There are %v release branches for repo %v", len(releaseBranches), rep.FullRepoName)
 		// Check if there is a release branch without a corresponding forked config
 		for _, releaseBranch := range releaseBranches {
 			result, err := forkJobs(rep.FullRepoName, releaseBranch, jobDirectoryPath, o.outputDirectory, fileNames)
