@@ -18,7 +18,7 @@ RUN mkdir /build && GOBIN=/build \
 
 FROM gcr.io/distroless/static-debian11:nonroot AS base_nonroot
 
-FROM alpine:3.16.2 AS ssl_git_runner
+FROM alpine:3.17.1 AS ssl_git_runner
 # Install SSL ca certificates
 RUN apk add --no-cache ca-certificates git
 # Create nonroot user and group to be used in executable containers
@@ -40,6 +40,12 @@ LABEL app=job-forker
 WORKDIR /
 COPY --from=builder /build/job-forker /job-forker
 ENTRYPOINT [ "/job-forker" ]
+
+FROM ssl_git_runner AS milestone-activator
+LABEL app=milestone-activator
+WORKDIR /
+COPY --from=builder /build/milestone-activator /milestone-activator
+ENTRYPOINT [ "/milestone-activator" ]
 
 FROM base_nonroot AS cla-assistant
 LABEL app=cla-assistant
