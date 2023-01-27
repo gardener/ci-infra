@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20230113-9189908
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20230127-b77a1fc
       command:
       - /job-forker
       args:
@@ -123,7 +123,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/milestone-activator:v20230113-9189908
+    - image: eu.gcr.io/gardener-project/ci-infra/milestone-activator:v20230127-b77a1fc
       command:
       - /milestone-activator
       args:
