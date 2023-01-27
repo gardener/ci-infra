@@ -228,8 +228,8 @@ tide:
     - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
-  ### Please uncomment when setting a Release Milestone for gardener/gardener
   #############################################################################
+  # <-- /start: gardener-gardener-milestone -->
     excludedBranches:
     - master
   - repos:
@@ -252,6 +252,7 @@ tide:
     milestone: v1.63
     includedBranches:
     - master
+  # <-- /end: gardener-gardener-milestone -->
   ##############################################################################
   ### End of Release Milestone section
   ##############################################################################

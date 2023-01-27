@@ -15,22 +15,16 @@
 package githubinteractor
 
 import (
-	"errors"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path"
 	"regexp"
-	"strings"
 
+	"github.com/sirupsen/logrus"
+	"k8s.io/test-infra/prow/config"
 	"k8s.io/test-infra/prow/git/v2"
 	"k8s.io/test-infra/prow/github"
-)
-
-var (
-	// ErrSplit occurs, when a repository name is tried to split, but it couldn't extract the Organisation and the Repository name
-	ErrSplit = errors.New("couldn't split")
 )
 
 // GetFileNames returns the relative filepath to the `dir`, ignoring folders / files in `ignoredFileNames`, goes through subfolders, if `recursive` is `true`
@@ -140,26 +134,16 @@ type Repository struct {
 
 // NewRepository creates a Repository object, by taking its fully qualified repository name (organisation/reponame) and splitting it into its counterparts
 func NewRepository(fullRepoName string, gh *GithubServer) (*Repository, error) {
+	var err error
 	rep := Repository{
 		FullRepoName: fullRepoName,
 		Gh:           gh,
 	}
-	err := rep.splitRepoName()
+	rep.Org, rep.Repo, err = config.SplitRepoName(fullRepoName)
 	if err != nil {
 		return nil, err
 	}
 	return &rep, nil
-}
-
-func (r *Repository) splitRepoName() error {
-	splitName := strings.Split(r.FullRepoName, "/")
-	if len(splitName) != 2 {
-		return ErrSplit
-	}
-	r.Org = splitName[0]
-	r.Repo = splitName[1]
-
-	return nil
 }
 
 // GetMatchingBranches returns all branches of the repository which match `releaseBranchPattern` RegEx
@@ -223,7 +207,7 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 	if err != nil {
 		return err
 	}
-	log.Println("Ensured fork exists")
+	logrus.Info("Ensured fork exists")
 	if r.RepoClient.BranchExists(targetBranch) {
 		if err := r.RepoClient.Checkout(targetBranch); err != nil {
 			return err
@@ -234,7 +218,7 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 	defer func() {
 		err := r.RepoClient.Clean()
 		if err != nil {
-			log.Printf("Error on cleaning up repo: %v\n", err)
+			logrus.WithError(err).Infof("Error on cleaning up repo")
 		}
 	}()
 	if err := r.Gh.Gc.Commit(r.RepoClient.Directory(), r.Gh.BotUser.Name, r.Gh.GetEmail(), commitMessage, false); err != nil {
@@ -252,10 +236,10 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 	)
 
 	for _, pr := range prs {
-		log.Printf("PR: %v, Head: %v, Base: %v\n", pr.Title, pr.Head.Repo.FullName, pr.Base.Repo.FullName)
+		logrus.Infof("PR: %s, Head: %s, Base: %s", pr.Title, pr.Head.Repo.FullName, pr.Base.Repo.FullName)
 		if pr.Head.Repo.FullName == fork.FullRepoName && pr.Head.Ref == targetBranch &&
 			pr.Base.Repo.FullName == upstreamRepo && pr.Base.Ref == upstreamBranch {
-			log.Printf("There is already an open PR")
+			logrus.Info("There is already an open PR")
 			prNumber = pr.Number
 			prExists = true
 			break
@@ -265,16 +249,16 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 	if err := r.RepoClient.PushToNamedFork(fork.Repo, targetBranch, true); err != nil {
 		return err
 	}
-	log.Printf("Pushed to branch %s on %s/%s\n", targetBranch, r.Gh.BotUser.Login, fork.Repo)
+	logrus.Infof("Pushed to branch %s on %s/%s", targetBranch, r.Gh.BotUser.Login, fork.Repo)
 
 	if !prExists {
 		head := fmt.Sprintf("%s:%s", r.Gh.BotUser.Login, targetBranch)
-		log.Printf("Head: %v\n", head)
+		logrus.Infof("Head: %s", head)
 		prNumber, err = r.Gh.Ghc.CreatePullRequest(r.Org, r.Repo, prTitle, "", head, upstreamBranch, true)
 		if err != nil {
 			return err
 		}
-		log.Printf("Created new PR: %v\n", prNumber)
+		logrus.Infof("Created new PR: %v", prNumber)
 
 	}
 	if labels != nil {
