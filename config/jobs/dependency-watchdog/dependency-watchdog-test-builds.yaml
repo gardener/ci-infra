@@ -34,7 +34,7 @@ presubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230203-1992cdf
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230214-ec65ab4
         command:
         - /image-builder
         args:
