@@ -36,3 +36,43 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
+periodics:
+- name: ci-gardener-e2e-kind-ha-multi-zone-upgrade
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 60m
+    grace_period: 15m
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+  annotations:
+    description: Runs end-to-end Gardener upgrade tests on a Seed with 3 zones with a Shoot with failure tolerance type 'zone' for gardener developments periodically
+    testgrid-dashboards: gardener-gardener
+    testgrid-days-of-results: "60"
+    fork-per-release: "true"
+  spec:
+    containers:
+    - image: gcr.io/k8s-staging-test-infra/krte:v20230117-50d6df3625-master
+      command:
+      - wrapper.sh
+      - bash
+      - -c
+      - make ci-e2e-kind-ha-multi-zone-upgrade
+      # we need privileged mode in order to do docker in docker
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          cpu: 6
+          memory: 24Gi
+      env:
+      - name: SKAFFOLD_UPDATE_CHECK
+        value: "false"
+      - name: SKAFFOLD_INTERACTIVE
+        value: "false"
