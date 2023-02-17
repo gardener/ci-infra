@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230117-50d6df3625-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230207-ce569a5e37-master
       name: ""
       resources:
         requests:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230117-50d6df3625-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230207-ce569a5e37-master
       name: ""
       resources:
         requests:
