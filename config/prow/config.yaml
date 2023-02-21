@@ -230,28 +230,28 @@ tide:
   ### Release Milestone section starts here
   #############################################################################
   # <-- /start: gardener-gardener-milestone -->
-  #   excludedBranches:
-  #   - master
-  # - repos:
-  #   - gardener/gardener
-  #   labels:
-  #   - lgtm
-  #   - approved
-  #   - "cla: yes"
-  #   missingLabels:
-  #   - do-not-merge/blocked-paths
-  #   - do-not-merge/contains-merge-commits
-  #   - do-not-merge/hold
-  #   - do-not-merge/invalid-commit-message
-  #   - do-not-merge/invalid-owners-file
-  #   - do-not-merge/needs-kind
-  #   - do-not-merge/release-note-label-needed
-  #   - do-not-merge/work-in-progress
-  #   - needs-rebase
-  #   - "cla: no"
-  #   milestone: v1.64
-  #   includedBranches:
-  #   - master
+    excludedBranches:
+    - master
+  - repos:
+    - gardener/gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+    milestone: v1.65
+    includedBranches:
+    - master
   # <-- /end: gardener-gardener-milestone -->
   ##############################################################################
   ### End of Release Milestone section
