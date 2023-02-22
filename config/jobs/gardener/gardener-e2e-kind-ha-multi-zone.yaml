@@ -17,7 +17,7 @@ presubmits:
       fork-per-release: "true"
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20230217-fc87adaa29-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20230222-b5208facd4-master
         command:
         - wrapper.sh
         - bash
@@ -57,7 +57,7 @@ periodics:
     fork-per-release: "true"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20230217-fc87adaa29-master
+    - image: gcr.io/k8s-staging-test-infra/krte:v20230222-b5208facd4-master
       command:
       - wrapper.sh
       - bash
