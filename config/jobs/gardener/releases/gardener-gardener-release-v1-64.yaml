@@ -417,7 +417,7 @@ postsubmits:
         - --inject-effective-version=true
         command:
         - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230227-3fae23d
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230228-957ffd5
         name: image-builder
         resources:
           requests:
@@ -802,7 +802,7 @@ presubmits:
         - --inject-effective-version=true
         command:
         - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230227-3fae23d
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230228-957ffd5
         name: image-builder
         resources:
           requests:
