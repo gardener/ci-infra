@@ -1,7 +1,7 @@
 # ----------------
 # Build container
 # ----------------
-ARG GOLANG_VERSION=1.18.10
+ARG GOLANG_VERSION=1.19.6
 
 FROM golang:${GOLANG_VERSION} AS builder
 LABEL stage=intermediate
@@ -18,7 +18,7 @@ RUN mkdir /build && GOBIN=/build \
 
 FROM gcr.io/distroless/static-debian11:nonroot AS base_nonroot
 
-FROM alpine:3.17.1 AS ssl_git_runner
+FROM alpine:3.17.2 AS ssl_git_runner
 # Install SSL ca certificates
 RUN apk add --no-cache ca-certificates git
 # Create nonroot user and group to be used in executable containers

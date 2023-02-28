@@ -356,7 +356,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230227-fbbd1a9-1.18
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230227-fbbd1a9-1.19
       command:
       - make
       args:
