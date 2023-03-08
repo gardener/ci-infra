@@ -2,6 +2,6 @@ variants:
   "1.18":
     GOLANG_VERSION: "1.18.10"
   "1.19":
-    GOLANG_VERSION: "1.19.6"
+    GOLANG_VERSION: "1.19.7"
   "1.20":
-    GOLANG_VERSION: "1.20.1"
+    GOLANG_VERSION: "1.20.2"
