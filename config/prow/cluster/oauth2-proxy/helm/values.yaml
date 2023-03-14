@@ -1,0 +1,67 @@
+# Check values.yaml of oauth2-proxy for help https://github.com/oauth2-proxy/manifests/blob/main/helm/oauth2-proxy/values.yaml
+extraArgs:
+  whitelist-domain: .prow.gardener.cloud
+  cookie-domain: .prow.gardener.cloud
+  provider: github
+  github-org: gardener
+  email-domain: "*"
+  scope: "user:email"
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: worker.gardener.cloud/system-components
+          operator: In
+          values:
+          - "true"
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - ingress-nginx
+          - key: app.kubernetes.io/instance
+            operator: In
+            values:
+            - ingress-nginx
+          - key: app.kubernetes.io/component
+            operator: In
+            values:
+            - controller
+        topologyKey: kubernetes.io/hostname
+
+config:
+  existingSecret: oauth2-proxy
+  existingConfig: oauth2-proxy
+
+ingress:
+  enabled: true
+  path: /
+  pathType: Prefix
+  hosts:
+  - oauth2.prow.gardener.cloud
+  annotations:
+    cert.gardener.cloud/issuer: ci-issuer
+    cert.gardener.cloud/purpose: managed
+    dns.gardener.cloud/class: garden
+    dns.gardener.cloud/dnsnames: oauth2.prow.gardener.cloud
+  tls:
+  - secretName: oauth2-proxy-tls
+    hosts:
+    - oauth2.prow.gardener.cloud
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 300Mi
+  requests:
+    cpu: 100m
+    memory: 300Mi
+
+replicaCount: 2
