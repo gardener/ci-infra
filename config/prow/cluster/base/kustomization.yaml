@@ -6,3 +6,4 @@ resources:
 - cpu-limit-range_limitrange.yaml
 - mem-limit-range_limitrange.yaml
 - gce-ssd_storageclass.yaml
+- dind-docker-config_configmap.yaml

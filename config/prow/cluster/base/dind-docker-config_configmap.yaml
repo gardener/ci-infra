@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dind-docker-config
+  namespace: test-pods
+data:
+  daemon.json: |-
+    {
+      "cgroup-parent": "prowparent.slice"
+    }
