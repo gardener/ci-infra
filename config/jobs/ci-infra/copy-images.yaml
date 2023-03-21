@@ -1,0 +1,31 @@
+postsubmits:
+  gardener/ci-infra:
+  - name: post-ci-infra-copy-images
+    cluster: gardener-prow-trusted
+    run_if_changed: '^images\/copy-images\/'
+    branches:
+    - ^master$
+    annotations:
+      description: Copy images from DockerHub
+      testgrid-dashboards: gardener-ci-infra
+      testgrid-days-of-results: "60"
+    decorate: true
+    max_concurrency: 1
+    reporter_config:
+      slack:
+        channel: prow-alerts
+    spec:
+      containers:
+      - name: copy-images
+        image: eu.gcr.io/gardener-project/ci-infra/copy-images:v20230321-a92c6e4
+        command:
+        - ./config/images/copy-images.sh
+        args:
+        - ./config/images/images.yaml
+        volumeMounts:
+        - name: docker-config
+          path: /root/.docker
+      volumes:
+      - name: docker-config
+        secret:
+          secretName: gardener-prow-gcr-docker-config

@@ -1,0 +1,5 @@
+images:
+- source: grafana/grafana
+  destination: eu.gcr.io/gardener-project/3rd/grafana/grafana
+  tags:
+  - 7.5.17
