@@ -317,16 +317,11 @@ presets:
   # krte (normal) path
   - name: docker-root
     emptyDir: {}
-  - name: docker-config
-    configMap:
-      name: dind-docker-config
   volumeMounts:
   - name: docker-graph
     mountPath: /docker-graph
   - name: docker-root
     mountPath: /var/lib/docker
-  - name: docker-config
-    mountPath: /etc/docker
 # volume mounts for kind
 - labels:
     preset-kind-volume-mounts: "true"
