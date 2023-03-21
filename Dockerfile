@@ -1,7 +1,7 @@
 # ----------------
 # Build container
 # ----------------
-ARG GOLANG_VERSION=1.19.6
+ARG GOLANG_VERSION=1.19.7
 
 FROM golang:${GOLANG_VERSION} AS builder
 LABEL stage=intermediate
