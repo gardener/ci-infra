@@ -42,5 +42,5 @@ You can run the `copy-images.sh` script with
 
 You can start the script inside the container from the current directory with
 ```bash
-docker run -v $PWD:/app eu.gcr.io/gardener-project/ci-infra/copy-images:v20230321-a92c6e4 /app/copy-images.sh /app/images.yaml
+docker run -v $PWD:/app eu.gcr.io/gardener-project/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
 ```
