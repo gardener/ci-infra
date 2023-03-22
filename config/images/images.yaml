@@ -1,5 +1,76 @@
 images:
+# gardener/charts/images.yaml
 - source: grafana/grafana
   destination: eu.gcr.io/gardener-project/3rd/grafana/grafana
   tags:
   - 7.5.17
+- source: coredns/coredns
+  destination: eu.gcr.io/gardener-project/3rd/coredns/coredns
+  tags:
+    - 1.10.0
+- source: kubernetesui/dashboard
+  destination: eu.gcr.io/gardener-project/3rd/kubernetesui/dashboard
+  tags:
+    - v2.4.0
+    - v2.5.1
+- source: kubernetesui/metrics-scraper
+  destination: eu.gcr.io/gardener-project/3rd/kubernetesui/metrics-scraper
+  tags:
+    - v1.0.7
+- source: alpine
+  destination: eu.gcr.io/gardener-project/3rd/alpine
+  tags:
+    - 3.15.4
+- source: fluent/fluent-bit
+  destination: eu.gcr.io/gardener-project/3rd/fluent/fluent-bit
+  tags:
+    - 1.9.7
+- source: grafana/loki
+  destination: eu.gcr.io/gardener-project/3rd/grafana/loki
+  tags:
+    - 2.2.1
+- source: grafana/promtail
+  destination: eu.gcr.io/gardener-project/3rd/grafana/promtail
+  tags:
+    - 2.2.1
+- source: envoyproxy/envoy-distroless
+  destination: eu.gcr.io/gardener-project/3rd/envoyproxy/envoy-distroless
+  tags:
+    - v1.24.1
+# gardener/pkg/provider-local/images.yaml
+- source: kindest/local-path-provisioner
+  destination: eu.gcr.io/gardener-project/3rd/kindest/local-path-provisioner
+  tags:
+    - v0.0.22-kind.0
+- source: kindest/local-path-helper
+  destination: eu.gcr.io/gardener-project/3rd/kindest/local-path-helper
+  tags:
+    - v20220512-507ff70b
+# gardener-extension-networking-calico/charts/images.yaml
+- source: projectcalico/calico
+  destination: eu.gcr.io/gardener-project/3rd/projectcalico/calico
+  tags:
+    - v3.25.0
+- source: calico/node
+  destination: eu.gcr.io/gardener-project/3rd/calico/node
+  tags:
+    - v3.22.2
+- source: calico/cni
+  destination: eu.gcr.io/gardener-project/3rd/calico/cni
+  tags:
+    - v3.25.0
+    - v3.22.2
+- source: calico/typha
+  destination: eu.gcr.io/gardener-project/3rd/calico/typha
+  tags:
+    - v3.25.0
+    - v3.22.2
+- source: calico/kube-controllers
+  destination: eu.gcr.io/gardener-project/3rd/calico/kube-controllers
+  tags:
+    - v3.25.0
+    - v3.22.2
+- source: calico/pod2daemon-flexvol
+  destination: eu.gcr.io/gardener-project/3rd/calico/pod2daemon-flexvol
+  tags:
+    - v3.22.2
