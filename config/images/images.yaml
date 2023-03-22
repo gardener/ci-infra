@@ -11,6 +11,7 @@ images:
 - source: kubernetesui/dashboard
   destination: eu.gcr.io/gardener-project/3rd/kubernetesui/dashboard
   tags:
+  - v2.2.0
   - v2.4.0
   - v2.5.1
 - source: kubernetesui/metrics-scraper
