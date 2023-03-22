@@ -64,6 +64,7 @@ deck:
           highlight_regexes:
           - "[tT]imed out"
           - "ERROR:"
+          - "Error:"
           - (FAIL|Failure \[|FAILED)\b
           - panic\b
           - level=fatal\b
