@@ -2,7 +2,7 @@ postsubmits:
   gardener/ci-infra:
   - name: post-ci-infra-copy-images
     cluster: gardener-prow-trusted
-    run_if_changed: '^images\/copy-images\/'
+    run_if_changed: '^config\/images\/'
     branches:
     - ^master$
     annotations:
