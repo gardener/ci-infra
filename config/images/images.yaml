@@ -48,13 +48,10 @@ images:
   tags:
   - v20220512-507ff70b
 # gardener-extension-networking-calico/charts/images.yaml
-- source: projectcalico/calico
-  destination: eu.gcr.io/gardener-project/3rd/projectcalico/calico
-  tags:
-  - v3.25.0
 - source: calico/node
   destination: eu.gcr.io/gardener-project/3rd/calico/node
   tags:
+  - v3.25.0
   - v3.22.2
 - source: calico/cni
   destination: eu.gcr.io/gardener-project/3rd/calico/cni
