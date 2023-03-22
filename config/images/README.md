@@ -33,6 +33,12 @@ It is required to have yq and crane installed.
 brew install yq
 brew install crane
 ```
+
+**Authentication**  
+There are two ways to authenticate to a private container registry.  
+1) Crane will use your existing docker config located at `~/.docker/config.json`
+2) Using crane to create a `config.json` using `crane auth <registry> -u <username> -p <password>`
+
 You can run the `copy-images.sh` script with 
 ```bash
 ./copy-images.sh images.yaml
@@ -43,4 +49,10 @@ You can run the `copy-images.sh` script with
 You can start the script inside the container from the current directory with
 ```bash
 docker run -v $PWD:/app eu.gcr.io/gardener-project/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
+```
+
+**Authentication**  
+In order to authenticate inside the container, mount your `~/.docker/config.json` to `/root/.docker/config.json`.
+```bash
+docker run -v $PWD:/app -v ~/.docker/config.json:/root/.docker/config.json eu.gcr.io/gardener-project/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
 ```
