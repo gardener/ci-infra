@@ -24,7 +24,7 @@ postsubmits:
         - ./config/images/images.yaml
         volumeMounts:
         - name: docker-config
-          path: /root/.docker
+          mountPath: /root/.docker
       volumes:
       - name: docker-config
         secret:
