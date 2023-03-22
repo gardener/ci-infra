@@ -9,7 +9,7 @@ periodics:
   decorate: true
   decoration_config:
     grace_period: 15m0s
-    timeout: 1h0m0s
+    timeout: 1h15m0s
   extra_refs:
   - base_ref: release-v1.65
     org: gardener
