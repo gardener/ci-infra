@@ -8,7 +8,7 @@ presubmits:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
     decoration_config:
-      timeout: 60m
+      timeout: 1h30m0s
       grace_period: 15m
     labels:
       preset-dind-enabled: "true"
@@ -46,7 +46,7 @@ periodics:
     base_ref: master
   decorate: true
   decoration_config:
-    timeout: 60m
+    timeout: 1h30m0s
     grace_period: 15m
   labels:
     preset-dind-enabled: "true"
