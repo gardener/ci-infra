@@ -72,3 +72,41 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/calico/pod2daemon-flexvol
   tags:
   - v3.22.2
+# gardener-extension-provider-equinix-metal/charts/images.yaml
+- source: equinix/cloud-provider-equinix-metal
+  destination: eu.gcr.io/gardener-project/3rd/equinix/cloud-provider-equinix-metal
+  tags:
+  - v3.5.0
+- source: packethost/metabot
+  destination: eu.gcr.io/gardener-project/3rd/packethost/metabot
+  tags:
+  - v1.0.0
+# gardener-extension-provider-openstack/charts/images.yaml
+- source: k8scloudprovider/openstack-cloud-controller-manager
+  destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/openstack-cloud-controller-manager
+  tags:
+  - v1.21.0
+  - v1.22.2
+  - v1.23.4
+  - v1.24.6
+  - v1.25.5
+  - v1.26.2
+- source: k8scloudprovider/cinder-csi-plugin
+  destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/cinder-csi-plugin
+  tags:
+  - v1.20.3
+  - v1.21.0
+  - v1.22.2
+  - v1.23.4
+  - v1.24.5
+  - v1.25.3
+  - v1.26.0
+  # gardener-extension-registry-cache/charts/images.yaml
+- source: registry
+  destination: eu.gcr.io/gardener-project/3rd/registry
+  tags:
+  - 2.8.1
+- source: bash
+  destination: eu.gcr.io/gardener-project/3rd/bash
+  tags:
+  - 5.2.0-alpine3.15
