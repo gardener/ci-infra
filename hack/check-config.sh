@@ -20,7 +20,7 @@ set -o pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  gcr.io/k8s-prow/checkconfig:v20230324-76cde35b3d \
+  gcr.io/k8s-prow/checkconfig:v20230324-8697ff4d24 \
   --config-path=config/prow/config.yaml \
   --job-config-path=config/jobs \
   --plugin-config=config/prow/plugins.yaml \
