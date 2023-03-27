@@ -2,10 +2,6 @@
 
 This repository contains configuration files for the testing and automation needs of the Gardener project.
 
-## ⚠️ Warning 🚧
-
-This is currently under construction / in evaluation phase.
-
 ## CI Job Management
 
 Gardener uses a [`prow`](https://github.com/kubernetes/test-infra/blob/master/prow) instance at [prow.gardener.cloud](https://prow.gardener.cloud) to handle CI and automation for parts of the project.
@@ -87,6 +83,14 @@ The following commands assume you are using the combined `kubeconfig` generated 
       ```bash
       kubectl config use-context gardener-prow-trusted
       kubectl -n prow create secret generic oauth-cookie-secret --from-literal=secret=$(openssl rand -base64 32)
+      ```
+    - `oauth2-proxy`
+      ```bash
+      kubectl config use-context gardener-prow-trusted
+      kubectl -n oauth2-proxy create secret generic oauth2-proxy \
+      --from-literal=cookie-secret=$(openssl rand -base64 32) \
+      --from-literal=client-id=<Github OAuth2 Proxy App client-id> \
+      --from-literal=client-secret=<Github OAuth2 Proxy App client-secret>
       ```
     - `kubeconfig` (ref [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#run-test-pods-in-different-clusters), needs to be present in the `prow` and `test-pods` namespace of the prow-trusted cluster)
       - add two contexts: the prow cluster as `gardener-prow-trusted` and the build/workload cluster as `gardener-prow-build`
