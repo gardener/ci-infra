@@ -88,9 +88,6 @@ images:
   - v1.21.0
   - v1.22.2
   - v1.23.4
-  - v1.24.6
-  - v1.25.5
-  - v1.26.2
 - source: k8scloudprovider/cinder-csi-plugin
   destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/cinder-csi-plugin
   tags:
@@ -98,9 +95,6 @@ images:
   - v1.21.0
   - v1.22.2
   - v1.23.4
-  - v1.24.5
-  - v1.25.3
-  - v1.26.0
   # gardener-extension-registry-cache/charts/images.yaml
 - source: registry
   destination: eu.gcr.io/gardener-project/3rd/registry
