@@ -1,6 +1,6 @@
 # Check values.yaml of ingress-nginx for help https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 controller:
-  replicaCount: 3
+  replicaCount: 2
   resources:
     requests:
       cpu: 100m
