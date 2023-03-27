@@ -4,7 +4,7 @@ extraArgs:
   cookie-domain: .prow.gardener.cloud
   provider: github
   github-org: gardener
-  github-repo: gardener/ci-infra
+  github-user: timebertt
   email-domain: "*"
   scope: "user:email"
 

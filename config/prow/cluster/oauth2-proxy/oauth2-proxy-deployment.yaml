@@ -119,7 +119,7 @@ spec:
           - --cookie-domain=.prow.gardener.cloud
           - --email-domain=*
           - --github-org=gardener
-          - --github-repo=gardener/ci-infra
+          - --github-user=timebertt
           - --provider=github
           - --scope=user:email
           - --whitelist-domain=.prow.gardener.cloud
