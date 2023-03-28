@@ -7,6 +7,7 @@ triggers:
   - gardener/gardener-extension-registry-cache
   - gardener/gardener-extension-shoot-oidc-service
   - gardener/dependency-watchdog
+  - gardener/gardener-extension-networking-cilium
 
 approve:
 - repos:
@@ -236,6 +237,11 @@ plugins:
     - skip
     - trigger
   gardener/dependency-watchdog:
+    plugins:
+    - override
+    - skip
+    - trigger
+  gardener/gardener-extension-networking-cilium:
     plugins:
     - override
     - skip
