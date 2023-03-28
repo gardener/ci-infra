@@ -26,6 +26,15 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/fluent/fluent-bit
   tags:
   - 1.9.7
+- source: kubesphere/fluent-bit
+  destination: eu.gcr.io/gardener-project/3rd/kubesphere/fluent-bit
+  tags:
+  - v2.0.9
+  - v2.0.10
+- source: kubesphere/fluent-operator
+  destination: eu.gcr.io/gardener-project/3rd/kubesphere/fluent-operator
+  tags:
+  - v1.7.0
 - source: grafana/loki
   destination: eu.gcr.io/gardener-project/3rd/grafana/loki
   tags:
