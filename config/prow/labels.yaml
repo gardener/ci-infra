@@ -356,6 +356,12 @@ repos:
         addedBy: anyone
         previously:
           - name: discussion
+      - name: kind/ipsei
+        color: 4c38a5
+        description: IPCEI (Important Project of Common European Interest)
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # os
       - name: os/garden-linux
         color: 187c00
@@ -1175,6 +1181,12 @@ repos:
         addedBy: anyone
         previously:
           - name: discussion
+      - name: kind/ipsei
+        color: 4c38a5
+        description: IPCEI (Important Project of Common European Interest)
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # os
       - name: os/garden-linux
         color: 187c00
@@ -2019,6 +2031,12 @@ repos:
         addedBy: anyone
         previously:
           - name: discussion
+      - name: kind/ipsei
+        color: 4c38a5
+        description: IPCEI (Important Project of Common European Interest)
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # os
       - name: os/garden-linux
         color: 187c00
