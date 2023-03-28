@@ -35,7 +35,7 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "6"
+          cpu: "12"
           memory: 24Gi
       securityContext:
         privileged: true
@@ -115,7 +115,7 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "6"
+          cpu: "12"
           memory: 24Gi
       securityContext:
         privileged: true
@@ -275,7 +275,7 @@ periodics:
       name: ""
       resources:
         requests:
-          cpu: "6"
+          cpu: "12"
           memory: 24Gi
       securityContext:
         privileged: true
@@ -540,7 +540,7 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "6"
+            cpu: "12"
             memory: 24Gi
         securityContext:
           privileged: true
@@ -685,7 +685,7 @@ presubmits:
         name: ""
         resources:
           requests:
-            cpu: "6"
+            cpu: "12"
             memory: 24Gi
         securityContext:
           privileged: true
