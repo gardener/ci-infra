@@ -1,0 +1,53 @@
+presubmits:
+  gardener/gardener-extension-networking-calico:
+  - name: pull-extension-networking-calico
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 30m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener-extension-networking-calico developments in pull requests
+    spec:
+      containers:
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230321-e37b222-1.20
+        command:
+        - make
+        args:
+        - verify-extended
+        resources:
+          limits:
+            memory: 2Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-extension-networking-calico
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-networking-calico
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 30m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for gardener-extension-networking-calico master branch
+    testgrid-dashboards: gardener-extension-networking-calico
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230321-e37b222-1.20
+      command:
+      - make
+      args:
+      - verify-extended
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 2
+          memory: 1Gi
