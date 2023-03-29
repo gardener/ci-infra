@@ -350,7 +350,7 @@ repos:
           - name: question
       - name: kind/discussion
         color: c7def8
-        description: Discussion (enaging others in deciding about multiple options)
+        description: Discussion (engaging others in deciding about multiple options)
         target: issues
         prowPlugin: label
         addedBy: anyone
@@ -1175,7 +1175,7 @@ repos:
           - name: question
       - name: kind/discussion
         color: c7def8
-        description: Discussion (enaging others in deciding about multiple options)
+        description: Discussion (engaging others in deciding about multiple options)
         target: issues
         prowPlugin: label
         addedBy: anyone
@@ -2025,7 +2025,7 @@ repos:
           - name: question
       - name: kind/discussion
         color: c7def8
-        description: Discussion (enaging others in deciding about multiple options)
+        description: Discussion (engaging others in deciding about multiple options)
         target: issues
         prowPlugin: label
         addedBy: anyone
