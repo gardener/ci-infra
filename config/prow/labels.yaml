@@ -350,12 +350,18 @@ repos:
           - name: question
       - name: kind/discussion
         color: c7def8
-        description: Discussion (enaging others in deciding about multiple options)
+        description: Discussion (engaging others in deciding about multiple options)
         target: issues
         prowPlugin: label
         addedBy: anyone
         previously:
           - name: discussion
+      - name: area/ipcei
+        color: 0052cc
+        description: IPCEI (Important Project of Common European Interest)
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # os
       - name: os/garden-linux
         color: 187c00
@@ -1169,12 +1175,18 @@ repos:
           - name: question
       - name: kind/discussion
         color: c7def8
-        description: Discussion (enaging others in deciding about multiple options)
+        description: Discussion (engaging others in deciding about multiple options)
         target: issues
         prowPlugin: label
         addedBy: anyone
         previously:
           - name: discussion
+      - name: area/ipcei
+        color: 0052cc
+        description: IPCEI (Important Project of Common European Interest)
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # os
       - name: os/garden-linux
         color: 187c00
@@ -2013,12 +2025,18 @@ repos:
           - name: question
       - name: kind/discussion
         color: c7def8
-        description: Discussion (enaging others in deciding about multiple options)
+        description: Discussion (engaging others in deciding about multiple options)
         target: issues
         prowPlugin: label
         addedBy: anyone
         previously:
           - name: discussion
+      - name: area/ipcei
+        color: 0052cc
+        description: IPCEI (Important Project of Common European Interest)
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # os
       - name: os/garden-linux
         color: 187c00
