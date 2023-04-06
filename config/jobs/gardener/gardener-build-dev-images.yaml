@@ -16,7 +16,7 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230327-34543a7
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230405-7d49741
         command:
         - /image-builder
         args:
