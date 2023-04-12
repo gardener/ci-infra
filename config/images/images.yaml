@@ -87,6 +87,7 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/equinix/cloud-provider-equinix-metal
   tags:
   - v3.5.0
+  - v3.6.0
 - source: packethost/metabot
   destination: eu.gcr.io/gardener-project/3rd/packethost/metabot
   tags:
