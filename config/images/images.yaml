@@ -61,21 +61,25 @@ images:
 - source: calico/node
   destination: eu.gcr.io/gardener-project/3rd/calico/node
   tags:
+  - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/cni
   destination: eu.gcr.io/gardener-project/3rd/calico/cni
   tags:
+  - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/typha
   destination: eu.gcr.io/gardener-project/3rd/calico/typha
   tags:
+  - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/kube-controllers
   destination: eu.gcr.io/gardener-project/3rd/calico/kube-controllers
   tags:
+  - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/pod2daemon-flexvol
