@@ -8,7 +8,6 @@ dashboard_groups:
     - gardener-dependency-watchdog
     - gardener-extension-networking-cilium
     - gardener-extension-networking-calico
-    - gardener-landscaper
 
 dashboards:
 - name: gardener-gardener
@@ -18,4 +17,3 @@ dashboards:
 - name: gardener-dependency-watchdog
 - name: gardener-extension-networking-cilium
 - name: gardener-extension-networking-calico
-- name: gardener-landscaper
