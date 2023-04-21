@@ -11,7 +11,7 @@ spec:
         resources:
           limits:
              # Increased CPU limit
-            cpu: 100m
+            cpu: 250m
       - name: kube-rbac-proxy
         resources:
           limits:
