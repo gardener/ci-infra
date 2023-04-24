@@ -36,6 +36,7 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/kubesphere/fluent-operator
   tags:
   - v1.7.0
+  - v2.2.0
 - source: grafana/loki
   destination: eu.gcr.io/gardener-project/3rd/grafana/loki
   tags:
