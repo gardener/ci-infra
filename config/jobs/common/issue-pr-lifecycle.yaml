@@ -1,5 +1,5 @@
 periodics:
-- name: ci-gardener-triage-robot-close
+- name: ci-gardener-triage-robot-issue-close
   interval: 1h
   cluster: gardener-prow-trusted
   decorate: true
@@ -18,21 +18,24 @@ periodics:
       - |-
         --query=repo:gardener/ci-infra
         repo:gardener/gardener
+        repo:gardener/gardener-extension-registry-cache
+        repo:gardener/dependency-watchdog
+        is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=720h
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
-        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues and PRs.
-        This bot triages issues and PRs according to the following rules:
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
+        This bot triages issues according to the following rules:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
         
         You can:
-        - Reopen this issue or PR with `/reopen`
-        - Mark this issue or PR as fresh with `/remove-lifecycle rotten`
+        - Reopen this issue with `/reopen`
+        - Mark this issue as fresh with `/remove-lifecycle rotten`
 
         /close
       - --template
@@ -46,7 +49,7 @@ periodics:
       secret:
         secretName: github-token
 
-- name: ci-gardener-triage-robot-rotten
+- name: ci-gardener-triage-robot-issue-rotten
   interval: 1h
   cluster: gardener-prow-trusted
   decorate: true
@@ -65,6 +68,9 @@ periodics:
       - |-
         --query=repo:gardener/ci-infra
         repo:gardener/gardener
+        repo:gardener/gardener-extension-registry-cache
+        repo:gardener/dependency-watchdog
+        is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
@@ -72,15 +78,15 @@ periodics:
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
-        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues and PRs.
-        This bot triages issues and PRs according to the following rules:
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
+        This bot triages issues according to the following rules:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
         
         You can:
-        - Mark this issue or PR as fresh with `/remove-lifecycle rotten`
-        - Close this issue or PR with `/close`
+        - Mark this issue as fresh with `/remove-lifecycle rotten`
+        - Close this issue with `/close`
 
         /lifecycle rotten
       - --template
@@ -94,7 +100,7 @@ periodics:
       secret:
         secretName: github-token
 
-- name: ci-gardener-triage-robot-stale
+- name: ci-gardener-triage-robot-issue-stale
   interval: 1h
   cluster: gardener-prow-trusted
   decorate: true
@@ -113,6 +119,9 @@ periodics:
       - |-
         --query=repo:gardener/ci-infra
         repo:gardener/gardener
+        repo:gardener/gardener-extension-registry-cache
+        repo:gardener/dependency-watchdog
+        is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
         -label:lifecycle/rotten
@@ -120,16 +129,169 @@ periodics:
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
-        --comment=The Gardener project currently lacks enough contributors to adequately respond to all issues and PRs.
-        This bot triages issues and PRs according to the following rules:
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
+        This bot triages issues according to the following rules:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
         
         You can:
-        - Mark this issue or PR as fresh with `/remove-lifecycle stale`
-        - Mark this issue or PR as rotten with `/lifecycle rotten`
-        - Close this issue or PR with `/close`
+        - Mark this issue as fresh with `/remove-lifecycle stale`
+        - Mark this issue as rotten with `/lifecycle rotten`
+        - Close this issue with `/close`
+
+        /lifecycle stale
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: token
+        mountPath: /etc/github-token
+    volumes:
+    - name: token
+      secret:
+        secretName: github-token
+
+- name: ci-gardener-triage-robot-pr-close
+  interval: 1h
+  cluster: gardener-prow-trusted
+  decorate: true
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  annotations:
+    description: Closes rotten PRs after 7d of inactivity
+    testgrid-create-test-group: "false"
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20230426-d32ca9cc84
+      command:
+      - commenter
+      args:
+      - |-
+        --query=repo:gardener/ci-infra
+        repo:gardener/gardener
+        repo:gardener/gardener-extension-registry-cache
+        repo:gardener/dependency-watchdog
+        is:pr
+        -label:lifecycle/frozen
+        label:lifecycle/rotten
+      - --updated=168h
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
+        This bot triages PRs according to the following rules:
+        - After 15d of inactivity, `lifecycle/stale` is applied
+        - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
+        
+        You can:
+        - Reopen this PR with `/reopen`
+        - Mark this PR as fresh with `/remove-lifecycle rotten`
+
+        /close
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: token
+        mountPath: /etc/github-token
+    volumes:
+    - name: token
+      secret:
+        secretName: github-token
+
+- name: ci-gardener-triage-robot-pr-rotten
+  interval: 1h
+  cluster: gardener-prow-trusted
+  decorate: true
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  annotations:
+    description: Adds lifecycle/rotten to stale PRs after 15d of inactivity
+    testgrid-create-test-group: "false"
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20230426-d32ca9cc84
+      command:
+      - commenter
+      args:
+      - |-
+        --query=repo:gardener/ci-infra
+        repo:gardener/gardener
+        repo:gardener/gardener-extension-registry-cache
+        repo:gardener/dependency-watchdog
+        is:pr
+        -label:lifecycle/frozen
+        label:lifecycle/stale
+        -label:lifecycle/rotten
+      - --updated=360h
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
+        This bot triages PRs according to the following rules:
+        - After 15d of inactivity, `lifecycle/stale` is applied
+        - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
+        
+        You can:
+        - Mark this PR as fresh with `/remove-lifecycle rotten`
+        - Close this PR with `/close`
+
+        /lifecycle rotten
+      - --template
+      - --ceiling=10
+      - --confirm
+      volumeMounts:
+      - name: token
+        mountPath: /etc/github-token
+    volumes:
+    - name: token
+      secret:
+        secretName: github-token
+
+- name: ci-gardener-triage-robot-pr-stale
+  interval: 1h
+  cluster: gardener-prow-trusted
+  decorate: true
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  annotations:
+    description: Adds lifecycle/stale to PRs after 15d of inactivity
+    testgrid-create-test-group: "false"
+  spec:
+    containers:
+    - image: gcr.io/k8s-prow/commenter:v20230426-d32ca9cc84
+      command:
+      - commenter
+      args:
+      - |-
+        --query=repo:gardener/ci-infra
+        repo:gardener/gardener
+        repo:gardener/gardener-extension-registry-cache
+        repo:gardener/dependency-watchdog
+        is:pr
+        -label:lifecycle/frozen
+        -label:lifecycle/stale
+        -label:lifecycle/rotten
+      - --updated=360h
+      - --token=/etc/github-token/token
+      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - |-
+        --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
+        This bot triages PRs according to the following rules:
+        - After 15d of inactivity, `lifecycle/stale` is applied
+        - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
+        
+        You can:
+        - Mark this PR as fresh with `/remove-lifecycle stale`
+        - Mark this PR as rotten with `/lifecycle rotten`
+        - Close this PR with `/close`
 
         /lifecycle stale
       - --template
