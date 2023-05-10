@@ -4,4 +4,13 @@ metadata:
   name: k8s
   namespace: monitoring
 spec:
+  containers:
+  - name: prometheus
+    # WAL replay in build cluster can take very long. Thus, we increase startup probe time to 2h
+    startupProbe:
+      failureThreshold: 480
+      periodSeconds: 15
+  resources:
+    requests:
+      memory: 14Gi
   retention: 30d

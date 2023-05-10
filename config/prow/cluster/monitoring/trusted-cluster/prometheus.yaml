@@ -4,7 +4,10 @@ metadata:
   name: k8s
   namespace: monitoring
 spec:
-  retention: 90d
   additionalScrapeConfigs:
     name: prometheus-prow-additional-scrape-configs
     key: additional-scrape-targets.yaml
+  retention: 90d
+  resources:
+    requests:
+      memory: 1400Mi
