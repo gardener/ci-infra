@@ -20,7 +20,7 @@ set -o pipefail
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $script_dir
 
-kube_prometheus_version="v0.11.0"
+kube_prometheus_version="v0.12.0"
 echo "> Fetching kube-prometheus@$kube_prometheus_version"
 
 tmp_dir=$(mktemp -d)
