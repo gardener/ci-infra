@@ -18,10 +18,10 @@ presubmits:
         - verify-extended
         resources:
           limits:
-            memory: 16Gi
+            memory: 2Gi
           requests:
-            cpu: 4
-            memory: 8Gi
+            cpu: 2
+            memory: 1Gi
 periodics:
 - name: ci-gardener-extension-registry-cache-unit
   cluster: gardener-prow-build
@@ -47,7 +47,7 @@ periodics:
       - verify-extended
       resources:
         limits:
-          memory: 16Gi
+          memory: 2Gi
         requests:
-          cpu: 4
-          memory: 8Gi
+          cpu: 2
+          memory: 1Gi
