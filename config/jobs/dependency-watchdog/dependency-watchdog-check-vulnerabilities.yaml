@@ -13,7 +13,7 @@ presubmits:
     spec:
       containers:
       - name: test
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230405-7d49741-1.19
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230511-9a61f23-1.19
         command:
         - make
         args:
@@ -36,7 +36,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230405-7d49741-1.19
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230511-9a61f23-1.19
       command:
       - make
       args:
