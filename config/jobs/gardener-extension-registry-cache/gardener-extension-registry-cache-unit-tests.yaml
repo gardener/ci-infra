@@ -11,22 +11,17 @@ presubmits:
       description: Runs unit tests for Gardener extension registry-cache developments in pull requests
     spec:
       containers:
-      # Run all tests sequentially in one container or as separate prow jobs.
-      # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
       - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230511-9a61f23-1.19
         command:
         - make
         args:
-        - check-generate
-        - check
-        - format
-        - test
+        - verify-extended
         resources:
           limits:
-            memory: 16Gi
+            memory: 2Gi
           requests:
-            cpu: 4
-            memory: 8Gi
+            cpu: 2
+            memory: 1Gi
 periodics:
 - name: ci-gardener-extension-registry-cache-unit
   cluster: gardener-prow-build
@@ -45,19 +40,14 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    # Run all tests sequentially in one container or as separate prow jobs.
-    # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
     - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230511-9a61f23-1.19
       command:
       - make
       args:
-      - check-generate
-      - check
-      - format
-      - test
+      - verify-extended
       resources:
         limits:
-          memory: 16Gi
+          memory: 2Gi
         requests:
-          cpu: 4
-          memory: 8Gi
+          cpu: 2
+          memory: 1Gi
