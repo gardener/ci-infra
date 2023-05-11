@@ -767,7 +767,7 @@ presubmits:
         - --no-push
         command:
         - /kaniko/executor
-        image: gcr.io/kaniko-project/executor:v1.9.1
+        image: gcr.io/kaniko-project/executor:v1.9.2
         name: kaniko
         resources:
           requests:
