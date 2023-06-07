@@ -46,6 +46,11 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/grafana/promtail
   tags:
   - 2.2.1
+- source: quay.io/brancz/kube-rbac-proxy
+  destination: eu.gcr.io/gardener-project/3rd/brancz/kube-rbac-proxy
+  tags:
+  - v0.14.0
+  - v0.14.2
 - source: envoyproxy/envoy-distroless
   destination: eu.gcr.io/gardener-project/3rd/envoyproxy/envoy-distroless
   tags:
