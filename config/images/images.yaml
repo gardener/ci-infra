@@ -37,6 +37,7 @@ images:
   tags:
   - v1.7.0
   - v2.2.0
+  - v2.3.0
 - source: grafana/loki
   destination: eu.gcr.io/gardener-project/3rd/grafana/loki
   tags:
