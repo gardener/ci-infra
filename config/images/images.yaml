@@ -32,6 +32,7 @@ images:
   tags:
   - v2.0.9
   - v2.0.10
+  - v2.1.4
 - source: kubesphere/fluent-operator
   destination: eu.gcr.io/gardener-project/3rd/kubesphere/fluent-operator
   tags:
