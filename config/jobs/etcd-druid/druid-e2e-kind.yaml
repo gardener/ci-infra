@@ -16,12 +16,12 @@ presubmits:
         description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
       spec:
         containers:
-          - image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
+          - image: gcr.io/k8s-staging-test-infra/krte:v20230421-ec4335b54b-master
             command:
-              - wrapper.sh
-              - bash
-              - -c
-              - make ci-e2e-kind
+            - wrapper.sh
+            - bash
+            - -c
+            - make ci-e2e-kind
             # we need privileged mode in order to do docker in docker
             securityContext:
               privileged: true
@@ -50,12 +50,12 @@ periodics:
       testgrid-days-of-results: "60"
     spec:
       containers:
-        - image: gcr.io/k8s-staging-test-infra/krte:v20221116-7c85504268-master
+        - image: gcr.io/k8s-staging-test-infra/v20230421-ec4335b54b-master
           command:
-            - wrapper.sh
-            - bash
-            - -c
-            - make ci-e2e-kind
+          - wrapper.sh
+          - bash
+          - -c
+          - make ci-e2e-kind
           # we need privileged mode in order to do docker in docker
           securityContext:
             privileged: true
