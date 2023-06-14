@@ -50,7 +50,7 @@ periodics:
       testgrid-days-of-results: "60"
     spec:
       containers:
-        - image: gcr.io/k8s-staging-test-infra/v20230421-ec4335b54b-master
+        - image: gcr.io/k8s-staging-test-infra/krte:v20230421-ec4335b54b-master
           command:
           - wrapper.sh
           - bash
