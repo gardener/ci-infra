@@ -27,8 +27,8 @@ presubmits:
               privileged: true
             resources:
               requests:
-                cpu: 12
-                memory: 18Gi
+                cpu: 6
+                memory: 8Gi
 periodics:
   - name: ci-etcd-druid-e2e-kind
     cluster: gardener-prow-build
@@ -61,5 +61,5 @@ periodics:
             privileged: true
           resources:
             requests:
-              cpu: 12
-              memory: 18Gi
+              cpu: 6
+              memory: 8Gi
