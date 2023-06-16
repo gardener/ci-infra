@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20230511-39cd55f
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20230616-97d95c3
       command:
       - /job-forker
       args:
@@ -123,7 +123,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/milestone-activator:v20230511-39cd55f
+    - image: eu.gcr.io/gardener-project/ci-infra/milestone-activator:v20230616-97d95c3
       command:
       - /milestone-activator
       args:
@@ -356,7 +356,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230511-9a61f23-1.19
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230616-97d95c3-1.19
       command:
       - make
       args:
