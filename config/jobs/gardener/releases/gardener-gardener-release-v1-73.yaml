@@ -11,14 +11,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h30m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-70
+  name: ci-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-73
   spec:
     containers:
     - command:
@@ -51,14 +51,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-multi-zone-release-v1-70
+  name: ci-gardener-e2e-kind-ha-multi-zone-release-v1-73
   spec:
     containers:
     - command:
@@ -91,14 +91,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-70
+  name: ci-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-73
   spec:
     containers:
     - command:
@@ -131,14 +131,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-single-zone-release-v1-70
+  name: ci-gardener-e2e-kind-ha-single-zone-release-v1-73
   spec:
     containers:
     - command:
@@ -161,6 +161,46 @@ periodics:
         privileged: true
 - annotations:
     created-by-job-forker: "true"
+    description: Runs control plane migration end-to-end tests of single zone HA shoots
+      for gardener developments periodically
+    testgrid-dashboards: gardener-gardener
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 15m0s
+    timeout: 1h0m0s
+  extra_refs:
+  - base_ref: release-v1.73
+    org: gardener
+    repo: gardener
+  interval: 4h
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+  name: ci-gardener-e2e-kind-migration-ha-single-zone-release-v1-73
+  spec:
+    containers:
+    - command:
+      - wrapper.sh
+      - bash
+      - -c
+      - make ci-e2e-kind-migration-ha-single-zone
+      env:
+      - name: SKAFFOLD_UPDATE_CHECK
+        value: "false"
+      - name: SKAFFOLD_INTERACTIVE
+        value: "false"
+      image: gcr.io/k8s-staging-test-infra/krte:v20230613-63d85f5ed2-master
+      name: ""
+      resources:
+        requests:
+          cpu: "6"
+          memory: 24Gi
+      securityContext:
+        privileged: true
+- annotations:
+    created-by-job-forker: "true"
     description: Runs control plane migration end-to-end tests for gardener developments
       periodically
     testgrid-dashboards: gardener-gardener
@@ -171,14 +211,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-migration-release-v1-70
+  name: ci-gardener-e2e-kind-migration-release-v1-73
   spec:
     containers:
     - command:
@@ -211,14 +251,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-operator-release-v1-70
+  name: ci-gardener-e2e-kind-operator-release-v1-73
   spec:
     containers:
     - command:
@@ -251,14 +291,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-upgrade-release-v1-70
+  name: ci-gardener-e2e-kind-upgrade-release-v1-73
   spec:
     containers:
     - command:
@@ -290,14 +330,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-release-v1-70
+  name: ci-gardener-e2e-kind-release-v1-73
   spec:
     containers:
     - command:
@@ -329,11 +369,11 @@ periodics:
     grace_period: 10m0s
     timeout: 20m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
-  name: ci-gardener-integration-release-v1-70
+  name: ci-gardener-integration-release-v1-73
   spec:
     containers:
     - args:
@@ -359,11 +399,11 @@ periodics:
     grace_period: 10m0s
     timeout: 40m0s
   extra_refs:
-  - base_ref: release-v1.70
+  - base_ref: release-v1.73
     org: gardener
     repo: gardener
   interval: 4h
-  name: ci-gardener-unit-release-v1-70
+  name: ci-gardener-unit-release-v1-73
   spec:
     containers:
     - args:
@@ -391,11 +431,11 @@ postsubmits:
       testgrid-dashboards: gardener-gardener
       testgrid-days-of-results: "60"
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-trusted
     decorate: true
     max_concurrency: 1
-    name: post-gardener-build-dev-images-release-v1-70
+    name: post-gardener-build-dev-images-release-v1-73
     skip_if_only_changed: ^VERSION$
     spec:
       containers:
@@ -440,7 +480,7 @@ presubmits:
         a Shoot with failure tolerance type 'zone' for gardener developments in pull
         requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -449,7 +489,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-70
+    name: pull-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-73
     optional: true
     spec:
       containers:
@@ -477,7 +517,7 @@ presubmits:
       description: Runs end-to-end tests on a Seed with 3 zones with a Shoot with
         failure tolerance type 'zone' for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -486,7 +526,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-multi-zone-release-v1-70
+    name: pull-gardener-e2e-kind-ha-multi-zone-release-v1-73
     spec:
       containers:
       - command:
@@ -513,7 +553,7 @@ presubmits:
       description: Runs end-to-end tests on a Seed with single zone with a Shoot with
         failure tolerance type 'node' for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -522,7 +562,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-70
+    name: pull-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-73
     optional: true
     spec:
       containers:
@@ -550,7 +590,7 @@ presubmits:
       description: Runs end-to-end tests on a Seed with single zone with a Shoot with
         failure tolerance type 'node' for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -559,7 +599,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-single-zone-release-v1-70
+    name: pull-gardener-e2e-kind-ha-single-zone-release-v1-73
     spec:
       containers:
       - command:
@@ -583,10 +623,10 @@ presubmits:
   - always_run: true
     annotations:
       created-by-job-forker: "true"
-      description: Runs control plane migration end-to-end tests for gardener developments
-        in pull requests
+      description: Runs control plane migration end-to-end tests of single zone HA
+        shoots for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -595,7 +635,43 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-migration-release-v1-70
+    name: pull-gardener-e2e-kind-migration-ha-single-zone-release-v1-73
+    spec:
+      containers:
+      - command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind-migration-ha-single-zone
+        env:
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
+        image: gcr.io/k8s-staging-test-infra/krte:v20230613-63d85f5ed2-master
+        name: ""
+        resources:
+          requests:
+            cpu: "6"
+            memory: 24Gi
+        securityContext:
+          privileged: true
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs control plane migration end-to-end tests for gardener developments
+        in pull requests
+    branches:
+    - release-v1.73
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 15m0s
+      timeout: 1h0m0s
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    name: pull-gardener-e2e-kind-migration-release-v1-73
     spec:
       containers:
       - command:
@@ -622,7 +698,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-operator managing Garden resources
         on a kind cluster for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -631,7 +707,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-operator-release-v1-70
+    name: pull-gardener-e2e-kind-operator-release-v1-73
     spec:
       containers:
       - command:
@@ -658,7 +734,7 @@ presubmits:
       description: Runs end-to-end Gardener upgrade tests for gardener developments
         in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -667,7 +743,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-upgrade-release-v1-70
+    name: pull-gardener-e2e-kind-upgrade-release-v1-73
     optional: true
     spec:
       containers:
@@ -694,7 +770,7 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs end-to-end tests for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -703,7 +779,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-release-v1-70
+    name: pull-gardener-e2e-kind-release-v1-73
     spec:
       containers:
       - command:
@@ -729,13 +805,13 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs integration tests for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 20m0s
-    name: pull-gardener-integration-release-v1-70
+    name: pull-gardener-integration-release-v1-73
     spec:
       containers:
       - args:
@@ -755,10 +831,10 @@ presubmits:
       created-by-job-forker: "true"
       description: Verify gardener image build on pull requests to master branch
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
-    name: pull-gardener-verify-image-build-release-v1-70
+    name: pull-gardener-verify-image-build-release-v1-73
     spec:
       containers:
       - args:
@@ -778,10 +854,10 @@ presubmits:
       created-by-job-forker: "true"
       description: Publish gardener development images on pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-trusted
     decorate: true
-    name: pull-gardener-publish-test-images-release-v1-70
+    name: pull-gardener-publish-test-images-release-v1-73
     optional: true
     spec:
       containers:
@@ -821,13 +897,13 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs unit tests for gardener developments in pull requests
     branches:
-    - release-v1.70
+    - release-v1.73
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 40m0s
-    name: pull-gardener-unit-release-v1-70
+    name: pull-gardener-unit-release-v1-73
     spec:
       containers:
       - args:
