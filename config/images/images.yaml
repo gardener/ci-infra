@@ -96,6 +96,7 @@ images:
   - v3.5.0
   - v3.6.0
   - v3.6.1
+  - v3.6.2
 - source: packethost/metabot
   destination: eu.gcr.io/gardener-project/3rd/packethost/metabot
   tags:
