@@ -64,7 +64,7 @@ periodics:
       - --confirm
       - --enable-apps-restrictions=true
       - --job-config-path=config/jobs
-      - --github-endpoint=http://ghproxy.prow.svc
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
       - --github-token-path=/etc/github/token
       volumeMounts:
@@ -93,7 +93,7 @@ periodics:
       - /job-forker
       args:
       - --github-token-path=/etc/github-token/token
-      - --github-endpoint=http://ghproxy
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
       - --dry-run=false
       - --job-directory=config/jobs/gardener
@@ -128,7 +128,7 @@ periodics:
       - /milestone-activator
       args:
       - --github-token-path=/etc/github-token/token
-      - --github-endpoint=http://ghproxy
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
       - --dry-run=false
       - --milestone-repository=gardener/gardener
