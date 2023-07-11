@@ -32,6 +32,7 @@ postsubmits:
         - --target=image-builder
         - --target=job-forker
         - --target=milestone-activator
+        - --target=release-handler
         - --add-date-sha-tag=true
         - --add-fixed-tag=latest
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule

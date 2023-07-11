@@ -1,0 +1,36 @@
+postsubmits:
+  gardener/gardener:
+  - name: post-gardener-release-handler
+    cluster: gardener-prow-trusted
+    run_if_changed: '^VERSION$'
+    branches:
+    - ^master$
+    - ^release-v\d+.\d+
+    annotations:
+      description: Release-handler runs release tasks for Gardener
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
+    decorate: true
+    max_concurrency: 1
+    spec:
+      containers:
+      - name: release-handler
+        image: eu.gcr.io/gardener-project/ci-infra/release-handler:v20230616-97d95c3
+        command:
+        - /release-handler
+        args:
+        - --dry-run=false
+        - --github-token-path=/etc/github-token/token
+        - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+        - --github-endpoint=https://api.github.com
+        - --log-level=info
+        - --release-branch-prefix=release-
+        - --version-file-path=VERSION
+        volumeMounts:
+        - name: github-token
+          mountPath: /etc/github-token
+          readOnly: true
+      volumes:
+      - name: github-token
+        secret:
+          secretName: github-token

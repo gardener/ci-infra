@@ -3,6 +3,7 @@ module github.com/gardener/ci-infra
 go 1.18
 
 require (
+	github.com/Masterminds/semver v1.5.0
 	github.com/cenkalti/backoff/v4 v4.2.0
 	github.com/google/go-cmp v0.5.9
 	github.com/onsi/ginkgo/v2 v2.3.1
