@@ -111,43 +111,6 @@ periodics:
       secret:
         secretName: github-token
 
-- cron: "40 * * * *"
-  name: ci-milestone-activator-gardener-gardener
-  cluster: gardener-prow-trusted
-  decorate: true
-  annotations:
-    description: Activate/deactivate release milestone config for gardener/gardener 
-    testgrid-create-test-group: "false"
-  reporter_config:
-    slack:
-      channel: prow-alerts
-  spec:
-    containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/milestone-activator:v20230712-5459313
-      command:
-      - /milestone-activator
-      args:
-      - --github-token-path=/etc/github-token/token
-      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
-      - --github-endpoint=https://api.github.com
-      - --dry-run=false
-      - --milestone-repository=gardener/gardener
-      - --milestone-pattern=v\d+\.\d+
-      - --file-with-sections=config/prow/config.yaml
-      - --section-identifier=gardener-gardener-milestone
-      - --upstream-repository=gardener/ci-infra
-      - --upstream-branch=master
-      - --git-email=gardener.ci.robot@gmail.com
-      - --labels-override=kind/enhancement,skip-review
-      volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
-        readOnly: true
-    volumes:
-    - name: github-token
-      secret:
-        secretName: github-token
-
 - cron: "30 * * * 1-5"
   name: ci-prow-autobump
   cluster: gardener-prow-trusted
