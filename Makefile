@@ -32,6 +32,8 @@ IMG_MILESTONE_ACTIVATOR := milestone-activator
 REG_MILESTONE_ACTIVATOR  := $(REGISTRY)/$(IMG_MILESTONE_ACTIVATOR)
 IMG_RELEASE_HANDLER := release-handler
 REG_RELEASE_HANDLER  := $(REGISTRY)/$(IMG_RELEASE_HANDLER)
+IMG_BRANCH_CLEANER := branch-cleaner
+REG_BRANCH_CLEANER  := $(REGISTRY)/$(IMG_BRANCH_CLEANER)
 
 
 #########################################
@@ -59,6 +61,7 @@ endif
 	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_JOB_FORKER):$(VERSION) -t $(REG_JOB_FORKER):latest -f Dockerfile --target $(IMG_JOB_FORKER) .
 	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_MILESTONE_ACTIVATOR):$(VERSION) -t $(REG_MILESTONE_ACTIVATOR):latest -f Dockerfile --target $(IMG_MILESTONE_ACTIVATOR) .
 	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_RELEASE_HANDLER):$(VERSION) -t $(REG_RELEASE_HANDLER):latest -f Dockerfile --target $(IMG_RELEASE_HANDLER) .
+	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_BRANCH_CLEANER):$(VERSION) -t $(REG_BRANCH_CLEANER):latest -f Dockerfile --target $(IMG_BRANCH_CLEANER) .
 
 .PHONY: docker-push
 docker-push:
@@ -73,12 +76,14 @@ endif
 	@if ! docker images $(REG_JOB_FORKER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_JOB_FORKER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_MILESTONE_ACTIVATOR) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_MILESTONE_ACTIVATOR) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_RELEASE_HANDLER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_RELEASE_HANDLER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
+	@if ! docker images $(REG_BRANCH_CLEANER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_BRANCH_CLEANER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_CHERRYPICKER):$(VERSION)
 	@docker push $(REG_CLA_ASSISTANT):$(VERSION)
 	@docker push $(REG_IMAGE_BUILDER):$(VERSION)
 	@docker push $(REG_JOB_FORKER):$(VERSION)
 	@docker push $(REG_MILESTONE_ACTIVATOR):$(VERSION)
 	@docker push $(REG_RELEASE_HANDLER):$(VERSION)
+	@docker push $(REG_BRANCH_CLEANER):$(VERSION)
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_GOLANG_TEST):latest
 	@docker push $(REG_CHERRYPICKER):latest
@@ -87,6 +92,7 @@ ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_JOB_FORKER):latest
 	@docker push $(REG_MILESTONE_ACTIVATOR):latest
 	@docker push $(REG_RELEASE_HANDLER):latest
+	@docker push $(REG_BRANCH_CLEANER):latest
 endif
 
 
