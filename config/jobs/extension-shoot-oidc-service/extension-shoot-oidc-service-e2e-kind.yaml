@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-shoot-oidc-service developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20230703-e6ae5b372a-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20230713-9bbb79523c-master
         command:
         - wrapper.sh
         - bash
@@ -62,7 +62,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20230703-e6ae5b372a-master
+    - image: gcr.io/k8s-staging-test-infra/krte:v20230713-9bbb79523c-master
       command:
       - wrapper.sh
       - bash
