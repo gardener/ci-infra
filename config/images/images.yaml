@@ -101,6 +101,14 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/packethost/metabot
   tags:
   - v1.0.0
+- source: quay.io/metallb/controller
+  destination: eu.gcr.io/gardener-project/3rd/equinix/metallb/controller
+  tags:
+  - v0.12.1
+- source: quay.io/metallb/speaker
+  destination: eu.gcr.io/gardener-project/3rd/equinix/metallb/speaker
+  tags:
+  - v0.12.1
 # gardener-extension-provider-openstack/charts/images.yaml
 - source: k8scloudprovider/openstack-cloud-controller-manager
   destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/openstack-cloud-controller-manager
