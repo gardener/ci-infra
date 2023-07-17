@@ -26,7 +26,7 @@ import (
 )
 
 type options struct {
-	fullRepo          string
+	fullRepos         flagutil.Strings
 	branchPattern     string
 	keepBranches      int
 	ignoreOpenPRs     bool
@@ -42,8 +42,8 @@ func (o *options) validate() error {
 	if err := o.github.Validate(o.dryRun); err != nil {
 		return err
 	}
-	if o.fullRepo == "" {
-		return fmt.Errorf("please provide a non empty --repository")
+	if len(o.fullRepos.Strings()) == 0 {
+		return fmt.Errorf("please provide at least one --repository")
 	}
 	if o.branchPattern == "" {
 		return fmt.Errorf("please provide a non empty --branch-pattern")
@@ -62,7 +62,7 @@ func (o *options) validate() error {
 func gatherOptions() options {
 	o := options{}
 	fs := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
-	fs.StringVar(&o.fullRepo, "repository", "", "Repository which should be cleaned up.")
+	fs.Var(&o.fullRepos, "repository", "Repository which should be cleaned up.")
 	fs.StringVar(&o.branchPattern, "branch-pattern", "^release-v\\d+\\.\\d+", "Regexp pattern to identify branches which should be cleaned up")
 	fs.IntVar(&o.keepBranches, "keep-branches", 3, "Defines the number of branches which should be kept (sorted in an alphabetical order)")
 	fs.BoolVar(&o.ignoreOpenPRs, "ignore-open-prs", false, "Defines if the branch should be deleted even when there are open PRs")
@@ -102,12 +102,16 @@ func main() {
 		logrus.WithError(err).Fatal("Error getting Git client")
 	}
 
-	branchCleaner := branchCleaner{
-		githubClient: githubClient,
-		options:      o,
-	}
+	logrus.Infof("Running branch-cleaner for these repos: %s", o.fullRepos.String())
+	for _, fullRepo := range o.fullRepos.Strings() {
+		branchCleaner := branchCleaner{
+			githubClient: githubClient,
+			fullRepo:     fullRepo,
+			options:      o,
+		}
 
-	if err := branchCleaner.run(); err != nil {
-		logrus.WithError(err).Fatal("Error when running branch-cleaner")
+		if err := branchCleaner.run(); err != nil {
+			logrus.WithError(err).Fatalf("Error when running branch-cleaner for repo %q", fullRepo)
+		}
 	}
 }

@@ -173,7 +173,7 @@ var _ = Describe("BranchCleaner", func() {
 
 	Describe("#run", func() {
 		JustBeforeEach(func() {
-			bc.options.fullRepo = "foo/bar"
+			bc.fullRepo = "foo/bar"
 			bc.options.branchPattern = "^release-v\\d+\\.\\d+"
 			fakeGithub.Branches = []github.Branch{
 				{Name: "master", Protected: true},

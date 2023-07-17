@@ -35,6 +35,7 @@ type githubClient interface {
 
 type branchCleaner struct {
 	githubClient githubClient
+	fullRepo     string
 	options      options
 
 	repo github.FullRepo
@@ -49,9 +50,9 @@ func init() {
 }
 
 func (b *branchCleaner) run() error {
-	logrus.Infof("Start cleaning up branches from %q", b.options.fullRepo)
+	logrus.Infof("Start cleaning up branches from %q", b.fullRepo)
 
-	org, repo, err := config.SplitRepoName(b.options.fullRepo)
+	org, repo, err := config.SplitRepoName(b.fullRepo)
 	if err != nil {
 		return err
 	}
