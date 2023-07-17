@@ -19,6 +19,7 @@ import (
 	"regexp"
 	"sort"
 
+	"github.com/Masterminds/semver"
 	"github.com/sirupsen/logrus"
 	"k8s.io/test-infra/prow/config"
 	"k8s.io/test-infra/prow/github"
@@ -28,6 +29,7 @@ type githubClient interface {
 	GetRepo(owner, name string) (github.FullRepo, error)
 	GetBranches(org, repo string, onlyProtected bool) ([]github.Branch, error)
 	GetPullRequests(org, repo string) ([]github.PullRequest, error)
+	GetRef(org, repo, ref string) (string, error)
 	DeleteRef(org, repo, ref string) error
 }
 
@@ -36,6 +38,14 @@ type branchCleaner struct {
 	options      options
 
 	repo github.FullRepo
+}
+
+var (
+	semverMajorMinor *regexp.Regexp
+)
+
+func init() {
+	semverMajorMinor = regexp.MustCompile(`v(0|[1-9]\d*)\.(0|[1-9]\d*)`)
 }
 
 func (b *branchCleaner) run() error {
@@ -55,6 +65,14 @@ func (b *branchCleaner) run() error {
 	matchingBranches, err := b.getMatchingBranches()
 	if err != nil {
 		return fmt.Errorf("error identifying matching branches: %w", err)
+	}
+
+	if b.options.releaseBranchMode {
+		logrus.Info("Release branch mode active. Searching release tags for the branches")
+		matchingBranches, err = b.identifyBranchesWithReleaseTags(matchingBranches)
+		if err != nil {
+			return fmt.Errorf("error identifying branches with release tags: %w", err)
+		}
 	}
 
 	branchesToDelete, err := b.identifyBranchesToDelete(matchingBranches)
@@ -93,6 +111,29 @@ func (b *branchCleaner) getMatchingBranches() ([]string, error) {
 	logrus.Infof("Found these matching branches sorted in reverse order: %v", matchingBranches)
 
 	return matchingBranches, nil
+}
+
+func (b *branchCleaner) identifyBranchesWithReleaseTags(branches []string) ([]string, error) {
+	var branchesWithReleaseTags []string
+	for _, branch := range branches {
+		branchSemverStr := semverMajorMinor.FindString(branch)
+		branchSemver, err := semver.NewVersion(branchSemverStr)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing semver of branch %q: %w", branch, err)
+		}
+		ref, err := b.githubClient.GetRef(b.repo.Owner.Login, b.repo.Name, fmt.Sprintf("tags/v%s", branchSemver.String()))
+		if github.IsNotFound(err) {
+			logrus.Infof("There is no release tag for branch %q - skipping this branch", branch)
+			continue
+		} else if err != nil {
+			return nil, err
+		}
+		logrus.Infof("Found release tag %q for branch %q", ref, branch)
+		branchesWithReleaseTags = append(branchesWithReleaseTags, branch)
+	}
+	logrus.Infof("These release branches have at least one release tag: %v", branchesWithReleaseTags)
+
+	return branchesWithReleaseTags, nil
 }
 
 func (b *branchCleaner) identifyBranchesToDelete(branches []string) ([]string, error) {

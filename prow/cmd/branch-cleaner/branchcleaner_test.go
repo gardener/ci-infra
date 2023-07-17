@@ -195,5 +195,18 @@ var _ = Describe("BranchCleaner", func() {
 			Expect(bc.run()).To(Succeed())
 			Expect(fakeGithub.RefsDeleted).To(Equal([]struct{ Org, Repo, Ref string }{{"foo", "bar", "heads/release-v1.72"}}))
 		})
+
+		It("should delete the correct refs with release branch mode enabled", func() {
+			bc.options.keepBranches = 2
+			bc.options.releaseBranchMode = true
+			fakeGithub.PullRequests[1] = &github.PullRequest{
+				Number: 1,
+				State:  "open",
+				Base:   github.PullRequestBranch{Ref: "release-v1.73"},
+			}
+
+			Expect(bc.run()).To(Succeed())
+			Expect(fakeGithub.RefsDeleted).To(Equal([]struct{ Org, Repo, Ref string }{{"foo", "bar", "heads/release-v1.72"}}))
+		})
 	})
 })

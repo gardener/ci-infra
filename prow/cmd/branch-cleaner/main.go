@@ -26,10 +26,11 @@ import (
 )
 
 type options struct {
-	fullRepo      string
-	branchPattern string
-	keepBranches  int
-	ignoreOpenPRs bool
+	fullRepo          string
+	branchPattern     string
+	keepBranches      int
+	ignoreOpenPRs     bool
+	releaseBranchMode bool
 
 	dryRun bool
 	github flagutil.GitHubOptions
@@ -65,6 +66,7 @@ func gatherOptions() options {
 	fs.StringVar(&o.branchPattern, "branch-pattern", "^release-v\\d+\\.\\d+", "Regexp pattern to identify branches which should be cleaned up")
 	fs.IntVar(&o.keepBranches, "keep-branches", 3, "Defines the number of branches which should be kept (sorted in an alphabetical order)")
 	fs.BoolVar(&o.ignoreOpenPRs, "ignore-open-prs", false, "Defines if the branch should be deleted even when there are open PRs")
+	fs.BoolVar(&o.releaseBranchMode, "release-branch-mode", false, "Checks for semver versions in the branches and considers only branches which have a corresponding release")
 
 	fs.BoolVar(&o.dryRun, "dry-run", true, "DryRun")
 	fs.StringVar(&o.logLevel, "log-level", "info", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))

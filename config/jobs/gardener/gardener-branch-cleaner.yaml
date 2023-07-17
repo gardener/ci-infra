@@ -1,5 +1,5 @@
 periodics:
-- cron: "0 21,22,23 * * FRI"
+- cron: "0 22 * * *"
   name: ci-gardener-branch-cleaner
   cluster: gardener-prow-trusted
   decorate: true
@@ -23,6 +23,7 @@ periodics:
       - --branch-pattern=^release-v\d+\.\d+
       - --keep-branches=3
       - --ignore-open-prs=false
+      - --release-branch-mode=true
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token
