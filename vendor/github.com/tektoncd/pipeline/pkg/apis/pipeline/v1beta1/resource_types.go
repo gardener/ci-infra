@@ -45,15 +45,6 @@ const (
 
 	// PipelineResourceTypeImage indicates that this source is a docker Image.
 	PipelineResourceTypeImage PipelineResourceType = resource.PipelineResourceTypeImage
-
-	// PipelineResourceTypeCluster indicates that this source is a k8s cluster Image.
-	PipelineResourceTypeCluster PipelineResourceType = resource.PipelineResourceTypeCluster
-
-	// PipelineResourceTypePullRequest indicates that this source is a SCM Pull Request.
-	PipelineResourceTypePullRequest PipelineResourceType = resource.PipelineResourceTypePullRequest
-
-	// PipelineResourceTypeCloudEvent indicates that this source is a cloud event URI
-	PipelineResourceTypeCloudEvent PipelineResourceType = resource.PipelineResourceTypeCloudEvent
 )
 
 // AllResourceTypes can be used for validation to check if a provided Resource type is one of the known types.
@@ -128,13 +119,10 @@ type PipelineResourceBinding struct {
 
 // PipelineResourceResult used to export the image name and digest as json
 type PipelineResourceResult struct {
-	Key          string `json:"key"`
-	Value        string `json:"value"`
-	ResourceName string `json:"resourceName,omitempty"`
-	// The field ResourceRef should be deprecated and removed in the next API version.
-	// See https://github.com/tektoncd/pipeline/issues/2694 for more information.
-	ResourceRef *PipelineResourceRef `json:"resourceRef,omitempty"`
-	ResultType  ResultType           `json:"type,omitempty"`
+	Key          string     `json:"key"`
+	Value        string     `json:"value"`
+	ResourceName string     `json:"resourceName,omitempty"`
+	ResultType   ResultType `json:"type,omitempty"`
 }
 
 // ResultType used to find out whether a PipelineResourceResult is from a task result or not
@@ -150,7 +138,6 @@ type ResultType int
 // of string, and then fail the running TaskRun because it doesn't know how to interpret
 // the string value that the TaskRun's entrypoint will emit when it completes.
 func (r *ResultType) UnmarshalJSON(data []byte) error {
-
 	var asInt int
 	var intErr error
 
