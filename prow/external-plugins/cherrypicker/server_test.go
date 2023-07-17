@@ -40,6 +40,7 @@ type fghc struct {
 	pr       *github.PullRequest
 	isMember bool
 
+	diff       []byte
 	patch      []byte
 	comments   []string
 	prs        []github.PullRequest
@@ -80,6 +81,12 @@ func (f *fghc) GetPullRequest(org, repo string, number int) (*github.PullRequest
 	f.Lock()
 	defer f.Unlock()
 	return f.pr, nil
+}
+
+func (f *fghc) GetPullRequestDiff(org, repo string, number int) ([]byte, error) {
+	f.Lock()
+	defer f.Unlock()
+	return f.diff, nil
 }
 
 func (f *fghc) GetPullRequestPatch(org, repo string, number int) ([]byte, error) {
