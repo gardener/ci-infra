@@ -1,0 +1,34 @@
+periodics:
+- cron: "0 22 * * *"
+  name: ci-gardener-branch-cleaner
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Clean up release branches of gardener/gardener 
+    testgrid-create-test-group: "false"
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  spec:
+    containers:
+    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20230712-5459313
+      command:
+      - /branch-cleaner
+      args:
+      - --github-token-path=/etc/github-token/token
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --dry-run=false
+      - --repository=gardener/gardener
+      - --branch-pattern=^release-v\d+\.\d+
+      - --keep-branches=3
+      - --ignore-open-prs=false
+      - --release-branch-mode=true
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token

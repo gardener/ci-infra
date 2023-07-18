@@ -65,3 +65,9 @@ LABEL app=release-handler
 WORKDIR /
 COPY --from=builder /build/release-handler /release-handler
 ENTRYPOINT [ "/release-handler" ]
+
+FROM base_nonroot AS branch-cleaner
+LABEL app=branch-cleaner
+WORKDIR /
+COPY --from=builder /build/branch-cleaner /branch-cleaner
+ENTRYPOINT [ "/branch-cleaner" ]

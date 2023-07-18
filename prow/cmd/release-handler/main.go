@@ -47,7 +47,7 @@ func (o *options) validate() error {
 		return err
 	}
 	if o.releaseBranchPrefix == "" {
-		return fmt.Errorf("please provide a non empty --upstream-repository")
+		return fmt.Errorf("please provide a non empty --release-branch-prefix")
 	}
 	if o.versionFilePath == "" {
 		return fmt.Errorf("please provide a non empty --version-file-path")

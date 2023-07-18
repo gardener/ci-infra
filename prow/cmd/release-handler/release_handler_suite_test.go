@@ -21,7 +21,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestMilestoneActivator(t *testing.T) {
+func TestReleaseHandler(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "ReleaseHandler Suite")
 }
