@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-networking-calico developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20230713-9bbb79523c-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20230719-72ce785784-master
         command:
         - wrapper.sh
         - bash
@@ -62,7 +62,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20230713-9bbb79523c-master
+    - image: gcr.io/k8s-staging-test-infra/krte:v20230719-72ce785784-master
       command:
       - wrapper.sh
       - bash
