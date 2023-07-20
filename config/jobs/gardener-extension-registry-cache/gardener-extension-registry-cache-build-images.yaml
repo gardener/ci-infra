@@ -36,7 +36,7 @@ postsubmits:
         resources:
           requests:
             cpu: 6
-            memory: 9Gi
+            memory: 2Gi
       # Node selector is copied to build pods
       nodeSelector:
         dedicated: high-cpu
