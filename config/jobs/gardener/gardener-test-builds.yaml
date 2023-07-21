@@ -22,7 +22,7 @@ presubmits:
         resources:
           requests:
             cpu: 6
-            memory: 9Gi
+            memory: 7Gi
   - name: pull-gardener-publish-test-images
     cluster: gardener-prow-trusted
     skip_branches:
@@ -62,7 +62,7 @@ presubmits:
         resources:
           requests:
             cpu: 6
-            memory: 9Gi
+            memory: 7Gi
       # Node selector is copied to build pods
       nodeSelector:
         dedicated: high-cpu
