@@ -1,6 +1,6 @@
 presubmits:
   gardener/etcd-druid:
-    - name: pull-etcd-druid-e2e-kind-alpha-features-true
+    - name: pull-etcd-druid-e2e-kind-alpha-features
       cluster: gardener-prow-build
       always_run: true
       skip_branches:
@@ -13,7 +13,7 @@ presubmits:
         preset-dind-enabled: "true"
         preset-kind-volume-mounts: "true"
       annotations:
-        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
+        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests with activated alpha features
       spec:
         containers:
           - image: gcr.io/k8s-staging-test-infra/krte:v20230719-72ce785784-master
@@ -33,7 +33,7 @@ presubmits:
             - name: USE_ETCD_DRUID_FEATURE_GATES
               value: "true"
 periodics:
-  - name: ci-etcd-druid-e2e-kind-alpha-features-true
+  - name: ci-etcd-druid-e2e-kind-alpha-features
     cluster: gardener-prow-build
     interval: 4h
     extra_refs:
@@ -48,7 +48,7 @@ periodics:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs KIND cluster based e2e tests for etcd druid developments periodically
+      description: Runs KIND cluster based e2e tests for etcd druid developments periodically with activated alpha features
       testgrid-dashboards: gardener-etcd-druid
       testgrid-days-of-results: "60"
     spec:
