@@ -51,6 +51,7 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/envoyproxy/envoy-distroless
   tags:
   - v1.24.1
+  - v1.26.4
 # gardener/pkg/provider-local/images.yaml
 - source: kindest/local-path-provisioner
   destination: eu.gcr.io/gardener-project/3rd/kindest/local-path-provisioner
