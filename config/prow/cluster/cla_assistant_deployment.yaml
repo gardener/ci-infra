@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: cla-assistant
-        image: eu.gcr.io/gardener-project/ci-infra/cla-assistant:v20230718-d3d872f
+        image: eu.gcr.io/gardener-project/ci-infra/cla-assistant:v20230802-7d3da3e
         imagePullPolicy: Always
         args:
         - --dry-run=false
