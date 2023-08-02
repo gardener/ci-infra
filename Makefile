@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-REGISTRY          := $(shell cat .REGISTRY 2>/dev/null)
-PUSH_LATEST_TAG   := true
-GOLANG_VERSION    := 1.19.11
-VERSION           := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
+REGISTRY            := $(shell cat .REGISTRY 2>/dev/null)
+PUSH_LATEST_TAG     := true
+GOLANG_TEST_VERSION := 1.20.6
+VERSION             := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HEAD)
 
 IMG_GOLANG_TEST := golang-test
 REG_GOLANG_TEST := $(REGISTRY)/$(IMG_GOLANG_TEST)
@@ -52,24 +52,24 @@ docker-images:
 ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
-	@echo "Building docker golang image for tests with version and tag $(GOLANG_VERSION)"
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):$(GOLANG_VERSION) -t $(REG_GOLANG_TEST):latest -f images/golang-test/Dockerfile --target $(IMG_GOLANG_TEST) .
+	@echo "Building docker golang image for tests with version and tag $(GOLANG_TEST_VERSION)"
+	@docker build --build-arg GOLANG_IMAGE=golang:$(GOLANG_TEST_VERSION) -t $(REG_GOLANG_TEST):$(GOLANG_TEST_VERSION) -t $(REG_GOLANG_TEST):latest -f images/golang-test/Dockerfile --target $(IMG_GOLANG_TEST) .
 	@echo "Building docker images with version and tag $(VERSION)"
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_CHERRYPICKER):$(VERSION) -t $(REG_CHERRYPICKER):latest -f Dockerfile --target $(IMG_CHERRYPICKER) .
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_IMAGE_BUILDER):$(VERSION) -t $(REG_IMAGE_BUILDER):latest -f Dockerfile --target $(IMG_IMAGE_BUILDER) .
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_JOB_FORKER):$(VERSION) -t $(REG_JOB_FORKER):latest -f Dockerfile --target $(IMG_JOB_FORKER) .
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_MILESTONE_ACTIVATOR):$(VERSION) -t $(REG_MILESTONE_ACTIVATOR):latest -f Dockerfile --target $(IMG_MILESTONE_ACTIVATOR) .
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_RELEASE_HANDLER):$(VERSION) -t $(REG_RELEASE_HANDLER):latest -f Dockerfile --target $(IMG_RELEASE_HANDLER) .
-	@docker build --build-arg GOLANG_VERSION=$(GOLANG_VERSION) -t $(REG_BRANCH_CLEANER):$(VERSION) -t $(REG_BRANCH_CLEANER):latest -f Dockerfile --target $(IMG_BRANCH_CLEANER) .
+	@docker build -t $(REG_CHERRYPICKER):$(VERSION) -t $(REG_CHERRYPICKER):latest -f Dockerfile --target $(IMG_CHERRYPICKER) .
+	@docker build -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
+	@docker build -t $(REG_IMAGE_BUILDER):$(VERSION) -t $(REG_IMAGE_BUILDER):latest -f Dockerfile --target $(IMG_IMAGE_BUILDER) .
+	@docker build -t $(REG_JOB_FORKER):$(VERSION) -t $(REG_JOB_FORKER):latest -f Dockerfile --target $(IMG_JOB_FORKER) .
+	@docker build -t $(REG_MILESTONE_ACTIVATOR):$(VERSION) -t $(REG_MILESTONE_ACTIVATOR):latest -f Dockerfile --target $(IMG_MILESTONE_ACTIVATOR) .
+	@docker build -t $(REG_RELEASE_HANDLER):$(VERSION) -t $(REG_RELEASE_HANDLER):latest -f Dockerfile --target $(IMG_RELEASE_HANDLER) .
+	@docker build -t $(REG_BRANCH_CLEANER):$(VERSION) -t $(REG_BRANCH_CLEANER):latest -f Dockerfile --target $(IMG_BRANCH_CLEANER) .
 
 .PHONY: docker-push
 docker-push:
 ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
-	@if ! docker images $(REG_GOLANG_TEST) | awk '{ print $$2 }' | grep -q -F $(GOLANG_VERSION); then echo "$(REG_GOLANG_TEST) version $(GOLANG_VERSION) is not yet built. Please run 'make docker-images'"; false; fi
-	@docker push $(REG_GOLANG_TEST):$(GOLANG_VERSION)
+	@if ! docker images $(REG_GOLANG_TEST) | awk '{ print $$2 }' | grep -q -F $(GOLANG_TEST_VERSION); then echo "$(REG_GOLANG_TEST) version $(GOLANG_TEST_VERSION) is not yet built. Please run 'make docker-images'"; false; fi
+	@docker push $(REG_GOLANG_TEST):$(GOLANG_TEST_VERSION)
 	@if ! docker images $(REG_CHERRYPICKER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CHERRYPICKER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_CLA_ASSISTANT) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CLA_ASSISTANT) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_IMAGE_BUILDER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_IMAGE_BUILDER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi

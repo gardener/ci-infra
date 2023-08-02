@@ -1,9 +1,7 @@
 # ----------------
 # Build container
 # ----------------
-ARG GOLANG_VERSION=1.19.11
-
-FROM golang:${GOLANG_VERSION} AS builder
+FROM golang:1.19.11 AS builder
 LABEL stage=intermediate
 # Copy entire repository to image
 COPY . /code
