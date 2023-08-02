@@ -58,7 +58,8 @@ func createTestFileSystem(t *testing.T) fstest.MapFS {
 		ModTime: time.Now(),
 	}
 
-	variantsYaml := `
+	variantsYaml := `apiVersion: variants/v1alpha1
+kind: Variants
 variants:
   v1:
     BUILD_ARG1: v1
@@ -66,7 +67,7 @@ variants:
   v2:
     BUILD_ARG1: v2
     BUILD_ARG2: v2
-  `
+`
 
 	variantsYamlFile := fstest.MapFile{
 		Data:    []byte(variantsYaml),
@@ -94,8 +95,7 @@ func createTestImageBuilderPod(t *testing.T) corev1.Pod {
 	t.Helper()
 	var ibPod corev1.Pod
 
-	unmarshalYAML(t, &ibPod, `
-apiVersion: v1
+	unmarshalYAML(t, &ibPod, `apiVersion: v1
 kind: Pod
 metadata:
   labels:
