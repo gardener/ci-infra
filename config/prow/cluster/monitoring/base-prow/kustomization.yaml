@@ -18,13 +18,16 @@ patchesStrategicMerge:
 - delete-grafana-dashboardDefinitions.yaml
 - delete-prometheusAdapter-apiService.yaml
 - alertmanager-alertmanager.yaml
+- alertmanager-service.yaml
 - blackboxExporter-deployment.yaml
 - grafana-deployment.yaml
 - grafana-networkPolicy.yaml
 - kubeStateMetrics-deployment.yaml
 - nodeExporter-daemonset.yaml
+- prometheus-service.yaml
 - prometheus.yaml
 - prometheusAdapter-deployment.yaml
+- prometheusAdapter-service.yaml
 - prometheusOperator-deployment.yaml
 
 secretGenerator:

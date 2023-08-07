@@ -15,22 +15,21 @@ spec:
                 operator: In
                 values:
                 - "true"
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/component
-                  operator: In
-                  values:
-                  - metrics-adapter
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values:
-                  - prometheus-adapter
-                - key: app.kubernetes.io/part-of
-                  operator: In
-                  values:
-                  - kube-prometheus
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      topologySpreadConstraints: 
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - metrics-adapter
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - prometheus-adapter
+            - key: app.kubernetes.io/part-of
+              operator: In
+              values:
+              - kube-prometheus
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
