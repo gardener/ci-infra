@@ -10,7 +10,7 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1
+      maxSurge: 0
       maxUnavailable: 1
   selector:
     matchLabels:
@@ -83,18 +83,16 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 3
           timeoutSeconds: 600
-      affinity: 
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - hook
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      topologySpreadConstraints: 
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - hook
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
       volumes:
       - name: github-app
         secret:
