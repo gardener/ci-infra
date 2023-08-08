@@ -1,7 +1,9 @@
 # Plugin configuration
 ---
 triggers:
-- repos:
+- trusted_apps:
+    - dependabot
+  repos:
   - gardener/ci-infra
   - gardener/gardener
   - gardener/gardener-extension-registry-cache
@@ -11,7 +13,6 @@ triggers:
   - gardener/gardener-extension-networking-cilium
   - gardener/gardener-extension-networking-calico
   - gardener/landscaper
-
 
 approve:
 - repos:
