@@ -3,7 +3,7 @@ ARG image
 
 FROM ${image} AS golang-test
 # install gardener unit/integration test related dependencies
-LABEL BASE_IMAGE=${image}
+LABEL GOLANG_IMAGE=${image}
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
