@@ -71,39 +71,39 @@ echo " $(color-green done)"
 
 echo "$(color-step "Deploying prow components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying prow components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/base"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/base"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/ingress-nginx"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/ingress-nginx"
 kubectl wait --for=condition=available deployment -l app.kubernetes.io/component=controller -n ingress-nginx --timeout 2m
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying oauth2-proxy components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/oauth2-proxy"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/oauth2-proxy"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring/trusted-cluster"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/monitoring/trusted-cluster"
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/ingress-nginx"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/ingress-nginx"
 kubectl wait --for=condition=available deployment -l app.kubernetes.io/component=controller -n ingress-nginx --timeout 2m
 echo "$(color-green done)"
 
 echo "$(color-step "Deploying monitoring components to gardener-prow-build cluster...")"
 kubectl config use-context gardener-prow-build
-kubectl apply --server-side=true -k "$SCRIPT_DIR/cluster/monitoring/build-cluster"
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/monitoring/build-cluster"
 echo "$(color-green done)"
 
 echo "$(color-green SUCCESS)"
