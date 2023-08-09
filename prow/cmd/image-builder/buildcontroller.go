@@ -517,7 +517,7 @@ func (r *buildReconciler) getVariants() ([]buildVariant, error) {
 		Variants map[string]map[string]string
 	}{}
 
-	if err := yaml.UnmarshalStrict(fileContent, &variants); err != nil {
+	if err := yaml.Unmarshal(fileContent, &variants); err != nil {
 		return nil, fmt.Errorf("failed reading %s", variantsFile)
 	}
 
