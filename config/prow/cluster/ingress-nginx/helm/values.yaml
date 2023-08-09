@@ -1,6 +1,6 @@
 # Check values.yaml of ingress-nginx for help https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 controller:
-  replicaCount: 2
+  replicaCount: 3
   resources:
     requests:
       cpu: 100m
@@ -17,27 +17,28 @@ controller:
             operator: In
             values:
             - "true"
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - ingress-nginx
-            - key: app.kubernetes.io/instance
-              operator: In
-              values:
-              - ingress-nginx
-            - key: app.kubernetes.io/component
-              operator: In
-              values:
-              - controller
-          topologyKey: kubernetes.io/hostname
+  enableTopologyAwareRouting: true
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+        - ingress-nginx
+      - key: app.kubernetes.io/instance
+        operator: In
+        values:
+        - ingress-nginx
+      - key: app.kubernetes.io/component
+        operator: In
+        values:
+        - controller
   updateStrategy:
     rollingUpdate:
+      maxSurge: 0
       maxUnavailable: 1
     type: RollingUpdate
   watchIngressWithoutClass: true
@@ -45,6 +46,13 @@ controller:
     name: nginx
     enabled: true
     default: true
+  service:
+    annotations:
+      service.kubernetes.io/topology-aware-hints: "auto"
+  admissionWebhooks:
+    service:
+      annotations:
+        service.kubernetes.io/topology-aware-hints: "auto"
 defaultBackend:
   affinity:
     nodeAffinity:

@@ -18,3 +18,6 @@ configMapGenerator:
       app.kubernetes.io/version: "7.4.0"
   files:
   - config/oauth2_proxy.cfg
+
+patchesStrategicMerge:
+- patch-oauth2-proxy-deployment.yaml
