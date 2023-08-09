@@ -1,6 +1,6 @@
 version: 2
 updates:
-# Create PRs for golang and alpine version updates
+# Create update PRs for ci-infra and golang-test images
 - package-ecosystem: docker
   directory: /
   schedule:
@@ -9,3 +9,6 @@ updates:
   directory: /images/golang-test
   schedule:
     interval: daily
+  ignore:
+    - dependency-name: "*"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
