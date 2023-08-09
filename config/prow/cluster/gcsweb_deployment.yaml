@@ -12,7 +12,7 @@ spec:
       app: gcsweb
   strategy:
     rollingUpdate:
-      maxSurge: 1
+      maxSurge: 0
       maxUnavailable: 1
     type: RollingUpdate
   template:
@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: gcsweb
-          image: k8s.gcr.io/gcsweb:v1.1.0
+          image: gcr.io/k8s-prow/gcsweb:v20230808-2811823aac
           args:
             - -upgrade-proxied-http-to-https
             # buckets owned by gardener
@@ -53,15 +53,13 @@ spec:
             initialDelaySeconds: 3
             timeoutSeconds: 2
             failureThreshold: 2
-      affinity: 
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - gcsweb
-              topologyKey: kubernetes.io/hostname
-            weight: 100
+      topologySpreadConstraints: 
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - gcsweb
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
