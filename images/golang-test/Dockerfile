@@ -1,9 +1,9 @@
 # Image based on golang for gardener unit and integration tests
-ARG GOLANG_IMAGE
+ARG image
 
-FROM ${GOLANG_IMAGE} AS golang-test
+FROM ${image} AS golang-test
 # install gardener unit/integration test related dependencies
-LABEL GOLANG_IMAGE=${GOLANG_IMAGE}
+LABEL GOLANG_IMAGE=${image}
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
