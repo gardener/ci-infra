@@ -120,3 +120,4 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/registry
   tags:
   - 2.8.1
+  - 2.8.2
