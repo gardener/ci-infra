@@ -1,9 +1,14 @@
 images:
-# gardener/charts/images.yaml
+# gardener/imagevector/images.yaml
+#
+# DO NOT ADD NEW GRAFANA IMAGES.
+# With https://github.com/gardener/gardener/pull/7318 grafana is replaced by plutono.
 - source: grafana/grafana
   destination: eu.gcr.io/gardener-project/3rd/grafana/grafana
   tags:
   - 7.5.17
+# DO NOT ADD NEW COREDNS IMAGES.
+# With https://github.com/gardener/gardener/pull/8192 a GCR copy image is no longer used for coredns.
 - source: coredns/coredns
   destination: eu.gcr.io/gardener-project/3rd/coredns/coredns
   tags:
@@ -39,10 +44,14 @@ images:
   - v1.7.0
   - v2.2.0
   - v2.3.0
+# DO NOT ADD NEW LOKI IMAGES.
+# With https://github.com/gardener/gardener/pull/7318 loki is replaced by vali.
 - source: grafana/loki
   destination: eu.gcr.io/gardener-project/3rd/grafana/loki
   tags:
   - 2.2.1
+# DO NOT ADD NEW PROMTAIL IMAGES.
+# With https://github.com/gardener/gardener/pull/7318 promtail is replaced by valitail.
 - source: grafana/promtail
   destination: eu.gcr.io/gardener-project/3rd/grafana/promtail
   tags:
@@ -61,6 +70,9 @@ images:
   tags:
   - v20220512-507ff70b
 # gardener-extension-networking-calico/charts/images.yaml
+#
+# DO NOT ADD NEW CALICO IMAGES.
+# With https://github.com/gardener/gardener-extension-networking-calico/pull/275 GCR copy images are no longer used for the calico images.
 - source: calico/node
   destination: eu.gcr.io/gardener-project/3rd/calico/node
   tags:
@@ -102,6 +114,9 @@ images:
   tags:
   - v1.0.0
 # gardener-extension-provider-openstack/charts/images.yaml
+#
+# DO NOT ADD NEW OPENSTACK IMAGES.
+# With https://github.com/gardener/gardener-extension-provider-openstack/pull/593 GCR copy images are no longer used for the openstack-cloud-controller-manager and cinder-csi-plugin images.
 - source: k8scloudprovider/openstack-cloud-controller-manager
   destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/openstack-cloud-controller-manager
   tags:
@@ -115,7 +130,7 @@ images:
   - v1.21.0
   - v1.22.2
   - v1.23.4
-  # gardener-extension-registry-cache/charts/images.yaml
+# gardener-extension-registry-cache/charts/images.yaml
 - source: registry
   destination: eu.gcr.io/gardener-project/3rd/registry
   tags:
