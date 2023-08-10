@@ -1,10 +1,16 @@
 version: 2
 updates:
-# Create update PRs for ci-infra and golang-test images
+# Create update PRs for ci-infra images
 - package-ecosystem: docker
   directory: /
   schedule:
     interval: daily
+# Create update PRs for copy-images images
+- package-ecosystem: docker
+  directory: /images/copy-images
+  schedule:
+    interval: daily
+# Create update PRs for golang-test images
 - package-ecosystem: docker
   directory: /images/golang-test
   schedule:
