@@ -1,9 +1,9 @@
 apiVersion: variants/v1alpha1
 kind: Variants
 variants:
-  "1.18":
-    image: "golang:1.18.10"
   "1.19":
-    image: "golang:1.19.11"
+    image: "golang:1.19.12"
   "1.20":
-    image: "golang:1.20.6"
+    image: "golang:1.20.7"
+  "1.21":
+    image: "golang:1.21.0"
