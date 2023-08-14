@@ -70,6 +70,11 @@ images:
   destination: eu.gcr.io/gardener-project/3rd/kindest/local-path-helper
   tags:
   - v20220512-507ff70b
+# gardener/test (Gardener integration tests)
+- source: redis
+  destination: eu.gcr.io/gardener-project/3rd/redis
+  tags:
+  - 5.0.8
 # gardener-extension-networking-calico/charts/images.yaml
 #
 # DO NOT ADD NEW CALICO IMAGES.
