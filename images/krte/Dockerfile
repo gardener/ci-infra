@@ -36,7 +36,7 @@ ENV KRTE_IMAGE=${IMAGE_ARG} \
     CONTAINER=docker
 
 # copy in image utility scripts
-COPY wrapper.sh /usr/local/bin/
+COPY images/krte/wrapper.sh /usr/local/bin/
 
 # Install tools needed to:
 # - install docker
