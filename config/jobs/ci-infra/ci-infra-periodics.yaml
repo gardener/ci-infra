@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20230810-bdb0169
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20230818-3aa437a
       command:
       - /job-forker
       args:
@@ -344,7 +344,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20230810-bdb0169
+    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20230818-3aa437a
       command:
       - /branch-cleaner
       args:
