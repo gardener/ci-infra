@@ -4,13 +4,11 @@
 **
 # -----------------------------------------------------------------------
 
-
 # ALLOW:
-
-!Dockerfile   # Dockerfile might be needed for pushing containers to registry later
-
 !go.mod
 !go.sum
 !vendor/**
 
 !prow/**
+
+!images/krte/wrapper.sh
