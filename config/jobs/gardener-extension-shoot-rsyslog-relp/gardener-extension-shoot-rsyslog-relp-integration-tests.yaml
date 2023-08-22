@@ -1,6 +1,6 @@
 presubmits:
   gardener/gardener-extension-shoot-rsyslog-relp:
-  - name: pull-gardener-extensioon-shoot-rsyslog-relp-integration
+  - name: pull-gardener-extension-shoot-rsyslog-relp-integration
     cluster: gardener-prow-build
     always_run: true
     skip_branches:
@@ -11,21 +11,20 @@ presubmits:
       grace_period: 10m
     annotations:
       description: Runs integration tests for Gardener extension shoot-rsyslog-relp developments in pull requests
-      fork-per-release: "true"
     spec:
       containers:
       - name: test-integration
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230810-2a54385-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230810-2a54385-1.20
         command:
         - make
         args:
         - test-integration
         resources:
           limits:
-            memory: 16Gi
+            memory: 2Gi
           requests:
-            cpu: 5
-            memory: 8Gi
+            cpu: 2
+            memory: 1Gi
 periodics:
 - name: ci-gardener-extension-shoot-rsyslog-relp-integration
   cluster: gardener-prow-build
@@ -42,18 +41,17 @@ periodics:
     description: Runs integration tests for Gardener extension shoot-rsyslog-relp developments periodically
     testgrid-dashboards: gardener-extension-shoot-rsyslog-relp
     testgrid-days-of-results: "60"
-    fork-per-release: "true"
   spec:
     containers:
     - name: test-integration
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230810-2a54385-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230810-2a54385-1.20
       command:
       - make
       args:
       - test-integration
       resources:
         limits:
-          memory: 16Gi
+          memory: 2Gi
         requests:
-          cpu: 5
-          memory: 8Gi
+          cpu: 2
+          memory: 1Gi
