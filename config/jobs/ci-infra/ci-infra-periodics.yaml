@@ -23,7 +23,7 @@ periodics:
       args:
       - --config=config/prow/labels.yaml
       - --confirm=true
-      - --only=gardener/ci-infra,gardener/gardener,gardener/gardener-extension-registry-cache,gardener/gardener-extension-shoot-oidc-service,gardener/dependency-watchdog,gardener/etcd-druid,gardener/gardener-extension-networking-cilium,gardener/gardener-extension-networking-calico
+      - --only=gardener/ci-infra,gardener/gardener,gardener/gardener-extension-registry-cache,gardener/gardener-extension-shoot-oidc-service,gardener/dependency-watchdog,gardener/etcd-druid,gardener/gardener-extension-networking-cilium,gardener/gardener-extension-networking-calico,gardener/gardener-extension-shoot-rsyslog-relp
       - --endpoint=http://ghproxy.prow.svc
       - --endpoint=https://api.github.com
       # TODO: switch to GitHub App Auth, once it's implemented in label_sync
@@ -337,7 +337,7 @@ periodics:
   cluster: gardener-prow-trusted
   decorate: true
   annotations:
-    description: Clean up cherry-pick branches of gardener-ci-robot/gardener 
+    description: Clean up cherry-pick branches of gardener-ci-robot/gardener
     testgrid-create-test-group: "false"
   reporter_config:
     slack:
