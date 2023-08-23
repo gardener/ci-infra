@@ -1,0 +1,53 @@
+presubmits:
+  gardener/gardener-extension-shoot-networking-filter:
+  - name: pull-extension-shoot-networking-filter
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 30m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener-extension-shoot-networking-filter developments in pull requests
+    spec:
+      containers:
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230810-2a54385-1.20
+        command:
+        - make
+        args:
+        - verify-extended
+        resources:
+          limits:
+            memory: 2Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-extension-shoot-networking-filter
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-shoot-networking-filter
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 30m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for gardener-extension-shoot-networking-filter master branch
+    testgrid-dashboards: gardener-extension-shoot-networking-filter
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230810-2a54385-1.20
+      command:
+      - make
+      args:
+      - verify-extended
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 2
+          memory: 1Gi

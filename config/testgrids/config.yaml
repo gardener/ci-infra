@@ -9,6 +9,7 @@ dashboard_groups:
     - gardener-etcd-druid
     - gardener-extension-networking-cilium
     - gardener-extension-networking-calico
+    - gardener-extension-shoot-networking-filter
     - gardener-extension-shoot-rsyslog-relp
 
 dashboards:
@@ -20,4 +21,5 @@ dashboards:
 - name: gardener-etcd-druid
 - name: gardener-extension-networking-cilium
 - name: gardener-extension-networking-calico
+- name: gardener-extension-shoot-networking-filter
 - name: gardener-extension-shoot-rsyslog-relp
