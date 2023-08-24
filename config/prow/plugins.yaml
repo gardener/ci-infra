@@ -307,6 +307,11 @@ plugins:
     - override
     - skip
     - trigger
+  gardener/gardener-extension-shoot-networking-filter:
+    plugins:
+    - override
+    - skip
+    - trigger
   gardener/gardener-extension-shoot-rsyslog-relp:
     plugins:
     - override
