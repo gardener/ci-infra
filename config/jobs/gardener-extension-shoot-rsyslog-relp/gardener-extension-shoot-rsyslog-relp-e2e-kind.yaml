@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for Gardener extension shoot-rsyslog-relp developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20230810-706aedbe3b-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
         command:
         - wrapper.sh
         - bash
@@ -53,7 +53,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20230810-706aedbe3b-master
+    - image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
       command:
       - wrapper.sh
       - bash
