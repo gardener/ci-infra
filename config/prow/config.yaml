@@ -137,7 +137,7 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-          restrictions: # prevent everyone except gardener-prow from pushing/merging
+          restrictions: # prevent everyone except gardener-prow from pushing/merging (except admins and gardener-prow)
             apps:
             - gardener-prow
             users: []
@@ -151,14 +151,13 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-          restrictions: # prevent everyone from pushing/merging (except admins and gardener-prow)
+          restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
             - gardener-prow
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: false # protections don't apply to admins
-          allow_deletions: true # allow maintainers to delete outdated release branches
+          enforce_admins: true # protections apply to admins as well
         gardener-extension-registry-cache:
           protect: true
           include:
@@ -166,13 +165,13 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
-          restrictions: # prevent everyone from pushing/merging (except admins and gardener-prow)
+          restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
             - gardener-prow
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: false # protections don't apply to admins
+          enforce_admins: true # protections apply to admins as well
         dependency-watchdog:
           protect: true
           include:
@@ -180,14 +179,13 @@ branch-protection:
           required_status_checks:
             contexts:
               - license/cla
-          restrictions: # prevent everyone from pushing/merging (except admins and gardener-prow)
+          restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
               - gardener-prow
             users: []
             teams:
               - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: false # protections don't apply to admins
-          allow_deletions: true # allow maintainers to delete outdated release branches
+          enforce_admins: true # protections apply to admins as well
 
 tide:
   sync_period: 1m
