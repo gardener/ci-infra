@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -71,7 +71,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -151,7 +151,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -191,7 +191,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -231,7 +231,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -271,7 +271,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -311,7 +311,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -350,7 +350,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+      image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
       name: ""
       resources:
         requests:
@@ -502,7 +502,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -538,7 +538,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -574,7 +574,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -610,7 +610,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -646,7 +646,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -682,7 +682,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -718,7 +718,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -754,7 +754,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
@@ -789,7 +789,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230824-1c1409fe24-master
+        image: gcr.io/k8s-staging-test-infra/krte:v20230904-8a576657a3-master
         name: ""
         resources:
           requests:
