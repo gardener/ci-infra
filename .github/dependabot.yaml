@@ -18,3 +18,11 @@ updates:
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
+# Create PRs for k8s.io/test-infra dependency updates
+- package-ecosystem: gomod
+  directory: /
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 5
+  allow:
+  - dependency-name: "k8s.io/test-infra"
