@@ -157,7 +157,7 @@ branch-protection:
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: true # protections apply to admins as well
+          enforce_admins: false # protections don't apply to admins
         gardener-extension-registry-cache:
           protect: true
           include:
@@ -171,7 +171,7 @@ branch-protection:
             users: []
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: true # protections apply to admins as well
+          enforce_admins: false # protections don't apply to admins
         dependency-watchdog:
           protect: true
           include:
@@ -185,7 +185,7 @@ branch-protection:
             users: []
             teams:
               - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
-          enforce_admins: true # protections apply to admins as well
+          enforce_admins: false # protections don't apply to admins
 
 tide:
   sync_period: 1m
