@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -71,7 +71,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -151,7 +151,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -191,7 +191,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -231,7 +231,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -271,7 +271,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -311,7 +311,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -350,7 +350,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -504,7 +504,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -540,7 +540,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -576,7 +576,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -612,7 +612,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -648,7 +648,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -684,7 +684,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -720,7 +720,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -756,7 +756,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -791,7 +791,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
