@@ -6,7 +6,7 @@ postsubmits:
     branches:
     - ^master$
     annotations:
-      description: Gardener development image build on master branch
+      description: Gardener development images build on master branch
       testgrid-dashboards: gardener-gardener
       testgrid-days-of-results: "60"
       fork-per-release: "true"
@@ -44,6 +44,51 @@ postsubmits:
           requests:
             cpu: 6
             memory: 7Gi
+      # Node selector is copied to build pods
+      nodeSelector:
+        dedicated: high-cpu
+      # Tolerations are copied to build pods
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "high-cpu"
+        effect: "NoSchedule"
+  - name: post-gardener-build-gardenertools-images
+    cluster: gardener-prow-trusted
+    run_if_changed: '^hack\/tools\/image|^hack\/tools\.mk'
+    branches:
+    - ^master$
+    annotations:
+      description: Build gardenertools images on master branch
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60" 
+    decorate: true
+    max_concurrency: 1
+    reporter_config:
+      slack:
+        channel: prow-alerts
+    spec:
+      serviceAccountName: image-builder
+      containers:
+      - name: image-builder
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20230912-bbf4e5a
+        command:
+        - /image-builder
+        args:
+        - --log-level=info
+        - --docker-config-secret=gardener-prow-gcr-docker-config
+        - --registry=eu.gcr.io/gardener-project/ci-infra
+        - --target=gardenertools
+        - --context=hack/tools/image
+        # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
+        # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
+        # to multiple build pods in parallel.
+        # For a proper scheduling the combined resource requests of all build pods are assigned to this pod, even though it does not
+        # use them. The resource requests of build pods themselves are "0"
+        resources:
+          requests:
+            cpu: 2
+            memory: 2000Mi
       # Node selector is copied to build pods
       nodeSelector:
         dedicated: high-cpu
