@@ -20,6 +20,7 @@ presubmits:
         command:
         - make
         args:
+        - import-tools-bin
         - check-generate
         - check
         - format
@@ -57,6 +58,7 @@ periodics:
       command:
       - make
       args:
+      - import-tools-bin
       - check-generate
       - check
       - format

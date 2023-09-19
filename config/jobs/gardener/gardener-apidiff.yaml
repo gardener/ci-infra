@@ -15,4 +15,5 @@ presubmits:
         command:
         - make
         args:
+        - import-tools-bin
         - check-apidiff
