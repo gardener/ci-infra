@@ -16,6 +16,12 @@
 # NOTE: we attempt to avoid unnecessary tools and image layers while
 # supporting kubernetes builds, kind installation, etc.
 
+# gardenertools image
+ARG gardenertoolsimage
+
+FROM ${gardenertoolsimage} AS gardenertools
+
+# krte
 FROM debian:bullseye AS krte
 
 # arg that specifies the image name (for debugging)
@@ -37,6 +43,7 @@ ENV KRTE_IMAGE=${IMAGE_ARG} \
 
 # copy in image utility scripts
 COPY images/krte/wrapper.sh /usr/local/bin/
+COPY --from=gardenertools /gardenertools /gardenertools
 
 # Install tools needed to:
 # - install docker
