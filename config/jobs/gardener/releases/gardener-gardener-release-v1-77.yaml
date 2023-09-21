@@ -25,13 +25,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-ha-multi-zone-upgrade
+      - make import-tools-bin ci-e2e-kind-ha-multi-zone-upgrade
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -65,13 +65,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-ha-multi-zone
+      - make import-tools-bin ci-e2e-kind-ha-multi-zone
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -105,13 +105,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-ha-single-zone-upgrade
+      - make import-tools-bin ci-e2e-kind-ha-single-zone-upgrade
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -145,13 +145,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-ha-single-zone
+      - make import-tools-bin ci-e2e-kind-ha-single-zone
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -185,13 +185,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-migration-ha-single-zone
+      - make import-tools-bin ci-e2e-kind-migration-ha-single-zone
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -225,13 +225,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-migration
+      - make import-tools-bin ci-e2e-kind-migration
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -265,13 +265,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-operator
+      - make import-tools-bin ci-e2e-kind-operator
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -305,13 +305,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind-upgrade
+      - make import-tools-bin ci-e2e-kind-upgrade
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -344,13 +344,13 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind
+      - make import-tools-bin ci-e2e-kind
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
       name: ""
       resources:
         requests:
@@ -377,6 +377,7 @@ periodics:
   spec:
     containers:
     - args:
+      - import-tools-bin
       - test-integration
       command:
       - make
@@ -407,6 +408,7 @@ periodics:
   spec:
     containers:
     - args:
+      - import-tools-bin
       - check-generate
       - check
       - format
@@ -496,13 +498,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-ha-multi-zone-upgrade
+        - make import-tools-bin ci-e2e-kind-ha-multi-zone-upgrade
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -532,13 +534,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-ha-multi-zone
+        - make import-tools-bin ci-e2e-kind-ha-multi-zone
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -568,13 +570,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-ha-single-zone-upgrade
+        - make import-tools-bin ci-e2e-kind-ha-single-zone-upgrade
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -604,13 +606,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-ha-single-zone
+        - make import-tools-bin ci-e2e-kind-ha-single-zone
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -640,13 +642,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-migration-ha-single-zone
+        - make import-tools-bin ci-e2e-kind-migration-ha-single-zone
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -676,13 +678,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-migration
+        - make import-tools-bin ci-e2e-kind-migration
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -712,13 +714,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-operator
+        - make import-tools-bin ci-e2e-kind-operator
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -748,13 +750,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind-upgrade
+        - make import-tools-bin ci-e2e-kind-upgrade
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -783,13 +785,13 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind
+        - make import-tools-bin ci-e2e-kind
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: gcr.io/k8s-staging-test-infra/krte:v20230908-f87868ed63-master
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230919-791e3fa-1.20
         name: ""
         resources:
           requests:
@@ -812,6 +814,7 @@ presubmits:
     spec:
       containers:
       - args:
+        - import-tools-bin
         - test-integration
         command:
         - make
@@ -904,6 +907,7 @@ presubmits:
     spec:
       containers:
       - args:
+        - import-tools-bin
         - check-generate
         - check
         - format

@@ -22,7 +22,7 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make ci-e2e-kind
+        - make import-tools-bin ci-e2e-kind
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -62,7 +62,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make ci-e2e-kind
+      - make import-tools-bin ci-e2e-kind
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true

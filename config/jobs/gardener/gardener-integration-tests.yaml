@@ -19,6 +19,7 @@ presubmits:
         command:
         - make
         args:
+        - import-tools-bin
         - test-integration
         resources:
           limits:
@@ -50,6 +51,7 @@ periodics:
       command:
       - make
       args:
+      - import-tools-bin
       - test-integration
       resources:
         limits:
