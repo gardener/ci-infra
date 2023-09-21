@@ -16,7 +16,7 @@ presubmits:
       containers:
       # Run all tests sequentially in one container or as separate prow jobs.
       # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230920-bdf1542-1.21
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230920-c0fbf38-1.21
         command:
         - make
         args:
@@ -54,7 +54,7 @@ periodics:
     containers:
     # Run all tests sequentially in one container or as separate prow jobs.
     # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230920-bdf1542-1.21
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230920-c0fbf38-1.21
       command:
       - make
       args:
