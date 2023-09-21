@@ -107,7 +107,7 @@ deck:
 
 prowjob_namespace: prow
 pod_namespace: test-pods
-log_level: debug
+log_level: info
 
 slack_reporter_configs:
   '*':
