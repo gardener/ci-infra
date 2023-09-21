@@ -12,5 +12,5 @@ spec:
       periodSeconds: 15
   resources:
     requests:
-      memory: 14Gi
-  retention: 30d
+      memory: 28Gi
+  retention: 14d
