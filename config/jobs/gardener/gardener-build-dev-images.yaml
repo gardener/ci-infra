@@ -55,7 +55,7 @@ postsubmits:
         effect: "NoSchedule"
   - name: post-gardener-build-gardenertools-images
     cluster: gardener-prow-trusted
-    run_if_changed: '^hack\/tools\/image|^hack\/tools\.mk'
+    run_if_changed: '^go\.mod|^hack\/tools\/image|^hack\/tools\.mk'
     branches:
     - ^master$
     annotations:
