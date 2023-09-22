@@ -22,6 +22,9 @@ ARG gardenertoolsimage
 FROM ${gardenertoolsimage} AS gardenertools
 
 # krte
+# Debian versions of krte image must be in sync with these images to avoid problems with different `glibc` versions:
+# - https://github.com/gardener/ci-infra/blob/master/images/golang-test/variants.yaml
+# - https://github.com/gardener/gardener/blob/master/hack/tools/image/variants.yaml
 FROM debian:bookworm AS krte
 
 # arg that specifies the image name (for debugging)
