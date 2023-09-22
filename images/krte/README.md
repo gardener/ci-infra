@@ -1,7 +1,7 @@
 # krte image
 
-**Note: This is a fork of [krte from kubernetes/test-infra (commit 1ffa643)](https://github.com/kubernetes/test-infra/tree/1ffa643ca2c0e92824fdb8e706b862466396dae0/images/krte) repository.
-It changes the Go version to Gardener requirements.**
+**Note: This is a fork of [krte from kubernetes/test-infra (commit 8b8d9ff)](https://github.com/kubernetes/test-infra/tree/8b8d9ff4819af95d51b02160a2f99c74459f22d7/images/krte) repository.
+It changes the Go version to Gardener requirements and adds [gardenertools](https://github.com/gardener/gardener/tree/master/hack/tools/image) binaries.**
 
 krte - [KIND](https://sigs.k8s.io/kind) RunTime Environment
 

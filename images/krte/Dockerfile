@@ -22,7 +22,7 @@ ARG gardenertoolsimage
 FROM ${gardenertoolsimage} AS gardenertools
 
 # krte
-FROM debian:bullseye AS krte
+FROM debian:bookworm AS krte
 
 # arg that specifies the image name (for debugging)
 ARG IMAGE_ARG
@@ -93,10 +93,11 @@ RUN echo "Installing Packages ..." \
             --usage-reporting=false \
         && gcloud components install kubectl \
     && echo "Installing Docker ..." \
-        && curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add - \
-        && add-apt-repository \
-            "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
-            $(lsb_release -cs) stable" \
+        && curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+        && chmod a+r /etc/apt/keyrings/docker.gpg \
+        && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+            tee /etc/apt/sources.list.d/docker.list > /dev/null \
         && apt-get update \
         && apt-get install -y --no-install-recommends docker-ce docker-buildx-plugin \
         && rm -rf /var/lib/apt/lists/* \
