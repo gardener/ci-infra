@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for gardener-extension-networking-calico developments in pull requests
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230922-7693431-1.21
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230922-13a5b72-1.21
         command:
         - make
         args:
@@ -40,7 +40,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230922-7693431-1.21
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230922-13a5b72-1.21
       command:
       - make
       args:
