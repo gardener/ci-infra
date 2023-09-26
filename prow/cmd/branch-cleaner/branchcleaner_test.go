@@ -39,12 +39,31 @@ func (f *fakeGithubClient) GetBranches(org, repo string, onlyProtected bool) ([]
 	return branches, nil
 }
 
+func (f *fakeGithubClient) GetBranchProtection(org, repo, branch string) (*github.BranchProtection, error) {
+	for _, b := range f.Branches {
+		if b.Name == branch && b.Protected {
+			return &github.BranchProtection{}, nil
+		}
+	}
+
+	return nil, nil
+}
+
 func (f *fakeGithubClient) GetPullRequests(org, repo string) ([]github.PullRequest, error) {
 	var prs []github.PullRequest
 	for _, pr := range f.PullRequests {
 		prs = append(prs, *pr)
 	}
 	return prs, nil
+}
+
+func (f *fakeGithubClient) RemoveBranchProtection(org, repo, branch string) error {
+	for _, b := range f.Branches {
+		if b.Name == branch && b.Protected {
+			return nil
+		}
+	}
+	return fmt.Errorf("Branch %q does either not exist or is not protected", branch)
 }
 
 func (f *fakeGithubClient) GetRepo(owner, name string) (github.FullRepo, error) {
@@ -177,7 +196,7 @@ var _ = Describe("BranchCleaner", func() {
 			bc.options.branchPattern = "^release-v\\d+\\.\\d+"
 			fakeGithub.Branches = []github.Branch{
 				{Name: "master", Protected: true},
-				{Name: "release-v1.73"},
+				{Name: "release-v1.73", Protected: true},
 				{Name: "release-v1.74"},
 				{Name: "release-v1.72"},
 				{Name: "release-v1.75", Protected: true},
@@ -207,6 +226,14 @@ var _ = Describe("BranchCleaner", func() {
 
 			Expect(bc.run()).To(Succeed())
 			Expect(fakeGithub.RefsDeleted).To(Equal([]struct{ Org, Repo, Ref string }{{"foo", "bar", "heads/release-v1.72"}}))
+		})
+
+		It("should delete the correct refs with release branch mode enabled - one with branch protection, one without", func() {
+			bc.options.keepBranches = 2
+			bc.options.releaseBranchMode = true
+
+			Expect(bc.run()).To(Succeed())
+			Expect(fakeGithub.RefsDeleted).To(Equal([]struct{ Org, Repo, Ref string }{{"foo", "bar", "heads/release-v1.73"}, {"foo", "bar", "heads/release-v1.72"}}))
 		})
 	})
 })
