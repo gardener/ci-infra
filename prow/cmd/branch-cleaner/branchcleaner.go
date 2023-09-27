@@ -28,6 +28,8 @@ import (
 type githubClient interface {
 	GetRepo(owner, name string) (github.FullRepo, error)
 	GetBranches(org, repo string, onlyProtected bool) ([]github.Branch, error)
+	GetBranchProtection(org, repo, branch string) (*github.BranchProtection, error)
+	RemoveBranchProtection(org, repo, branch string) error
 	GetPullRequests(org, repo string) ([]github.PullRequest, error)
 	GetRef(org, repo, ref string) (string, error)
 	DeleteRef(org, repo, ref string) error
@@ -79,6 +81,13 @@ func (b *branchCleaner) run() error {
 	branchesToDelete, err := b.identifyBranchesToDelete(matchingBranches)
 	if err != nil {
 		return fmt.Errorf("error identifying branches to delete: %w", err)
+	}
+
+	if b.options.releaseBranchMode {
+		logrus.Infof("Release branch mode active. Deleting branch protection rules for %v if existing", branchesToDelete)
+		if err := b.removeBranchProtection(branchesToDelete); err != nil {
+			return fmt.Errorf("error removing branch protection rules: %w", err)
+		}
 	}
 
 	return b.deleteBranches(branchesToDelete)
@@ -204,6 +213,25 @@ func (b *branchCleaner) deleteBranches(branches []string) error {
 		}
 	}
 	logrus.Infof("Successfully deleted these branches: %v", branches)
+
+	return nil
+}
+
+func (b *branchCleaner) removeBranchProtection(branches []string) error {
+	for _, branch := range branches {
+		branchProtection, err := b.githubClient.GetBranchProtection(b.repo.Owner.Login, b.repo.Name, branch)
+		if err != nil {
+			return err
+		}
+		if branchProtection == nil {
+			logrus.Infof("There is no branch protection rule for %q branch", branch)
+			continue
+		}
+		if err := b.githubClient.RemoveBranchProtection(b.repo.Owner.Login, b.repo.Name, branch); err != nil {
+			return err
+		}
+		logrus.Infof("Successfully deleted branch protection rule of %q branch", branch)
+	}
 
 	return nil
 }
