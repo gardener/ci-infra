@@ -16,7 +16,7 @@ RUN mkdir /build && GOBIN=/build \
 
 FROM gcr.io/distroless/static-debian11:nonroot AS base_nonroot
 
-FROM alpine:3.18.3 AS ssl_git_runner
+FROM alpine:3.18.4 AS ssl_git_runner
 # Install SSL ca certificates
 RUN apk add --no-cache ca-certificates git
 # Create nonroot user and group to be used in executable containers
