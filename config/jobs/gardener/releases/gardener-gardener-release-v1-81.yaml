@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -71,7 +71,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -151,7 +151,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -191,7 +191,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -231,7 +231,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -271,7 +271,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -311,7 +311,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -350,7 +350,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
       name: ""
       resources:
         requests:
@@ -381,7 +381,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231004-e37eb85-1.21
       name: test-integration
       resources:
         limits:
@@ -417,7 +417,7 @@ periodics:
       - check-docforge
       command:
       - make
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230925-2cf45e8-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231004-e37eb85-1.21
       name: ""
       resources:
         limits:
@@ -459,7 +459,7 @@ postsubmits:
         - --inject-effective-version=true
         command:
         - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231002-dc1fff9
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231004-e37eb85
         name: image-builder
         resources:
           requests:
@@ -504,7 +504,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -540,7 +540,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -576,7 +576,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -612,7 +612,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -648,7 +648,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -684,7 +684,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -720,7 +720,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -756,7 +756,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -791,7 +791,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: eu.gcr.io/gardener-project/ci-infra/krte:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/krte:v20231004-e37eb85-1.21
         name: ""
         resources:
           requests:
@@ -818,7 +818,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231004-e37eb85-1.21
         name: test-integration
         resources:
           limits:
@@ -878,7 +878,7 @@ presubmits:
         - --inject-effective-version=true
         command:
         - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231002-dc1fff9
+        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231004-e37eb85
         name: image-builder
         resources:
           requests:
@@ -916,7 +916,7 @@ presubmits:
         - check-docforge
         command:
         - make
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20230925-2cf45e8-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231004-e37eb85-1.21
         name: ""
         resources:
           limits:
