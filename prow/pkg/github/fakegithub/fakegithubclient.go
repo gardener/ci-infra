@@ -25,22 +25,22 @@ type FakeGithubClient struct {
 }
 
 // CreatePullRequest is a fake for CreatePullRequest
-func (g *FakeGithubClient) CreatePullRequest(org, repo, title, body, head, base string, canModify bool) (int, error) {
+func (g *FakeGithubClient) CreatePullRequest(_, _, _, _, _, _ string, _ bool) (int, error) {
 	return 1, nil
 }
 
 // EnsureFork is a fake for EnsureFork
-func (g *FakeGithubClient) EnsureFork(forkingUser, org, repo string) (string, error) {
+func (g *FakeGithubClient) EnsureFork(_, _, repo string) (string, error) {
 	return repo, nil
 }
 
 // GetPullRequests is a fake for GetPullRequests
-func (g *FakeGithubClient) GetPullRequests(org, repo string) ([]github.PullRequest, error) {
+func (g *FakeGithubClient) GetPullRequests(_, _ string) ([]github.PullRequest, error) {
 	return []github.PullRequest{}, nil
 }
 
 // GetBranches is a fake for GetBranches
-func (g *FakeGithubClient) GetBranches(org, repo string, onlyProtected bool) ([]github.Branch, error) {
+func (g *FakeGithubClient) GetBranches(_, _ string, onlyProtected bool) ([]github.Branch, error) {
 	if onlyProtected {
 		return g.ProtectedBranches, nil
 	}
@@ -48,6 +48,6 @@ func (g *FakeGithubClient) GetBranches(org, repo string, onlyProtected bool) ([]
 }
 
 // AddLabels is a fake for AddLabels
-func (g *FakeGithubClient) AddLabels(org, repo string, number int, label ...string) error {
+func (g *FakeGithubClient) AddLabels(_, _ string, _ int, _ ...string) error {
 	return nil
 }

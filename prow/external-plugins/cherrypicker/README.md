@@ -1,6 +1,6 @@
 # Cherrypicker
 
-**Note: This is a fork of [cherrypicker from kubernetes/test-infra (commit 78d91d6)](https://github.com/kubernetes/test-infra/tree/78d91d66742286ba1c8d003fa3b328184869867d/prow/external-plugins/cherrypicker) repository.
+**Note: This is a fork of [cherrypicker from kubernetes/test-infra (commit f3ebf8a)](https://github.com/kubernetes/test-infra/tree/f3ebf8a77f21a661a5a69844e9dc374b62798203/prow/external-plugins/cherrypicker) repository.
 It changes the release note regexp to fit the gardener release note format**
 
 Cherrypicker is an external prow plugin that can also run as a standalone bot.

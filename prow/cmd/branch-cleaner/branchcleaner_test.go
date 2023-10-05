@@ -29,7 +29,7 @@ type fakeGithubClient struct {
 	Branches []github.Branch
 }
 
-func (f *fakeGithubClient) GetBranches(org, repo string, onlyProtected bool) ([]github.Branch, error) {
+func (f *fakeGithubClient) GetBranches(_, _ string, onlyProtected bool) ([]github.Branch, error) {
 	var branches []github.Branch
 	for _, branch := range f.Branches {
 		if branch.Protected == onlyProtected {
@@ -39,7 +39,7 @@ func (f *fakeGithubClient) GetBranches(org, repo string, onlyProtected bool) ([]
 	return branches, nil
 }
 
-func (f *fakeGithubClient) GetBranchProtection(org, repo, branch string) (*github.BranchProtection, error) {
+func (f *fakeGithubClient) GetBranchProtection(_, _, branch string) (*github.BranchProtection, error) {
 	for _, b := range f.Branches {
 		if b.Name == branch && b.Protected {
 			return &github.BranchProtection{}, nil
@@ -49,7 +49,7 @@ func (f *fakeGithubClient) GetBranchProtection(org, repo, branch string) (*githu
 	return nil, nil
 }
 
-func (f *fakeGithubClient) GetPullRequests(org, repo string) ([]github.PullRequest, error) {
+func (f *fakeGithubClient) GetPullRequests(_, _ string) ([]github.PullRequest, error) {
 	var prs []github.PullRequest
 	for _, pr := range f.PullRequests {
 		prs = append(prs, *pr)
@@ -57,7 +57,7 @@ func (f *fakeGithubClient) GetPullRequests(org, repo string) ([]github.PullReque
 	return prs, nil
 }
 
-func (f *fakeGithubClient) RemoveBranchProtection(org, repo, branch string) error {
+func (f *fakeGithubClient) RemoveBranchProtection(_, _, branch string) error {
 	for _, b := range f.Branches {
 		if b.Name == branch && b.Protected {
 			return nil

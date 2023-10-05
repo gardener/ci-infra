@@ -152,11 +152,11 @@ func (b *branchCleaner) identifyBranchesToDelete(branches []string) ([]string, e
 		return branchesToDelete, nil
 	}
 	for _, branch := range branches[b.options.keepBranches:] {
-		delete, err := b.checkBranchToDelete(branch)
+		deleteBranch, err := b.checkBranchToDelete(branch)
 		if err != nil {
 			return nil, err
 		}
-		if delete {
+		if deleteBranch {
 			branchesToDelete = append(branchesToDelete, branch)
 		}
 	}
