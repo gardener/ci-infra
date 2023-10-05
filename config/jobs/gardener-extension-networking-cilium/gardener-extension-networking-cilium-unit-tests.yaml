@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for gardener-extension-networking-cilium developments in pull requests
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231004-e37eb85-1.21
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231005-29c8752-1.21
         command:
         - make
         args:
@@ -40,7 +40,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231004-e37eb85-1.21
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231005-29c8752-1.21
       command:
       - make
       args:
