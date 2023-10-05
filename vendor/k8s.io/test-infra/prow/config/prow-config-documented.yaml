@@ -62,6 +62,9 @@ branch-protection:
                                 - ""
                             # Protect overrides whether branch protection is enabled if set.
                             protect: false
+                            # RequireManuallyTriggeredJobs enforces a context presence when job runs conditionally, but not automatically,
+                            # that results in params always_run: false, optional: false, and skip_if_only_change, run_if_changed not present.
+                            require_manually_triggered_jobs: false
                             # RequiredLinearHistory enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch.
                             required_linear_history: false
                             # RequiredPullRequestReviews specifies github approval/review criteria.
@@ -113,6 +116,9 @@ branch-protection:
                         - ""
                     # Protect overrides whether branch protection is enabled if set.
                     protect: false
+                    # RequireManuallyTriggeredJobs enforces a context presence when job runs conditionally, but not automatically,
+                    # that results in params always_run: false, optional: false, and skip_if_only_change, run_if_changed not present.
+                    require_manually_triggered_jobs: false
                     # RequiredLinearHistory enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch.
                     required_linear_history: false
                     # RequiredPullRequestReviews specifies github approval/review criteria.
@@ -152,6 +158,9 @@ branch-protection:
                             - ""
                     # Unmanaged makes us not manage the branchprotection.
                     unmanaged: false
+            # RequireManuallyTriggeredJobs enforces a context presence when job runs conditionally, but not automatically,
+            # that results in params always_run: false, optional: false, and skip_if_only_change, run_if_changed not present.
+            require_manually_triggered_jobs: false
             # RequiredLinearHistory enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch.
             required_linear_history: false
             # RequiredPullRequestReviews specifies github approval/review criteria.
@@ -200,6 +209,9 @@ branch-protection:
     # ProtectReposWithOptionalJobs will make the Branchprotector manage required status
     # contexts on repositories that only have optional jobs (default: false)
     protect_repos_with_optional_jobs: false
+    # RequireManuallyTriggeredJobs enforces a context presence when job runs conditionally, but not automatically,
+    # that results in params always_run: false, optional: false, and skip_if_only_change, run_if_changed not present.
+    require_manually_triggered_jobs: false
     # RequiredLinearHistory enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch.
     required_linear_history: false
     # RequiredPullRequestReviews specifies github approval/review criteria.
@@ -414,6 +426,10 @@ deck:
 # DefaultJobTimeout this is default deadline for prow jobs. This value is used when
 # no timeout is configured at the job level. This value is set to 24 hours.
 default_job_timeout: 0s
+# DisabledClusters holds a list of disabled build cluster names. The same context names will be ignored while
+# Prow components load the kubeconfig files.
+disabled_clusters:
+    - ""
 # Gangway contains configurations needed by the the Prow API server of the
 # same name. It encodes an allowlist of API clients and what kinds of Prow
 # Jobs they are authorized to trigger.
@@ -440,11 +456,12 @@ gangway:
             # "PROJECT".
             endpoint_api_consumer_type: ' '
 gerrit:
+    allowed_presubmit_trigger_re: ' '
     # DeckURL is the root URL of Deck. This is used to construct links to
     # job runs for a given CL.
     deck_url: ' '
     org_repos_config: null
-    # TickInterval is how often we do a sync with binded gerrit instance.
+    # TickInterval is how often we do a sync with bound gerrit instance.
     tick_interval: 0s
 # GitHubOptions allows users to control how prow applications display GitHub website links.
 github:
@@ -521,6 +538,11 @@ managed_webhooks:
         "":
             token_created_after: "0001-01-01T00:00:00Z"
     respect_legacy_global_token: false
+# Moonraker contains configurations for Moonraker, such as the client
+# timeout to use for all Prow services that need to send requests to
+# Moonraker.
+moonraker:
+    client_timeout: 0s
 # OwnersDirDenylist is used to configure regular expressions matching directories
 # to ignore when searching for OWNERS{,_ALIAS} files in a repo.
 owners_dir_denylist:
@@ -603,6 +625,11 @@ plank:
             # DefaultServiceAccountName is the name of the Kubernetes service account
             # that should be used by the pod if one is not specified in the podspec.
             default_service_account_name: ""
+            # FsGroup defines special supplemental group ID used in all containers in a Pod.
+            # This allows to change the ownership of particular volumes by kubelet.
+            # This field will not override the existing ProwJob's PodSecurityContext.
+            # Equivalent to PodSecurityContext's FsGroup
+            fs_group: 0
             # GCSConfiguration holds options for pushing logs and
             # artifacts to GCS from a job.
             gcs_configuration:
@@ -695,6 +722,14 @@ plank:
                         "": "0"
                     requests:
                         "": "0"
+            # RunAsGroup defines GID of process in all containers running in a Pod.
+            # This field will not override the existing ProwJob's PodSecurityContext.
+            # Equivalent to PodSecurityContext's RunAsGroup
+            run_as_group: 0
+            # RunAsUser defines UID for process in all containers running in a Pod.
+            # This field will not override the existing ProwJob's PodSecurityContext.
+            # Equivalent to PodSecurityContext's RunAsUser
+            run_as_user: 0
             # S3CredentialsSecret is the name of the Kubernetes secret
             # that holds blob storage push credentials.
             s3_credentials_secret: ""
@@ -781,6 +816,11 @@ plank:
             # DefaultServiceAccountName is the name of the Kubernetes service account
             # that should be used by the pod if one is not specified in the podspec.
             default_service_account_name: ""
+            # FsGroup defines special supplemental group ID used in all containers in a Pod.
+            # This allows to change the ownership of particular volumes by kubelet.
+            # This field will not override the existing ProwJob's PodSecurityContext.
+            # Equivalent to PodSecurityContext's FsGroup
+            fs_group: 0
             # GCSConfiguration holds options for pushing logs and
             # artifacts to GCS from a job.
             gcs_configuration:
@@ -873,6 +913,14 @@ plank:
                         "": "0"
                     requests:
                         "": "0"
+            # RunAsGroup defines GID of process in all containers running in a Pod.
+            # This field will not override the existing ProwJob's PodSecurityContext.
+            # Equivalent to PodSecurityContext's RunAsGroup
+            run_as_group: 0
+            # RunAsUser defines UID for process in all containers running in a Pod.
+            # This field will not override the existing ProwJob's PodSecurityContext.
+            # Equivalent to PodSecurityContext's RunAsUser
+            run_as_user: 0
             # S3CredentialsSecret is the name of the Kubernetes secret
             # that holds blob storage push credentials.
             s3_credentials_secret: ""
