@@ -15,7 +15,7 @@ presubmits:
     spec:
       containers:
       - name: test-integration
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231005-aa4b2b0-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231006-0bdfb00-1.21
         command:
         - make
         args:
@@ -47,7 +47,7 @@ periodics:
   spec:
     containers:
     - name: test-integration
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231005-aa4b2b0-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231006-0bdfb00-1.21
       command:
       - make
       args:
