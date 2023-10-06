@@ -6,7 +6,7 @@ kind: Variants
 variants:
   "1.20":
     image: golang:1.20.8-bookworm
-    gardenertoolsimage: eu.gcr.io/gardener-project/ci-infra/gardenertools:v20231005-c0185cb-1.20
+    gardenertoolsimage: eu.gcr.io/gardener-project/ci-infra/gardenertools:v20231006-e5c479e-1.20
   "1.21":
     image: golang:1.21.1-bookworm
-    gardenertoolsimage: eu.gcr.io/gardener-project/ci-infra/gardenertools:v20231005-c0185cb-1.21
+    gardenertoolsimage: eu.gcr.io/gardener-project/ci-infra/gardenertools:v20231006-e5c479e-1.21
