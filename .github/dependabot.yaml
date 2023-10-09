@@ -10,19 +10,3 @@ updates:
   directory: /images/copy-images
   schedule:
     interval: daily
-# Create update PRs for golang-test images
-- package-ecosystem: docker
-  directory: /images/golang-test
-  schedule:
-    interval: daily
-  ignore:
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major", "version-update:semver-minor"]
-# Create PRs for k8s.io/test-infra dependency updates
-- package-ecosystem: gomod
-  directory: /
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 5
-  allow:
-  - dependency-name: "k8s.io/test-infra"
