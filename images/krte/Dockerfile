@@ -16,22 +16,11 @@
 # NOTE: we attempt to avoid unnecessary tools and image layers while
 # supporting kubernetes builds, kind installation, etc.
 
-# gardenertools image
-ARG gardenertoolsimage
-
-FROM ${gardenertoolsimage} AS gardenertools
-
 # krte
-# Debian versions of krte image must be in sync with these images to avoid problems with different `glibc` versions:
-# - https://github.com/gardener/ci-infra/blob/master/images/golang-test/variants.yaml
-# - https://github.com/gardener/gardener/blob/master/hack/tools/image/variants.yaml
-FROM debian:bookworm AS krte
+FROM ${golangtestimage} AS krte
 
 # arg that specifies the image name (for debugging)
 ARG IMAGE_ARG
-
-# arg that specifies the go version to install
-ARG GO_VERSION
 
 # add envs:
 # - so we can debug with the image name:tag
@@ -46,7 +35,6 @@ ENV KRTE_IMAGE=${IMAGE_ARG} \
 
 # copy in image utility scripts
 COPY images/krte/wrapper.sh /usr/local/bin/
-COPY --from=gardenertools /gardenertools /gardenertools
 
 # Install tools needed to:
 # - install docker
@@ -79,11 +67,7 @@ RUN echo "Installing Packages ..." \
             software-properties-common \
             unzip \
         && rm -rf /var/lib/apt/lists/* \
-    && echo "Installing Go ..." \
-        && export GO_TARBALL="go${GO_VERSION}.linux-amd64.tar.gz" \
-        && curl -fsSL "https://go.dev/dl/${GO_TARBALL}" --output "${GO_TARBALL}" \
-        && tar xzf "${GO_TARBALL}" -C /usr/local \
-        && rm "${GO_TARBALL}"\
+    && echo "Creating GOPATH ..." \
         && mkdir -p "${GOPATH}/bin" \
     && echo "Installing gcloud SDK, kubectl ..." \
         && curl -fsSL https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz --output google-cloud-sdk.tar.gz \
