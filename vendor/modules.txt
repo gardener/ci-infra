@@ -122,7 +122,7 @@ github.com/blendle/zapdriver
 # github.com/bwmarrin/snowflake v0.0.0
 ## explicit
 github.com/bwmarrin/snowflake
-# github.com/cenkalti/backoff/v4 v4.2.0
+# github.com/cenkalti/backoff/v4 v4.2.1
 ## explicit; go 1.18
 github.com/cenkalti/backoff/v4
 # github.com/census-instrumentation/opencensus-proto v0.4.1
@@ -136,6 +136,11 @@ github.com/census-instrumentation/opencensus-proto/gen-go/trace/v1
 # github.com/cespare/xxhash/v2 v2.2.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
+# github.com/cjwagner/httpcache v0.0.0-20230907212505-d4841bbad466
+## explicit
+github.com/cjwagner/httpcache
+github.com/cjwagner/httpcache/diskcache
+github.com/cjwagner/httpcache/redis
 # github.com/clarketm/json v1.13.4
 ## explicit
 github.com/clarketm/json
@@ -294,11 +299,6 @@ github.com/googleapis/gax-go/v2/apierror/internal/proto
 github.com/googleapis/gax-go/v2/internal
 # github.com/gopherjs/gopherjs v1.17.2
 ## explicit; go 1.17
-# github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc
-## explicit
-github.com/gregjones/httpcache
-github.com/gregjones/httpcache/diskcache
-github.com/gregjones/httpcache/redis
 # github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
 ## explicit; go 1.17
 github.com/grpc-ecosystem/grpc-gateway/v2/internal/httprule
@@ -354,7 +354,7 @@ github.com/modern-go/reflect2
 # github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822
 ## explicit
 github.com/munnerz/goautoneg
-# github.com/onsi/ginkgo/v2 v2.9.2
+# github.com/onsi/ginkgo/v2 v2.11.0
 ## explicit; go 1.18
 github.com/onsi/ginkgo/v2
 github.com/onsi/ginkgo/v2/config
@@ -376,7 +376,7 @@ github.com/onsi/ginkgo/v2/internal/parallel_support
 github.com/onsi/ginkgo/v2/internal/testingtproxy
 github.com/onsi/ginkgo/v2/reporters
 github.com/onsi/ginkgo/v2/types
-# github.com/onsi/gomega v1.27.6
+# github.com/onsi/gomega v1.27.10
 ## explicit; go 1.18
 github.com/onsi/gomega
 github.com/onsi/gomega/format
@@ -513,7 +513,7 @@ gocloud.dev/internal/gcerr
 gocloud.dev/internal/oc
 gocloud.dev/internal/openurl
 gocloud.dev/internal/retry
-# golang.org/x/crypto v0.9.0
+# golang.org/x/crypto v0.13.0
 ## explicit; go 1.17
 golang.org/x/crypto/chacha20
 golang.org/x/crypto/chacha20poly1305
@@ -524,12 +524,12 @@ golang.org/x/crypto/internal/alias
 golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/pkcs12
 golang.org/x/crypto/pkcs12/internal/rc2
-# golang.org/x/mod v0.10.0
+# golang.org/x/mod v0.12.0
 ## explicit; go 1.17
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.10.0
+# golang.org/x/net v0.15.0
 ## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
@@ -551,11 +551,11 @@ golang.org/x/oauth2/google/internal/externalaccount
 golang.org/x/oauth2/internal
 golang.org/x/oauth2/jws
 golang.org/x/oauth2/jwt
-# golang.org/x/sync v0.2.0
-## explicit
+# golang.org/x/sync v0.3.0
+## explicit; go 1.17
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.8.0
+# golang.org/x/sys v0.12.0
 ## explicit; go 1.17
 golang.org/x/sys/cpu
 golang.org/x/sys/execabs
@@ -563,10 +563,10 @@ golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.8.0
+# golang.org/x/term v0.12.0
 ## explicit; go 1.17
 golang.org/x/term
-# golang.org/x/text v0.9.0
+# golang.org/x/text v0.13.0
 ## explicit; go 1.17
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
@@ -591,7 +591,7 @@ golang.org/x/text/unicode/norm
 # golang.org/x/time v0.3.0
 ## explicit
 golang.org/x/time/rate
-# golang.org/x/tools v0.8.0
+# golang.org/x/tools v0.13.0
 ## explicit; go 1.18
 golang.org/x/tools/cmd/goimports
 golang.org/x/tools/go/ast/astutil
@@ -600,6 +600,7 @@ golang.org/x/tools/internal/event
 golang.org/x/tools/internal/event/core
 golang.org/x/tools/internal/event/keys
 golang.org/x/tools/internal/event/label
+golang.org/x/tools/internal/event/tag
 golang.org/x/tools/internal/fastwalk
 golang.org/x/tools/internal/gocommand
 golang.org/x/tools/internal/gopathwalk
@@ -1091,8 +1092,8 @@ k8s.io/kube-openapi/pkg/schemamutation
 k8s.io/kube-openapi/pkg/spec3
 k8s.io/kube-openapi/pkg/util/proto
 k8s.io/kube-openapi/pkg/validation/spec
-# k8s.io/test-infra v0.0.0-20230717090707-605d4aeb1eb3
-## explicit; go 1.18
+# k8s.io/test-infra v0.0.0-20231005183734-12234147d23e
+## explicit; go 1.21
 k8s.io/test-infra/ghproxy/ghcache
 k8s.io/test-infra/ghproxy/ghmetrics
 k8s.io/test-infra/pkg/flagutil
@@ -1116,7 +1117,6 @@ k8s.io/test-infra/prow/flagutil
 k8s.io/test-infra/prow/flagutil/plugins
 k8s.io/test-infra/prow/gcsupload
 k8s.io/test-infra/prow/gerrit/source
-k8s.io/test-infra/prow/git
 k8s.io/test-infra/prow/git/localgit
 k8s.io/test-infra/prow/git/types
 k8s.io/test-infra/prow/git/v2
@@ -1148,6 +1148,7 @@ k8s.io/test-infra/prow/secretutil
 k8s.io/test-infra/prow/sidecar
 k8s.io/test-infra/prow/simplifypath
 k8s.io/test-infra/prow/slack
+k8s.io/test-infra/prow/throttle
 k8s.io/test-infra/prow/version
 # k8s.io/utils v0.0.0-20230209194617-a36077c30491
 ## explicit; go 1.18

@@ -872,7 +872,7 @@ type fakeClient struct {
 	fakegithub.FakeClient
 }
 
-func (f *fakeClient) QueryWithGitHubAppsSupport(ctx context.Context, q interface{}, vars map[string]interface{}, org string) error {
+func (f *fakeClient) QueryWithGitHubAppsSupport(_ context.Context, q interface{}, vars map[string]interface{}, _ string) error {
 
 	sq, ok := q.(*searchQuery)
 	if !ok {

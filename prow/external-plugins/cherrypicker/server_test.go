@@ -50,7 +50,7 @@ type fghc struct {
 	issues     []github.Issue
 }
 
-func (f *fghc) AddLabel(org, repo string, number int, label string) error {
+func (f *fghc) AddLabel(_, _ string, number int, label string) error {
 	f.Lock()
 	defer f.Unlock()
 	for i := range f.prs {
@@ -61,7 +61,7 @@ func (f *fghc) AddLabel(org, repo string, number int, label string) error {
 	return nil
 }
 
-func (f *fghc) AssignIssue(org, repo string, number int, logins []string) error {
+func (f *fghc) AssignIssue(_, _ string, number int, logins []string) error {
 	var users []github.User
 	for _, login := range logins {
 		users = append(users, github.User{Login: login})
@@ -77,25 +77,25 @@ func (f *fghc) AssignIssue(org, repo string, number int, logins []string) error 
 	return nil
 }
 
-func (f *fghc) GetPullRequest(org, repo string, number int) (*github.PullRequest, error) {
+func (f *fghc) GetPullRequest(_, _ string, _ int) (*github.PullRequest, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.pr, nil
 }
 
-func (f *fghc) GetPullRequestDiff(org, repo string, number int) ([]byte, error) {
+func (f *fghc) GetPullRequestDiff(_, _ string, _ int) ([]byte, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.diff, nil
 }
 
-func (f *fghc) GetPullRequestPatch(org, repo string, number int) ([]byte, error) {
+func (f *fghc) GetPullRequestPatch(_, _ string, _ int) ([]byte, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.patch, nil
 }
 
-func (f *fghc) GetPullRequests(org, repo string) ([]github.PullRequest, error) {
+func (f *fghc) GetPullRequests(_, _ string) ([]github.PullRequest, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.prs, nil
@@ -108,25 +108,25 @@ func (f *fghc) CreateComment(org, repo string, number int, comment string) error
 	return nil
 }
 
-func (f *fghc) IsMember(org, user string) (bool, error) {
+func (f *fghc) IsMember(_, _ string) (bool, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.isMember, nil
 }
 
-func (f *fghc) IsCollaborator(org, repo, user string) (bool, error) {
+func (f *fghc) IsCollaborator(_, _, _ string) (bool, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.isMember, nil
 }
 
-func (f *fghc) GetRepo(owner, name string) (github.FullRepo, error) {
+func (f *fghc) GetRepo(_, _ string) (github.FullRepo, error) {
 	f.Lock()
 	defer f.Unlock()
 	return github.FullRepo{}, nil
 }
 
-func (f *fghc) EnsureFork(forkingUser, org, repo string) (string, error) {
+func (f *fghc) EnsureFork(_, _, repo string) (string, error) {
 	if repo == "changeme" {
 		return "changed", nil
 	}
@@ -146,7 +146,7 @@ func prToString(pr github.PullRequest) string {
 	return fmt.Sprintf(expectedFmt, pr.Title, pr.Body, pr.Head.Ref, pr.Base.Ref, labels)
 }
 
-func (f *fghc) CreateIssue(org, repo, title, body string, milestone int, labels, assignees []string) (int, error) {
+func (f *fghc) CreateIssue(_, _, title, body string, _ int, labels, assignees []string) (int, error) {
 	f.Lock()
 	defer f.Unlock()
 
@@ -180,7 +180,7 @@ func (f *fghc) CreateIssue(org, repo, title, body string, milestone int, labels,
 	return num, nil
 }
 
-func (f *fghc) CreatePullRequest(org, repo, title, body, head, base string, canModify bool) (int, error) {
+func (f *fghc) CreatePullRequest(_, _, title, body, head, base string, _ bool) (int, error) {
 	f.Lock()
 	defer f.Unlock()
 
@@ -202,19 +202,19 @@ func (f *fghc) CreatePullRequest(org, repo, title, body, head, base string, canM
 	return num, nil
 }
 
-func (f *fghc) ListIssueComments(org, repo string, number int) ([]github.IssueComment, error) {
+func (f *fghc) ListIssueComments(_, _ string, _ int) ([]github.IssueComment, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.prComments, nil
 }
 
-func (f *fghc) GetIssueLabels(org, repo string, number int) ([]github.Label, error) {
+func (f *fghc) GetIssueLabels(_, _ string, _ int) ([]github.Label, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.prLabels, nil
 }
 
-func (f *fghc) ListOrgMembers(org, role string) ([]github.TeamMember, error) {
+func (f *fghc) ListOrgMembers(_, role string) ([]github.TeamMember, error) {
 	f.Lock()
 	defer f.Unlock()
 	if role != "all" {
@@ -223,7 +223,7 @@ func (f *fghc) ListOrgMembers(org, role string) ([]github.TeamMember, error) {
 	return f.orgMembers, nil
 }
 
-func (f *fghc) ListCollaborators(org, repo string) ([]github.User, error) {
+func (f *fghc) ListCollaborators(_, _ string) ([]github.User, error) {
 	f.Lock()
 	defer f.Unlock()
 	githubUsers := []github.User{}
@@ -234,7 +234,7 @@ func (f *fghc) ListCollaborators(org, repo string) ([]github.User, error) {
 	return githubUsers, nil
 }
 
-func (f *fghc) CreateFork(org, repo string) (string, error) {
+func (f *fghc) CreateFork(_, repo string) (string, error) {
 	return repo, nil
 }
 
@@ -294,11 +294,6 @@ func makeFakeRepoWithCommit(clients localgit.Clients, t *testing.T) (*localgit.L
 		t.Fatalf("Adding initial commit: %v", err)
 	}
 	return lg, c
-}
-
-func TestCherryPickIC(t *testing.T) {
-	t.Parallel()
-	testCherryPickIC(localgit.New, t)
 }
 
 func TestCherryPickICV2(t *testing.T) {
@@ -378,11 +373,6 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 	if got != expected {
 		t.Errorf("Expected (%d):\n%s\nGot (%d):\n%+v\n", len(expected), expected, len(got), got)
 	}
-}
-
-func TestCherryPickPR(t *testing.T) {
-	t.Parallel()
-	testCherryPickPR(localgit.New, t)
 }
 
 func TestCherryPickPRV2(t *testing.T) {
@@ -536,11 +526,6 @@ func testCherryPickPR(clients localgit.Clients, t *testing.T) {
 	}
 }
 
-func TestCherryPickOfCherryPickPR(t *testing.T) {
-	t.Parallel()
-	testCherryPickOfCherryPickPR(localgit.New, t)
-}
-
 func TestCherryPickOfCherryPickPRV2(t *testing.T) {
 	t.Parallel()
 	testCherryPickOfCherryPickPR(localgit.NewV2, t)
@@ -664,11 +649,6 @@ func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
 	if len(seenBranches) != len(expectedBranches) {
 		t.Fatalf("Expected to see PRs for %d branches, got %d (%v)", len(expectedBranches), len(seenBranches), seenBranches)
 	}
-}
-
-func TestCherryPickPRWithLabels(t *testing.T) {
-	t.Parallel()
-	testCherryPickPRWithLabels(localgit.New, t)
 }
 
 func TestCherryPickPRWithLabelsV2(t *testing.T) {
@@ -950,11 +930,6 @@ func TestCherryPickCreateIssue(t *testing.T) {
 	}
 }
 
-func TestCherryPickPRAssignments(t *testing.T) {
-	t.Parallel()
-	testCherryPickPRAssignments(localgit.New, t)
-}
-
 func TestCherryPickPRAssignmentsV2(t *testing.T) {
 	t.Parallel()
 	testCherryPickPRAssignments(localgit.NewV2, t)
@@ -1131,7 +1106,7 @@ type threadUnsafeFGHC struct {
 	orgRepoCountCalled int
 }
 
-func (tuf *threadUnsafeFGHC) EnsureFork(login, org, repo string) (string, error) {
+func (tuf *threadUnsafeFGHC) EnsureFork(_, _, _ string) (string, error) {
 	tuf.orgRepoCountCalled++
 	return "", errors.New("that is enough")
 }

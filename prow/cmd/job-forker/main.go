@@ -22,7 +22,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"k8s.io/test-infra/prow/flagutil"
-	"k8s.io/test-infra/prow/git/v2"
 	"k8s.io/test-infra/prow/logrusutil"
 	"k8s.io/test-infra/prow/pod-utils/downwardapi"
 
@@ -126,7 +125,7 @@ func main() {
 	if err != nil {
 		logrus.WithError(err).Fatal("Error getting GitHubClient")
 	}
-	gitClient, err := o.github.GitClient(o.dryRun)
+	gitClientFactory, err := o.github.GitClientFactory("", nil, o.dryRun, false)
 	if err != nil {
 		logrus.WithError(err).Fatal("Error getting Git client")
 	}
@@ -137,7 +136,7 @@ func main() {
 
 	githubServer := ghi.GithubServer{
 		Ghc:     githubClient,
-		Gcf:     git.ClientFactoryFrom(gitClient),
+		Gcf:     gitClientFactory,
 		Gc:      &ghi.CommitClient{},
 		BotUser: botUser,
 		Email:   o.gitEmail,

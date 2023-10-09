@@ -114,10 +114,14 @@ func constructClientFactoryOpts(githubClient github.Client, o options) (*gitv2.C
 		return name, email, nil
 	}
 
+	tokenGetter := func(_ string) (string, error) {
+		return string(secret.GetTokenGenerator(o.github.TokenPath)()), nil
+	}
+
 	clientFactoryOpts := gitv2.ClientFactoryOpts{
 		Censor:   secret.Censor,
 		Username: userGenerator,
-		Token:    secret.GetTokenGenerator(o.github.TokenPath),
+		Token:    tokenGetter,
 		GitUser:  gitUser,
 	}
 

@@ -37,18 +37,24 @@ type FakeInteractor struct{}
 type FakeCommitClient struct{}
 
 // Commit is a fake for Commit
-func (gc *FakeCommitClient) Commit(directory, name, email, message string, signoff bool) error {
+func (gc *FakeCommitClient) Commit(_, _, _, _ string, _ bool) error {
 	return nil
 }
 
 // ClientFromDir is a fake for ClientFromDir
-func (fgcf *FakeGitClientFactory) ClientFromDir(org, repo, dir string) (git.RepoClient, error) {
+func (fgcf *FakeGitClientFactory) ClientFromDir(_, _, _ string) (git.RepoClient, error) {
 	repoClient := new(FakeRepoClient)
 	return repoClient, nil
 }
 
 // ClientFor is a fake for ClientFor
-func (fgcf *FakeGitClientFactory) ClientFor(org, repo string) (git.RepoClient, error) {
+func (fgcf *FakeGitClientFactory) ClientFor(_, _ string) (git.RepoClient, error) {
+	repoClient := new(FakeRepoClient)
+	return repoClient, nil
+}
+
+// ClientForWithRepoOpts is a fake for ClientForWithRepoOpts
+func (fgcf *FakeGitClientFactory) ClientForWithRepoOpts(_, _ string, _ git.RepoOpts) (git.RepoClient, error) {
 	repoClient := new(FakeRepoClient)
 	return repoClient, nil
 }
@@ -61,22 +67,22 @@ func (fgcf *FakeGitClientFactory) Clean() error {
 //--------------------------------------------------------------------------------------//
 
 // Commit is a fake for Commit
-func (fp *FakePublisher) Commit(title, body string) error {
+func (fp *FakePublisher) Commit(_, _ string) error {
 	return nil
 }
 
 // PushToFork is a fake for PushToFork
-func (fp *FakePublisher) PushToFork(branch string, force bool) error {
+func (fp *FakePublisher) PushToFork(_ string, _ bool) error {
 	return nil
 }
 
 // PushToNamedFork is a fake for PushToNamedFork
-func (fp *FakePublisher) PushToNamedFork(forkName, branch string, force bool) error {
+func (fp *FakePublisher) PushToNamedFork(_, _ string, _ bool) error {
 	return nil
 }
 
 // PushToCentral is a fake for PushToCentral
-func (fp *FakePublisher) PushToCentral(branch string, force bool) error {
+func (fp *FakePublisher) PushToCentral(_ string, _ bool) error {
 	return nil
 }
 
@@ -93,12 +99,12 @@ func (fi *FakeInteractor) Clean() error {
 }
 
 // CommitExists is a fake for CommitExists
-func (fi *FakeInteractor) CommitExists(sha string) (bool, error) {
+func (fi *FakeInteractor) CommitExists(_ string) (bool, error) {
 	return true, nil
 }
 
 // ResetHard is a fake for ResetHard
-func (fi *FakeInteractor) ResetHard(commitlike string) error {
+func (fi *FakeInteractor) ResetHard(_ string) error {
 	return nil
 }
 
@@ -108,81 +114,91 @@ func (fi *FakeInteractor) IsDirty() (bool, error) {
 }
 
 // Checkout is a fake for Checkout
-func (fi *FakeInteractor) Checkout(commitlike string) error {
+func (fi *FakeInteractor) Checkout(_ string) error {
 	return nil
 }
 
 // RevParse is a fake for RevParse
-func (fi *FakeInteractor) RevParse(commitlike string) (string, error) {
+func (fi *FakeInteractor) RevParse(_ string) (string, error) {
 	return "", nil
 }
 
+// RevParseN is a fake for RevParseN
+func (fi *FakeInteractor) RevParseN(_ []string) (map[string]string, error) {
+	return nil, nil
+}
+
 // BranchExists is a fake for BranchExists
-func (fi *FakeInteractor) BranchExists(branch string) bool {
+func (fi *FakeInteractor) BranchExists(_ string) bool {
 	return true
 }
 
+// ObjectExists is a fake for ObjectExists
+func (fi *FakeInteractor) ObjectExists(_ string) (bool, error) {
+	return true, nil
+}
+
 // CheckoutNewBranch is a fake for CheckoutNewBranch
-func (fi *FakeInteractor) CheckoutNewBranch(branch string) error {
+func (fi *FakeInteractor) CheckoutNewBranch(_ string) error {
 	return nil
 }
 
 // Merge is a fake for Merge
-func (fi *FakeInteractor) Merge(commitlike string) (bool, error) {
+func (fi *FakeInteractor) Merge(_ string) (bool, error) {
 	return true, nil
 }
 
 // MergeWithStrategy is a fake for MergeWithStrategy
-func (fi *FakeInteractor) MergeWithStrategy(commitlike, mergeStrategy string, opts ...git.MergeOpt) (bool, error) {
+func (fi *FakeInteractor) MergeWithStrategy(_, _ string, _ ...git.MergeOpt) (bool, error) {
 	return true, nil
 }
 
 // MergeAndCheckout is a fake for MergeAndCheckout
-func (fi *FakeInteractor) MergeAndCheckout(baseSHA string, mergeStrategy string, headSHAs ...string) error {
+func (fi *FakeInteractor) MergeAndCheckout(_, _ string, _ ...string) error {
 	return nil
 }
 
 // Am is a fake for Am
-func (fi *FakeInteractor) Am(path string) error {
+func (fi *FakeInteractor) Am(_ string) error {
 	return nil
 }
 
 // Fetch is a fake for Fetch
-func (fi *FakeInteractor) Fetch(arg ...string) error {
+func (fi *FakeInteractor) Fetch(_ ...string) error {
 	return nil
 }
 
 // FetchRef is a fake for FetchRef
-func (fi *FakeInteractor) FetchRef(refspec string) error {
+func (fi *FakeInteractor) FetchRef(_ string) error {
 	return nil
 }
 
 // FetchFromRemote is a fake for FetchFromRemote
-func (fi *FakeInteractor) FetchFromRemote(remote git.RemoteResolver, branch string) error {
+func (fi *FakeInteractor) FetchFromRemote(_ git.RemoteResolver, _ string) error {
 	return nil
 }
 
 // CheckoutPullRequest is a fake for CheckoutPullRequest
-func (fi *FakeInteractor) CheckoutPullRequest(number int) error {
+func (fi *FakeInteractor) CheckoutPullRequest(_ int) error {
 	return nil
 }
 
 // Config is a fake for Config
-func (fi *FakeInteractor) Config(args ...string) error {
+func (fi *FakeInteractor) Config(_ ...string) error {
 	return nil
 }
 
 // Diff is a fake for Diff
-func (fi *FakeInteractor) Diff(head, sha string) (changes []string, err error) {
+func (fi *FakeInteractor) Diff(_, _ string) (changes []string, err error) {
 	return []string{}, nil
 }
 
 // MergeCommitsExistBetween is a fake for MergeCommitsExistBetween
-func (fi *FakeInteractor) MergeCommitsExistBetween(target, head string) (bool, error) {
+func (fi *FakeInteractor) MergeCommitsExistBetween(_, _ string) (bool, error) {
 	return true, nil
 }
 
 // ShowRef is a fake for ShowRef
-func (fi *FakeInteractor) ShowRef(commitlike string) (string, error) {
+func (fi *FakeInteractor) ShowRef(_ string) (string, error) {
 	return "", nil
 }

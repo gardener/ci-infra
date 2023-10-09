@@ -1,7 +1,7 @@
 # ----------------
 # Build container
 # ----------------
-FROM golang:1.19.13 AS builder
+FROM golang:1.21.1 AS builder
 LABEL stage=intermediate
 # Copy entire repository to image
 COPY . /code
