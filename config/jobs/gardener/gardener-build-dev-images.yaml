@@ -53,13 +53,13 @@ postsubmits:
         operator: "Equal"
         value: "high-cpu"
         effect: "NoSchedule"
-  - name: post-gardener-build-gardenertools-images
+  - name: post-gardener-build-golang-test-images
     cluster: gardener-prow-trusted
     run_if_changed: '^go\.mod|^hack\/tools\/image|^hack\/tools\.mk'
     branches:
     - ^master$
     annotations:
-      description: Build gardenertools images on master branch
+      description: Build golang-test images on master branch
       testgrid-dashboards: gardener-gardener
       testgrid-days-of-results: "60" 
     decorate: true
@@ -78,7 +78,7 @@ postsubmits:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
         - --registry=eu.gcr.io/gardener-project/ci-infra
-        - --target=gardenertools
+        - --target=golang-test
         - --context=hack/tools/image
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
