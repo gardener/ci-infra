@@ -3344,6 +3344,27 @@ repos:
         target: prs
         prowPlugin: trigger
         addedBy: prow
+      - color: e11d21
+        description: Indicates the PR's author has not signed the cla-assistant.io CLA.
+        name: 'cla: no'
+        target: prs
+        prowPlugin: cla-assistant
+        isExternalPlugin: true
+        addedBy: prow
+      - color: bfe5bf
+        description: Indicates the PR's author has signed the cla-assistant.io CLA.
+        name: 'cla: yes'
+        target: prs
+        prowPlugin: cla-assistant
+        isExternalPlugin: true
+        addedBy: prow
+      - color: e11d21
+        description: Indicates a PR cannot be merged because it has merge conflicts with HEAD.
+        name: needs-rebase
+        target: prs
+        prowPlugin: needs-rebase
+        isExternalPlugin: true
+        addedBy: prow
   gardener/landscaper:
     labels:
       - color: b60205
