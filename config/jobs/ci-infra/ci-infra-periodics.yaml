@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20231012-361aea8
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20231019-52945f7
       command:
       - /job-forker
       args:
@@ -319,7 +319,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231012-5bc8827-1.21
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231019-b7633eb-1.21
       command:
       - make
       args:
@@ -344,7 +344,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20231012-361aea8
+    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20231019-52945f7
       command:
       - /branch-cleaner
       args:
