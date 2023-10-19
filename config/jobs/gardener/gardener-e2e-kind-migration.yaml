@@ -17,7 +17,7 @@ presubmits:
       fork-per-release: "true"
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/krte:v20231012-361aea8-1.21
+      - image: eu.gcr.io/gardener-project/ci-infra/krte:v20231019-3016ef6-1.21
         command:
         - wrapper.sh
         - bash
@@ -57,7 +57,7 @@ periodics:
     fork-per-release: "true"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/krte:v20231012-361aea8-1.21
+    - image: eu.gcr.io/gardener-project/ci-infra/krte:v20231019-3016ef6-1.21
       command:
       - wrapper.sh
       - bash
