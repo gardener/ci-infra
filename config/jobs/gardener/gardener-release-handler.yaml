@@ -15,7 +15,7 @@ postsubmits:
     spec:
       containers:
       - name: release-handler
-        image: eu.gcr.io/gardener-project/ci-infra/release-handler:v20231019-52945f7
+        image: eu.gcr.io/gardener-project/ci-infra/release-handler:v20231019-3016ef6
         command:
         - /release-handler
         args:
