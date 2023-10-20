@@ -313,6 +313,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 			Base: github.PullRequestBranch{
 				Ref: "master",
 			},
+			User:   github.User{Login: "foo-author"},
 			Merged: true,
 			Title:  "This is a fix for X",
 			Body:   body,
@@ -344,7 +345,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 	expectedTitle := "[stage] This is a fix for X"
-	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer\nUpdate the magic number from 42 to 49\n```", iNumber)
+	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer github.com/foo/bar #%d @foo-author\nUpdate the magic number from 42 to 49\n```", iNumber, iNumber)
 	expectedBase := "stage"
 	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, iNumber, expectedBase)
 	expectedLabels := []string{}
@@ -1025,13 +1026,13 @@ func TestHandleLocks(t *testing.T) {
 
 	go func() {
 		defer close(routine1Done)
-		if err := s.handle(l, "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
+		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
 			t.Errorf("routine failed: %v", err)
 		}
 	}()
 	go func() {
 		defer close(routine2Done)
-		if err := s.handle(l, "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
+		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
 			t.Errorf("routine failed: %v", err)
 		}
 	}()
