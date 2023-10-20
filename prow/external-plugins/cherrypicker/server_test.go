@@ -1102,6 +1102,66 @@ func TestEnsureForkExists(t *testing.T) {
 
 }
 
+func TestReleaseNoteFromParentPR(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "test1",
+			input:    "```feature developer\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test2",
+			input:    "```feature developer github.com/foobar/barfoo #999 @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foobar/barfoo #999 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test3",
+			input:    "```feature developer github.com/foobar/barfoo #999\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foobar/barfoo #999 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test4",
+			input:    "```feature developer github.com/foobar/barfoo\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test5",
+			input:    "```feature developer @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test6",
+			input:    "```feature developer #999 @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test7",
+			input:    "```feature developer github.com/foobar/barfoo @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test8",
+			input:    "```feature developer #999\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := releaseNoteFromParentPR("foo-author", "foo", "bar", 123, tc.input)
+			if result != tc.expected {
+				t.Errorf("Expected: %q\n Got: %q", tc.expected, result)
+			}
+		})
+	}
+}
+
 type threadUnsafeFGHC struct {
 	*fghc
 	orgRepoCountCalled int

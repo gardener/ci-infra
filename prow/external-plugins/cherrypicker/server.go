@@ -43,7 +43,7 @@ const pluginName = "cherrypick"
 const defaultLabelPrefix = "cherrypick/"
 
 var cherryPickRe = regexp.MustCompile(`(?m)^(?:/cherrypick|/cherry-pick)\s+(.+)$`)
-var releaseNoteRe = regexp.MustCompile("(?s)(```(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)\\s(.+?)```)")
+var releaseNoteRe = regexp.MustCompile(`(\x60\x60\x60(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)( github\.com/\S+?/\S+?)?( #\d+?)?( @\S+?)?\s*\n(.+?)\n\x60\x60\x60)`)
 var titleTargetBranchIndicatorTemplate = `[%s] `
 
 type githubClient interface {
@@ -659,18 +659,27 @@ func normalize(input string) string {
 // releaseNoteNoteFromParentPR gets the release note from the
 // parent PR and formats it as per the PR template so that
 // it can be copied to the cherry-pick PR.
-func releaseNoteFromParentPR(author, org, repo string, num int, body string) string {
+func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) string {
 	potentialMatch := releaseNoteRe.FindStringSubmatch(body)
 	if potentialMatch == nil {
 		return ""
 	}
-	source := fmt.Sprintf("github.com/%s/%s", org, repo)
-	return fmt.Sprintf("```%s %s %s #%d @%s\n%s\n```",
+	source := strings.TrimSpace(potentialMatch[4])
+	ref := strings.TrimSpace(potentialMatch[5])
+	if source == "" || ref == "" {
+		source = fmt.Sprintf("github.com/%s/%s", org, repo)
+		ref = fmt.Sprintf("#%d", num)
+	}
+	author := strings.TrimSpace(potentialMatch[6])
+	if author == "" {
+		author = fmt.Sprintf("@%s", prAuthor)
+	}
+	return fmt.Sprintf("```%s %s %s %s %s\n%s\n```",
 		strings.TrimSpace(potentialMatch[2]),
 		strings.TrimSpace(potentialMatch[3]),
 		source,
-		num,
+		ref,
 		author,
-		strings.TrimSpace(potentialMatch[4]),
+		strings.TrimSpace(potentialMatch[7]),
 	)
 }
