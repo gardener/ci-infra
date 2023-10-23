@@ -251,7 +251,7 @@ func (s *Server) handleIssueComment(l *logrus.Entry, ic github.IssueCommentEvent
 		"target_branch": targetBranch,
 	})
 	l.Debug("Cherrypick request.")
-	return s.handle(l, pr.User.Login, ic.Comment.User.Login, &ic.Comment, org, repo, targetBranch, baseBranch, title, body, num)
+	return s.handle(l, pr.User.Login, ic.Comment.User.Login, &ic.Comment, org, repo, targetBranch, baseBranch, title, body, num, pr.Labels)
 }
 
 func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent) error {
@@ -373,7 +373,7 @@ func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent)
 				"target_branch": targetBranch,
 			})
 			l.Debug("Cherrypick request.")
-			err := s.handle(l, pr.User.Login, requestor, ic, org, repo, targetBranch, baseBranch, title, body, num)
+			err := s.handle(l, pr.User.Login, requestor, ic, org, repo, targetBranch, baseBranch, title, body, num, pr.Labels)
 			if err != nil {
 				errs = append(errs, fmt.Errorf("failed to create cherrypick: %w", err))
 			}
@@ -384,7 +384,7 @@ func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent)
 
 var cherryPickBranchFmt = "cherry-pick-%d-to-%s"
 
-func (s *Server) handle(logger *logrus.Entry, author, requestor string, comment *github.IssueComment, org, repo, targetBranch, baseBranch, title, body string, num int) error {
+func (s *Server) handle(logger *logrus.Entry, author, requestor string, comment *github.IssueComment, org, repo, targetBranch, baseBranch, title, body string, num int, labels []github.Label) error {
 	var lock *sync.Mutex
 	func() {
 		s.mapLock.Lock()
@@ -523,6 +523,13 @@ func (s *Server) handle(logger *logrus.Entry, author, requestor string, comment 
 	for _, label := range s.labels {
 		if err := s.ghc.AddLabel(org, repo, createdNum, label); err != nil {
 			return fmt.Errorf("failed to add label %s: %w", label, err)
+		}
+	}
+	for _, label := range labels {
+		if strings.HasPrefix(label.Name, "area/") || strings.HasPrefix(label.Name, "kind/") {
+			if err := s.ghc.AddLabel(org, repo, createdNum, label.Name); err != nil {
+				return fmt.Errorf("failed to add label %s: %w", label, err)
+			}
 		}
 	}
 	if s.prowAssignments {

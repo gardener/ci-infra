@@ -1026,13 +1026,13 @@ func TestHandleLocks(t *testing.T) {
 
 	go func() {
 		defer close(routine1Done)
-		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
+		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0, []github.Label{}); err != nil {
 			t.Errorf("routine failed: %v", err)
 		}
 	}()
 	go func() {
 		defer close(routine2Done)
-		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
+		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0, []github.Label{}); err != nil {
 			t.Errorf("routine failed: %v", err)
 		}
 	}()
