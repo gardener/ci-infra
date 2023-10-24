@@ -313,6 +313,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 			Base: github.PullRequestBranch{
 				Ref: "master",
 			},
+			User:   github.User{Login: "foo-author"},
 			Merged: true,
 			Title:  "This is a fix for X",
 			Body:   body,
@@ -344,7 +345,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 	expectedTitle := "[stage] This is a fix for X"
-	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer\nUpdate the magic number from 42 to 49\n```", iNumber)
+	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer github.com/foo/bar #%d @foo-author\nUpdate the magic number from 42 to 49\n```", iNumber, iNumber)
 	expectedBase := "stage"
 	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, iNumber, expectedBase)
 	expectedLabels := []string{}
@@ -1025,13 +1026,13 @@ func TestHandleLocks(t *testing.T) {
 
 	go func() {
 		defer close(routine1Done)
-		if err := s.handle(l, "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
+		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0, []github.Label{}); err != nil {
 			t.Errorf("routine failed: %v", err)
 		}
 	}()
 	go func() {
 		defer close(routine2Done)
-		if err := s.handle(l, "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0); err != nil {
+		if err := s.handle(l, "", "", &github.IssueComment{}, "org", "repo", "targetBranch", "baseBranch", "title", "body", 0, []github.Label{}); err != nil {
 			t.Errorf("routine failed: %v", err)
 		}
 	}()
@@ -1099,6 +1100,66 @@ func TestEnsureForkExists(t *testing.T) {
 		})
 	}
 
+}
+
+func TestReleaseNoteFromParentPR(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "test1",
+			input:    "```feature developer\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test2",
+			input:    "```feature developer github.com/foobar/barfoo #999 @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foobar/barfoo #999 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test3",
+			input:    "```feature developer github.com/foobar/barfoo #999\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foobar/barfoo #999 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test4",
+			input:    "```feature developer github.com/foobar/barfoo\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test5",
+			input:    "```feature developer @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test6",
+			input:    "```feature developer #999 @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test7",
+			input:    "```feature developer github.com/foobar/barfoo @bar-author\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @bar-author\nUpdate the magic number from 42 to 49\n```",
+		},
+		{
+			name:     "test8",
+			input:    "```feature developer #999\nUpdate the magic number from 42 to 49\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := releaseNoteFromParentPR("foo-author", "foo", "bar", 123, tc.input)
+			if result != tc.expected {
+				t.Errorf("Expected: %q\n Got: %q", tc.expected, result)
+			}
+		})
+	}
 }
 
 type threadUnsafeFGHC struct {

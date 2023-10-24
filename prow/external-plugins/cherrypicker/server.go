@@ -43,7 +43,7 @@ const pluginName = "cherrypick"
 const defaultLabelPrefix = "cherrypick/"
 
 var cherryPickRe = regexp.MustCompile(`(?m)^(?:/cherrypick|/cherry-pick)\s+(.+)$`)
-var releaseNoteRe = regexp.MustCompile("(?s)(```(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)\\s(.+?)```)")
+var releaseNoteRe = regexp.MustCompile(`(\x60\x60\x60(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)( github\.com/\S+?/\S+?)?( #\d+?)?( @\S+?)?\s*\n(.+?)\n\x60\x60\x60)`)
 var titleTargetBranchIndicatorTemplate = `[%s] `
 
 type githubClient interface {
@@ -251,7 +251,7 @@ func (s *Server) handleIssueComment(l *logrus.Entry, ic github.IssueCommentEvent
 		"target_branch": targetBranch,
 	})
 	l.Debug("Cherrypick request.")
-	return s.handle(l, ic.Comment.User.Login, &ic.Comment, org, repo, targetBranch, baseBranch, title, body, num)
+	return s.handle(l, pr.User.Login, ic.Comment.User.Login, &ic.Comment, org, repo, targetBranch, baseBranch, title, body, num, pr.Labels)
 }
 
 func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent) error {
@@ -373,7 +373,7 @@ func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent)
 				"target_branch": targetBranch,
 			})
 			l.Debug("Cherrypick request.")
-			err := s.handle(l, requestor, ic, org, repo, targetBranch, baseBranch, title, body, num)
+			err := s.handle(l, pr.User.Login, requestor, ic, org, repo, targetBranch, baseBranch, title, body, num, pr.Labels)
 			if err != nil {
 				errs = append(errs, fmt.Errorf("failed to create cherrypick: %w", err))
 			}
@@ -384,7 +384,7 @@ func (s *Server) handlePullRequest(l *logrus.Entry, pre github.PullRequestEvent)
 
 var cherryPickBranchFmt = "cherry-pick-%d-to-%s"
 
-func (s *Server) handle(logger *logrus.Entry, requestor string, comment *github.IssueComment, org, repo, targetBranch, baseBranch, title, body string, num int) error {
+func (s *Server) handle(logger *logrus.Entry, author, requestor string, comment *github.IssueComment, org, repo, targetBranch, baseBranch, title, body string, num int, labels []github.Label) error {
 	var lock *sync.Mutex
 	func() {
 		s.mapLock.Lock()
@@ -503,9 +503,9 @@ func (s *Server) handle(logger *logrus.Entry, requestor string, comment *github.
 	// Open a PR in GitHub.
 	var cherryPickBody string
 	if s.prowAssignments {
-		cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(body))
+		cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(author, org, repo, num, body))
 	} else {
-		cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(body))
+		cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(author, org, repo, num, body))
 	}
 	head := fmt.Sprintf("%s:%s", s.botUser.Login, newBranch)
 	createdNum, err := s.ghc.CreatePullRequest(org, repo, title, cherryPickBody, head, targetBranch, true)
@@ -523,6 +523,13 @@ func (s *Server) handle(logger *logrus.Entry, requestor string, comment *github.
 	for _, label := range s.labels {
 		if err := s.ghc.AddLabel(org, repo, createdNum, label); err != nil {
 			return fmt.Errorf("failed to add label %s: %w", label, err)
+		}
+	}
+	for _, label := range labels {
+		if strings.HasPrefix(label.Name, "area/") || strings.HasPrefix(label.Name, "kind/") {
+			if err := s.ghc.AddLabel(org, repo, createdNum, label.Name); err != nil {
+				return fmt.Errorf("failed to add label %s: %w", label, err)
+			}
 		}
 	}
 	if s.prowAssignments {
@@ -659,10 +666,27 @@ func normalize(input string) string {
 // releaseNoteNoteFromParentPR gets the release note from the
 // parent PR and formats it as per the PR template so that
 // it can be copied to the cherry-pick PR.
-func releaseNoteFromParentPR(body string) string {
+func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) string {
 	potentialMatch := releaseNoteRe.FindStringSubmatch(body)
 	if potentialMatch == nil {
 		return ""
 	}
-	return fmt.Sprintf("```%s %s\n%s\n```", strings.TrimSpace(potentialMatch[2]), strings.TrimSpace(potentialMatch[3]), strings.TrimSpace(potentialMatch[4]))
+	source := strings.TrimSpace(potentialMatch[4])
+	ref := strings.TrimSpace(potentialMatch[5])
+	if source == "" || ref == "" {
+		source = fmt.Sprintf("github.com/%s/%s", org, repo)
+		ref = fmt.Sprintf("#%d", num)
+	}
+	author := strings.TrimSpace(potentialMatch[6])
+	if author == "" {
+		author = fmt.Sprintf("@%s", prAuthor)
+	}
+	return fmt.Sprintf("```%s %s %s %s %s\n%s\n```",
+		strings.TrimSpace(potentialMatch[2]),
+		strings.TrimSpace(potentialMatch[3]),
+		source,
+		ref,
+		author,
+		strings.TrimSpace(potentialMatch[7]),
+	)
 }
