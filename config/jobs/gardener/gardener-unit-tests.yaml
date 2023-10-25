@@ -26,7 +26,6 @@ presubmits:
         - format
         - test
         - test-prometheus
-        - check-docforge
         resources:
           limits:
             memory: 16Gi
@@ -64,7 +63,6 @@ periodics:
       - format
       - test
       - test-prometheus
-      - check-docforge
       resources:
         limits:
           memory: 16Gi
