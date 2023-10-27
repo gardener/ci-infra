@@ -11,7 +11,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20231026-a68b11e
+    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20231027-10cc5b5
       command:
       - /branch-cleaner
       args:
