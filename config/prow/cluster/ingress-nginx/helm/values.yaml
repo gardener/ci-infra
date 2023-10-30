@@ -1,5 +1,6 @@
 # Check values.yaml of ingress-nginx for help https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 controller:
+  enableAnnotationValidations: true
   replicaCount: 3
   resources:
     requests:
