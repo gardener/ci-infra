@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for Gardener extension registry-cache developments in pull requests
     spec:
       containers:
-      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231026-af2f827-1.21
+      - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231030-59c9cc5-1.21
         command:
         - make
         args:
@@ -40,7 +40,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231026-af2f827-1.21
+    - image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231030-59c9cc5-1.21
       command:
       - make
       args:
