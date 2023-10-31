@@ -66,6 +66,18 @@ images:
   tags:
   - v1.24.1
   - v1.26.4
+- source: ghcr.io/credativ/vali
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/vali
+  tags:
+  - v2.2.13
+- source: ghcr.io/credativ/valitail
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/valitail
+  tags:
+  - v2.2.13
+- source: ghcr.io/credativ/plutono
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/plutono
+  tags:
+  - v7.5.28
 # gardener/pkg/provider-local/images.yaml
 - source: kindest/local-path-provisioner
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-provisioner
@@ -112,6 +124,15 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/pod2daemon-flexvol
   tags:
   - v3.22.2
+# gardener-extension-provider-aws/imagevector/images.yaml
+- source: public.ecr.aws/eks/aws-load-balancer-controller
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/eks/aws-load-balancer-controller
+  tags:
+  - v2.6.1
+- source: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/ebs-csi-driver/volume-modifier-for-k8s
+  tags:
+  - v0.1.3
 # gardener-extension-provider-equinix-metal/charts/images.yaml
 - source: equinix/cloud-provider-equinix-metal
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/equinix/cloud-provider-equinix-metal
