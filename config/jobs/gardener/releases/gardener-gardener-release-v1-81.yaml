@@ -425,54 +425,6 @@ periodics:
         requests:
           cpu: "6"
           memory: 8Gi
-postsubmits:
-  gardener/gardener:
-  - annotations:
-      created-by-job-forker: "true"
-      description: Gardener development images build on master branch
-      testgrid-dashboards: gardener-gardener
-      testgrid-days-of-results: "60"
-    branches:
-    - release-v1.81
-    cluster: gardener-prow-trusted
-    decorate: true
-    max_concurrency: 1
-    name: post-gardener-build-dev-images-release-v1-81
-    skip_if_only_changed: ^VERSION$
-    spec:
-      containers:
-      - args:
-        - --log-level=info
-        - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/gardener
-        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
-        - --target=apiserver
-        - --target=controller-manager
-        - --target=scheduler
-        - --target=gardenlet
-        - --target=admission-controller
-        - --target=resource-manager
-        - --target=gardener-extension-provider-local
-        - --target=operator
-        - --add-version-tag=true
-        - --add-version-sha-tag=true
-        - --inject-effective-version=true
-        command:
-        - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231030-67cd5d7
-        name: image-builder
-        resources:
-          requests:
-            cpu: "6"
-            memory: 7Gi
-      nodeSelector:
-        dedicated: high-cpu
-      serviceAccountName: image-builder
-      tolerations:
-      - effect: NoSchedule
-        key: dedicated
-        operator: Equal
-        value: high-cpu
 presubmits:
   gardener/gardener:
   - always_run: true
@@ -849,49 +801,6 @@ presubmits:
           requests:
             cpu: "6"
             memory: 7Gi
-  - always_run: false
-    annotations:
-      created-by-job-forker: "true"
-      description: Publish gardener development images on pull requests
-    branches:
-    - release-v1.81
-    cluster: gardener-prow-trusted
-    decorate: true
-    name: pull-gardener-publish-test-images-release-v1-81
-    optional: true
-    spec:
-      containers:
-      - args:
-        - --log-level=info
-        - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/gardener
-        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
-        - --target=apiserver
-        - --target=controller-manager
-        - --target=scheduler
-        - --target=gardenlet
-        - --target=admission-controller
-        - --target=resource-manager
-        - --target=gardener-extension-provider-local
-        - --target=operator
-        - --add-version-sha-tag=true
-        - --inject-effective-version=true
-        command:
-        - /image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231030-67cd5d7
-        name: image-builder
-        resources:
-          requests:
-            cpu: "6"
-            memory: 7Gi
-      nodeSelector:
-        dedicated: high-cpu
-      serviceAccountName: image-builder
-      tolerations:
-      - effect: NoSchedule
-        key: dedicated
-        operator: Equal
-        value: high-cpu
   - always_run: true
     annotations:
       created-by-job-forker: "true"
