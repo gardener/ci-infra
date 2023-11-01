@@ -24,7 +24,7 @@ spec:
         image: gcr.io/k8s-prow/ghproxy:v20231027-9cda73bb73
         args:
         - --cache-dir=/cache
-        - --cache-sizeGB=99
+        - --cache-sizeGB=9
         - --serve-metrics=true
         ports:
         - name: main
@@ -38,11 +38,3 @@ spec:
       - name: cache
         persistentVolumeClaim:
           claimName: ghproxy
-#      # run on our dedicated node
-#      tolerations:
-#      - key: "dedicated"
-#        operator: "Equal"
-#        value: "ghproxy"
-#        effect: "NoSchedule"
-#      nodeSelector:
-#        dedicated: "ghproxy"
