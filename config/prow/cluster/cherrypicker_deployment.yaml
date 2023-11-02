@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: cherrypicker
-        image: eu.gcr.io/gardener-project/ci-infra/cherrypicker:v20231030-67cd5d7
+        image: eu.gcr.io/gardener-project/ci-infra/cherrypicker:v20231102-710ef09
         imagePullPolicy: Always
         args:
         - --github-token-path=/etc/github/token
