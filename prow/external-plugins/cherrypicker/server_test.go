@@ -37,7 +37,6 @@ var fakePR prNumberGenerator
 
 type fghc struct {
 	sync.Mutex
-	pr       *github.PullRequest
 	isMember bool
 
 	diff       []byte
@@ -77,10 +76,15 @@ func (f *fghc) AssignIssue(_, _ string, number int, logins []string) error {
 	return nil
 }
 
-func (f *fghc) GetPullRequest(_, _ string, _ int) (*github.PullRequest, error) {
+func (f *fghc) GetPullRequest(_, _ string, num int) (*github.PullRequest, error) {
 	f.Lock()
 	defer f.Unlock()
-	return f.pr, nil
+	for _, pr := range f.prs {
+		if pr.Number == num {
+			return &pr, nil
+		}
+	}
+	return nil, fmt.Errorf("PR #%d not found", num)
 }
 
 func (f *fghc) GetPullRequestDiff(_, _ string, _ int) ([]byte, error) {
@@ -99,6 +103,18 @@ func (f *fghc) GetPullRequests(_, _ string) ([]github.PullRequest, error) {
 	f.Lock()
 	defer f.Unlock()
 	return f.prs, nil
+}
+
+func (f *fghc) EditPullRequest(_, _ string, num int, pullRequest *github.PullRequest) (*github.PullRequest, error) {
+	f.Lock()
+	defer f.Unlock()
+	for i, pr := range f.prs {
+		if pr.Number == num {
+			f.prs[i] = *pullRequest
+			return pullRequest, nil
+		}
+	}
+	return nil, fmt.Errorf("PR #%d not found", num)
 }
 
 func (f *fghc) CreateComment(org, repo string, number int, comment string) error {
@@ -309,14 +325,17 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 	}
 
 	ghc := &fghc{
-		pr: &github.PullRequest{
-			Base: github.PullRequestBranch{
-				Ref: "master",
+		prs: []github.PullRequest{
+			{
+				Number: iNumber,
+				Base: github.PullRequestBranch{
+					Ref: "master",
+				},
+				User:   github.User{Login: "foo-author"},
+				Merged: true,
+				Title:  "This is a fix for X",
+				Body:   body,
 			},
-			User:   github.User{Login: "foo-author"},
-			Merged: true,
-			Title:  "This is a fix for X",
-			Body:   body,
 		},
 		isMember: true,
 		patch:    patch,
@@ -345,7 +364,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 	expectedTitle := "[stage] This is a fix for X"
-	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer github.com/foo/bar #%d @foo-author\nUpdate the magic number from 42 to 49\n```", iNumber, iNumber)
+	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer github.com/foo/bar #%d @foo-author\nUpdate the magic number from 42 to 49\n```", iNumber, iNumber+1)
 	expectedBase := "stage"
 	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, iNumber, expectedBase)
 	expectedLabels := []string{}
@@ -370,7 +389,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 	if err := s.handleIssueComment(logrus.NewEntry(logrus.StandardLogger()), ic); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	got := prToString(ghc.prs[0])
+	got := prToString(ghc.prs[1])
 	if got != expected {
 		t.Errorf("Expected (%d):\n%s\nGot (%d):\n%+v\n", len(expected), expected, len(got), got)
 	}
@@ -948,13 +967,16 @@ func testCherryPickPRAssignments(clients localgit.Clients, t *testing.T) {
 			Login: "wiseguy",
 		}
 		ghc := &fghc{
-			pr: &github.PullRequest{
-				Base: github.PullRequestBranch{
-					Ref: "master",
+			prs: []github.PullRequest{
+				{
+					Number: iNumber,
+					Base: github.PullRequestBranch{
+						Ref: "master",
+					},
+					Merged: true,
+					Title:  "This is a fix for X",
+					Body:   body,
 				},
-				Merged: true,
-				Title:  "This is a fix for X",
-				Body:   body,
 			},
 			isMember: true,
 			patch:    patch,
@@ -1005,7 +1027,7 @@ func testCherryPickPRAssignments(clients localgit.Clients, t *testing.T) {
 			expected = append(expected, user)
 		}
 
-		got := ghc.prs[0].Assignees
+		got := ghc.prs[1].Assignees
 		if !cmp.Equal(got, expected) {
 			t.Errorf("Expected (%d):\n+%v\nGot (%d):\n%+v\n", len(expected), expected, len(got), got)
 		}
