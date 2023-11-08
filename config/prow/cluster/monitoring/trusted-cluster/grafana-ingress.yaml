@@ -9,7 +9,7 @@ metadata:
     dns.gardener.cloud/class: garden
     dns.gardener.cloud/dnsnames: monitoring.prow.gardener.cloud
     nginx.ingress.kubernetes.io/auth-url: https://oauth2.prow.gardener.cloud/oauth2/auth
-    nginx.ingress.kubernetes.io/auth-signin: https://oauth2.prow.gardener.cloud/oauth2/start?rd=https%3A//monitoring.prow.gardener.cloud
+    nginx.ingress.kubernetes.io/auth-signin: https://oauth2.prow.gardener.cloud/oauth2/start?rd=https://monitoring.prow.gardener.cloud
 spec:
   rules:
   - host: monitoring.prow.gardener.cloud
