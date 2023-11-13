@@ -54,6 +54,7 @@ type githubClient interface {
 	CreatePullRequest(org, repo, title, body, head, base string, canModify bool) (int, error)
 	CreateIssue(org, repo, title, body string, milestone int, labels, assignees []string) (int, error)
 	EnsureFork(forkingUser, org, repo string) (string, error)
+	EditPullRequest(org, repo string, number int, pr *github.PullRequest) (*github.PullRequest, error)
 	GetPullRequest(org, repo string, number int) (*github.PullRequest, error)
 	GetPullRequestPatch(org, repo string, number int) ([]byte, error)
 	GetPullRequests(org, repo string) ([]github.PullRequest, error)
@@ -518,7 +519,25 @@ func (s *Server) handle(logger *logrus.Entry, author, requestor string, comment 
 	resp := fmt.Sprintf("new pull request created: #%d", createdNum)
 	logger.Info("new pull request created")
 	if err := s.createComment(logger, org, repo, num, comment, resp); err != nil {
-		return fmt.Errorf("failed to create comment: %w", err)
+		logger.WithError(err).Warn("failed to create comment")
+	}
+	// The PR reference in the release note is not correct yet, because number of the new PR was not known.
+	// Hence, we update the cherry-pick PR with the correct release notes after its creation.
+	logger.Info("updating PR references in release notes of cherry-pick pull request")
+	prUpdateErrorResponse := fmt.Sprintf("Failed updating the PR references in release notes. Please change the references manually from #%d to #%d", num, createdNum)
+	createdPR, err := s.ghc.GetPullRequest(org, repo, createdNum)
+	if err == nil {
+		if s.prowAssignments {
+			cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(author, org, repo, createdNum, body))
+		} else {
+			cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(author, org, repo, createdNum, body))
+		}
+		createdPR.Body = cherryPickBody
+		if _, err := s.ghc.EditPullRequest(org, repo, createdNum, createdPR); err != nil {
+			logger.WithError(utilerrors.NewAggregate([]error{err, s.ghc.CreateComment(org, repo, createdNum, prUpdateErrorResponse)})).Warn("failed to update cherry-pick pull request")
+		}
+	} else {
+		logger.WithError(utilerrors.NewAggregate([]error{err, s.ghc.CreateComment(org, repo, createdNum, prUpdateErrorResponse)})).Warn("failed to get cherry-pick pull request")
 	}
 	for _, label := range s.labels {
 		if err := s.ghc.AddLabel(org, repo, createdNum, label); err != nil {
