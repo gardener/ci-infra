@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for landscaper developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20231012-0288f8bc6c-master
+      - image: gcr.io/k8s-staging-test-infra/krte:v20231114-d60f9688d6-master
         command:
         - wrapper.sh
         - bash

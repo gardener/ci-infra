@@ -16,7 +16,7 @@ presubmits:
         description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
       spec:
         containers:
-          - image: gcr.io/k8s-staging-test-infra/krte:v20231012-0288f8bc6c-master
+          - image: gcr.io/k8s-staging-test-infra/krte:v20231114-d60f9688d6-master
             command:
             - wrapper.sh
             - bash
@@ -50,7 +50,7 @@ periodics:
       testgrid-days-of-results: "60"
     spec:
       containers:
-        - image: gcr.io/k8s-staging-test-infra/krte:v20231012-0288f8bc6c-master
+        - image: gcr.io/k8s-staging-test-infra/krte:v20231114-d60f9688d6-master
           command:
           - wrapper.sh
           - bash
