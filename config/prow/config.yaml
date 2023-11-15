@@ -48,7 +48,7 @@ sinker:
 deck:
   spyglass:
     size_limit: 100000000 # 100MB
-    gcs_browser_prefix: https://gcsweb.gardener.cloud/gcs/
+    gcs_browser_prefix: https://gcsweb.prow.gardener.cloud/gcs/
     testgrid_config: gs://gardener-prow/testgrid/config
     testgrid_root: https://testgrid.k8s.io/
     lenses:

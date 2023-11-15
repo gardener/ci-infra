@@ -9,10 +9,10 @@ metadata:
     cert.gardener.cloud/issuer: ci-issuer
     cert.gardener.cloud/purpose: managed
     dns.gardener.cloud/class: garden
-    dns.gardener.cloud/dnsnames: gcsweb.gardener.cloud
+    dns.gardener.cloud/dnsnames: gcsweb.prow.gardener.cloud
 spec:
   rules:
-  - host: gcsweb.gardener.cloud
+  - host: gcsweb.prow.gardener.cloud
     http:
       paths:
       - path: /
@@ -24,5 +24,5 @@ spec:
               number: 80
   tls:
   - hosts:
-    - gcsweb.gardener.cloud
+    - gcsweb.prow.gardener.cloud
     secretName: gcsweb-ingress-tls
