@@ -1,0 +1,42 @@
+fullnameOverride: athens-proxy
+
+replicaCount: 1
+
+ingress:
+  enabled: false
+
+storage:
+  type: disk
+  disk:
+    storageRoot: "/var/lib/athens"
+    persistence:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 20Gi
+      storageClass: gce-ssd
+
+configEnvVars:
+- name: ATHENS_GO_BINARY_ENV_VARS
+  value: GOPROXY=https://proxy.golang.org,direct
+
+goGetWorkers: 5
+
+metrics:
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: worker.gardener.cloud/system-components
+              operator: In
+              values:
+                - "true"
+
+resources:
+  requests:
+    cpu: 2
+    memory: 512Mi

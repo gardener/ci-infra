@@ -106,4 +106,14 @@ kubectl config use-context gardener-prow-build
 kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/monitoring/build-cluster"
 echo "$(color-green "done")"
 
+echo "$(color-step "Deploying athens components to gardener-prow-trusted cluster...")"
+kubectl config use-context gardener-prow-trusted
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/athens"
+echo "$(color-green "done")"
+
+echo "$(color-step "Deploying athens components to gardener-prow-build cluster...")"
+kubectl config use-context gardener-prow-build
+kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/athens"
+echo "$(color-green "done")"
+
 echo "$(color-green "SUCCESS")"

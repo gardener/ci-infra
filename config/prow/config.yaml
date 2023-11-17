@@ -347,7 +347,7 @@ presets:
       hostPath:
         path: /sys/fs/cgroup
         type: Directory
-# enable GOPROXY by default
+# enable GOPROXY by default and use local athens-proxy as primary choice
 - env:
   - name: GOPROXY
-    value: "https://proxy.golang.org"
+    value: "http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org"

@@ -1,0 +1,223 @@
+---
+# Source: athens-proxy/templates/service-account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: athens-proxy
+  labels:
+    
+    app: athens-proxy
+    chart: athens-proxy-0.8.0
+    release: "athens"
+    heritage: "Helm"
+    app.kubernetes.io/name: athens-proxy
+    helm.sh/chart: athens-proxy-0.8.0
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "athens"
+    app.kubernetes.io/version: "v0.12.1"
+---
+# Source: athens-proxy/templates/secret.yaml
+kind: Secret
+apiVersion: v1
+metadata:
+  name: athens-proxy-secret
+  labels:
+    
+    app: athens-proxy
+    chart: athens-proxy-0.8.0
+    release: "athens"
+    heritage: "Helm"
+    app.kubernetes.io/name: athens-proxy
+    helm.sh/chart: athens-proxy-0.8.0
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "athens"
+    app.kubernetes.io/version: "v0.12.1"
+type: Opaque
+data:
+---
+# Source: athens-proxy/templates/storage-pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: athens-proxy-storage
+  labels:
+    
+    app: athens-proxy-storage
+    chart: athens-proxy-0.8.0
+    release: "athens"
+    heritage: "Helm"
+    app.kubernetes.io/name: athens-proxy-storage
+    helm.sh/chart: athens-proxy-0.8.0
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "athens"
+    app.kubernetes.io/version: "v0.12.1"
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "20Gi"
+  storageClassName: "gce-ssd"
+---
+# Source: athens-proxy/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: athens-proxy
+  labels:
+    
+    app: athens-proxy
+    chart: athens-proxy-0.8.0
+    release: "athens"
+    heritage: "Helm"
+    app.kubernetes.io/name: athens-proxy
+    helm.sh/chart: athens-proxy-0.8.0
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "athens"
+    app.kubernetes.io/version: "v0.12.1"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: athens-proxy
+    release: "athens"
+---
+# Source: athens-proxy/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: athens-proxy
+  labels:
+    
+    app: athens-proxy
+    chart: athens-proxy-0.8.0
+    release: "athens"
+    heritage: "Helm"
+    app.kubernetes.io/name: athens-proxy
+    helm.sh/chart: athens-proxy-0.8.0
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "athens"
+    app.kubernetes.io/version: "v0.12.1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: athens-proxy
+      release: "athens"
+  template:
+    metadata:
+      labels:
+        
+        app: athens-proxy
+        chart: athens-proxy-0.8.0
+        release: "athens"
+        heritage: "Helm"
+        app.kubernetes.io/name: athens-proxy
+        helm.sh/chart: athens-proxy-0.8.0
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/instance: "athens"
+        app.kubernetes.io/version: "v0.12.1"
+      annotations:
+        checksum/upstream: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        checksum/ssh-config: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        checksum/ssh-secret: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+    spec:
+      serviceAccount: athens-proxy
+      containers:
+      - name: athens-proxy
+        image: "docker.io/gomods/athens:v0.12.1"
+        imagePullPolicy: "IfNotPresent"
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: "/healthz"
+            port: 3000
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: "/readyz"
+            port: 3000
+        env:
+        - name: ATHENS_GOGET_WORKERS
+          value: "5"
+        - name: ATHENS_GO_BINARY_ENV_VARS
+          value: GOPROXY=https://proxy.golang.org,direct
+        - name: ATHENS_STORAGE_TYPE
+          value: "disk"
+        - name: ATHENS_DISK_STORAGE_ROOT
+          value: "/var/lib/athens"
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: storage-volume
+          mountPath: "/var/lib/athens"
+        resources:
+          requests:
+            cpu: 2
+            memory: 512Mi
+      volumes:
+      - name: storage-volume
+        persistentVolumeClaim:
+          claimName: athens-proxy-storage
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker.gardener.cloud/system-components
+                operator: In
+                values:
+                - "true"
+---
+# Source: athens-proxy/templates/service-monitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    
+    app: athens-proxy
+    chart: athens-proxy-0.8.0
+    release: "athens"
+    heritage: "Helm"
+    app.kubernetes.io/name: athens-proxy
+    helm.sh/chart: athens-proxy-0.8.0
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "athens"
+    app.kubernetes.io/version: "v0.12.1"
+    prometheus: default
+  name: athens-proxy
+  namespace: monitoring
+spec:
+  endpoints:
+  - path: /metrics
+    port: http
+  namespaceSelector:
+    matchNames:
+    - athens
+  selector:
+    matchLabels:
+      app: athens-proxy
+      release: "athens"
+---
+# Source: athens-proxy/templates/test/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "athens-proxy-test-connection"
+  labels:
+    app: athens-proxy
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['athens-proxy:80']
+  restartPolicy: Never
