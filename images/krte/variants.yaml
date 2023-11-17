@@ -1,7 +1,7 @@
 variants:
   "1.20":
     IMAGE_ARG: eu.gcr.io/gardener-project/ci-infra/krte:1.20
-    golangtestimage: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231115-524084c-1.20
+    golangtestimage: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231116-57bca01-1.20
   "1.21":
     IMAGE_ARG: eu.gcr.io/gardener-project/ci-infra/krte:1.21
-    golangtestimage: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231115-524084c-1.21
+    golangtestimage: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231116-57bca01-1.21
