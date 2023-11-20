@@ -689,9 +689,6 @@ func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) s
 	var output string
 	potentialMatches := releaseNoteRe.FindAllStringSubmatch(body, -1)
 	for i, potentialMatch := range potentialMatches {
-		if potentialMatch == nil {
-			return ""
-		}
 		source := strings.TrimSpace(potentialMatch[4])
 		ref := strings.TrimSpace(potentialMatch[5])
 		if source == "" || ref == "" {

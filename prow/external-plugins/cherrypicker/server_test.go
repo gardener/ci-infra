@@ -1174,7 +1174,7 @@ func TestReleaseNoteFromParentPR(t *testing.T) {
 		},
 		{
 			name:     "test9",
-			input:    "```feature developer\nUpdate the magic number from 42 to 49\n```\n\n```feature operator\nUpdate another magic number\n```",
+			input:    "```feature developer\nUpdate the magic number from 42 to 49\n```\n```feature operator\nUpdate another magic number\n```",
 			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```\n```feature operator github.com/foo/bar #123 @foo-author\nUpdate another magic number\n```",
 		},
 		{
