@@ -686,26 +686,30 @@ func normalize(input string) string {
 // parent PR and formats it as per the PR template so that
 // it can be copied to the cherry-pick PR.
 func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) string {
-	potentialMatch := releaseNoteRe.FindStringSubmatch(body)
-	if potentialMatch == nil {
-		return ""
+	var output string
+	potentialMatches := releaseNoteRe.FindAllStringSubmatch(body, -1)
+	for i, potentialMatch := range potentialMatches {
+		source := strings.TrimSpace(potentialMatch[4])
+		ref := strings.TrimSpace(potentialMatch[5])
+		if source == "" || ref == "" {
+			source = fmt.Sprintf("github.com/%s/%s", org, repo)
+			ref = fmt.Sprintf("#%d", num)
+		}
+		author := strings.TrimSpace(potentialMatch[6])
+		if author == "" {
+			author = fmt.Sprintf("@%s", prAuthor)
+		}
+		output += fmt.Sprintf("```%s %s %s %s %s\n%s\n```",
+			strings.TrimSpace(potentialMatch[2]),
+			strings.TrimSpace(potentialMatch[3]),
+			source,
+			ref,
+			author,
+			strings.TrimSpace(potentialMatch[7]),
+		)
+		if i+1 < len(potentialMatches) {
+			output += "\n"
+		}
 	}
-	source := strings.TrimSpace(potentialMatch[4])
-	ref := strings.TrimSpace(potentialMatch[5])
-	if source == "" || ref == "" {
-		source = fmt.Sprintf("github.com/%s/%s", org, repo)
-		ref = fmt.Sprintf("#%d", num)
-	}
-	author := strings.TrimSpace(potentialMatch[6])
-	if author == "" {
-		author = fmt.Sprintf("@%s", prAuthor)
-	}
-	return fmt.Sprintf("```%s %s %s %s %s\n%s\n```",
-		strings.TrimSpace(potentialMatch[2]),
-		strings.TrimSpace(potentialMatch[3]),
-		source,
-		ref,
-		author,
-		strings.TrimSpace(potentialMatch[7]),
-	)
+	return output
 }
