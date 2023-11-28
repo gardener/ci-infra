@@ -1,23 +1,28 @@
 fullnameOverride: athens-proxy
 
-replicaCount: 1
+replicaCount: 3
+
+image:
+  runAsNonRoot: true
 
 ingress:
   enabled: false
 
+service:
+  annotations:
+    service.kubernetes.io/topology-mode: Auto
+
 storage:
-  type: disk
-  disk:
-    storageRoot: "/var/lib/athens"
-    persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      size: 20Gi
-      storageClass: gce-ssd
+  type: gcp
+  gcp:
+    projectID: gardener-project
+    bucket: gardener-prow-goproxy
 
 configEnvVars:
 - name: ATHENS_GO_BINARY_ENV_VARS
   value: GOPROXY=https://proxy.golang.org,direct
+- name: ATHENS_SINGLE_FLIGHT_TYPE
+  value: gcp
 
 goGetWorkers: 5
 

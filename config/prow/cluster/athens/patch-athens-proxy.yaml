@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: athens-proxy
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  template:
+    spec:
+      containers:
+      - name: athens-proxy
+        env:
+        - name: ATHENS_STORAGE_GCP_JSON_KEY
+          valueFrom:
+            secretKeyRef:
+              name: athens-proxy-secret
+              key: ATHENS_STORAGE_GCP_JSON_KEY
+      topologySpreadConstraints:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - athens-proxy
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - athens
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
