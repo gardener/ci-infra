@@ -49,11 +49,11 @@ controller:
     default: true
   service:
     annotations:
-      service.kubernetes.io/topology-aware-hints: "auto"
+      service.kubernetes.io/topology-mode: Auto
   admissionWebhooks:
     service:
       annotations:
-        service.kubernetes.io/topology-aware-hints: "auto"
+        service.kubernetes.io/topology-mode: Auto
 defaultBackend:
   affinity:
     nodeAffinity:
