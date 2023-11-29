@@ -1,9 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-bases:
-- ./base
-
 resources:
 - prowjob_customresourcedefinition.yaml
 - prow_namespace.yaml
@@ -45,3 +42,4 @@ resources:
 - tide_deployment.yaml
 - tide_rbac.yaml
 - tide_service.yaml
+- ./base

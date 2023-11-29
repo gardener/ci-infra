@@ -6,18 +6,18 @@ resources:
 - oauth2-proxy-deployment.yaml
 
 configMapGenerator:
-- name: oauth2-proxy
+- files:
+  - config/oauth2_proxy.cfg
+  name: oauth2-proxy
   namespace: oauth2-proxy
   options:
     labels:
-      app: oauth2-proxy    
+      app: oauth2-proxy
       app.kubernetes.io/component: authentication-proxy
-      app.kubernetes.io/part-of: oauth2-proxy
-      app.kubernetes.io/name: oauth2-proxy
       app.kubernetes.io/instance: oauth2-proxy
-      app.kubernetes.io/version: "7.4.0"
-  files:
-  - config/oauth2_proxy.cfg
+      app.kubernetes.io/name: oauth2-proxy
+      app.kubernetes.io/part-of: oauth2-proxy
+      app.kubernetes.io/version: 7.4.0
 
-patchesStrategicMerge:
-- patch-oauth2-proxy-deployment.yaml
+patches:
+- path: patch-oauth2-proxy-deployment.yaml

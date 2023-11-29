@@ -4,20 +4,17 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-bases:
-- ../base-prow
-
 resources:
 - grafana-ingress.yaml
 - prow_prometheusrule.yaml
-
-patchesStrategicMerge:
-- grafana-deployment.yaml
-- prometheus.yaml
+- ../base-prow
 
 secretGenerator:
-- name: alertmanager-main
-  namespace: monitoring
-  behavior: merge
+- behavior: merge
   literals:
-  - 'cluster-name.tmpl={{ define "cluster_name" }}Build Cluster{{ end }}'
+  - cluster-name.tmpl={{ define "cluster_name" }}Build Cluster{{ end }}
+  name: alertmanager-main
+  namespace: monitoring
+patches:
+- path: grafana-deployment.yaml
+- path: prometheus.yaml
