@@ -5,28 +5,15 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-bases:
-- ../base-prow
-
 resources:
 - grafana-ingress.yaml
 - prow_prometheusrule.yaml
 - prow_servicemonitors.yaml
 - prow_prometheus_rbac.yaml
-
-patchesStrategicMerge:
-- grafana-deployment.yaml
-- prometheus.yaml
+- ../base-prow
 
 configMapGenerator:
-- name: grafana-prow-dashboards
-  namespace: monitoring
-  options:
-    labels:
-      app.kubernetes.io/component: grafana
-      app.kubernetes.io/name: grafana
-      app.kubernetes.io/part-of: kube-prometheus
-  files:
+- files:
   - dashboards/deck.json
   - dashboards/ghproxy.json
   - dashboards/hook.json
@@ -35,9 +22,18 @@ configMapGenerator:
   - dashboards/sinker.json
   - dashboards/slo.json
   - dashboards/tide.json
+  name: grafana-prow-dashboards
+  namespace: monitoring
+  options:
+    labels:
+      app.kubernetes.io/component: grafana
+      app.kubernetes.io/name: grafana
+      app.kubernetes.io/part-of: kube-prometheus
 
 secretGenerator:
-- name: prometheus-prow-additional-scrape-configs
+- files:
+  - prometheus/additional-scrape-targets.yaml
+  name: prometheus-prow-additional-scrape-configs
   namespace: monitoring
   options:
     labels:
@@ -45,10 +41,12 @@ secretGenerator:
       app.kubernetes.io/instance: k8s
       app.kubernetes.io/name: prometheus
       app.kubernetes.io/part-of: kube-prometheus
-  files:
-  - prometheus/additional-scrape-targets.yaml
-- name: alertmanager-main
-  namespace: monitoring
-  behavior: merge
+- behavior: merge
   literals:
-  - 'cluster-name.tmpl={{ define "cluster_name" }}Trusted Cluster{{ end }}'
+  - cluster-name.tmpl={{ define "cluster_name" }}Trusted Cluster{{ end }}
+  name: alertmanager-main
+  namespace: monitoring
+
+patches:
+- path: grafana-deployment.yaml
+- path: prometheus.yaml

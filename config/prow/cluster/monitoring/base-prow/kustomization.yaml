@@ -4,36 +4,54 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-bases:
-- ../base
-
 images:
 - name: grafana/grafana
   newTag: 7.5.17
 
 resources:
-  - kubernetes-podMonitorKubeProxy.yaml
-
-patchesStrategicMerge:
-- delete-grafana-dashboardDefinitions.yaml
-- delete-prometheusAdapter-apiService.yaml
-- alertmanager-alertmanager.yaml
-- alertmanager-service.yaml
-- blackboxExporter-deployment.yaml
-- grafana-deployment.yaml
-- grafana-networkPolicy.yaml
-- kubeStateMetrics-deployment.yaml
-- nodeExporter-daemonset.yaml
-- prometheus-service.yaml
-- prometheus.yaml
-- prometheusAdapter-deployment.yaml
-- prometheusAdapter-service.yaml
-- prometheusOperator-deployment.yaml
+- kubernetes-podMonitorKubeProxy.yaml
+- ../base
 
 secretGenerator:
-- name: alertmanager-main
-  namespace: monitoring
-  behavior: merge
+- behavior: merge
   files:
   - alertmanager.yaml=alertmanager/config.yaml
   - alertmanager/slack-messages.tmpl
+  name: alertmanager-main
+  namespace: monitoring
+
+patches:
+- path: delete-prometheusAdapter-apiService.yaml
+- path: alertmanager-alertmanager.yaml
+- path: alertmanager-service.yaml
+- path: blackboxExporter-deployment.yaml
+- path: grafana-deployment.yaml
+- path: grafana-networkPolicy.yaml
+- path: kubeStateMetrics-deployment.yaml
+- path: nodeExporter-daemonset.yaml
+- path: prometheus-service.yaml
+- path: prometheus.yaml
+- path: prometheusAdapter-deployment.yaml
+- path: prometheusAdapter-service.yaml
+- path: prometheusOperator-deployment.yaml
+- patch: |-
+    $patch: delete
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: grafana-dashboard-apiserver
+      namespace: monitoring
+- patch: |-
+    $patch: delete
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: grafana-dashboard-controller-manager
+      namespace: monitoring
+- patch: |-
+    $patch: delete
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: grafana-dashboard-scheduler
+      namespace: monitoring

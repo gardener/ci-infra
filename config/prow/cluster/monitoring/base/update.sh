@@ -18,19 +18,19 @@ set -o nounset
 set -o pipefail
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-cd $script_dir
+cd "$script_dir"
 
-kube_prometheus_version="v0.12.0"
+kube_prometheus_version="v0.13.0"
 echo "> Fetching kube-prometheus@$kube_prometheus_version"
 
 tmp_dir=$(mktemp -d)
 trap "rm -rf $tmp_dir" EXIT
 
-# tar on OSX deals differently with wildcard as tar on Linux
-if [[ $(uname -s) = "Darwin" ]]; then
-    wildcards=""
-else
+# GNU tar deals differently with wildcard as bsdtar
+if tar --version | grep -q "GNU tar"; then
     wildcards="--wildcards"
+else
+    wildcards=""
 fi
 
 tarball="$tmp_dir/archive.tar.gz"
@@ -41,7 +41,7 @@ prometheus_operator_version=$(tar -O -xzf "$tarball" $wildcards "kube-prometheus
 echo "Included prometheus-operator version: $prometheus_operator_version"
 
 echo "> Removing old yaml files"
-find $script_dir -name "*.yaml" -exec rm -rf {} \;
+find "$script_dir" -name "*.yaml" -exec rm -rf {} \;
 
 echo "> Updating kube-prometheus"
 
@@ -69,7 +69,7 @@ EOF
 echo "> Updating kube-prometheus/setup"
 
 tar -xzf "$tarball" --strip-components=2 $wildcards "kube-prometheus-*/manifests/setup/*.yaml"
-cd $script_dir/setup
+cd "$script_dir/setup"
 
 cat <<EOF > README.md
 The CRDs in this directory were downloaded from

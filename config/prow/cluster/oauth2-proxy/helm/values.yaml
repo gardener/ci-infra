@@ -39,7 +39,7 @@ topologySpreadConstraints:
 
 service:
   annotations:
-    service.kubernetes.io/topology-aware-hints: "auto"
+    service.kubernetes.io/topology-mode: Auto
 
 config:
   existingSecret: oauth2-proxy

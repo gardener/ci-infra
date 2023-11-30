@@ -5,5 +5,5 @@ resources:
 - ingress-nginx-namespace.yaml
 - ingress-nginx-deployment.yaml
 
-patchesStrategicMerge:
-- patch-admission-webhook-jobs.yaml
+patches:
+- path: patch-admission-webhook-jobs.yaml
