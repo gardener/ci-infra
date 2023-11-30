@@ -36,6 +36,7 @@ postsubmits:
         - --target=branch-cleaner
         - --add-date-sha-tag=true
         - --add-fixed-tag=latest
+        - --kaniko-arg=--build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.
