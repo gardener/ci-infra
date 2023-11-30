@@ -6,4 +6,5 @@ resources:
 - ingress-nginx-deployment.yaml
 
 patches:
-- path: patch-admission-webhook-jobs.yaml
+- path: patch-ingress-nginx-admission-create.yaml
+- path: patch-ingress-nginx-admission-patch.yaml
