@@ -9,13 +9,19 @@ resources:
 - athens_prometheus_rbac.yaml
 
 patches:
-  - path: athens-proxy.yaml
+  - path: patch-athens-proxy.yaml
   - patch: |-
       $patch: delete
       apiVersion: v1
       kind: Pod
       metadata:
         name: athens-proxy-test-connection
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: athens-proxy-secret        
 
 transformers:
     - |-

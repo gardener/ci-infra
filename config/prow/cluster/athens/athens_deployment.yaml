@@ -35,35 +35,13 @@ metadata:
 type: Opaque
 data:
 ---
-# Source: athens-proxy/templates/storage-pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: athens-proxy-storage
-  labels:
-    
-    app: athens-proxy-storage
-    chart: athens-proxy-0.8.0
-    release: "athens"
-    heritage: "Helm"
-    app.kubernetes.io/name: athens-proxy-storage
-    helm.sh/chart: athens-proxy-0.8.0
-    app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.12.1"
-spec:
-  accessModes:
-    - "ReadWriteOnce"
-  resources:
-    requests:
-      storage: "20Gi"
-  storageClassName: "gce-ssd"
----
 # Source: athens-proxy/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: athens-proxy
+  annotations:
+    service.kubernetes.io/topology-mode: Auto
   labels:
     
     app: athens-proxy
@@ -103,7 +81,7 @@ metadata:
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.12.1"
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: athens-proxy
@@ -126,6 +104,9 @@ spec:
         checksum/ssh-config: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         checksum/ssh-secret: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
       serviceAccount: athens-proxy
       containers:
       - name: athens-proxy
@@ -148,23 +129,23 @@ spec:
           value: "5"
         - name: ATHENS_GO_BINARY_ENV_VARS
           value: GOPROXY=https://proxy.golang.org,direct
+        - name: ATHENS_SINGLE_FLIGHT_TYPE
+          value: gcp
         - name: ATHENS_STORAGE_TYPE
-          value: "disk"
-        - name: ATHENS_DISK_STORAGE_ROOT
-          value: "/var/lib/athens"
+          value: "gcp"
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "gardener-project"
+        - name: ATHENS_STORAGE_GCP_BUCKET
+          value: "gardener-prow-goproxy"
         ports:
         - containerPort: 3000
-        volumeMounts:
-        - name: storage-volume
-          mountPath: "/var/lib/athens"
         resources:
           requests:
             cpu: 0.5
             memory: 768Mi
       volumes:
       - name: storage-volume
-        persistentVolumeClaim:
-          claimName: athens-proxy-storage
+        emptyDir: {}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -191,6 +172,8 @@ metadata:
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.12.1"
     prometheus: default
+  annotations:
+    service.kubernetes.io/topology-mode: Auto
   name: athens-proxy
   namespace: monitoring
 spec:
