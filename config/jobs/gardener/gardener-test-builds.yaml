@@ -19,6 +19,7 @@ presubmits:
         - --context=/home/prow/go/src/github.com/gardener/gardener
         - --dockerfile=Dockerfile
         - --no-push
+        - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org
         resources:
           requests:
             cpu: 6
