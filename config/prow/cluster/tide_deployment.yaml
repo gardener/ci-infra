@@ -28,9 +28,9 @@ spec:
         - --github-graphql-endpoint=http://ghproxy/graphql
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
-        - --history-uri=gs://gardener-prow/tide-history.json
+        - --history-uri=gs://gardener-prow-status/tide-history.json
         - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
-        - --status-path=gs://gardener-prow/tide-status-checkpoint.yaml
+        - --status-path=gs://gardener-prow-status/tide-status-checkpoint.yaml
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
         env:

@@ -8,7 +8,6 @@
     - https://prow.gardener.cloud
     - https://monitoring.prow.gardener.cloud
     - https://monitoring-build.prow.gardener.cloud
-    - https://storage.googleapis.com/gardener-prow/tide-history.json
   relabel_configs:
   - source_labels: [__address__]
     target_label: __param_target
