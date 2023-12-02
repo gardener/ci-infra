@@ -30,7 +30,7 @@ spec:
         - --github-endpoint=https://api.github.com
         - --job-config-path=/etc/job-config
         - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
-        - --status-path=gs://gardener-prow/status-reconciler-status
+        - --status-path=gs://gardener-prow-status/status-reconciler-status
         - --github-app-id=$(GITHUB_APP_ID)
         - --github-app-private-key-path=/etc/github/cert
         env:

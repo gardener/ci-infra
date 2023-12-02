@@ -311,14 +311,6 @@ spec:
       labels:
         severity: critical
         slo: monitoring
-    - alert: 'Site unavailable: https://storage.googleapis.com/gardener-prow/tide-history.json'
-      annotations:
-        description: 'The blackbox_exporter HTTP probe has detected that the following site has been unhealthy (not 2xx HTTP response) for at least 2 minutes: <https://storage.googleapis.com/gardener-prow/tide-history.json|https://storage.googleapis.com/gardener-prow/tide-history.json>.'
-      expr: |
-        min(probe_success{instance="https://storage.googleapis.com/gardener-prow/tide-history.json"}) == 0
-      for: 2m
-      labels:
-        severity: critical
   - name: Heartbeat ProwJobs
     rules:
     - alert: 'No recent successful heartbeat job runs'
