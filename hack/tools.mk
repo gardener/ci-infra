@@ -24,7 +24,7 @@ GOIMPORTS                  := $(TOOLS_BIN_DIR)/goimports
 GOLANGCI_LINT              := $(TOOLS_BIN_DIR)/golangci-lint
 
 # default tool versions
-GOLANGCI_LINT_VERSION ?= v1.54.2
+GOLANGCI_LINT_VERSION ?= v1.55.2
 
 export TOOLS_BIN_DIR := $(TOOLS_BIN_DIR)
 export PATH := $(abspath $(TOOLS_BIN_DIR)):$(PATH)
