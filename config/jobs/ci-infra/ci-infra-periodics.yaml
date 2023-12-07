@@ -17,7 +17,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/label_sync:v20231206-f5c8e5872b
       command:
       - label_sync
       args:
@@ -56,7 +56,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: gcr.io/k8s-prow/branchprotector:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/branchprotector:v20231206-f5c8e5872b
       command:
       - branchprotector
       args:
@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20231206-615e901
+    - image: eu.gcr.io/gardener-project/ci-infra/job-forker:v20231206-ba0cc08
       command:
       - /job-forker
       args:
@@ -127,7 +127,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231206-f5c8e5872b
       command:
       - generic-autobumper
       args:
@@ -158,7 +158,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231206-f5c8e5872b
       command:
       - generic-autobumper
       args:
@@ -189,7 +189,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231206-f5c8e5872b
       command:
       - generic-autobumper
       args:
@@ -220,7 +220,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231206-f5c8e5872b
       command:
       - generic-autobumper
       args:
@@ -254,7 +254,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/checkconfig:v20231206-f5c8e5872b
       command:
       - checkconfig
       args:
@@ -286,7 +286,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20231205-00bb86bbf2
+    - image: gcr.io/k8s-prow/checkconfig:v20231206-f5c8e5872b
       command:
       - checkconfig
       args:
@@ -344,7 +344,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20231206-615e901
+    - image: eu.gcr.io/gardener-project/ci-infra/branch-cleaner:v20231206-ba0cc08
       command:
       - /branch-cleaner
       args:
