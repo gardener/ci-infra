@@ -27,6 +27,7 @@ import (
 
 	"k8s.io/test-infra/prow/cache"
 	"k8s.io/test-infra/prow/git/v2"
+	"k8s.io/utils/lru"
 )
 
 // Overview
@@ -164,7 +165,7 @@ func NewInRepoConfigCache(
 	lookupsCallback := mkCacheEventCallback(inRepoConfigCacheMetrics.lookups)
 	hitsCallback := mkCacheEventCallback(inRepoConfigCacheMetrics.hits)
 	missesCallback := mkCacheEventCallback(inRepoConfigCacheMetrics.misses)
-	forcedEvictionsCallback := func(key interface{}, _ interface{}) {
+	forcedEvictionsCallback := func(key lru.Key, _ interface{}) {
 		org, repo, err := keyToOrgRepo(key)
 		if err != nil {
 			return
@@ -195,7 +196,8 @@ func NewInRepoConfigCache(
 		lruCache.Mutex.Lock()         // Lock the mutex
 		defer lruCache.Mutex.Unlock() // Unlock the mutex when done
 		// Record all unique orgRepo combinations we've seen so far.
-		for _, key := range lruCache.Keys() {
+		for i := lruCache.Len(); i > 0; i-- {
+			key, _ := lruCache.Get(i)
 			org, repo, err := keyToOrgRepo(key)
 			if err != nil {
 				// This should only happen if we are deliberately using things
@@ -301,8 +303,8 @@ func keyToOrgRepo(key interface{}) (string, string, error) {
 // GetPresubmits uses a cache lookup to get the *ProwYAML value (cache hit),
 // instead of computing it from scratch (cache miss). It also stores the
 // *ProwYAML into the cache if there is a cache miss.
-func (cache *InRepoConfigCache) GetPresubmits(identifier string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) ([]Presubmit, error) {
-	prowYAML, err := cache.GetProwYAML(identifier, baseSHAGetter, headSHAGetters...)
+func (cache *InRepoConfigCache) GetPresubmits(identifier, baseBranch string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) ([]Presubmit, error) {
+	prowYAML, err := cache.GetProwYAML(identifier, baseBranch, baseSHAGetter, headSHAGetters...)
 	if err != nil {
 		return nil, err
 	}
@@ -315,8 +317,8 @@ func (cache *InRepoConfigCache) GetPresubmits(identifier string, baseSHAGetter R
 // lookup to get the *ProwYAML value (cache hit), instead of computing it from
 // scratch (cache miss). It also stores the *ProwYAML into the cache if there is
 // a cache miss.
-func (cache *InRepoConfigCache) GetPostsubmits(identifier string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) ([]Postsubmit, error) {
-	prowYAML, err := cache.GetProwYAML(identifier, baseSHAGetter, headSHAGetters...)
+func (cache *InRepoConfigCache) GetPostsubmits(identifier, baseBranch string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) ([]Postsubmit, error) {
+	prowYAML, err := cache.GetProwYAML(identifier, baseBranch, baseSHAGetter, headSHAGetters...)
 	if err != nil {
 		return nil, err
 	}
@@ -326,8 +328,8 @@ func (cache *InRepoConfigCache) GetPostsubmits(identifier string, baseSHAGetter 
 }
 
 // GetProwYAML returns the ProwYAML value stored in the InRepoConfigCache.
-func (cache *InRepoConfigCache) GetProwYAML(identifier string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) (*ProwYAML, error) {
-	prowYAML, err := cache.GetProwYAMLWithoutDefaults(identifier, baseSHAGetter, headSHAGetters...)
+func (cache *InRepoConfigCache) GetProwYAML(identifier, baseBranch string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) (*ProwYAML, error) {
+	prowYAML, err := cache.GetProwYAMLWithoutDefaults(identifier, baseBranch, baseSHAGetter, headSHAGetters...)
 	if err != nil {
 		return nil, err
 	}
@@ -348,7 +350,7 @@ func (cache *InRepoConfigCache) GetProwYAML(identifier string, baseSHAGetter Ref
 	return newProwYAML, nil
 }
 
-func (cache *InRepoConfigCache) GetProwYAMLWithoutDefaults(identifier string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) (*ProwYAML, error) {
+func (cache *InRepoConfigCache) GetProwYAMLWithoutDefaults(identifier, baseBranch string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) (*ProwYAML, error) {
 	timeGetProwYAML := time.Now()
 	defer func() {
 		orgRepo := NewOrgRepo(identifier)
@@ -357,7 +359,7 @@ func (cache *InRepoConfigCache) GetProwYAMLWithoutDefaults(identifier string, ba
 
 	c := cache.configAgent.Config()
 
-	prowYAML, err := cache.getProwYAML(c.getProwYAML, identifier, baseSHAGetter, headSHAGetters...)
+	prowYAML, err := cache.getProwYAML(c.getProwYAML, identifier, baseBranch, baseSHAGetter, headSHAGetters...)
 	if err != nil {
 		return nil, err
 	}
@@ -366,9 +368,18 @@ func (cache *InRepoConfigCache) GetProwYAMLWithoutDefaults(identifier string, ba
 }
 
 // GetInRepoConfig just wraps around GetProwYAML().
-func (cache *InRepoConfigCache) GetInRepoConfig(identifier string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) (*ProwYAML, error) {
-	return cache.GetProwYAML(identifier, baseSHAGetter, headSHAGetters...)
+func (cache *InRepoConfigCache) GetInRepoConfig(identifier, baseBranch string, baseSHAGetter RefGetter, headSHAGetters ...RefGetter) (*ProwYAML, error) {
+	return cache.GetProwYAML(identifier, baseBranch, baseSHAGetter, headSHAGetters...)
 }
+
+// valConstructorHelper is called to construct ProwYAML values inside the cache.
+type valConstructorHelper func(
+	gitClient git.ClientFactory,
+	identifier string,
+	baseBranch string,
+	baseSHAGetter RefGetter,
+	headSHAGetters ...RefGetter,
+) (*ProwYAML, error)
 
 // getProwYAML performs a lookup of previously-calculated *ProwYAML objects. The
 // 'valConstructorHelper' is used in two ways. First it is used by the caching
@@ -378,8 +389,9 @@ func (cache *InRepoConfigCache) GetInRepoConfig(identifier string, baseSHAGetter
 // because unit tests can just provide its own function for constructing a
 // *ProwYAML object (instead of needing to create an actual Git repo, etc.).
 func (cache *InRepoConfigCache) getProwYAML(
-	valConstructorHelper func(git.ClientFactory, string, RefGetter, ...RefGetter) (*ProwYAML, error),
+	valConstructorHelper valConstructorHelper,
 	identifier string,
+	baseBranch string,
 	baseSHAGetter RefGetter,
 	headSHAGetters ...RefGetter) (*ProwYAML, error) {
 
@@ -405,7 +417,7 @@ func (cache *InRepoConfigCache) getProwYAML(
 	}
 
 	valConstructor := func() (interface{}, error) {
-		return valConstructorHelper(cache.gitClient, identifier, baseSHAGetter, headSHAGetters...)
+		return valConstructorHelper(cache.gitClient, identifier, baseBranch, baseSHAGetter, headSHAGetters...)
 	}
 
 	got, err := cache.get(CacheKeyParts{Identifier: identifier, BaseSHA: baseSHA, HeadSHAs: headSHAs}, valConstructor)

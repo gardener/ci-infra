@@ -5,9 +5,9 @@ go 1.21
 require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/cenkalti/backoff/v4 v4.2.1
-	github.com/google/go-cmp v0.5.9
-	github.com/onsi/ginkgo/v2 v2.11.0
-	github.com/onsi/gomega v1.27.10
+	github.com/google/go-cmp v0.6.0
+	github.com/onsi/ginkgo/v2 v2.13.0
+	github.com/onsi/gomega v1.29.0
 	github.com/pkg/errors v0.9.1
 	github.com/shurcooL/githubv4 v0.0.0-20210725200734-83ba7b4c9228
 	github.com/sirupsen/logrus v1.9.0
@@ -16,7 +16,7 @@ require (
 	k8s.io/api v0.25.9
 	k8s.io/apimachinery v0.26.5
 	k8s.io/client-go v0.25.9
-	k8s.io/test-infra v0.0.0-20231011120823-ac20e2039248
+	k8s.io/test-infra v0.0.0-20231207013618-edb02f8e2214
 	sigs.k8s.io/controller-runtime v0.12.3
 	sigs.k8s.io/yaml v1.3.0
 )
@@ -87,7 +87,6 @@ require (
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.2 // indirect
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
