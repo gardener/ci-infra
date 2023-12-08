@@ -106,14 +106,9 @@ check: $(GOIMPORTS) $(GOLANGCI_LINT)
 
 .PHONY: revendor
 revendor:
+	@echo "> Revendor"
 	@GO111MODULE=on go mod tidy
 	@GO111MODULE=on go mod vendor
-
-.PHONY: verify-vendor
-verify-vendor: revendor
-	@if !(git diff --quiet HEAD -- go.sum go.mod vendor); then \
-		echo "go module files or vendor folder are out of date, please run 'make revendor'"; exit 1; \
-	fi
 
 .PHONY: test
 test:
@@ -122,3 +117,13 @@ test:
 .PHONY: test-cov
 test-cov:
 	@./hack/test-cover.sh ./prow/...
+
+.PHONY: verify
+verify: check test verify-vendor
+
+.PHONY: verify-vendor
+verify-vendor: revendor
+	@echo "> Verify vendor"
+	@if !(git diff --quiet HEAD -- go.sum go.mod vendor); then \
+		echo "go module files or vendor folder are out of date, please run 'make revendor'"; exit 1; \
+	fi

@@ -37,9 +37,7 @@ presubmits:
         command:
         - make
         args:
-        - check
-        - test
-        - verify-vendor
+        - verify
         resources:
           limits:
             memory: 4Gi
