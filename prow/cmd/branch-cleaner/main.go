@@ -83,7 +83,7 @@ func gatherOptions() options {
 func main() {
 	logrusutil.Init(&logrusutil.DefaultFieldsFormatter{
 		PrintLineNumber:  true,
-		WrappedFormatter: &logrus.TextFormatter{},
+		WrappedFormatter: logrus.StandardLogger().Formatter,
 	})
 
 	o := gatherOptions()
