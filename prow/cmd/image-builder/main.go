@@ -179,7 +179,7 @@ func getPodNamespace() (string, error) {
 func main() {
 	logrusutil.Init(&logrusutil.DefaultFieldsFormatter{
 		PrintLineNumber:  true,
-		WrappedFormatter: &logrus.TextFormatter{},
+		WrappedFormatter: logrus.StandardLogger().Formatter,
 	})
 	o := gatherOptions()
 	if err := o.Validate(); err != nil {

@@ -25,7 +25,6 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-
 	"k8s.io/test-infra/pkg/flagutil"
 	"k8s.io/test-infra/prow/config/secret"
 	prowflagutil "k8s.io/test-infra/prow/flagutil"
@@ -86,7 +85,10 @@ func gatherOptions() options {
 }
 
 func main() {
-	logrusutil.ComponentInit()
+	logrusutil.Init(&logrusutil.DefaultFieldsFormatter{
+		PrintLineNumber:  true,
+		WrappedFormatter: logrus.StandardLogger().Formatter,
+	})
 	o := gatherOptions()
 	if err := o.Validate(); err != nil {
 		logrus.Fatalf("Invalid options: %v", err)
