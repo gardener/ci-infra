@@ -146,3 +146,8 @@ images:
   - 2.8.1
   - 2.8.2
   - 2.8.3
+# gardener-extension-registry-cache/test/e2e
+- source: nginx
+  destination: eu.gcr.io/gardener-project/3rd/nginx
+  tags:
+  - 1.17.6
