@@ -1,0 +1,23 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app: gcsweb
+  name: gcsweb
+  namespace: gcsweb
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+      maxAllowed:
+        cpu: 3
+        memory: 1024Mi
+      minAllowed:
+        memory: 16Mi
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: gcsweb
+  updatePolicy:
+    updateMode: Auto

@@ -11,7 +11,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: cherrypicker
@@ -21,7 +21,6 @@ spec:
         app: cherrypicker
     spec:
       serviceAccountName: ""
-      serviceAccount: ""
       terminationGracePeriodSeconds: 180
       containers:
       - name: cherrypicker
@@ -44,6 +43,10 @@ spec:
           readOnly: true
         - name: tmp
           mountPath: /tmp
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
       volumes:
       - name: tmp
         emptyDir: {}

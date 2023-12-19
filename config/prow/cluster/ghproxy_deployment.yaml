@@ -34,6 +34,10 @@ spec:
         volumeMounts:
         - name: cache
           mountPath: /cache
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
       volumes:
       - name: cache
         persistentVolumeClaim:
