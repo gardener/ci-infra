@@ -18,13 +18,13 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231219-49e31fd
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20231219-49e31fd
         command:
         - /image-builder
         args:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/ci-infra
+        - --registry=europe-docker.pkg.dev/gardener-project/releases/ci-infra
         - --target=golang-test
         - --context=hack/tools/image
         - --kaniko-arg=--build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org
