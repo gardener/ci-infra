@@ -18,13 +18,13 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231219-49e31fd
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20231219-49e31fd
         command:
         - /image-builder
         args:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/ci-infra
+        - --registry=europe-docker.pkg.dev/gardener-project/releases/ci-infra
         - --target=copy-images
         - --dockerfile=images/copy-images/Dockerfile
         - --add-date-sha-tag=true
@@ -65,13 +65,13 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231219-49e31fd
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20231219-49e31fd
         command:
         - /image-builder
         args:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/ci-infra
+        - --registry=europe-docker.pkg.dev/gardener-project/releases/ci-infra
         - --target=krte
         - --context=images/krte
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
