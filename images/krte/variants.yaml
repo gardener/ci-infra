@@ -1,7 +1,7 @@
 variants:
   "1.20":
-    IMAGE_ARG: eu.gcr.io/gardener-project/ci-infra/krte:1.20
-    golangtestimage: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231219-92940f4-1.20
+    IMAGE_ARG: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.20
+    golangtestimage: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20231219-92940f4-1.20
   "1.21":
-    IMAGE_ARG: eu.gcr.io/gardener-project/ci-infra/krte:1.21
-    golangtestimage: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231219-92940f4-1.21
+    IMAGE_ARG: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.21
+    golangtestimage: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20231219-92940f4-1.21
