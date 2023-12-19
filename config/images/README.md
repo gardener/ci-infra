@@ -11,13 +11,13 @@ The images needed are all listed inside the `images.yaml` with the following sch
 ```yaml
 images:
 - source: kubernetesui/dashboard
-  destination: eu.gcr.io/gardener-project/3rd/kubernetesui/dashboard
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubernetesui/dashboard
   tags:
   - v2.2.0
   - v2.4.0
   - v2.5.1
 - source: envoyproxy/envoy-distroless
-  destination: eu.gcr.io/gardener-project/3rd/envoyproxy/envoy-distroless
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/envoy-distroless
   tags:
   - v1.24.1
 ```
@@ -48,11 +48,11 @@ You can run the `copy-images.sh` script with
 
 You can start the script inside the container from the current directory with
 ```bash
-docker run -v $PWD:/app eu.gcr.io/gardener-project/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
+docker run -v $PWD:/app europe-docker.pkg.dev/gardener-project/releases/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
 ```
 
 **Authentication**  
 In order to authenticate inside the container, mount your `~/.docker/config.json` to `/root/.docker/config.json`.
 ```bash
-docker run -v $PWD:/app -v ~/.docker/config.json:/root/.docker/config.json eu.gcr.io/gardener-project/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
+docker run -v $PWD:/app -v ~/.docker/config.json:/root/.docker/config.json europe-docker.pkg.dev/gardener-project/releases/ci-infra/copy-images:latest /app/copy-images.sh /app/images.yaml
 ```

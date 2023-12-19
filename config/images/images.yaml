@@ -4,27 +4,27 @@ images:
 # DO NOT ADD NEW GRAFANA IMAGES.
 # With https://github.com/gardener/gardener/pull/7318 grafana is replaced by plutono.
 - source: grafana/grafana
-  destination: eu.gcr.io/gardener-project/3rd/grafana/grafana
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/grafana/grafana
   tags:
   - 7.5.17
 # DO NOT ADD NEW COREDNS IMAGES.
 # With https://github.com/gardener/gardener/pull/8192 a GCR copy image is no longer used for coredns.
 - source: coredns/coredns
-  destination: eu.gcr.io/gardener-project/3rd/coredns/coredns
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/coredns/coredns
   tags:
   - 1.10.0
 - source: kubernetesui/dashboard
-  destination: eu.gcr.io/gardener-project/3rd/kubernetesui/dashboard
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubernetesui/dashboard
   tags:
   - v2.2.0
   - v2.4.0
   - v2.5.1
 - source: kubernetesui/metrics-scraper
-  destination: eu.gcr.io/gardener-project/3rd/kubernetesui/metrics-scraper
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubernetesui/metrics-scraper
   tags:
   - v1.0.7
 - source: alpine
-  destination: eu.gcr.io/gardener-project/3rd/alpine
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/alpine
   tags:
   - 3.15.4
   - 3.15.8
@@ -32,17 +32,17 @@ images:
 # DO NOT ADD NEW FLUENT/FLUENT-BIT IMAGES.
 # With https://github.com/gardener/gardener/pull/7568 the fluent/fluent-bit image is replaced by kubesphere/fluent-bit.
 - source: fluent/fluent-bit
-  destination: eu.gcr.io/gardener-project/3rd/fluent/fluent-bit
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/fluent/fluent-bit
   tags:
   - 1.9.7
 - source: kubesphere/fluent-bit # A custom Fluent Bit image `kubesphere/fluent-bit` is required to work with FluentBit Operator for dynamic configuration reloading, ref: https://github.com/fluent/fluent-operator#fluent-bit
-  destination: eu.gcr.io/gardener-project/3rd/kubesphere/fluent-bit
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubesphere/fluent-bit
   tags:
   - v2.0.9
   - v2.0.10
   - v2.1.4
 - source: kubesphere/fluent-operator
-  destination: eu.gcr.io/gardener-project/3rd/kubesphere/fluent-operator
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubesphere/fluent-operator
   tags:
   - v1.7.0
   - v2.2.0
@@ -50,32 +50,32 @@ images:
 # DO NOT ADD NEW LOKI IMAGES.
 # With https://github.com/gardener/gardener/pull/7318 loki is replaced by vali.
 - source: grafana/loki
-  destination: eu.gcr.io/gardener-project/3rd/grafana/loki
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/grafana/loki
   tags:
   - 2.2.1
 # DO NOT ADD NEW PROMTAIL IMAGES.
 # With https://github.com/gardener/gardener/pull/7318 promtail is replaced by valitail.
 - source: grafana/promtail
-  destination: eu.gcr.io/gardener-project/3rd/grafana/promtail
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/grafana/promtail
   tags:
   - 2.2.1
 - source: envoyproxy/envoy-distroless
-  destination: eu.gcr.io/gardener-project/3rd/envoyproxy/envoy-distroless
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/envoy-distroless
   tags:
   - v1.24.1
   - v1.26.4
 # gardener/pkg/provider-local/images.yaml
 - source: kindest/local-path-provisioner
-  destination: eu.gcr.io/gardener-project/3rd/kindest/local-path-provisioner
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-provisioner
   tags:
   - v0.0.22-kind.0
 - source: kindest/local-path-helper
-  destination: eu.gcr.io/gardener-project/3rd/kindest/local-path-helper
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-helper
   tags:
   - v20220512-507ff70b
 # gardener/test (Gardener integration tests)
 - source: redis
-  destination: eu.gcr.io/gardener-project/3rd/redis
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/redis
   tags:
   - 5.0.8
 # gardener-extension-networking-calico/charts/images.yaml
@@ -83,43 +83,43 @@ images:
 # DO NOT ADD NEW CALICO IMAGES.
 # With https://github.com/gardener/gardener-extension-networking-calico/pull/275 GCR copy images are no longer used for the calico images.
 - source: calico/node
-  destination: eu.gcr.io/gardener-project/3rd/calico/node
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/node
   tags:
   - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/cni
-  destination: eu.gcr.io/gardener-project/3rd/calico/cni
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/cni
   tags:
   - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/typha
-  destination: eu.gcr.io/gardener-project/3rd/calico/typha
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/typha
   tags:
   - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/kube-controllers
-  destination: eu.gcr.io/gardener-project/3rd/calico/kube-controllers
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/kube-controllers
   tags:
   - v3.25.1
   - v3.25.0
   - v3.22.2
 - source: calico/pod2daemon-flexvol
-  destination: eu.gcr.io/gardener-project/3rd/calico/pod2daemon-flexvol
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/pod2daemon-flexvol
   tags:
   - v3.22.2
 # gardener-extension-provider-equinix-metal/charts/images.yaml
 - source: equinix/cloud-provider-equinix-metal
-  destination: eu.gcr.io/gardener-project/3rd/equinix/cloud-provider-equinix-metal
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/equinix/cloud-provider-equinix-metal
   tags:
   - v3.5.0
   - v3.6.0
   - v3.6.1
   - v3.6.2
 - source: packethost/metabot
-  destination: eu.gcr.io/gardener-project/3rd/packethost/metabot
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/packethost/metabot
   tags:
   - v1.0.0
 # gardener-extension-provider-openstack/charts/images.yaml
@@ -127,13 +127,13 @@ images:
 # DO NOT ADD NEW OPENSTACK IMAGES.
 # With https://github.com/gardener/gardener-extension-provider-openstack/pull/593 GCR copy images are no longer used for the openstack-cloud-controller-manager and cinder-csi-plugin images.
 - source: k8scloudprovider/openstack-cloud-controller-manager
-  destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/openstack-cloud-controller-manager
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/k8scloudprovider/openstack-cloud-controller-manager
   tags:
   - v1.21.0
   - v1.22.2
   - v1.23.4
 - source: k8scloudprovider/cinder-csi-plugin
-  destination: eu.gcr.io/gardener-project/3rd/k8scloudprovider/cinder-csi-plugin
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/k8scloudprovider/cinder-csi-plugin
   tags:
   - v1.20.3
   - v1.21.0
@@ -141,7 +141,7 @@ images:
   - v1.23.4
 # gardener-extension-registry-cache/charts/images.yaml
 - source: registry
-  destination: eu.gcr.io/gardener-project/3rd/registry
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/registry
   tags:
   - 2.8.1
   - 2.8.2
