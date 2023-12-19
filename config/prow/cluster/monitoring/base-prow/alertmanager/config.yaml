@@ -51,5 +51,5 @@ receivers:
 - name: 'null-receiver'
 
 templates:
-- slack-messages.tmpl
-- cluster-name.tmpl
+- /etc/alertmanager/config/slack-messages.tmpl
+- /etc/alertmanager/config/cluster-name.tmpl
