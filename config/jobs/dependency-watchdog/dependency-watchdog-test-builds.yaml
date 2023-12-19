@@ -34,14 +34,14 @@ presubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: eu.gcr.io/gardener-project/ci-infra/image-builder:v20231219-49e31fd
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20231219-49e31fd
         command:
         - /image-builder
         args:
         - --log-level=info
         - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=eu.gcr.io/gardener-project/gardener
-        - --cache-registry=eu.gcr.io/gardener-project/ci-infra/kaniko-cache
+        - --registry=europe-docker.pkg.dev/gardener-project/snapshots/gardener
+        - --cache-registry=europe-docker.pkg.dev/gardener-project/snapshots/ci-infra/kaniko-cache
         - --target=dependency-watchdog
         - --add-version-sha-tag=true
         - --inject-effective-version=true
