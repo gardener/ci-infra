@@ -381,7 +381,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231207-53e08c3-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231219-92940f4-1.21
       name: test-integration
       resources:
         limits:
@@ -416,7 +416,7 @@ periodics:
       - test-prometheus
       command:
       - make
-      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231207-53e08c3-1.21
+      image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231219-92940f4-1.21
       name: ""
       resources:
         limits:
@@ -769,7 +769,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231207-53e08c3-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231219-92940f4-1.21
         name: test-integration
         resources:
           limits:
@@ -823,7 +823,7 @@ presubmits:
         - test-prometheus
         command:
         - make
-        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231207-53e08c3-1.21
+        image: eu.gcr.io/gardener-project/ci-infra/golang-test:v20231219-92940f4-1.21
         name: ""
         resources:
           limits:
