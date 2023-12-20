@@ -17,7 +17,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/label_sync:v20231219-5ff56c5221
       command:
       - label_sync
       args:
@@ -56,7 +56,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: gcr.io/k8s-prow/branchprotector:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/branchprotector:v20231219-5ff56c5221
       command:
       - branchprotector
       args:
@@ -127,7 +127,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-5ff56c5221
       command:
       - generic-autobumper
       args:
@@ -158,7 +158,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-5ff56c5221
       command:
       - generic-autobumper
       args:
@@ -189,7 +189,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-5ff56c5221
       command:
       - generic-autobumper
       args:
@@ -220,7 +220,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/generic-autobumper:v20231219-5ff56c5221
       command:
       - generic-autobumper
       args:
@@ -254,7 +254,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/checkconfig:v20231219-5ff56c5221
       command:
       - checkconfig
       args:
@@ -286,7 +286,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/checkconfig:v20231219-d8851a0c8e
+    - image: gcr.io/k8s-prow/checkconfig:v20231219-5ff56c5221
       command:
       - checkconfig
       args:
@@ -319,7 +319,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20231219-92940f4-1.21
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20231219-4b8a6c5-1.21
       command:
       - make
       args:
