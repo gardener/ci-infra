@@ -1,0 +1,3 @@
+- op: add
+  path: /spec/template/spec/containers/1/args/-
+  value: --config-reloader-cpu-limit=0
