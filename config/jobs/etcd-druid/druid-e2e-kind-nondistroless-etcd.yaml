@@ -1,6 +1,6 @@
 presubmits:
   gardener/etcd-druid:
-    - name: pull-etcd-druid-e2e-kind-alpha-features
+    - name: pull-etcd-druid-e2e-kind-nondistroless-etcd
       cluster: gardener-prow-build
       always_run: true
       skip_branches:
@@ -31,9 +31,9 @@ presubmits:
                 memory: 8Gi
             env:
             - name: USE_ETCD_DRUID_FEATURE_GATES
-              value: "true"
+              value: "false"
 periodics:
-  - name: ci-etcd-druid-e2e-kind-alpha-features
+  - name: ci-etcd-druid-e2e-kind-nondistroless-etcd
     cluster: gardener-prow-build
     interval: 4h
     extra_refs:
@@ -68,4 +68,4 @@ periodics:
               memory: 8Gi
           env:
           - name: USE_ETCD_DRUID_FEATURE_GATES
-            value: "true"
+            value: "false"
