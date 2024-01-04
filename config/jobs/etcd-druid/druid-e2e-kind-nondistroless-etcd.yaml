@@ -13,7 +13,7 @@ presubmits:
         preset-dind-enabled: "true"
         preset-kind-volume-mounts: "true"
       annotations:
-        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests with activated alpha features
+        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests with etcd-custom-image(nondistroless-etcd).
       spec:
         containers:
           - image: gcr.io/k8s-staging-test-infra/krte:v20231208-8b9fd88e88-master
@@ -48,7 +48,7 @@ periodics:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs KIND cluster based e2e tests for etcd druid developments periodically with activated alpha features
+      description: Runs KIND cluster based e2e tests for etcd druid developments periodically with etcd-custom-image(nondistroless-etcd).
       testgrid-dashboards: gardener-etcd-druid
       testgrid-days-of-results: "60"
     spec:
