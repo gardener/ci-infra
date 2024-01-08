@@ -16,6 +16,10 @@ route:
   - receiver: 'null-receiver'
     matchers:
       - alertname=InfoInhibitor
+  # KubePodNotReady creates warnings for each failed test-pod
+  - receiver: 'null-receiver'
+    matchers:
+      - alertname=KubePodNotReady
   # Metrics not visible in shoot cluster
   - receiver: 'null-receiver'
     matchers:
