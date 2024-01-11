@@ -41,12 +41,14 @@ images:
   - v2.0.9
   - v2.0.10
   - v2.1.4
+  - v2.2.0
 - source: kubesphere/fluent-operator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubesphere/fluent-operator
   tags:
   - v1.7.0
   - v2.2.0
   - v2.3.0
+  - v2.7.0
 # DO NOT ADD NEW LOKI IMAGES.
 # With https://github.com/gardener/gardener/pull/7318 loki is replaced by vali.
 - source: grafana/loki
