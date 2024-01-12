@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: gcsweb
-          image: gcr.io/k8s-prow/gcsweb:v20240111-4df3614954
+          image: gcr.io/k8s-prow/gcsweb:v20240112-522878393d
           args:
             - -upgrade-proxied-http-to-https
             # buckets owned by gardener
