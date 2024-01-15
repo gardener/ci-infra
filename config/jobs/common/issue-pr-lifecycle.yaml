@@ -11,7 +11,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20240112-522878393d
+    - image: gcr.io/k8s-prow/commenter:v20240113-a5b27f3c7e
       command:
       - commenter
       args:
@@ -61,7 +61,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20240112-522878393d
+    - image: gcr.io/k8s-prow/commenter:v20240113-a5b27f3c7e
       command:
       - commenter
       args:
@@ -112,7 +112,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20240112-522878393d
+    - image: gcr.io/k8s-prow/commenter:v20240113-a5b27f3c7e
       command:
       - commenter
       args:
@@ -164,7 +164,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20240112-522878393d
+    - image: gcr.io/k8s-prow/commenter:v20240113-a5b27f3c7e
       command:
       - commenter
       args:
@@ -214,7 +214,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20240112-522878393d
+    - image: gcr.io/k8s-prow/commenter:v20240113-a5b27f3c7e
       command:
       - commenter
       args:
@@ -265,7 +265,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/commenter:v20240112-522878393d
+    - image: gcr.io/k8s-prow/commenter:v20240113-a5b27f3c7e
       command:
       - commenter
       args:
