@@ -11,7 +11,7 @@ presubmits:
       containers:
       - name: test
         # don't update go version here until a go-apidiff release is available with new go version support.
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240116-fde669d-1.20
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240117-e14f57a-1.20
         command:
         - make
         args:
