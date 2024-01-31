@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-networking-cilium developments in pull requests
     spec:
       containers:
-      - image: gcr.io/k8s-staging-test-infra/krte:v20240130-9db6d59ca0-master
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240129-6ed9d9f-1.21
         command:
         - wrapper.sh
         - bash
@@ -62,7 +62,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/krte:v20240130-9db6d59ca0-master
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240129-6ed9d9f-1.21
       command:
       - wrapper.sh
       - bash
