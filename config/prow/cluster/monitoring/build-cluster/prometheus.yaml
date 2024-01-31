@@ -12,7 +12,7 @@ spec:
       periodSeconds: 15
   resources:
     requests:
-      memory: 28Gi
+      memory: 8Gi
     limits:
       memory: 30Gi
   retention: 7d

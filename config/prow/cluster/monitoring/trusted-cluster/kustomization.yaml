@@ -10,6 +10,7 @@ resources:
 - prow_prometheusrule.yaml
 - prow_servicemonitors.yaml
 - prow_prometheus_rbac.yaml
+- prometheus_vpa.yaml
 - ../base-prow
 
 configMapGenerator:

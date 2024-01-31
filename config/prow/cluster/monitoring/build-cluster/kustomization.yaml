@@ -7,6 +7,7 @@ generatorOptions:
 resources:
 - grafana-ingress.yaml
 - prow_prometheusrule.yaml
+- prometheus_vpa.yaml
 - ../base-prow
 
 secretGenerator:

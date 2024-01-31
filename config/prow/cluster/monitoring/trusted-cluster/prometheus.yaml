@@ -10,4 +10,4 @@ spec:
   retention: 90d
   resources:
     requests:
-      memory: 1400Mi
+      memory: 1Gi
