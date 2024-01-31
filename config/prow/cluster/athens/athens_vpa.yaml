@@ -1,0 +1,22 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app: athens-proxy
+  name: athens-proxy
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+      maxAllowed:
+        cpu: 3
+        memory: 2048Mi
+      minAllowed:
+        memory: 32Mi
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: athens-proxy
+  updatePolicy:
+    updateMode: Auto
