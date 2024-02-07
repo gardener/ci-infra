@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for Gardener extension shoot-rsyslog-relp developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240206-7d87e58-1.21
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240207-efa2835-1.21
         command:
         - wrapper.sh
         - bash
@@ -53,7 +53,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240206-7d87e58-1.21
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240207-efa2835-1.21
       command:
       - wrapper.sh
       - bash
