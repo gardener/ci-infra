@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for Gardener extension shoot-rsyslog-relp developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240206-10632d7-1.21
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240208-8bd73f5-1.21
         command:
         - make
         args:
@@ -40,7 +40,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240206-10632d7-1.21
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240208-8bd73f5-1.21
       command:
       - make
       args:
