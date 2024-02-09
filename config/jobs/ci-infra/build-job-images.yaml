@@ -18,7 +18,7 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240207-efa2835
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240209-cbb1ee1
         command:
         - /image-builder
         args:
@@ -65,7 +65,7 @@ postsubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240207-efa2835
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240209-cbb1ee1
         command:
         - /image-builder
         args:
