@@ -12,13 +12,15 @@ presubmits:
     spec:
       containers:
       - name: kaniko
-        image: gcr.io/kaniko-project/executor:v1.16.0
+        image: gcr.io/kaniko-project/executor:v1.20.1
         command:
         - /kaniko/executor
         args:
         - --context=/home/prow/go/src/github.com/gardener/gardener
         - --dockerfile=Dockerfile
         - --no-push
+        - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
+        - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
         - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org
         resources:
           requests:
