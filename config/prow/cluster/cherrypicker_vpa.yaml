@@ -1,0 +1,23 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app: cherrypicker
+  name: cherrypicker
+  namespace: prow
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+      maxAllowed:
+        cpu: 3
+        memory: 512Mi
+      minAllowed:
+        memory: 16Mi
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cherrypicker
+  updatePolicy:
+    updateMode: Auto

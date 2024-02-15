@@ -43,5 +43,5 @@ affinity:
 
 resources:
   requests:
-    cpu: 0.5
-    memory: 768Mi
+    cpu: 200m
+    memory: 32Mi

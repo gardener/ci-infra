@@ -1,0 +1,23 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app: statusreconciler
+  name: statusreconciler
+  namespace: prow
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+      maxAllowed:
+        cpu: 3
+        memory: 1024Mi
+      minAllowed:
+        memory: 32Mi
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: statusreconciler
+  updatePolicy:
+    updateMode: Auto

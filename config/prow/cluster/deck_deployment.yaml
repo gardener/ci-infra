@@ -97,6 +97,10 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 3
           timeoutSeconds: 600
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
       topologySpreadConstraints: 
         - labelSelector:
             matchExpressions:

@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - ingress-nginx-namespace.yaml
 - ingress-nginx-deployment.yaml
+- ingress-nginx_vpa.yaml
 
 patches:
 - path: patch-ingress-nginx-admission-create.yaml

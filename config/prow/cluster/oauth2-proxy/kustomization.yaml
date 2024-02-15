@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - oauth2-proxy-namespace.yaml
 - oauth2-proxy-deployment.yaml
+- oauth2-proxy_vpa.yaml
 
 configMapGenerator:
 - files:

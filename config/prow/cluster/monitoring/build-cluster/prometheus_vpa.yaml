@@ -1,0 +1,27 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app.kubernetes.io/name: prometheus
+  name: prometheus-k8s
+  namespace: monitoring
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+      minAllowed:
+        memory: 50Mi
+    - containerName: prometheus
+      controlledValues: RequestsOnly
+      maxAllowed:
+        cpu: 3
+        memory: 28Gi
+      minAllowed:
+        memory: 8Gi
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: prometheus-k8s
+  updatePolicy:
+    updateMode: Auto

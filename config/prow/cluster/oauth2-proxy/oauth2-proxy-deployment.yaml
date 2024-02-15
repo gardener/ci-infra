@@ -171,11 +171,10 @@ spec:
           periodSeconds: 10
         resources:
           limits:
-            cpu: 500m
-            memory: 300Mi
+            memory: 500Mi
           requests:
-            cpu: 100m
-            memory: 300Mi
+            cpu: 10m
+            memory: 50Mi
         volumeMounts:
         - mountPath: /etc/oauth2_proxy/oauth2_proxy.cfg
           name: configmain

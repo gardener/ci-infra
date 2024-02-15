@@ -7,6 +7,7 @@ resources:
 - athens_namespace.yaml
 - athens_deployment.yaml
 - athens_prometheus_rbac.yaml
+- athens_vpa.yaml
 
 patches:
   - path: patch-athens-proxy.yaml

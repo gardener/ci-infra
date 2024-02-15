@@ -43,6 +43,10 @@ spec:
         - name: job-config
           mountPath: /etc/job-config
           readOnly: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 196Mi
       volumes:
       - name: kubeconfig
         secret:

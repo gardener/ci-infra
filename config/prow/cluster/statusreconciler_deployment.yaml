@@ -55,6 +55,10 @@ spec:
         - name: gcs-credentials
           mountPath: /etc/gcs-credentials
           readOnly: true
+        resources:
+          requests:
+            cpu: 50m
+            memory: 32Mi
       volumes:
       - name: github-app
         secret:
