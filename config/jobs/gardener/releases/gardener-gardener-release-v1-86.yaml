@@ -793,9 +793,11 @@ presubmits:
         - --dockerfile=Dockerfile
         - --no-push
         - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org
+        - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
+        - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
         command:
         - /kaniko/executor
-        image: gcr.io/kaniko-project/executor:v1.16.0
+        image: gcr.io/kaniko-project/executor:v1.20.1
         name: kaniko
         resources:
           requests:
