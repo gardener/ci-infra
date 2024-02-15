@@ -95,11 +95,10 @@ endif
 check: $(GOIMPORTS) $(GOLANGCI_LINT)
 	@hack/check.sh --golangci-lint-config=./.golangci.yaml ./prow/...
 
-.PHONY: revendor
-revendor:
-	@echo "> Revendor"
+.PHONY: tidy
+tidy:
+	@echo "> Tidy"
 	@GO111MODULE=on go mod tidy
-	@GO111MODULE=on go mod vendor
 
 .PHONY: test
 test:
@@ -110,11 +109,11 @@ test-cov:
 	@./hack/test-cover.sh ./prow/...
 
 .PHONY: verify
-verify: check test verify-vendor
+verify: check test verify-tidy
 
-.PHONY: verify-vendor
-verify-vendor: revendor
-	@echo "> Verify vendor"
-	@if !(git diff --quiet HEAD -- go.sum go.mod vendor); then \
-		echo "go module files or vendor folder are out of date, please run 'make revendor'"; exit 1; \
+.PHONY: verify-tidy
+verify-tidy: tidy
+	@echo "> Verify tidy"
+	@if !(git diff --quiet HEAD -- go.sum go.mod); then \
+		echo "go module files are out of date, please run 'make tidy'"; exit 1; \
 	fi

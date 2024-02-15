@@ -10,7 +10,7 @@ COPY . /code
 WORKDIR /code
 # Build go executables into binaries
 RUN mkdir /build && GOBIN=/build \
-    GO111MODULE=on CGO_ENABLED=0 GOOS=$(go env GOOS) GOARCH=$(go env GOARCH) go install -mod vendor -a ./...
+    GO111MODULE=on CGO_ENABLED=0 GOOS=$(go env GOOS) GOARCH=$(go env GOARCH) go install ./...
 
 # --------------------------
 # Executable container base
