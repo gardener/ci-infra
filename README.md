@@ -1,4 +1,6 @@
 # ci-infra
+[![REUSE status](https://api.reuse.software/badge/github.com/gardener/ci-infra)](https://api.reuse.software/info/github.com/gardener/ci-infra)
+
 
 This repository contains configuration files for the testing and automation needs of the Gardener project.
 
