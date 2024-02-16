@@ -57,7 +57,7 @@ periodics:
     fork-per-release: "true"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240212-9d312fe-1.21
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240212-9d312fe-1.22
       command:
       - wrapper.sh
       - bash
