@@ -1,0 +1,40 @@
+fullnameOverride: renovate
+
+cronjob:
+  schedule: "42 * * * *"
+  timeZone: CET
+
+renovate:
+  # See https://docs.renovatebot.com/self-hosted-configuration
+  config: |
+    {
+      "platform": "github",
+      "autodiscover": true,
+      "autodiscoverFilter": ["gardener/*"],
+      "allowedPostUpgradeCommands": [".*"]
+    }
+
+  persistence:
+    cache:
+      enabled: true
+      storageClass: gce-ssd
+      storageSize: 10Gi
+
+existingSecret: github
+
+serviceAccount:
+  create: true
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 256Mi
+
+apiVersionOverrides:
+  cronjob: batch/v1
+
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  fsGroupChangePolicy: OnRootMismatch
