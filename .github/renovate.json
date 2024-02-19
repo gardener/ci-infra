@@ -1,0 +1,103 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices"
+  ],
+  "labels": ["kind/enhancement"],
+  "postUpdateOptions": ["gomodTidy"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["config\/prow\/cluster\/.+\/helm\/generate-.+-deployments.sh$"],
+      "matchStrings": [
+          "helm repo add .+ (?<registryUrl>.+?)\\s(.|\\n)*helm template -n .+ .+ .+\\/(?<depName>.+?) --version \"(?<currentValue>.*)\"\\s"
+      ],
+      "datasourceTemplate": "helm"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["config\/prow\/cluster\/monitoring\/base\/update.sh$"],
+      "matchStrings": [
+          "kube_prometheus_version=\"(?<currentValue>.*)\"\\s"
+      ],
+      "depNameTemplate": "prometheus-operator/kube-prometheus",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+  "separateMinorPatch": true,
+  "packageRules": [
+    {
+      "groupName": "update: athens",
+      "matchDatasources": ["helm"],
+      "matchPackagePatterns": ["athens-proxy"],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool helm v3.14.0",
+          "bash config/prow/cluster/athens/helm/generate-athens-deployments.sh"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "groupName": "update: ingress-nginx",
+      "matchDatasources": ["helm"],
+      "matchPackagePatterns": ["ingress-nginx"],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool helm v3.14.0",
+          "bash config/prow/cluster/ingress-nginx/helm/generate-ingress-nginx-deployments.sh"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "groupName": "update: oauth2-proxy",
+      "matchDatasources": ["helm"],
+      "matchPackagePatterns": ["oauth2-proxy"],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool helm v3.14.0",
+          "bash config/prow/cluster/oauth2-proxy/helm/generate-oauth2-proxy-deployments.sh"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "groupName": "update: renovate",
+      "matchDatasources": ["helm"],
+      "matchPackagePatterns": ["renovate"],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool helm v3.14.0",
+          "bash config/prow/cluster/renovate/helm/generate-renovate-deployments.sh"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "groupName": "update: kube-prometheus",
+      "matchDatasources": ["github-releases"],
+      "matchPackagePatterns": ["prometheus-operator/kube-prometheus"],
+      "postUpgradeTasks": {
+        "commands": [
+          "bash config/prow/cluster/monitoring/base/update.sh"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      "matchDatasources": ["go"],
+      "matchPackagePatterns": [
+        "k8s\\.io\/(api|apimachinery|client-go)",
+        "sigs\\.k8s\\.io\/controller-runtime"
+      ],
+      "enabled": false
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major", "minor"],
+      "matchPackagePatterns": ["grafana/grafana"],
+      "enabled": false
+    }
+  ]
+}
