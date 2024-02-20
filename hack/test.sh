@@ -11,4 +11,4 @@ set -o pipefail
 
 echo "> Test"
 
-GO111MODULE=on go test -race -timeout=2m -mod=vendor $@ | grep -v 'no test files'
+GO111MODULE=on go test -race -timeout=2m $@ | grep -v 'no test files'
