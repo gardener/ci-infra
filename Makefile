@@ -109,3 +109,12 @@ verify-tidy: tidy
 	@if !(git diff --quiet HEAD -- go.sum go.mod); then \
 		echo "go module files are out of date, please run 'make tidy'"; exit 1; \
 	fi
+
+.PHONY: generate-prow-deployments
+generate-prow-deployments:
+	@echo "> Generate prow deployments"
+	@./config/prow/cluster/athens/helm/generate-athens-deployments.sh
+	@./config/prow/cluster/ingress-nginx/helm/generate-ingress-nginx-deployments.sh
+	@./config/prow/cluster/oauth2-proxy/helm/generate-oauth2-proxy-deployments.sh
+	@./config/prow/cluster/renovate/helm/generate-renovate-deployments.sh
+	@./config/prow/cluster/monitoring/base/update.sh

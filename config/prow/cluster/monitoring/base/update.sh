@@ -11,6 +11,7 @@ set -o pipefail
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd "$script_dir"
 
+# renovate: datasource=github-releases depName=prometheus-operator/kube-prometheus
 kube_prometheus_version="v0.13.0"
 echo "> Fetching kube-prometheus@$kube_prometheus_version"
 
@@ -50,11 +51,9 @@ cat <<EOF > kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-bases:
-- ./setup
-
 resources:
 $(ls *.yaml | sed 's/^/- /')
+- ./setup
 EOF
 
 echo "> Updating kube-prometheus/setup"
@@ -74,12 +73,14 @@ cat <<EOF > kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-commonLabels:
-  app.kubernetes.io/name: prometheus-operator
-  app.kubernetes.io/part-of: kube-prometheus
-  app.kubernetes.io/version: $prometheus_operator_version
-
 resources:
 $(ls *.yaml | sed 's/^/- /')
+
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/name: prometheus-operator
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: $prometheus_operator_version
 EOF
 

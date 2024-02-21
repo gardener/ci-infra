@@ -1,0 +1,118 @@
+---
+# Source: renovate/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: renovate
+  labels:
+    helm.sh/chart: renovate-37.200.0
+    app.kubernetes.io/name: renovate
+    app.kubernetes.io/instance: renovate
+    app.kubernetes.io/version: "37.200.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: renovate/templates/config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-config
+  labels:
+    helm.sh/chart: renovate-37.200.0
+    app.kubernetes.io/name: renovate
+    app.kubernetes.io/instance: renovate
+    app.kubernetes.io/version: "37.200.0"
+    app.kubernetes.io/managed-by: Helm
+data:
+  config.json: |-
+    {
+      "platform": "github",
+      "autodiscover": true,
+      "autodiscoverFilter": [
+        "gardener/ci-infra",
+        "gardener/gardener",
+        "gardener/gardener-extension-registry-cache",
+        "gardener/gardener-extension-shoot-oidc-service",
+        "gardener/dependency-watchdog",
+        "gardener/etcd-druid",
+        "gardener/gardener-extension-networking-cilium",
+        "gardener/gardener-extension-networking-calico",
+        "gardener/gardener-extension-shoot-rsyslog-relp",
+        "gardener/landscaper"
+      ],
+      "allowedPostUpgradeCommands": [".*"]
+    }
+---
+# Source: renovate/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: renovate-cache
+spec:
+  storageClassName: gce-ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+# Source: renovate/templates/cronjob.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate
+  labels:
+    helm.sh/chart: renovate-37.200.0
+    app.kubernetes.io/name: renovate
+    app.kubernetes.io/instance: renovate
+    app.kubernetes.io/version: "37.200.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  schedule: "42 * * * *"
+  timeZone: CET
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/name: renovate
+        app.kubernetes.io/instance: renovate
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: renovate
+            app.kubernetes.io/instance: renovate
+        spec:
+          serviceAccountName: renovate
+          restartPolicy: Never
+          containers:
+            - name: renovate
+              image: "ghcr.io/renovatebot/renovate:37.200.0"
+              imagePullPolicy: IfNotPresent
+              volumeMounts:
+              - name: config-volume
+                mountPath: /usr/src/app/config.json
+                subPath: config.json
+              - name: renovate-cache
+                mountPath: /tmp/renovate
+              env:
+                - name: RENOVATE_CONFIG_FILE
+                  value: /usr/src/app/config.json
+              envFrom:
+                - secretRef:
+                    name: github
+              resources:
+                requests:
+                  cpu: 500m
+                  memory: 256Mi
+          volumes:
+            - name: config-volume
+              configMap:
+                name: renovate-config
+            - name: renovate-cache
+              persistentVolumeClaim:
+                claimName: renovate-cache
+          securityContext:
+            
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsUser: 1000
