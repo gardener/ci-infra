@@ -1,7 +1,7 @@
 fullnameOverride: renovate
 
 cronjob:
-  schedule: "42 * * * *"
+  schedule: "*/5 * * * *"
   timeZone: CET
 
 renovate:

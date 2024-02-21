@@ -67,7 +67,7 @@ metadata:
     app.kubernetes.io/version: "37.203.3"
     app.kubernetes.io/managed-by: Helm
 spec:
-  schedule: "42 * * * *"
+  schedule: "*/5 * * * *"
   timeZone: CET
   jobTemplate:
     metadata:
