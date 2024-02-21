@@ -179,3 +179,39 @@ Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted
 [`Renovate` 🤖](https://github.com/renovatebot/renovate) is working in repositories which are enabled in `prow`.
 
 You can enable it by creating a `renovate.json5` file in the respective repository. Please check the [renovate docs](https://docs.renovatebot.com/configuration-options/) for the configuration options.
+
+
+### Changing Renovate Configuration
+
+Renovate can be difficult and tiresome to configure correctly.
+Follow these two tips to validate your configuration changes before opening/merging PRs!
+
+Both require a local installation of renovate, e.g.:
+
+```bash
+brew install renovate
+```
+
+#### Config Validation
+
+Use the [config validator](https://docs.renovatebot.com/config-validation/) to ensure you have no syntax or schema issues in your configuration file:
+
+```
+$ renovate-config-validator
+ INFO: Validating .github/renovate.json5
+ INFO: Config validated successfully
+```
+
+[`config/jobs/ci-infra/ci-infra-presubmits.yaml`](./config/jobs/ci-infra/ci-infra-presubmits.yaml) has a reusable prow job definition that runs `renovate-config-validator` as a presubmit job.
+
+#### Local Dry-Run
+
+You can perform a [dry-run](https://docs.renovatebot.com/self-hosted-configuration/#dryrun) of renovate by using the [`local` platform](https://docs.renovatebot.com/modules/platform/local/).
+It will output a lot of logs which indicate what dependencies were detected, what updates are available, etc. without actually opening/updating PRs:
+
+```
+$ LOG_LEVEL=debug GITHUB_API_GITHUB_COM_TOKEN=$(cat ~/path/to/my-personal-access-token) renovate --detect-host-rules-from-env --platform=local
+```
+
+Renovate requires a token for repository lookups on GitHub.
+You can use any [personal access token](https://github.com/settings/tokens) on your account.
