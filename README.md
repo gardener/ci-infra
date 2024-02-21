@@ -75,6 +75,7 @@ The following commands assume you are using the combined `kubeconfig` generated 
     - the secrets for GCP service accounts can be created by our credentials rotation script `./hack/rotate-secrets.sh`. Please see Rotate [credentials section](#rotate-credentials) for more details.
     - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
     - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`, needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
+    - `github` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with `repo` scope, needs to be present in `renovate` namespace of the prow cluster)
     - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
     - `hmac-token`
       ```bash
@@ -173,9 +174,8 @@ Alertmanager will send Slack alerts in [`#gardener-prow-alerts`](https://sap-ti.
 
 Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted cluster) and https://monitoring-build.prow.gardener.cloud (build cluster).
 
-## Rotate credentials
+## Renovate
 
-Service account tokens of the GCP service accounts we are using can be rotated using the `./hack/rotate-secrets.sh` script. It includes the service accounts.
-- GCP infrastructure service account
-- GCP storage service account
-- Service account for gcr.io
+[`Renovate` 🤖](https://github.com/renovatebot/renovate) is working in repositories which are enabled in `prow`.
+
+You can enable it by creating a `renovate.json5` file in the respective repository. Please check the [renovate docs](https://docs.renovatebot.com/configuration-options/) for the configuration options.
