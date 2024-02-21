@@ -51,11 +51,9 @@ cat <<EOF > kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-bases:
-- ./setup
-
 resources:
 $(ls *.yaml | sed 's/^/- /')
+- ./setup
 EOF
 
 echo "> Updating kube-prometheus/setup"
@@ -75,12 +73,14 @@ cat <<EOF > kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-commonLabels:
-  app.kubernetes.io/name: prometheus-operator
-  app.kubernetes.io/part-of: kube-prometheus
-  app.kubernetes.io/version: $prometheus_operator_version
-
 resources:
 $(ls *.yaml | sed 's/^/- /')
+
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/name: prometheus-operator
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: $prometheus_operator_version
 EOF
 
