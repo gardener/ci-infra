@@ -1,0 +1,71 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices"
+  ],
+  "labels": ["kind/enhancement"],
+  "postUpdateOptions": ["gomodTidy"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["config\/prow\/cluster\/.+\/helm\/generate-.+-deployments.sh$"],
+      "matchStrings": [
+          "helm repo add .+ (?<registryUrl>.+?)\\s(.|\\n)*helm template -n .+ .+ .+\\/(?<depName>.+?) --version \"(?<currentValue>.*)\"\\s"
+      ],
+      "datasourceTemplate": "helm"
+    },
+    {
+      // Update `_VERSION` variables in Makefiles and scripts.
+      // Inspired by `regexManagers:dockerfileVersions` preset.
+      "customType": "regex",
+      "fileMatch": ["Makefile$", "\\.mk$", "\\.sh$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s.+?_(VERSION|version) *[?:]?= *\"?(?<currentValue>.+?)\"?\\s"
+      ]
+    }
+  ],
+  "separateMinorPatch": true,
+  "packageRules": [
+    {
+      "groupName": "update: prow apps",
+      "matchDatasources": ["github-releases", "helm"],
+      "matchPackagePatterns": [
+        "athens-proxy",
+        "ingress-nginx",
+        "oauth2-proxy",
+        "renovate",
+        "prometheus-operator/kube-prometheus"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool helm v3.14.0",
+          "make generate-prow-deployments"
+        ],
+        "executionMode": "branch"
+      }
+    },
+    {
+      // Do not update Kubernetes dependencies except k8s.io/test-infra.
+      // The versions of api, apimachiner, client-go and controller-runtime depend on k8s.io/test-infra.
+      "matchDatasources": ["go"],
+      "matchPackagePatterns": [
+        "k8s\\.io\/(api|apimachinery|client-go)",
+        "sigs\\.k8s\\.io\/controller-runtime"
+      ],
+      "enabled": false
+    },
+    {
+      // k8s.io/test-infra is too noisy because it does not create releases but is referenced by digest
+      "matchDatasources": ["go"],
+      "matchPackagePatterns": ["k8s\\.io\/test-infra"],
+      "extends": ["schedule:monthly"]
+    },
+    {
+      // Pin grafana to the latest minor version published with Apache 2.0 license
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major", "minor"],
+      "matchPackagePatterns": ["grafana/grafana"],
+      "enabled": false
+    }
+  ]
+}

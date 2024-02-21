@@ -11,6 +11,7 @@ set -o pipefail
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd "$script_dir"
 
+# renovate: datasource=github-releases depName=prometheus-operator/kube-prometheus
 kube_prometheus_version="v0.13.0"
 echo "> Fetching kube-prometheus@$kube_prometheus_version"
 
