@@ -1,0 +1,14 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-check-renovate-config
+    cluster: gardener-prow-build
+    always_run: true
+    annotations:
+      description: Validates renovate config on pull requests to master branch
+    decorate: true
+    spec:
+      containers:
+      - name: renovate
+        image: ghcr.io/renovatebot/renovate:37.203.3
+        command:
+        - renovate-config-validator
