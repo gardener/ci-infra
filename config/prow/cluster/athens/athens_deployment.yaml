@@ -14,7 +14,7 @@ metadata:
     helm.sh/chart: athens-proxy-0.8.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.12.1"
+    app.kubernetes.io/version: "v0.12.0"
 ---
 # Source: athens-proxy/templates/secret.yaml
 kind: Secret
@@ -31,7 +31,7 @@ metadata:
     helm.sh/chart: athens-proxy-0.8.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.12.1"
+    app.kubernetes.io/version: "v0.12.0"
 type: Opaque
 data:
 ---
@@ -52,7 +52,7 @@ metadata:
     helm.sh/chart: athens-proxy-0.8.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.12.1"
+    app.kubernetes.io/version: "v0.12.0"
 spec:
   type: ClusterIP
   ports:
@@ -79,7 +79,7 @@ metadata:
     helm.sh/chart: athens-proxy-0.8.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.12.1"
+    app.kubernetes.io/version: "v0.12.0"
 spec:
   replicas: 3
   selector:
@@ -98,7 +98,7 @@ spec:
         helm.sh/chart: athens-proxy-0.8.0
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/instance: "athens"
-        app.kubernetes.io/version: "v0.12.1"
+        app.kubernetes.io/version: "v0.12.0"
       annotations:
         checksum/upstream: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         checksum/ssh-config: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
@@ -110,7 +110,7 @@ spec:
       serviceAccount: athens-proxy
       containers:
       - name: athens-proxy
-        image: "docker.io/gomods/athens:v0.12.1"
+        image: "docker.io/gomods/athens:v0.12.0"
         imagePullPolicy: "IfNotPresent"
         livenessProbe:
           failureThreshold: 3
@@ -170,7 +170,7 @@ metadata:
     helm.sh/chart: athens-proxy-0.8.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.12.1"
+    app.kubernetes.io/version: "v0.12.0"
     prometheus: default
   annotations:
     service.kubernetes.io/topology-mode: Auto

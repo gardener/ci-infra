@@ -14,6 +14,7 @@ resources:
 - 0servicemonitorCustomResourceDefinition.yaml
 - 0thanosrulerCustomResourceDefinition.yaml
 - namespace.yaml
+
 labels:
 - includeSelectors: true
   pairs:
