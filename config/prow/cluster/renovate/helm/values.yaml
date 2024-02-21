@@ -10,7 +10,18 @@ renovate:
     {
       "platform": "github",
       "autodiscover": true,
-      "autodiscoverFilter": ["gardener/*"],
+      "autodiscoverFilter": [
+        "gardener/ci-infra",
+        "gardener/gardener",
+        "gardener/gardener-extension-registry-cache",
+        "gardener/gardener-extension-shoot-oidc-service",
+        "gardener/dependency-watchdog",
+        "gardener/etcd-druid",
+        "gardener/gardener-extension-networking-cilium",
+        "gardener/gardener-extension-networking-calico",
+        "gardener/gardener-extension-shoot-rsyslog-relp",
+        "gardener/landscaper"
+      ],
       "allowedPostUpgradeCommands": [".*"]
     }
 
