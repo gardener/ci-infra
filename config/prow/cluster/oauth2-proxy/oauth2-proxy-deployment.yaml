@@ -126,7 +126,6 @@ spec:
           - --github-org=gardener
           - --github-user=timebertt
           - --provider=github
-          - --scope=user:email
           - --whitelist-domain=.prow.gardener.cloud
           - --config=/etc/oauth2_proxy/oauth2_proxy.cfg
         env:

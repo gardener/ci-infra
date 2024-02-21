@@ -6,7 +6,6 @@ extraArgs:
   github-org: gardener
   github-user: timebertt
   email-domain: "*"
-  scope: "user:email"
 
 affinity:
   nodeAffinity:
