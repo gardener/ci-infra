@@ -9,6 +9,6 @@ presubmits:
     spec:
       containers:
       - name: renovate
-        image: ghcr.io/renovatebot/renovate:37.207.0
+        image: ghcr.io/renovatebot/renovate:37.208.0
         command:
         - renovate-config-validator
