@@ -20,6 +20,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/gardener-extension-shoot-rsyslog-relp
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -32,7 +33,7 @@ periodics:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
-        
+
         You can:
         - Reopen this issue with `/reopen`
         - Mark this issue as fresh with `/remove-lifecycle rotten`
@@ -70,6 +71,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/gardener-extension-shoot-rsyslog-relp
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -83,7 +85,7 @@ periodics:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
-        
+
         You can:
         - Mark this issue as fresh with `/remove-lifecycle rotten`
         - Close this issue with `/close`
@@ -121,6 +123,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/gardener-extension-shoot-rsyslog-relp
         is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -134,7 +137,7 @@ periodics:
         - After 90d of inactivity, `lifecycle/stale` is applied
         - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
-        
+
         You can:
         - Mark this issue as fresh with `/remove-lifecycle stale`
         - Mark this issue as rotten with `/lifecycle rotten`
@@ -173,6 +176,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/gardener-extension-shoot-rsyslog-relp
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -185,7 +189,7 @@ periodics:
         - After 15d of inactivity, `lifecycle/stale` is applied
         - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
-        
+
         You can:
         - Reopen this PR with `/reopen`
         - Mark this PR as fresh with `/remove-lifecycle rotten`
@@ -223,6 +227,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/gardener-extension-shoot-rsyslog-relp
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -236,7 +241,7 @@ periodics:
         - After 15d of inactivity, `lifecycle/stale` is applied
         - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
-        
+
         You can:
         - Mark this PR as fresh with `/remove-lifecycle rotten`
         - Close this PR with `/close`
@@ -274,6 +279,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/gardener-extension-shoot-rsyslog-relp
         is:pr
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -287,7 +293,7 @@ periodics:
         - After 15d of inactivity, `lifecycle/stale` is applied
         - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
         - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
-        
+
         You can:
         - Mark this PR as fresh with `/remove-lifecycle stale`
         - Mark this PR as rotten with `/lifecycle rotten`

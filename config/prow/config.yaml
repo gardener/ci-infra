@@ -186,6 +186,20 @@ branch-protection:
             teams:
               - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: false # protections don't apply to admins
+        gardener-extension-shoot-rsyslog-relp:
+          protect: true
+          include:
+          - "main"
+          required_status_checks:
+            contexts:
+            - license/cla
+          restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
+            apps:
+            - gardener-prow
+            users: []
+            teams:
+            - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
+          enforce_admins: false # protections don't apply to admins
 
 tide:
   sync_period: 1m
@@ -274,6 +288,23 @@ tide:
       - do-not-merge/work-in-progress
       - needs-rebase
       - "cla: no"
+  - repos:
+    - gardener/gardener-extension-shoot-rsyslog-relp
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
 
   context_options:
     # Use branch protection options to define required and optional contexts
@@ -283,6 +314,7 @@ tide:
     gardener/gardener: squash
     gardener/gardener-extension-registry-cache: squash
     gardener/dependency-watchdog: squash
+    gardener/gardener-extension-shoot-rsyslog-relp: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr
   blocker_label: tide/merge-blocker
