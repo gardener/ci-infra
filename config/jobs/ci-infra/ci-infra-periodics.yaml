@@ -142,7 +142,7 @@ periodics:
       secret:
         secretName: github-token
 
-- cron: "35 8-12 * * 1-5"
+- cron: "35 8-15 * * 1-5"
   name: ci-prow-autobump-autodeploy
   cluster: gardener-prow-trusted
   decorate: true
