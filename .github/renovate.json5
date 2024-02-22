@@ -52,10 +52,11 @@
       }
     },
     {
-      "groupName": "Renovate",
+      "groupName": "auto-update: renovate",
       "matchDatasources": ["docker", "helm"],
       "matchPackagePatterns": [
-        "^renovate$"
+        "^renovate$",
+        "^ghcr\\.io\/renovatebot\/renovate$"
       ],
       "addLabels": ["skip-review"],
       "schedule": ["after 08:30 and before 15:30 every weekday"]
