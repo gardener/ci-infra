@@ -52,6 +52,21 @@
       }
     },
     {
+      "groupName": "Renovate",
+      "matchDatasources": ["docker", "helm"],
+      "matchPackagePatterns": [
+        "^renovate$"
+      ],
+      "addLabels": ["skip-review"],
+      "schedule": ["after 08:30 and before 15:30 every weekday"]
+    },
+    {
+      // k8s.io/test-infra is too noisy because it does not create releases but is referenced by digest
+      "matchDatasources": ["go"],
+      "matchPackagePatterns": ["k8s\\.io\/test-infra"],
+      "extends": ["schedule:monthly"]
+    },
+    {
       // Do not update Kubernetes dependencies except k8s.io/test-infra.
       // The versions of api, apimachiner, client-go and controller-runtime depend on k8s.io/test-infra.
       "matchDatasources": ["go"],
@@ -60,12 +75,6 @@
         "sigs\\.k8s\\.io\/controller-runtime"
       ],
       "enabled": false
-    },
-    {
-      // k8s.io/test-infra is too noisy because it does not create releases but is referenced by digest
-      "matchDatasources": ["go"],
-      "matchPackagePatterns": ["k8s\\.io\/test-infra"],
-      "extends": ["schedule:monthly"]
     },
     {
       // Pin grafana to the latest minor version published with Apache 2.0 license
