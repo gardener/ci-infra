@@ -67,6 +67,7 @@ images:
   tags:
   - v1.24.1
   - v1.26.4
+  - v1.26.7
 - source: ghcr.io/credativ/vali
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/vali
   tags:
