@@ -68,36 +68,52 @@ slack:
     - prow-alerts
     exempt_users:
     - gardener-prow[bot]
+    - gardener-ci-robot
+    - dependabot[bot]
   - repos:
     - gardener/gardener
     channels:
     - prow-alerts
     exempt_users:
     - gardener-prow[bot]
+    - gardener-ci-robot
     - gardener-robot-ci-1
     - gardener-robot-ci-2
     - gardener-robot-ci-3
+    - dependabot[bot]
   - repos:
     - gardener/gardener-extension-registry-cache
     channels:
     - prow-alerts
     exempt_users:
     - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
   - repos:
-      - gardener/dependency-watchdog
+    - gardener/dependency-watchdog
     channels:
-      - prow-alerts
+    - prow-alerts
     exempt_users:
       - gardener-prow[bot]
+      - gardener-ci-robot
       - gardener-robot-ci-1
       - gardener-robot-ci-2
       - gardener-robot-ci-3
+      - dependabot[bot]
   - repos:
     - gardener/gardener-extension-shoot-rsyslog-relp
     channels:
     - prow-alerts
     exempt_users:
     - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
 
 repo_milestone:
   gardener/ci-infra:
