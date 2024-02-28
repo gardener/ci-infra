@@ -21,6 +21,6 @@ helm repo add oauth2-proxy https://oauth2-proxy.github.io/manifests
 helm repo update
 
 echo "Templating oauth2-proxy"
-helm template -n oauth2-proxy oauth2-proxy oauth2-proxy/oauth2-proxy --version "6.24.1" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../oauth2-proxy-deployment.yaml
+helm template -n oauth2-proxy oauth2-proxy oauth2-proxy/oauth2-proxy --version "7.0.0" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../oauth2-proxy-deployment.yaml
 
 echo "Done"
