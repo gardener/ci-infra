@@ -20,7 +20,11 @@ renovate:
         "gardener/gardener-extension-networking-cilium",
         "gardener/gardener-extension-networking-calico",
         "gardener/gardener-extension-shoot-rsyslog-relp",
-        "gardener/landscaper"
+        "gardener/landscaper",
+        "gardener/dashboard",
+        "gardener/gardenctl-v2",
+        "gardener/gardenlogin",
+        "gardener/terminal-controller-manager"
       ],
       "allowedPostUpgradeCommands": [".*"]
     }
