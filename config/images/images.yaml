@@ -132,6 +132,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/eks/aws-load-balancer-controller
   tags:
   - v2.6.1
+  - v2.7.0
 - source: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/ebs-csi-driver/volume-modifier-for-k8s
   tags:
