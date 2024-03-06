@@ -100,6 +100,8 @@ spec:
               env:
                 - name: RENOVATE_CONFIG_FILE
                   value: /usr/src/app/config.json
+                - name: "GOPROXY"
+                  value: "http://athens-proxy.athens.svc.cluster.local,direct"
               envFrom:
                 - secretRef:
                     name: github
