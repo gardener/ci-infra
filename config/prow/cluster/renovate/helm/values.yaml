@@ -53,3 +53,6 @@ securityContext:
   runAsGroup: 1000
   fsGroup: 1000
   fsGroupChangePolicy: OnRootMismatch
+
+env:
+  GOPROXY: http://athens-proxy.athens.svc.cluster.local,direct

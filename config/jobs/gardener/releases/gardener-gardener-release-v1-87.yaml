@@ -792,7 +792,7 @@ presubmits:
         - --context=/home/prow/go/src/github.com/gardener/gardener
         - --dockerfile=Dockerfile
         - --no-push
-        - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org
+        - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
         - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
         - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
         command:

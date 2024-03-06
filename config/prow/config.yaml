@@ -382,4 +382,4 @@ presets:
 # enable GOPROXY by default and use local athens-proxy as primary choice
 - env:
   - name: GOPROXY
-    value: "http://athens-proxy.athens.svc.cluster.local,https://proxy.golang.org"
+    value: "http://athens-proxy.athens.svc.cluster.local,direct"
