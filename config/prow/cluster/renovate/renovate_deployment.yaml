@@ -72,7 +72,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 spec:
   schedule: "*/5 * * * *"
-  timeZone: CET
+  concurrencyPolicy: Forbid
   jobTemplate:
     metadata:
       labels:
