@@ -2,7 +2,7 @@ fullnameOverride: renovate
 
 cronjob:
   schedule: "*/5 * * * *"
-  timeZone: CET
+  concurrencyPolicy: Forbid
 
 renovate:
   # See https://docs.renovatebot.com/self-hosted-configuration
