@@ -797,7 +797,7 @@ presubmits:
         - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
         command:
         - /kaniko/executor
-        image: gcr.io/kaniko-project/executor:v1.21.0
+        image: gcr.io/kaniko-project/executor:v1.21.1
         name: kaniko
         resources:
           requests:
