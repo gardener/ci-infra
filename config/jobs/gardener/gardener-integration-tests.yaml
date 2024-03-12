@@ -15,7 +15,7 @@ presubmits:
     spec:
       containers:
       - name: test-integration
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240311-5390c12-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240311-cd1c6ff-1.22
         command:
         - make
         args:
@@ -47,7 +47,7 @@ periodics:
   spec:
     containers:
     - name: test-integration
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240311-5390c12-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240311-cd1c6ff-1.22
       command:
       - make
       args:
