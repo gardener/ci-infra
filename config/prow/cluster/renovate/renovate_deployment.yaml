@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: renovate
   labels:
-    helm.sh/chart: renovate-37.246.0
+    helm.sh/chart: renovate-37.246.1
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "37.246.0"
+    app.kubernetes.io/version: "37.246.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: renovate/templates/config.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: renovate-config
   labels:
-    helm.sh/chart: renovate-37.246.0
+    helm.sh/chart: renovate-37.246.1
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "37.246.0"
+    app.kubernetes.io/version: "37.246.1"
     app.kubernetes.io/managed-by: Helm
 data:
   config.json: |-
@@ -65,10 +65,10 @@ kind: CronJob
 metadata:
   name: renovate
   labels:
-    helm.sh/chart: renovate-37.246.0
+    helm.sh/chart: renovate-37.246.1
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "37.246.0"
+    app.kubernetes.io/version: "37.246.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   schedule: "*/5 * * * *"
@@ -89,7 +89,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: renovate
-              image: "ghcr.io/renovatebot/renovate:37.246.0"
+              image: "ghcr.io/renovatebot/renovate:37.246.1"
               imagePullPolicy: IfNotPresent
               volumeMounts:
               - name: config-volume
