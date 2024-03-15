@@ -41,7 +41,8 @@ data:
         "gardener/dashboard",
         "gardener/gardenctl-v2",
         "gardener/gardenlogin",
-        "gardener/terminal-controller-manager"
+        "gardener/terminal-controller-manager",
+        "gardener/diki"
       ],
       "allowedPostUpgradeCommands": [".*"]
     }
