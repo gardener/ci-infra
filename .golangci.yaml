@@ -2,7 +2,7 @@ run:
   concurrency: 4
   deadline: 10m
 
-  skip-files:
+  exclude-files:
   - ".*\\.pb\\.go$"
   - "zz_generated\\..*\\.go$"
   - "openapi_generated\\.go$"
