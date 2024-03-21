@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -71,7 +71,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -151,7 +151,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -191,7 +191,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -231,7 +231,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -271,7 +271,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -311,7 +311,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -350,7 +350,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
       name: ""
       resources:
         requests:
@@ -455,7 +455,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -491,7 +491,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -527,7 +527,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -563,7 +563,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -599,7 +599,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -635,7 +635,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -671,7 +671,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -707,7 +707,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
@@ -742,7 +742,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-2d110f2-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240321-cba2389-1.22
         name: ""
         resources:
           requests:
