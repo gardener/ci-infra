@@ -11,7 +11,7 @@ presubmits:
     spec:
       containers:
       - name: kaniko
-        image: gcr.io/kaniko-project/executor:v1.21.1
+        image: gcr.io/kaniko-project/executor:v1.22.0
         command:
         - /kaniko/executor
         args:
@@ -47,6 +47,7 @@ presubmits:
         - --target=dependency-watchdog
         - --add-version-sha-tag=true
         - --inject-effective-version=true
+        - --kaniko-image=gcr.io/kaniko-project/executor:v1.22.0
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.

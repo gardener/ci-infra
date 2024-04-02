@@ -15,7 +15,7 @@
       "datasourceTemplate": "helm"
     },
     {
-      // Update `_VERSION` variables in Makefiles and scripts.
+      // Update `_VERSION` and `_version` variables in Makefiles and scripts.
       // Inspired by `regexManagers:dockerfileVersions` preset.
       "customType": "regex",
       "fileMatch": ["Makefile$", "\\.mk$", "\\.sh$"],
@@ -24,10 +24,10 @@
       ]
     },
     {  
-      // Generic detection for pod-like image specifications in prow jobs.
+      // Generic detection for pod-like and CLI-argument-like image specifications in prow jobs.
       "customType": "regex",
       "fileMatch": ["^config\/jobs\/.+\\.yaml$"],  
-      "matchStrings": ["image: (?<depName>.*?):(?<currentValue>.*?)\\s"],  
+      "matchStrings": ["image(: |=)(?<depName>.*?):(?<currentValue>.*?)\\s"],  
       "datasourceTemplate": "docker"  
     }
   ],
