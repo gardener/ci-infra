@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-networking-calico developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240329-de84295-1.22
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240403-957a72b-1.22
         command:
         - wrapper.sh
         - bash
@@ -62,7 +62,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240329-de84295-1.22
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240403-957a72b-1.22
       command:
       - wrapper.sh
       - bash
