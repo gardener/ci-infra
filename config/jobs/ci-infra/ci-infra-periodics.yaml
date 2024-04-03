@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20240329-de84295
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20240402-00fdd1a
       command:
       - /job-forker
       args:
@@ -319,7 +319,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240329-4be4ddb-1.22
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240403-73f6de6-1.22
       command:
       - make
       args:
@@ -342,7 +342,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20240329-de84295
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20240402-00fdd1a
       command:
       - /branch-cleaner
       args:
