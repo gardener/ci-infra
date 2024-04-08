@@ -38,6 +38,8 @@ data:
         "gardener/gardener-extension-networking-calico",
         "gardener/gardener-extension-shoot-rsyslog-relp",
         "gardener/landscaper",
+        "gardener/landscaper-service",
+        "gardener/landscapercli",
         "gardener/dashboard",
         "gardener/gardenctl-v2",
         "gardener/gardenlogin",
