@@ -61,7 +61,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 50Gi
 ---
 # Source: renovate/templates/cronjob.yaml
 apiVersion: batch/v1
