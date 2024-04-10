@@ -11,8 +11,8 @@ import (
 
 	"github.com/Masterminds/semver"
 	"github.com/sirupsen/logrus"
-	"k8s.io/test-infra/prow/config"
-	"k8s.io/test-infra/prow/github"
+	"sigs.k8s.io/prow/prow/config"
+	"sigs.k8s.io/prow/prow/github"
 )
 
 type githubClient interface {

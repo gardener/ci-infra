@@ -11,8 +11,8 @@ import (
 	"github.com/Masterminds/semver"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"k8s.io/test-infra/prow/git/localgit"
-	gitv2 "k8s.io/test-infra/prow/git/v2"
+	"sigs.k8s.io/prow/prow/git/localgit"
+	gitv2 "sigs.k8s.io/prow/prow/git/v2"
 )
 
 var _ = Describe("ReleaseHandler", func() {

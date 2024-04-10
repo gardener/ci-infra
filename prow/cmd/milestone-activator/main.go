@@ -11,9 +11,9 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	"k8s.io/test-infra/prow/flagutil"
-	"k8s.io/test-infra/prow/logrusutil"
-	"k8s.io/test-infra/prow/pod-utils/downwardapi"
+	"sigs.k8s.io/prow/prow/flagutil"
+	"sigs.k8s.io/prow/prow/logrusutil"
+	"sigs.k8s.io/prow/prow/pod-utils/downwardapi"
 
 	ghi "github.com/gardener/ci-infra/prow/pkg/githubinteractor"
 )

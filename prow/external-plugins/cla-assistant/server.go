@@ -10,7 +10,7 @@ import (
 	"net/http"
 
 	"github.com/sirupsen/logrus"
-	"k8s.io/test-infra/prow/github"
+	"sigs.k8s.io/prow/prow/github"
 )
 
 // httpServer implements http.Handler. It validates incoming GitHub webhooks and
