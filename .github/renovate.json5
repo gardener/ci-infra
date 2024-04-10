@@ -62,14 +62,14 @@
       "schedule": ["after 08:30 and before 15:30 every weekday"]
     },
     {
-      // k8s.io/test-infra is too noisy because it does not create releases but is referenced by digest
+      // sigs.k8s.io/prow is too noisy because it does not create releases but is referenced by digest.
       "matchDatasources": ["go"],
-      "matchPackagePatterns": ["k8s\\.io\/test-infra"],
+      "matchPackagePatterns": ["sigs\\.k8s\\.io\/prow"],
       "extends": ["schedule:monthly"]
     },
     {
-      // Do not update Kubernetes dependencies except k8s.io/test-infra.
-      // The versions of api, apimachiner, client-go and controller-runtime depend on k8s.io/test-infra.
+      // Do not update Kubernetes dependencies except sigs.k8s.io/prow.
+      // The versions of api, apimachiner, client-go and controller-runtime depend on sigs.k8s.io/prow.
       "matchDatasources": ["go"],
       "matchPackagePatterns": [
         "k8s\\.io\/(api|apimachinery|client-go)",
@@ -78,7 +78,16 @@
       "enabled": false
     },
     {
-      // Pin grafana to the latest minor version published with Apache 2.0 license
+      // Do not update patch versions of the Go Toolchain.
+      // Default golang images set the environment variable GOTOOLCHAIN=local
+      // and we don't want to enforce every (test-)image to be on the latest patch level.
+      "matchManagers": ["gomod"],
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": ["go"],
+      "enabled": false
+    },
+    {
+      // Pin grafana to the latest minor version published with Apache 2.0 license.
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major", "minor"],
       "matchPackagePatterns": ["grafana/grafana"],
