@@ -1,6 +1,6 @@
 module github.com/gardener/ci-infra
 
-go 1.22.2
+go 1.22.0
 
 require (
 	github.com/Masterminds/semver v1.5.0
@@ -16,8 +16,8 @@ require (
 	k8s.io/api v0.25.9
 	k8s.io/apimachinery v0.26.5
 	k8s.io/client-go v0.25.9
-	k8s.io/test-infra v0.0.0-20240402200411-ae65ab3f07bf
 	sigs.k8s.io/controller-runtime v0.12.3
+	sigs.k8s.io/prow v0.0.0-20240410004112-4be743f3ec63
 	sigs.k8s.io/yaml v1.4.0
 )
 
@@ -29,6 +29,7 @@ require (
 	cloud.google.com/go/storage v1.28.1 // indirect
 	contrib.go.opencensus.io/exporter/ocagent v0.7.1-0.20200907061046-05415f1de66d // indirect
 	contrib.go.opencensus.io/exporter/prometheus v0.4.0 // indirect
+	github.com/Azure/azure-pipeline-go v0.2.2 // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
 	github.com/Azure/go-autorest/autorest v0.11.29 // indirect
 	github.com/Azure/go-autorest/autorest/adal v0.9.22 // indirect
@@ -94,6 +95,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/jtolds/gls v4.20.0+incompatible // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mattn/go-ieproxy v0.0.1 // indirect
 	github.com/mattn/go-zglob v0.0.2 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
