@@ -16,7 +16,7 @@ presubmits:
         description: Runs KIND cluster based e2e tests for dependency watchdog developments in pull requests
       spec:
         containers:
-          - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240409-856de46-1.21
+          - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240410-0cc43ea-1.21
             command:
               - wrapper.sh
               - bash
@@ -50,7 +50,7 @@ periodics:
       testgrid-days-of-results: "60"
     spec:
       containers:
-        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240409-856de46-1.21
+        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240410-0cc43ea-1.21
           command:
             - wrapper.sh
             - bash
