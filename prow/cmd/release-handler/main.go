@@ -10,12 +10,12 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	prowjobv1 "k8s.io/test-infra/prow/apis/prowjobs/v1"
-	"k8s.io/test-infra/prow/config/secret"
-	"k8s.io/test-infra/prow/flagutil"
-	gitv2 "k8s.io/test-infra/prow/git/v2"
-	"k8s.io/test-infra/prow/github"
-	"k8s.io/test-infra/prow/pod-utils/downwardapi"
+	prowjobv1 "sigs.k8s.io/prow/prow/apis/prowjobs/v1"
+	"sigs.k8s.io/prow/prow/config/secret"
+	"sigs.k8s.io/prow/prow/flagutil"
+	gitv2 "sigs.k8s.io/prow/prow/git/v2"
+	"sigs.k8s.io/prow/prow/github"
+	"sigs.k8s.io/prow/prow/pod-utils/downwardapi"
 )
 
 type options struct {

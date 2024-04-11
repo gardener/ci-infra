@@ -4,7 +4,7 @@
 
 package fakegit
 
-import "k8s.io/test-infra/prow/git/v2"
+import "sigs.k8s.io/prow/prow/git/v2"
 
 // FakeGitClientFactory fakes the prow git client factory
 type FakeGitClientFactory struct {

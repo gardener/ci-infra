@@ -19,11 +19,11 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	clgofake "k8s.io/client-go/kubernetes/fake"
-	"k8s.io/test-infra/prow/flagutil"
-	"k8s.io/test-infra/prow/interrupts"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlfake "sigs.k8s.io/controller-runtime/pkg/client/fake"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"sigs.k8s.io/prow/prow/flagutil"
+	"sigs.k8s.io/prow/prow/interrupts"
 	"sigs.k8s.io/yaml"
 )
 

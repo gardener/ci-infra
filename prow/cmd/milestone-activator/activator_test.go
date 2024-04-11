@@ -11,7 +11,7 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"k8s.io/test-infra/prow/github/fakegithub"
+	"sigs.k8s.io/prow/prow/github/fakegithub"
 )
 
 var _ = Describe("activator", func() {
