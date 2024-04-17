@@ -7,14 +7,14 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.3
+    chart: athens-proxy-0.9.4
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.3
+    helm.sh/chart: athens-proxy-0.9.4
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.13.1"
+    app.kubernetes.io/version: "v0.13.3"
 ---
 # Source: athens-proxy/templates/secret.yaml
 kind: Secret
@@ -24,14 +24,14 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.3
+    chart: athens-proxy-0.9.4
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.3
+    helm.sh/chart: athens-proxy-0.9.4
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.13.1"
+    app.kubernetes.io/version: "v0.13.3"
 type: Opaque
 data:
 ---
@@ -45,14 +45,14 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.3
+    chart: athens-proxy-0.9.4
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.3
+    helm.sh/chart: athens-proxy-0.9.4
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.13.1"
+    app.kubernetes.io/version: "v0.13.3"
 spec:
   type: ClusterIP
   ports:
@@ -72,14 +72,14 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.3
+    chart: athens-proxy-0.9.4
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.3
+    helm.sh/chart: athens-proxy-0.9.4
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.13.1"
+    app.kubernetes.io/version: "v0.13.3"
 spec:
   replicas: 3
   selector:
@@ -91,14 +91,14 @@ spec:
       labels:
         
         app: athens-proxy
-        chart: athens-proxy-0.9.3
+        chart: athens-proxy-0.9.4
         release: "athens"
         heritage: "Helm"
         app.kubernetes.io/name: athens-proxy
-        helm.sh/chart: athens-proxy-0.9.3
+        helm.sh/chart: athens-proxy-0.9.4
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/instance: "athens"
-        app.kubernetes.io/version: "v0.13.1"
+        app.kubernetes.io/version: "v0.13.3"
       annotations:
         checksum/upstream: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         checksum/ssh-config: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
@@ -110,7 +110,7 @@ spec:
       serviceAccount: athens-proxy
       containers:
       - name: athens-proxy
-        image: "docker.io/gomods/athens:v0.13.1"
+        image: "docker.io/gomods/athens:v0.13.3"
         imagePullPolicy: "IfNotPresent"
         livenessProbe:
           failureThreshold: 3
@@ -163,14 +163,14 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.3
+    chart: athens-proxy-0.9.4
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.3
+    helm.sh/chart: athens-proxy-0.9.4
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
-    app.kubernetes.io/version: "v0.13.1"
+    app.kubernetes.io/version: "v0.13.3"
     prometheus: default
   annotations:
     service.kubernetes.io/topology-mode: Auto
