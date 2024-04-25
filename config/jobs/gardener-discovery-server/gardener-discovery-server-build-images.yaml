@@ -1,0 +1,48 @@
+postsubmits:
+  gardener/gardener-discovery-server:
+  - name: post-gardener-discovery-server-build-images
+    cluster: gardener-prow-trusted
+    skip_if_only_changed: '^VERSION$'
+    branches:
+    - ^main$
+    annotations:
+      description: Gardener Discovery Server image build on main branch
+      testgrid-dashboards: gardener-discovery-server
+      testgrid-days-of-results: "60"
+    decorate: true
+    max_concurrency: 1
+    spec:
+      serviceAccountName: image-builder
+      containers:
+      - name: image-builder
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240422-cbb954f
+        command:
+        - /image-builder
+        args:
+        - --log-level=info
+        - --docker-config-secret=gardener-prow-gcr-docker-config
+        - --registry=europe-docker.pkg.dev/gardener-project/snapshots/gardener
+        - --cache-registry=europe-docker.pkg.dev/gardener-project/snapshots/ci-infra/kaniko-cache
+        - --target=gardener-discovery-server
+        - --add-version-tag=true
+        - --add-version-sha-tag=true
+        - --add-fixed-tag=latest
+        - --kaniko-image=gcr.io/kaniko-project/executor:v1.22.0
+        # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
+        # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
+        # to multiple build pods in parallel.
+        # For a proper scheduling the combined resource requests of all build pods are assigned to this pod, even though it does not
+        # use them. The resource requests of build pods themselves are "0"
+        resources:
+          requests:
+            cpu: 6
+            memory: 2Gi
+      # Node selector is copied to build pods
+      nodeSelector:
+        dedicated: high-cpu
+      # Tolerations are copied to build pods
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "high-cpu"
+        effect: "NoSchedule"
