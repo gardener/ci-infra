@@ -1,0 +1,64 @@
+presubmits:
+  gardener/gardener-discovery-server:
+  - name: pull-gardener-discovery-server-verify-image-build
+    cluster: gardener-prow-build
+    always_run: true
+    annotations:
+      description: Verify Gardener Discovery Server image build on pull requests
+    decorate: true
+    spec:
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:v1.22.0
+        command:
+        - /kaniko/executor
+        args:
+        - --context=/home/prow/go/src/github.com/gardener/gardener-discovery-server
+        - --dockerfile=Dockerfile
+        - --no-push
+        - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
+        - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
+        resources:
+          requests:
+            cpu: 6
+            memory: 2Gi
+  - name: pull-gardener-discovery-server-publish-test-images
+    cluster: gardener-prow-trusted
+    annotations:
+      description: Publish Gardener Discovery Server development images on pull requests
+    decorate: true
+    optional: true
+    spec:
+      serviceAccountName: image-builder
+      containers:
+      - name: image-builder
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240422-cbb954f
+        command:
+        - /image-builder
+        args:
+        - --log-level=info
+        - --docker-config-secret=gardener-prow-gcr-docker-config
+        - --registry=europe-docker.pkg.dev/gardener-project/snapshots/gardener/extensions
+        - --cache-registry=europe-docker.pkg.dev/gardener-project/snapshots/ci-infra/kaniko-cache
+        - --target=gardener-discovery-server
+        - --add-version-sha-tag=true
+        - --inject-effective-version=true
+        - --kaniko-image=gcr.io/kaniko-project/executor:v1.22.0
+        # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
+        # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
+        # to multiple build pods in parallel.
+        # For a proper scheduling the combined resource requests of all build pods are assigned to this pod, even though it does not
+        # use them. The resource requests of build pods themselves are "0"
+        resources:
+          requests:
+            cpu: 6
+            memory: 2Gi
+      # Node selector is copied to build pods
+      nodeSelector:
+        dedicated: high-cpu
+      # Tolerations are copied to build pods
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "high-cpu"
+        effect: "NoSchedule"
