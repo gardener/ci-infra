@@ -1,0 +1,53 @@
+presubmits:
+  gardener/gardener-discovery-server:
+  - name: pull-gardener-discovery-server-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener-discovery-server developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240424-d9a3196-1.22
+        command:
+        - make
+        args:
+        - verify-extended
+        resources:
+          limits:
+            memory: 2Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-gardener-discovery-server-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener-discovery-server
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for gardener-discovery-server main branch
+    testgrid-dashboards: gardener-discovery-server
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240424-d9a3196-1.22
+      command:
+      - make
+      args:
+      - verify-extended
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 2
+          memory: 1Gi

@@ -11,6 +11,7 @@ dashboard_groups:
     - gardener-extension-networking-calico
     - gardener-extension-shoot-networking-filter
     - gardener-extension-shoot-rsyslog-relp
+    - gardener-discovery-server
 
 dashboards:
 - name: gardener-gardener
@@ -23,3 +24,4 @@ dashboards:
 - name: gardener-extension-networking-calico
 - name: gardener-extension-shoot-networking-filter
 - name: gardener-extension-shoot-rsyslog-relp
+- name: gardener-discovery-server
