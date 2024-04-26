@@ -27,7 +27,7 @@ postsubmits:
     spec:
       serviceAccountName: deployer
       containers:
-      - image: bitnami/kubectl:1.29.4
+      - image: bitnami/kubectl:1.30.0
         command:
         - config/prow/deploy.sh
         env:
