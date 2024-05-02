@@ -25,7 +25,6 @@ presubmits:
         - check
         - format
         - test
-        - test-prometheus
         resources:
           limits:
             memory: 16Gi
@@ -62,7 +61,6 @@ periodics:
       - check
       - format
       - test
-      - test-prometheus
       resources:
         limits:
           memory: 16Gi
