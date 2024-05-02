@@ -7,9 +7,9 @@ package main
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	prowapi "sigs.k8s.io/prow/prow/apis/prowjobs/v1"
-	"sigs.k8s.io/prow/prow/config"
-	"sigs.k8s.io/prow/prow/github"
+	prowapi "sigs.k8s.io/prow/pkg/apis/prowjobs/v1"
+	"sigs.k8s.io/prow/pkg/config"
+	"sigs.k8s.io/prow/pkg/github"
 )
 
 var (

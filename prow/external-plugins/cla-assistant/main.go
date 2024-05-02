@@ -13,14 +13,14 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"sigs.k8s.io/prow/pkg/config/secret"
 	"sigs.k8s.io/prow/pkg/flagutil"
-	"sigs.k8s.io/prow/prow/config/secret"
-	prowflagutil "sigs.k8s.io/prow/prow/flagutil"
-	pluginsflagutil "sigs.k8s.io/prow/prow/flagutil/plugins"
-	"sigs.k8s.io/prow/prow/interrupts"
-	"sigs.k8s.io/prow/prow/logrusutil"
-	"sigs.k8s.io/prow/prow/pjutil"
-	"sigs.k8s.io/prow/prow/pluginhelp/externalplugins"
+	prowflagutil "sigs.k8s.io/prow/pkg/flagutil"
+	pluginsflagutil "sigs.k8s.io/prow/pkg/flagutil/plugins"
+	"sigs.k8s.io/prow/pkg/interrupts"
+	"sigs.k8s.io/prow/pkg/logrusutil"
+	"sigs.k8s.io/prow/pkg/pjutil"
+	"sigs.k8s.io/prow/pkg/pluginhelp/externalplugins"
 )
 
 type options struct {

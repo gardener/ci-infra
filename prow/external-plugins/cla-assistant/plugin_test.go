@@ -18,10 +18,10 @@ import (
 	githubql "github.com/shurcooL/githubv4"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	"sigs.k8s.io/prow/prow/config"
-	"sigs.k8s.io/prow/prow/github"
-	"sigs.k8s.io/prow/prow/github/fakegithub"
-	"sigs.k8s.io/prow/prow/plugins"
+	"sigs.k8s.io/prow/pkg/config"
+	"sigs.k8s.io/prow/pkg/github"
+	"sigs.k8s.io/prow/pkg/github/fakegithub"
+	"sigs.k8s.io/prow/pkg/plugins"
 )
 
 const (

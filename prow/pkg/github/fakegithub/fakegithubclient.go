@@ -5,7 +5,7 @@
 package fakegithub
 
 import (
-	"sigs.k8s.io/prow/prow/github"
+	"sigs.k8s.io/prow/pkg/github"
 )
 
 // FakeGithubClient fakes the prow GitHubClient

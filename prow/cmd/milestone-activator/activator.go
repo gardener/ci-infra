@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	"sigs.k8s.io/prow/prow/config"
-	"sigs.k8s.io/prow/prow/github"
+	"sigs.k8s.io/prow/pkg/config"
+	"sigs.k8s.io/prow/pkg/github"
 
 	ghi "github.com/gardener/ci-infra/prow/pkg/githubinteractor"
 )
