@@ -19,11 +19,11 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-	prowjobv1 "sigs.k8s.io/prow/prow/apis/prowjobs/v1"
-	"sigs.k8s.io/prow/prow/flagutil"
-	"sigs.k8s.io/prow/prow/interrupts"
-	"sigs.k8s.io/prow/prow/logrusutil"
-	"sigs.k8s.io/prow/prow/pod-utils/downwardapi"
+	prowjobv1 "sigs.k8s.io/prow/pkg/apis/prowjobs/v1"
+	"sigs.k8s.io/prow/pkg/flagutil"
+	"sigs.k8s.io/prow/pkg/interrupts"
+	"sigs.k8s.io/prow/pkg/logrusutil"
+	"sigs.k8s.io/prow/pkg/pod-utils/downwardapi"
 )
 
 type options struct {

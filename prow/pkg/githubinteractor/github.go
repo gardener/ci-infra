@@ -12,9 +12,9 @@ import (
 	"regexp"
 
 	"github.com/sirupsen/logrus"
-	"sigs.k8s.io/prow/prow/config"
-	"sigs.k8s.io/prow/prow/git/v2"
-	"sigs.k8s.io/prow/prow/github"
+	"sigs.k8s.io/prow/pkg/config"
+	"sigs.k8s.io/prow/pkg/git/v2"
+	"sigs.k8s.io/prow/pkg/github"
 )
 
 // GetFileNames returns the relative filepath to the `dir`, ignoring folders / files in `ignoredFileNames`, goes through subfolders, if `recursive` is `true`

@@ -26,9 +26,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/sirupsen/logrus"
 
-	"sigs.k8s.io/prow/prow/git/localgit"
-	v2 "sigs.k8s.io/prow/prow/git/v2"
-	"sigs.k8s.io/prow/prow/github"
+	"sigs.k8s.io/prow/pkg/git/localgit"
+	v2 "sigs.k8s.io/prow/pkg/git/v2"
+	"sigs.k8s.io/prow/pkg/github"
 )
 
 var commentFormat = "%s/%s#%d %s"

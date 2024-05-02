@@ -11,8 +11,8 @@ import (
 	"regexp"
 
 	"github.com/sirupsen/logrus"
-	"sigs.k8s.io/prow/prow/flagutil"
-	"sigs.k8s.io/prow/prow/logrusutil"
+	"sigs.k8s.io/prow/pkg/flagutil"
+	"sigs.k8s.io/prow/pkg/logrusutil"
 )
 
 type options struct {

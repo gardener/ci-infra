@@ -13,7 +13,7 @@ import (
 
 	"github.com/Masterminds/semver"
 	"github.com/sirupsen/logrus"
-	gitv2 "sigs.k8s.io/prow/prow/git/v2"
+	gitv2 "sigs.k8s.io/prow/pkg/git/v2"
 )
 
 const (

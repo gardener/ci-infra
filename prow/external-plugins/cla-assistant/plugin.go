@@ -15,10 +15,10 @@ import (
 	backoff "github.com/cenkalti/backoff/v4"
 	githubql "github.com/shurcooL/githubv4"
 	"github.com/sirupsen/logrus"
-	"sigs.k8s.io/prow/prow/config"
-	"sigs.k8s.io/prow/prow/github"
-	"sigs.k8s.io/prow/prow/pluginhelp"
-	"sigs.k8s.io/prow/prow/plugins"
+	"sigs.k8s.io/prow/pkg/config"
+	"sigs.k8s.io/prow/pkg/github"
+	"sigs.k8s.io/prow/pkg/pluginhelp"
+	"sigs.k8s.io/prow/pkg/plugins"
 )
 
 const (
