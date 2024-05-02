@@ -7,11 +7,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.4
+    chart: athens-proxy-0.9.5
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.4
+    helm.sh/chart: athens-proxy-0.9.5
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.13.3"
@@ -24,11 +24,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.4
+    chart: athens-proxy-0.9.5
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.4
+    helm.sh/chart: athens-proxy-0.9.5
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.13.3"
@@ -45,11 +45,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.4
+    chart: athens-proxy-0.9.5
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.4
+    helm.sh/chart: athens-proxy-0.9.5
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.13.3"
@@ -72,11 +72,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.4
+    chart: athens-proxy-0.9.5
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.4
+    helm.sh/chart: athens-proxy-0.9.5
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.13.3"
@@ -91,11 +91,11 @@ spec:
       labels:
         
         app: athens-proxy
-        chart: athens-proxy-0.9.4
+        chart: athens-proxy-0.9.5
         release: "athens"
         heritage: "Helm"
         app.kubernetes.io/name: athens-proxy
-        helm.sh/chart: athens-proxy-0.9.4
+        helm.sh/chart: athens-proxy-0.9.5
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/instance: "athens"
         app.kubernetes.io/version: "v0.13.3"
@@ -107,7 +107,7 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
-      serviceAccount: athens-proxy
+      serviceAccountName: athens-proxy
       containers:
       - name: athens-proxy
         image: "docker.io/gomods/athens:v0.13.3"
@@ -163,11 +163,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.9.4
+    chart: athens-proxy-0.9.5
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.9.4
+    helm.sh/chart: athens-proxy-0.9.5
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.13.3"
