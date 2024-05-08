@@ -1,7 +1,7 @@
 # ----------------
 # Build container
 # ----------------
-FROM golang:1.22.2 AS builder
+FROM golang:1.22.3 AS builder
 ARG GOPROXY=https://proxy.golang.org,direct
 ENV GOPROXY=$GOPROXY
 LABEL stage=intermediate
