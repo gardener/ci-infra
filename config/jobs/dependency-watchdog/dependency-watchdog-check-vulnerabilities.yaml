@@ -13,7 +13,7 @@ presubmits:
     spec:
       containers:
       - name: test
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240508-4448f4a-1.21
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240509-6d000d0-1.21
         command:
         - make
         args:
@@ -36,7 +36,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240508-4448f4a-1.22
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240509-6d000d0-1.22
       command:
       - make
       args:
