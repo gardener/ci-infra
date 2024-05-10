@@ -45,7 +45,7 @@
       ],
       "postUpgradeTasks": {
         "commands": [
-          "install-tool helm v3.14.0",
+          "install-tool helm v3.14.4",
           "make generate-prow-deployments"
         ],
         "executionMode": "branch"
@@ -58,6 +58,13 @@
         "^renovate$",
         "^ghcr\\.io\/renovatebot\/renovate$"
       ],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool helm v3.14.4",
+          "make generate-prow-deployments"
+        ],
+        "executionMode": "branch"
+      },
       "addLabels": ["skip-review"],
       "schedule": ["after 08:30 and before 15:30 every weekday"]
     },
