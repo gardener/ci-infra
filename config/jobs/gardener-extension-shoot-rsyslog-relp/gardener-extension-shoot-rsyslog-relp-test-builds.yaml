@@ -9,7 +9,7 @@ presubmits:
     spec:
       containers:
       - name: kaniko
-        image: gcr.io/kaniko-project/executor:v1.22.0
+        image: gcr.io/kaniko-project/executor:v1.23.0
         command:
         - /kaniko/executor
         args:
