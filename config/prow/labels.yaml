@@ -1086,6 +1086,13 @@ repos:
         target: both
         prowPlugin: label
         addedBy: anyone
+      # ipcei
+      - name: ipcei/workload-identity
+        color: C2E0C6
+        description: ""
+        target: both
+        prowPlugin: label
+        addedBy: anyone
       # kind
       - name: kind/epic
         color: c7def8
