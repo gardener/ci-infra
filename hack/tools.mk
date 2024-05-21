@@ -16,7 +16,7 @@ GOLANGCI_LINT              := $(TOOLS_BIN_DIR)/golangci-lint
 
 # default tool versions
 # renovate: datasource=github-releases depName=golangci/golangci-lint
-GOLANGCI_LINT_VERSION ?= v1.58.1
+GOLANGCI_LINT_VERSION ?= v1.58.2
 
 export TOOLS_BIN_DIR := $(TOOLS_BIN_DIR)
 export PATH := $(abspath $(TOOLS_BIN_DIR)):$(PATH)
