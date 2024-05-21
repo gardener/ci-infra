@@ -1088,7 +1088,7 @@ repos:
         addedBy: anyone
       # ipcei
       - name: ipcei/workload-identity
-        color: C2E0C6
+        color: c2e0c6
         description: ""
         target: both
         prowPlugin: label
