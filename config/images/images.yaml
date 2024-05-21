@@ -77,16 +77,19 @@ images:
   tags:
   - v2.2.13
   - v2.2.14
+  - v2.2.15
 - source: ghcr.io/credativ/valitail
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/valitail
   tags:
   - v2.2.13
   - v2.2.14
+  - v2.2.15
 - source: ghcr.io/credativ/plutono
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/plutono
   tags:
   - v7.5.28
   - v7.5.29
+  - v7.5.30
 # gardener/pkg/provider-local/images.yaml
 - source: kindest/local-path-provisioner
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-provisioner
