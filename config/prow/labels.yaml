@@ -1089,7 +1089,13 @@ repos:
       # ipcei
       - name: ipcei/workload-identity
         color: c2e0c6
-        description: ""
+        description: Epic for Gardener Workload Identity scenarios
+        target: both
+        prowPlugin: label
+        addedBy: anyone
+      - name: ipcei/oidc
+        color: c2e0c6
+        description: Epic for Gardener OIDC scenarios
         target: both
         prowPlugin: label
         addedBy: anyone
