@@ -38,7 +38,7 @@ renovate:
     cache:
       enabled: true
       storageClass: gce-ssd
-      storageSize: 50Gi
+      storageSize: 10Gi
 
 existingSecret: github
 
