@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
 - test-pods_namespace.yaml
+- test-pods_pod-disruption-budget.yaml
 - cpu-limit-range_limitrange.yaml
 - mem-limit-range_limitrange.yaml
 - gce-ssd_storageclass.yaml
