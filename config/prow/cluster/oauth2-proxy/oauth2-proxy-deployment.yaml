@@ -5,7 +5,7 @@ kind: PodDisruptionBudget
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.7.0
+    helm.sh/chart: oauth2-proxy-7.7.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
@@ -27,7 +27,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.7.0
+    helm.sh/chart: oauth2-proxy-7.7.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
@@ -44,7 +44,7 @@ kind: Service
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.7.0
+    helm.sh/chart: oauth2-proxy-7.7.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
@@ -78,7 +78,7 @@ kind: Deployment
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.7.0
+    helm.sh/chart: oauth2-proxy-7.7.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
@@ -103,7 +103,7 @@ spec:
         checksum/redis-secret: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
       labels:
         app: oauth2-proxy        
-        helm.sh/chart: oauth2-proxy-7.7.0
+        helm.sh/chart: oauth2-proxy-7.7.1
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: authentication-proxy
         app.kubernetes.io/part-of: oauth2-proxy
@@ -229,7 +229,7 @@ kind: Ingress
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.7.0
+    helm.sh/chart: oauth2-proxy-7.7.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
