@@ -17,6 +17,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	prowjobv1 "sigs.k8s.io/prow/pkg/apis/prowjobs/v1"
@@ -211,7 +212,12 @@ func main() {
 	if err != nil {
 		log.WithError(err).Fatal("Unable to add corev1 to scheme")
 	}
-	mgr, err := manager.New(restConfig, manager.Options{Scheme: sc, Namespace: podNamespace})
+	mgr, err := manager.New(restConfig, manager.Options{
+		Scheme: sc,
+		Cache: cache.Options{
+			DefaultNamespaces: map[string]cache.Config{podNamespace: {}},
+		},
+	})
 	if err != nil {
 		log.WithError(err).Fatal("Unable to create controller manager")
 	}

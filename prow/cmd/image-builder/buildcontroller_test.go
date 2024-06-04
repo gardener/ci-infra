@@ -156,7 +156,7 @@ func createTestImageBuildController(t *testing.T, initObjs ...client.Object) *bu
 	if err != nil {
 		t.Fatal(err)
 	}
-	client := ctrlfake.NewClientBuilder().WithScheme(sc).WithObjects(initObjs...).Build()
+	client := ctrlfake.NewClientBuilder().WithScheme(sc).WithIndex(&corev1.Pod{}, ownerReferencesUID, indexOwnerReferences).WithObjects(initObjs...).Build()
 	clientset := clgofake.NewSimpleClientset()
 
 	mapFS := createTestFileSystem(t)
