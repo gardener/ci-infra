@@ -29,7 +29,7 @@ postsubmits:
         - --dockerfile=images/copy-images/Dockerfile
         - --add-date-sha-tag=true
         - --add-fixed-tag=latest
-        - --kaniko-image=gcr.io/kaniko-project/executor:v1.23.0
+        - --kaniko-image=gcr.io/kaniko-project/executor:v1.23.1
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.
@@ -75,7 +75,7 @@ postsubmits:
         - --registry=europe-docker.pkg.dev/gardener-project/releases/ci-infra
         - --target=krte
         - --context=images/krte
-        - --kaniko-image=gcr.io/kaniko-project/executor:v1.23.0
+        - --kaniko-image=gcr.io/kaniko-project/executor:v1.23.1
         # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
         # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
         # to multiple build pods in parallel.
