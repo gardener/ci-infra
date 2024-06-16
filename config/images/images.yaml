@@ -44,6 +44,10 @@ images:
   - v2.1.4
   - v2.2.0
   - v2.2.2
+- source: ghcr.io/fluent/fluent-operator/fluent-bit # A custom Fluent Bit image is required to work with FluentBit Operator for dynamic configuration reloading, ref: https://github.com/fluent/fluent-operator#fluent-bit
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/fluent-operator/fluent-bit
+  tags:
+  - v3.0.7
 - source: kubesphere/fluent-operator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubesphere/fluent-operator
   tags:
