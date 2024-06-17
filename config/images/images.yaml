@@ -44,7 +44,7 @@ images:
   - v2.1.4
   - v2.2.0
   - v2.2.2
-- source: ghcr.io/fluent/fluent-operator/fluent-bit # A custom Fluent Bit image is required to work with FluentBit Operator for dynamic configuration reloading, ref: https://github.com/fluent/fluent-operator#fluent-bit
+- source: ghcr.io/fluent/fluent-operator/fluent-bit # A custom Fluent Bit image is required to work with FluentBit Operator for dynamic configuration reloading, ref: https://github.com/fluent/fluent-operator#fluent-bit It follows the switch in the upstream fluent-operator project. The kubsphere/fluent-bit image shall not be used anymore.
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/fluent-operator/fluent-bit
   tags:
   - v3.0.7
@@ -55,6 +55,10 @@ images:
   - v2.2.0
   - v2.3.0
   - v2.7.0
+# It follows the switch in the upstream fluent-operator project. The kubsphere/fluent-operator image shall not be used anymore.
+- source: ghcr.io/fluent/fluent-operator
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/fluent-operator/fluent-operator
+  tags:
   - v2.9.0
 # DO NOT ADD NEW LOKI IMAGES.
 # With https://github.com/gardener/gardener/pull/7318 loki is replaced by vali.
