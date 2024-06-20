@@ -21,6 +21,6 @@ helm repo add gomods https://gomods.github.io/athens-charts
 helm repo update
 
 echo "Templating athens"
-helm template -n athens athens gomods/athens-proxy --version "0.12.0" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../athens_deployment.yaml
+helm template -n athens athens gomods/athens-proxy --version "0.12.1" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../athens_deployment.yaml
 
 echo "Done"
