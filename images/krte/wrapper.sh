@@ -38,9 +38,12 @@ printf '%0.s=' {1..80} >&2; echo >&2
 
 cleanup(){
   if [[ "${DOCKER_IN_DOCKER_ENABLED:-false}" == "true" ]]; then
+    >&2 echo "wrapper.sh] [CLEANUP] Waiting 30 seconds for pods stopped with terminationGracePeriod:30"
+    sleep 30
     >&2 echo "wrapper.sh] [CLEANUP] Cleaning up after Docker in Docker ..."
     docker ps -aq | xargs -r docker rm -f || true
-    service docker stop || true
+    >&2 echo "wrapper.sh] [CLEANUP] Waiting for docker to stop for 30 seconds"
+    timeout 30 service docker stop || true
     >&2 echo "wrapper.sh] [CLEANUP] Done cleaning up after Docker in Docker."
   fi
 }
@@ -92,6 +95,8 @@ fi
 export DOCKER_IN_DOCKER_ENABLED=${DOCKER_IN_DOCKER_ENABLED:-false}
 if [[ "${DOCKER_IN_DOCKER_ENABLED}" == "true" ]]; then
   >&2 echo "wrapper.sh] [SETUP] Docker in Docker enabled, initializing ..."
+  # Fix ulimit issue
+  sed -i 's|ulimit -Hn|ulimit -n|' /etc/init.d/docker || true
   # If we have opted in to docker in docker, start the docker daemon,
   service docker start
   # the service can be started but the docker socket not ready, wait for ready
