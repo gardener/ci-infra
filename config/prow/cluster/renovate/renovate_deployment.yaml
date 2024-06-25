@@ -46,6 +46,7 @@ data:
         "gardener/gardenlogin",
         "gardener/terminal-controller-manager",
         "gardener/diki",
+        "gardener/cert-management",
         "gardener/ops-toolbelt"
       ],
       "allowedPostUpgradeCommands": [".*"]
