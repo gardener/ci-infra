@@ -1,0 +1,53 @@
+presubmits:
+  gardener/cert-management:
+  - name: pull-cert-management-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 30m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for cert-management developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240617-85ad75b-1.22
+        command:
+        - make
+        args:
+        - test
+        resources:
+          limits:
+            memory: 2Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-cert-management-unit
+  cluster: gardener-prow-build
+  interval: 24h
+  extra_refs:
+  - org: gardener
+    repo: cert-management
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 30m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for cert-management master branch
+    testgrid-dashboards: cert-management
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240617-85ad75b-1.22
+      command:
+      - make
+      args:
+      - test
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 2
+          memory: 1Gi
