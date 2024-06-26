@@ -12,6 +12,7 @@ dashboard_groups:
     - gardener-extension-shoot-networking-filter
     - gardener-extension-shoot-rsyslog-relp
     - gardener-discovery-server
+    - cert-management
 
 dashboards:
 - name: gardener-gardener
@@ -25,3 +26,4 @@ dashboards:
 - name: gardener-extension-shoot-networking-filter
 - name: gardener-extension-shoot-rsyslog-relp
 - name: gardener-discovery-server
+- name: cert-management

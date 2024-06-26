@@ -22,6 +22,7 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-discovery-server
+        repo:gardener/cert-management
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -74,6 +75,7 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-discovery-server
+        repo:gardener/cert-management
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -127,6 +129,7 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-discovery-server
+        repo:gardener/cert-management
         is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -181,6 +184,7 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-discovery-server
+        repo:gardener/cert-management
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -233,6 +237,7 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-discovery-server
+        repo:gardener/cert-management
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -286,6 +291,7 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-discovery-server
+        repo:gardener/cert-management
         is:pr
         -label:lifecycle/frozen
         -label:lifecycle/stale

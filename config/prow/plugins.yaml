@@ -15,6 +15,7 @@ triggers:
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-discovery-server
   - gardener/landscaper
+  - gardener/cert-management
 
 approve:
 - repos:
@@ -24,6 +25,7 @@ approve:
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-discovery-server
+  - gardener/cert-management
   lgtm_acts_as_approve: false
   require_self_approval: true
   commandHelpLink: "https://prow.gardener.cloud/command-help"
@@ -55,6 +57,7 @@ lgtm:
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-discovery-server
+  - gardener/cert-management
   review_acts_as_lgtm: true
   store_tree_hash: true
 
@@ -131,6 +134,17 @@ slack:
     - gardener-robot-ci-2
     - gardener-robot-ci-3
     - dependabot[bot]
+  - repos:
+    - gardener/cert-management
+    channels:
+    - prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
 
 repo_milestone:
   gardener/ci-infra:
@@ -145,6 +159,8 @@ repo_milestone:
     maintainers_team: rsyslog-relp-maintainers
   gardener/gardener-discovery-server:
     maintainers_team: oidc-webhook-authenticator-maintainers
+  gardener/cert-management:
+    maintainers_team: cert-manager-maintainers
 
 config_updater:
   maps:
@@ -178,6 +194,7 @@ welcome:
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-discovery-server
+  - gardener/cert-management
   message_template: "Welcome @{{.AuthorLogin}}! <br><br>It looks like this is your first PR to <a href='https://github.com/{{.Org}}/{{.Repo}}'>{{.Org}}/{{.Repo}}</a> 🎉. Please refer to our [pull request process documentation](https://gardener.cloud/docs/contribute/#pull-request-checklist) to help your PR have a smooth ride to approval. <br><br>You will be prompted by a bot to use commands during the review process. Do not be afraid to follow the prompts! It is okay to experiment. [Here is the bot commands documentation](https://prow.gardener.cloud/command-help). <br><br>You can also check if {{.Org}}/{{.Repo}} has [its own contribution guidelines](https://github.com/{{.Org}}/{{.Repo}}/tree/master/CONTRIBUTING.md). <br><br>Thank you, and welcome to Gardener. :smiley:"
 
 require_matching_label:
@@ -209,6 +226,11 @@ require_matching_label:
 - missing_label: do-not-merge/needs-kind
   org: gardener
   repo: gardener-discovery-server
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: cert-management
   prs: true
   regexp: ^kind/
 
@@ -436,6 +458,37 @@ plugins:
     - override
     - skip
     - trigger
+  gardener/cert-management:
+    plugins:
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
 
 external_plugins:
   gardener/ci-infra:
@@ -514,6 +567,21 @@ external_plugins:
     - issue_comment
     - pull_request
   gardener/gardener-discovery-server:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
+    events:
+    - issue_comment
+    - pull_request
+  gardener/cert-management:
   - name: cla-assistant
     events:
       - issue_comment
