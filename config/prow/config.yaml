@@ -221,6 +221,10 @@ branch-protection:
           required_status_checks:
             contexts:
             - license/cla
+            - concourse-ci/build
+            - concourse-ci/build_oci_image_cert-management
+            - concourse-ci/check
+            - concourse-ci/publish
           restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
             - gardener-prow
