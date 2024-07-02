@@ -111,6 +111,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-provisioner
   tags:
   - v0.0.22-kind.0
+  - v0.0.23-kind.0
 - source: kindest/local-path-helper
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-helper
   tags:
