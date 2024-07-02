@@ -23,6 +23,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubernetesui/metrics-scraper
   tags:
   - v1.0.7
+  - v1.0.9
 - source: alpine
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/alpine
   tags:
