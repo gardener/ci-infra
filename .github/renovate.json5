@@ -136,7 +136,7 @@
       "postUpgradeTasks": {
         "commands": [
           "install-tool nix 2.23",
-          "nix --extra-experimental-features nix-command profile install nixpkgs#yq-go",
+          "nix --extra-experimental-features 'nix-command flakes' profile install nixpkgs#yq-go",
           "bash -c \"sed -i `yq '(.images[] | select(.source == \\\"{{{depName}}}\\\") | key) as \\\$imagePos | (.images[\\\$imagePos].tags | length) as \\\$tagLength | .images[\\\$imagePos].tags[\\\$tagLength - 1] | line' config/images/images.yaml`'i\\\  - {{{currentVersion}}}' config/images/images.yaml\""
         ],
         "executionMode": "update"
