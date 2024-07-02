@@ -116,6 +116,7 @@
         "coredns/coredns",
         "calico/node",
         "calico/cni",
+        "calico/typha",
         "calico/kube-controllers",
         "calico/pod2daemon-flexvol",
         "fluent/fluent-bit",
