@@ -137,7 +137,7 @@
         "commands": [
           "install-tool golang v1.22.3",
           "go install github.com/mikefarah/yq/v4@latest",
-          "bash -c \"sed -i `yq '(.images[] | select(.source == \\\"{{{depName}}}\\\") | key) as \\\$imagePos | (.images[\\\$imagePos].tags | length) as \\\$tagLength | .images[\\\$imagePos].tags[\\\$tagLength - 1] | line' config/images/images.yaml`'i\\\  - {{{currentVersion}}}' config/images/images.yaml\""
+          "bash -c \"sed -i `yq '(.images[] | select(.source == \\\"{{{depName}}}\\\") | key) as \\\$imagePos | (.images[\\\$imagePos].tags | length) as \\\$tagLength | .images[\\\$imagePos].tags[\\\$tagLength - 1] | line' config/images/images.yaml`'i\\\  - {{{currentValue}}}' config/images/images.yaml\""
         ],
         "executionMode": "update"
       }
