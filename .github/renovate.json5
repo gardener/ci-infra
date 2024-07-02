@@ -135,8 +135,8 @@
       "matchFileNames": ["config/images/images.yaml"],
       "postUpgradeTasks": {
         "commands": [
-          "install-tool nix 2.23",
-          "nix --extra-experimental-features 'nix-command flakes' profile install nixpkgs#yq-go",
+          "install-tool golang v1.22.3",
+          "go install github.com/mikefarah/yq/v4@latest",
           "bash -c \"sed -i `yq '(.images[] | select(.source == \\\"{{{depName}}}\\\") | key) as \\\$imagePos | (.images[\\\$imagePos].tags | length) as \\\$tagLength | .images[\\\$imagePos].tags[\\\$tagLength - 1] | line' config/images/images.yaml`'i\\\  - {{{currentVersion}}}' config/images/images.yaml\""
         ],
         "executionMode": "update"
