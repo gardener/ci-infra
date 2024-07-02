@@ -29,6 +29,13 @@
       "fileMatch": ["^config\/jobs\/.+\\.yaml$"],  
       "matchStrings": ["image(: |=)(?<depName>.*?):(?<currentValue>.*?)\\s"],  
       "datasourceTemplate": "docker"  
+    },
+    {
+      // Generic detection for container images to be copied.
+      "customType": "regex",
+      "fileMatch": ["^config\/images\/images\\.yaml$"],
+      "matchStrings": ["\\s+source:\\s+(?<depName>.+?)\\n\\s+destination:\\s+.*\\n\\s+tags:\\n(\\s+-\\s+v?[0-9][0-9a-zA-Z\\-\\.]*\\n)*\\s+-\\s+(?<currentValue>.+?)\\n"],
+      "datasourceTemplate": "docker"
     }
   ],
   "separateMinorPatch": true,
@@ -99,6 +106,35 @@
       "matchUpdateTypes": ["major", "minor"],
       "matchPackagePatterns": ["grafana/grafana"],
       "enabled": false
+    },
+    {
+      // Pin certain components to the current version.
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchFileNames": ["config/images/images.yaml"],
+      "matchPackagePatterns": [
+        "coredns/coredns",
+        "calico/node",
+        "calico/cni",
+        "calico/kube-controllers",
+        "calico/pod2daemon-flexvol",
+        "k8scloudprovider/openstack-cloud-controller-manager",
+        "k8scloudprovider/cinder-csi-plugin",
+        "nginx",
+      ],
+      "enabled": false
+    },
+    {
+      // Add new versions instead of replacing old version to keep a list of all copied versions.
+      "matchFileNames": ["config/images/images.yaml"],
+      "postUpgradeTasks": {
+        "commands": [
+          "install-tool nix 2.23",
+          "nix profile install nixpkgs#yq-go",
+          "bash -c \"sed -i `yq '(.images[] | select(.source == \\\"{{{depName}}}\\\") | key) as \\\$imagePos | (.images[\\\$imagePos].tags | length) as \\\$tagLength | .images[\\\$imagePos].tags[\\\$tagLength - 1] | line' config/images/images.yaml`'i\\\  - {{{currentVersion}}}' config/images/images.yaml\""
+        ],
+        "executionMode": "update"
+      }
     }
   ]
 }
