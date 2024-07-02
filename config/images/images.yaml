@@ -142,6 +142,7 @@ images:
   - v3.25.1
   - v3.25.0
   - v3.22.2
+  - v3.22.5
 - source: calico/kube-controllers
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/calico/kube-controllers
   tags:
