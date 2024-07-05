@@ -52,7 +52,7 @@
       ],
       "postUpgradeTasks": {
         "commands": [
-          "install-tool helm v3.14.4",
+          "install-tool helm v3.15.2",
           "make generate-prow-deployments"
         ],
         "executionMode": "branch"
@@ -67,7 +67,7 @@
       ],
       "postUpgradeTasks": {
         "commands": [
-          "install-tool helm v3.14.4",
+          "install-tool helm v3.15.2",
           "make generate-prow-deployments"
         ],
         "executionMode": "branch"
@@ -136,7 +136,7 @@
       "matchFileNames": ["config/images/images.yaml"],
       "postUpgradeTasks": {
         "commands": [
-          "install-tool golang v1.22.3",
+          "install-tool golang 1.22.5",
           "go install github.com/mikefarah/yq/v4@latest",
           "bash -c \"sed -i `yq '(.images[] | select(.source == \\\"{{{depName}}}\\\") | key) as \\\$imagePos | (.images[\\\$imagePos].tags | length) as \\\$tagLength | .images[\\\$imagePos].tags[\\\$tagLength - 1] | line' config/images/images.yaml`'i\\\  - {{{currentValue}}}' config/images/images.yaml\""
         ],
