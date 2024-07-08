@@ -21,6 +21,6 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 
 echo "Templating ingress-nginx"
-helm template -n ingress-nginx ingress-nginx ingress-nginx/ingress-nginx --version "4.10.1" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../ingress-nginx-deployment.yaml
+helm template -n ingress-nginx ingress-nginx ingress-nginx/ingress-nginx --version "4.10.2" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../ingress-nginx-deployment.yaml
 
 echo "Done"
