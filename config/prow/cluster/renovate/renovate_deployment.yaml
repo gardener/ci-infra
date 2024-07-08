@@ -95,7 +95,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: renovate
-              image: "ghcr.io/renovatebot/renovate:37.425.2"
+              image: "ghcr.io/renovatebot/renovate:37.425.2-full"
               imagePullPolicy: IfNotPresent
               volumeMounts:
               - name: config-volume

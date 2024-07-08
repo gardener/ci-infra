@@ -1,5 +1,8 @@
 fullnameOverride: renovate
 
+image:
+  useFull: true
+
 cronjob:
   schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
