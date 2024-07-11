@@ -209,6 +209,7 @@ images:
   - 2.8.2
   - 2.8.3
   - 3.0.0-alpha.1
+  - 3.0.0-beta.1
 # gardener-extension-registry-cache/test/e2e
 - source: nginx
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/nginx
