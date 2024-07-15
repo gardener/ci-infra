@@ -21,6 +21,6 @@ helm repo add renovatebot https://docs.renovatebot.com/helm-charts
 helm repo update
 
 echo "Templating renovate"
-helm template -n renovate renovate renovatebot/renovate --version "37.431.4" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../renovate_deployment.yaml
+helm template -n renovate renovate renovatebot/renovate --version "37.431.6" -f $SCRIPT_DIR/values.yaml > $SCRIPT_DIR/../renovate_deployment.yaml
 
 echo "Done"
