@@ -6,5 +6,7 @@ metadata:
 data:
   daemon.json: |-
     {
-      "cgroup-parent": "prowparent.slice"
+      "cgroup-parent": "prowparent.slice",
+      "insecure-registries" : ["registry-docker-io.kube-system.svc.cluster.local:5000"],
+      "registry-mirrors": ["http://registry-docker-io.kube-system.svc.cluster.local:5000"]
     }
