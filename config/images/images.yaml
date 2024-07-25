@@ -131,6 +131,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/redis
   tags:
   - 5.0.8
+  - 5.0.14
 # gardener-extension-networking-calico/charts/images.yaml
 #
 # DO NOT ADD NEW CALICO IMAGES.
