@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for landscaper developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240724-568ef4b-1.21
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240725-5dcf272-1.21
         command:
         - wrapper.sh
         - bash
