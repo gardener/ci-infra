@@ -84,10 +84,14 @@ var _ = Describe("BranchCleaner", func() {
 		JustBeforeEach(func() {
 			fakeGithub.Branches = []github.Branch{
 				{Name: "master", Protected: true},
-				{Name: "release-v1.73"},
-				{Name: "release-v1.74"},
-				{Name: "release-v1.72"},
-				{Name: "release-v1.75", Protected: true},
+				{Name: "release-v1.98"},
+				{Name: "release-v1.99"},
+				{Name: "release-v1.100"},
+				{Name: "release-v1.101", Protected: true},
+				{Name: "release-v1.201"},
+				{Name: "release-v1.202"},
+				{Name: "release-v2.15"},
+				{Name: "release-v2.16"},
 			}
 		})
 
@@ -95,7 +99,7 @@ var _ = Describe("BranchCleaner", func() {
 			bc.options.branchPattern = "^release-v\\d+\\.\\d+"
 			branches, err := bc.getMatchingBranches()
 			Expect(err).ToNot(HaveOccurred())
-			Expect(branches).To(Equal([]string{"release-v1.75", "release-v1.74", "release-v1.73", "release-v1.72"}))
+			Expect(branches).To(Equal([]string{"release-v2.16", "release-v2.15", "release-v1.202", "release-v1.201", "release-v1.101", "release-v1.100", "release-v1.99", "release-v1.98"}))
 		})
 
 		It("should not find non matching branches", func() {

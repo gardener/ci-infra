@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/Masterminds/semver"
 	"github.com/sirupsen/logrus"
@@ -107,7 +109,20 @@ func (b *branchCleaner) getMatchingBranches() ([]string, error) {
 			matchingBranches = append(matchingBranches, branch.Name)
 		}
 	}
-	sort.Sort(sort.Reverse(sort.StringSlice(matchingBranches)))
+
+	sort.Slice(matchingBranches, func(i, j int) bool {
+		aString := strings.Split(strings.TrimPrefix(matchingBranches[i], "release-v"), ".")
+		bString := strings.Split(strings.TrimPrefix(matchingBranches[j], "release-v"), ".")
+
+		aNum, _ := strconv.Atoi(aString[1])
+		bNum, _ := strconv.Atoi(bString[1])
+
+		if aString[0] == bString[0] {
+			return aNum > bNum
+		}
+		return aString[0] > bString[0]
+	})
+
 	logrus.Infof("Found these matching branches sorted in reverse order: %v", matchingBranches)
 
 	return matchingBranches, nil
