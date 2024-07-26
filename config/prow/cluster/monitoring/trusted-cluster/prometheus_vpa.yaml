@@ -14,9 +14,6 @@ spec:
         memory: 50Mi
     - containerName: prometheus
       controlledValues: RequestsOnly
-      maxAllowed:
-        cpu: 3
-        memory: 12Gi
       minAllowed:
         memory: 1Gi
   targetRef:
