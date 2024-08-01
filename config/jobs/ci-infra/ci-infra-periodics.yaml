@@ -17,7 +17,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-prow/label_sync:v20240729-5ecc23f8fa
+    - image: gcr.io/k8s-prow/label_sync:v20240731-a5d9345e59
       command:
       - label_sync
       args:
