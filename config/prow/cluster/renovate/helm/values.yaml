@@ -6,6 +6,15 @@ image:
 cronjob:
   schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
+  postCommand: |
+    disk_usage=$(df /tmp/renovate | awk 'NR==2 {print $5}' | tr -d '%')
+    inode_usage=$(df -i /tmp/renovate | awk 'NR==2 {print $5}' | tr -d '%')
+    if [ "$disk_usage" -gt 95 ] || [ "$inode_usage" -gt 95 ]; then
+      echo "Disk usage: $disk_usage %"
+      echo "Inode usage: $inode_usage %"
+      echo "Renovate cache disk is almost full. Deleting contents of /tmp/renovate"
+      rm -rf /tmp/renovate/*
+    fi
 
 renovate:
   # See https://docs.renovatebot.com/self-hosted-configuration
@@ -42,7 +51,7 @@ renovate:
     cache:
       enabled: true
       storageClass: gce-ssd
-      storageSize: 20Gi
+      storageSize: 10Gi
 
 existingSecret: github
 
