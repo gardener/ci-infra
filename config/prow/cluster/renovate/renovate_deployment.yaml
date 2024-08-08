@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: renovate
   labels:
-    helm.sh/chart: renovate-38.21.3
+    helm.sh/chart: renovate-38.23.0
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "38.21.3"
+    app.kubernetes.io/version: "38.23.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: renovate/templates/config.yaml
@@ -17,10 +17,10 @@ kind: ConfigMap
 metadata:
   name: renovate-config
   labels:
-    helm.sh/chart: renovate-38.21.3
+    helm.sh/chart: renovate-38.23.0
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "38.21.3"
+    app.kubernetes.io/version: "38.23.0"
     app.kubernetes.io/managed-by: Helm
 data:
   config.json: |-
@@ -58,10 +58,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: renovate-cache
   labels:
-    helm.sh/chart: renovate-38.21.3
+    helm.sh/chart: renovate-38.23.0
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "38.21.3"
+    app.kubernetes.io/version: "38.23.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   storageClassName: gce-ssd
@@ -77,10 +77,10 @@ kind: CronJob
 metadata:
   name: renovate
   labels:
-    helm.sh/chart: renovate-38.21.3
+    helm.sh/chart: renovate-38.23.0
     app.kubernetes.io/name: renovate
     app.kubernetes.io/instance: renovate
-    app.kubernetes.io/version: "38.21.3"
+    app.kubernetes.io/version: "38.23.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   schedule: "*/5 * * * *"
@@ -101,7 +101,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: renovate
-              image: "ghcr.io/renovatebot/renovate:38.21.3-full"
+              image: "ghcr.io/renovatebot/renovate:38.23.0-full"
               imagePullPolicy: IfNotPresent
               command: ["/bin/bash", "-c"]
               args:
