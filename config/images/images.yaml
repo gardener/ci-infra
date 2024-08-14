@@ -55,6 +55,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/fluent-operator/fluent-bit
   tags:
   - v3.0.7
+  - v3.1.5
 # The kubesphere/fluent-operator image shall not be used anymore. Please use ghcr.io/fluent/fluent-operator/fluent-operator instead.
 - source: kubesphere/fluent-operator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kubesphere/fluent-operator
