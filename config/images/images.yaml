@@ -35,6 +35,7 @@ images:
   - 3.19.2
   - 3.20.1
   - 3.20.2
+  - 3.20.3
 # DO NOT ADD NEW FLUENT/FLUENT-BIT IMAGES.
 # With https://github.com/gardener/gardener/pull/7568 the fluent/fluent-bit image is replaced by kubesphere/fluent-bit.
 - source: fluent/fluent-bit
