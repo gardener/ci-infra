@@ -36,7 +36,7 @@ presubmits:
       serviceAccountName: image-builder
       containers:
       - name: image-builder
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240909-0016e7e
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20240910-c806f56
         command:
         - /image-builder
         args:
