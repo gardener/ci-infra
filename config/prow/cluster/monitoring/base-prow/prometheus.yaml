@@ -5,6 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   retentionSize: 80GB
+  shards: 1
   storage:
     volumeClaimTemplate:
       metadata:
