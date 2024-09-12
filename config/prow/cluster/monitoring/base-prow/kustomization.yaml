@@ -4,10 +4,6 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-images:
-- name: grafana/grafana
-  newTag: 7.5.17
-
 resources:
 - kubernetes-podMonitorKubeProxy.yaml
 - ../base
