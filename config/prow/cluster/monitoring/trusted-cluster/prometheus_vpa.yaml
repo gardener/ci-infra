@@ -17,8 +17,8 @@ spec:
       minAllowed:
         memory: 1Gi
   targetRef:
-    apiVersion: apps/v1
-    kind: StatefulSet
-    name: prometheus-k8s
+    apiVersion: monitoring.coreos.com/v1
+    kind: Prometheus
+    name: k8s
   updatePolicy:
     updateMode: Auto
