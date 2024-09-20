@@ -18,10 +18,10 @@ presubmits:
         - verify-extended
         resources:
           limits:
-            memory: 2Gi
+            memory: 4Gi
           requests:
             cpu: 2
-            memory: 1Gi
+            memory: 2Gi
 periodics:
 - name: ci-extension-networking-cilium
   cluster: gardener-prow-build
@@ -47,7 +47,7 @@ periodics:
       - verify-extended
       resources:
         limits:
-          memory: 2Gi
+          memory: 4Gi
         requests:
           cpu: 2
-          memory: 1Gi
+          memory: 2Gi
