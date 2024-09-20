@@ -7,11 +7,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.13.0
+    chart: athens-proxy-0.14.0
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.13.0
+    helm.sh/chart: athens-proxy-0.14.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.15.1"
@@ -24,11 +24,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.13.0
+    chart: athens-proxy-0.14.0
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.13.0
+    helm.sh/chart: athens-proxy-0.14.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.15.1"
@@ -45,11 +45,11 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.13.0
+    chart: athens-proxy-0.14.0
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.13.0
+    helm.sh/chart: athens-proxy-0.14.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.15.1"
@@ -72,16 +72,18 @@ metadata:
   labels:
     
     app: athens-proxy
-    chart: athens-proxy-0.13.0
+    chart: athens-proxy-0.14.0
     release: "athens"
     heritage: "Helm"
     app.kubernetes.io/name: athens-proxy
-    helm.sh/chart: athens-proxy-0.13.0
+    helm.sh/chart: athens-proxy-0.14.0
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "athens"
     app.kubernetes.io/version: "v0.15.1"
 spec:
   replicas: 3
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: athens-proxy
@@ -91,11 +93,11 @@ spec:
       labels:
         
         app: athens-proxy
-        chart: athens-proxy-0.13.0
+        chart: athens-proxy-0.14.0
         release: "athens"
         heritage: "Helm"
         app.kubernetes.io/name: athens-proxy
-        helm.sh/chart: athens-proxy-0.13.0
+        helm.sh/chart: athens-proxy-0.14.0
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/instance: "athens"
         app.kubernetes.io/version: "v0.15.1"
@@ -166,8 +168,8 @@ metadata:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "athens-proxy"
     app.kubernetes.io/version: "v0.15.1"
-    chart: "athens-proxy-0.13.0"
-    helm.sh/chart: "athens-proxy-0.13.0"
+    chart: "athens-proxy-0.14.0"
+    helm.sh/chart: "athens-proxy-0.14.0"
     heritage: "Helm"
     release: "athens"
   annotations:
@@ -199,6 +201,11 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args: ['athens-proxy:80']
+      command: ['sh']
+      args:
+        - '-c'
+        - |
+          sleep 2;
+          wget athens-proxy:80;
+          wget -O - athens-proxy:80/github.com/google/uuid/@v/v1.6.0.mod;
   restartPolicy: Never
