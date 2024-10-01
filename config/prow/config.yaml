@@ -375,6 +375,8 @@ tide:
   context_options:
     # Use branch protection options to define required and optional contexts
     from-branch-protection: true
+    # Overwrite pending contexts of a PR when it can be merged because of a successful batch job
+    overwrite-pending-contexts: true
   merge_method:
     gardener/ci-infra: squash
     gardener/gardener: squash
