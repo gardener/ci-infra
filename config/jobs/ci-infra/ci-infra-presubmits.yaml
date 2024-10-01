@@ -9,7 +9,7 @@ presubmits:
       description: Runs checkconfig to validate changes to job configs, config.yaml and friends
     spec:
       containers:
-      - image: gcr.io/k8s-prow/checkconfig:v20240805-37a08f946
+      - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20240930-8302b5c30
         command:
         - checkconfig
         args:
