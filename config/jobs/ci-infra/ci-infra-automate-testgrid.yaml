@@ -10,9 +10,9 @@ presubmits:
       testgrid-create-test-group: "false"
     spec:
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20240731-a5d9345e59
+      - image: gcr.io/k8s-staging-test-infra/configurator:v20240914-93a93a3da9
         command:
-        - /ko-app/configurator
+        - configurator
         args:
         - --yaml=config/testgrids/config.yaml
         - --default=config/testgrids/default.yaml
@@ -38,9 +38,9 @@ postsubmits:
       testgrid-create-test-group: "false"
     spec:
       containers:
-      - image: gcr.io/k8s-prow/configurator:v20240731-a5d9345e59
+      - image: gcr.io/k8s-staging-test-infra/configurator:v20240914-93a93a3da9
         command:
-        - /ko-app/configurator
+        - configurator
         args:
         - --gcp-service-account=/etc/gcp-service-account/service-account.json
         - --yaml=config/testgrids/config.yaml
