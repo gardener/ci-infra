@@ -240,7 +240,7 @@ func (r *buildReconciler) createPVC(ctx context.Context, ibPod *corev1.Pod) (*co
 			AccessModes: []corev1.PersistentVolumeAccessMode{
 				corev1.ReadWriteOnce,
 			},
-			Resources: corev1.ResourceRequirements{
+			Resources: corev1.VolumeResourceRequirements{
 				Requests: corev1.ResourceList{
 					corev1.ResourceStorage: storageSize,
 				},
