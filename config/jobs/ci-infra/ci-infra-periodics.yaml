@@ -17,7 +17,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/label_sync:v20240914-93a93a3da9
+    - image: gcr.io/k8s-staging-test-infra/label_sync:v20241009-8bb28ed95b
       command:
       - label_sync
       args:
@@ -319,7 +319,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241008-1232a49-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241008-d8394b2-1.23
       command:
       - make
       args:
