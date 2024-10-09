@@ -28,10 +28,10 @@ presubmits:
         - sast
         resources:
           limits:
-            memory: 16Gi
+            memory: 24Gi
           requests:
             cpu: 6
-            memory: 8Gi
+            memory: 16Gi
 periodics:
 - name: ci-gardener-unit
   cluster: gardener-prow-build
@@ -65,7 +65,7 @@ periodics:
       - sast
       resources:
         limits:
-          memory: 16Gi
+          memory: 24Gi
         requests:
           cpu: 6
-          memory: 8Gi
+          memory: 16Gi
