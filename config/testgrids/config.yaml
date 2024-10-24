@@ -13,6 +13,7 @@ dashboard_groups:
     - gardener-extension-shoot-rsyslog-relp
     - gardener-discovery-server
     - cert-management
+    - gardener-extension-provider-equinix-metal
 
 dashboards:
 - name: gardener-gardener
@@ -27,3 +28,4 @@ dashboards:
 - name: gardener-extension-shoot-rsyslog-relp
 - name: gardener-discovery-server
 - name: cert-management
+- name: gardener-extension-provider-equinix-metal

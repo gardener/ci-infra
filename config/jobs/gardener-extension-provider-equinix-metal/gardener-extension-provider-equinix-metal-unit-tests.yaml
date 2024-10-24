@@ -1,0 +1,53 @@
+presubmits:
+  gardener/gardener-extension-provider-equinix-metal:
+  - name: pull-gardener-extension-provider-equinix-metal-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for Gardener extension registry-cache developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+        command:
+        - make
+        args:
+        - verify-extended
+        resources:
+          limits:
+            memory: 3Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-gardener-extension-provider-equinix-metal-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-provider-equinix-metal
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 40m
+    grace_period: 10m
+  annotations:
+    description: Runs unit tests for Gardener extension registry-cache developments periodically
+    testgrid-dashboards: gardener-extension-provider-equinix-metal
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+      command:
+      - make
+      args:
+      - verify-extended
+      resources:
+        limits:
+          memory: 3Gi
+        requests:
+          cpu: 2
+          memory: 1Gi
