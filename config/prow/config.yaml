@@ -237,7 +237,7 @@ tide:
   sync_period: 1m
   queries:
   # default configuration for repositories that should be onboarded to tide
-  - repos:
+  - repos: &tide-onboarded-repos
     - gardener/ci-infra
     - gardener/gardener
     - gardener/gardener-extension-registry-cache
@@ -263,8 +263,7 @@ tide:
 
   # configuration for automerging robot PRs
   - author: gardener-ci-robot
-    repos:
-    - gardener/ci-infra
+    repos: *tide-onboarded-repos
     labels:
     # gardener-ci-robot adds this label to PRs that should be merged automatically
     - skip-review
