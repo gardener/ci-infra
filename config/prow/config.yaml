@@ -236,131 +236,20 @@ branch-protection:
 tide:
   sync_period: 1m
   queries:
-  - repos:
+  # default configuration for repositories that should be onboarded to tide
+  - repos: &tide-onboarded-repos
     - gardener/ci-infra
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - author: gardener-ci-robot
-    repos:
-    - gardener/ci-infra
-    labels: # gardener-ci-robot should only create autobump PR with this label
-    - skip-review
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/gardener
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/gardener-extension-registry-cache
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
-      - gardener/dependency-watchdog
-    labels:
-      - lgtm
-      - approved
-      - "cla: yes"
-    missingLabels:
-      - do-not-merge/blocked-paths
-      - do-not-merge/contains-merge-commits
-      - do-not-merge/hold
-      - do-not-merge/invalid-commit-message
-      - do-not-merge/invalid-owners-file
-      - do-not-merge/needs-kind
-      - do-not-merge/release-note-label-needed
-      - do-not-merge/work-in-progress
-      - needs-rebase
-      - "cla: no"
-  - repos:
+    - gardener/dependency-watchdog
     - gardener/gardener-extension-shoot-rsyslog-relp
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/gardener-discovery-server
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/cert-management
     labels:
     - lgtm
     - approved
     - "cla: yes"
-    missingLabels:
+    missingLabels: &tide-default-missing-labels
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
     - do-not-merge/hold
@@ -371,6 +260,15 @@ tide:
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
+
+  # configuration for automerging robot PRs
+  - author: gardener-ci-robot
+    repos: *tide-onboarded-repos
+    labels:
+    # gardener-ci-robot adds this label to PRs that should be merged automatically
+    - skip-review
+    - "cla: yes"
+    missingLabels: *tide-default-missing-labels
 
   context_options:
     # Use branch protection options to define required and optional contexts
