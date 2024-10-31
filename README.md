@@ -202,7 +202,7 @@ $ renovate-config-validator
  INFO: Config validated successfully
 ```
 
-[`config/jobs/ci-infra/ci-infra-presubmits.yaml`](./config/jobs/ci-infra/ci-infra-presubmits.yaml) has a reusable prow job definition that runs `renovate-config-validator` as a presubmit job.
+[`config/jobs/common/renovate-presubmits.yaml`](./config/jobs/common/renovate-presubmits.yaml) has a reusable prow job definition that runs `renovate-config-validator` as a presubmit job.
 
 #### Local Dry-Run
 
