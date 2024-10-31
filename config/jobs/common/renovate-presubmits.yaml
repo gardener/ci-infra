@@ -46,30 +46,6 @@ presubmits:
   gardener/landscaper:
   - <<: *renovate-presubmit
     name: pull-landscaper-check-renovate-config
-  gardener/landscaper-service:
-  - <<: *renovate-presubmit
-    name: pull-landscaper-service-check-renovate-config
-  gardener/landscapercli:
-  - <<: *renovate-presubmit
-    name: pull-landscapercli-check-renovate-config
-  gardener/dashboard:
-  - <<: *renovate-presubmit
-    name: pull-dashboard-check-renovate-config
-  gardener/gardenctl-v2:
-  - <<: *renovate-presubmit
-    name: pull-gardenctl-v2-check-renovate-config
-  gardener/gardenlogin:
-  - <<: *renovate-presubmit
-    name: pull-gardenlogin-check-renovate-config
-  gardener/terminal-controller-manager:
-  - <<: *renovate-presubmit
-    name: pull-terminal-controller-manager-check-renovate-config
-  gardener/diki:
-  - <<: *renovate-presubmit
-    name: pull-diki-check-renovate-config
   gardener/cert-management:
   - <<: *renovate-presubmit
     name: pull-cert-management-check-renovate-config
-  gardener/ops-toolbelt:
-  - <<: *renovate-presubmit
-    name: pull-ops-toolbelt-check-renovate-config
