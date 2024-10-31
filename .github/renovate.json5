@@ -4,6 +4,8 @@
     "config:recommended"
   ],
   "labels": ["kind/enhancement"],
+  "automergeType": "pr-comment",
+  "automergeComment": "/label skip-review",
   "postUpdateOptions": ["gomodTidy"],
   "customManagers": [
     {
@@ -72,7 +74,7 @@
         ],
         "executionMode": "branch"
       },
-      "addLabels": ["skip-review"],
+      "automerge": true,
       "schedule": ["after 08:30 and before 15:30 every weekday"]
     },
     {
