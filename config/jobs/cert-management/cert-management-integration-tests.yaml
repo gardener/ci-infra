@@ -15,7 +15,7 @@ presubmits:
         command:
         - make
         args:
-        - integration
+        - test-integration
         resources:
           limits:
             memory: 2Gi
@@ -44,7 +44,7 @@ periodics:
       command:
       - make
       args:
-      - integration
+      - test-integration
       resources:
         limits:
           memory: 2Gi
