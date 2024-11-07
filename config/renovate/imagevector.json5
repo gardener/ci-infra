@@ -1,0 +1,20 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  description: 'Regex manager for detecting dependencies in image vector files matched by the passed regex. If an image specifies a github.com sourceRepository, the manager extracts a dependency with the github-releases data source. Otherwise, it extracts a generic dependency with the docker data source.',
+  customManagers: [
+    {
+      // Generic detection of container images in imagevector via container registry.
+      customType: 'regex',
+      fileMatch: ['{{arg0}}'],
+      matchStrings: ['\\s+repository:\\s+(?<depName>.*?)\\n\\s+tag:\\s+"?(?<currentValue>.*?)"?\\n'],
+      datasourceTemplate: 'docker',
+    },
+    {
+      // Generic detection of container images in imagevector via github releases.
+      customType: 'regex',
+      fileMatch: ['{{arg0}}'],
+      matchStrings: ['\\s+sourceRepository:\\s+github.com\/(?<depName>.*?)\\n\\s+repository:\\s+.*\\n\\s+tag:\\s+"?(?<currentValue>.*?)"?\\n'],
+      datasourceTemplate: 'github-releases',
+    }
+  ]
+}
