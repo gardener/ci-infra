@@ -4,62 +4,54 @@
     'config:recommended',
     'github>gardener/ci-infra//config/renovate/automerge-with-tide.json5',
   ],
-  labels: [
-    'kind/enhancement',
-  ],
-  postUpdateOptions: [
-    'gomodTidy',
-  ],
+  labels: ['kind/enhancement'],
+  postUpdateOptions: ['gomodTidy'],
+  separateMinorPatch: true,
   customManagers: [
     {
       customType: 'regex',
-      fileMatch: [
-        'config/prow/cluster/.+/helm/generate-.+-deployments.sh$',
-      ],
+      fileMatch: ['config/prow/cluster/.+/helm/generate-.+-deployments.sh$'],
       matchStrings: [
         'helm repo add .+ (?<registryUrl>.+?)\\s(.|\\n)*helm template -n .+ .+ .+\\/(?<depName>.+?) --version "(?<currentValue>.*)"\\s',
       ],
       datasourceTemplate: 'helm',
     },
     {
+      // Update `_VERSION` and `_version` variables in Makefiles and scripts.
+      // Inspired by `regexManagers:dockerfileVersions` preset.
       customType: 'regex',
-      fileMatch: [
-        'Makefile$',
-        '\\.mk$',
-        '\\.sh$',
-      ],
+      fileMatch: ['Makefile$', '\\.mk$', '\\.sh$'],
       matchStrings: [
         '# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s.+?_(VERSION|version) *[?:]?= *"?(?<currentValue>.+?)"?\\s',
       ],
     },
     {
+      // Generic detection for pod-like and CLI-argument-like image specifications in prow jobs.
       customType: 'regex',
-      fileMatch: [
-        '^config/jobs/.+\\.yaml$',
-      ],
-      matchStrings: [
-        'image(: |=)(?<depName>.*?):(?<currentValue>.*?)\\s',
-      ],
+      fileMatch: ['^config/jobs/.+\\.yaml$'],
+      matchStrings: ['image(: |=)(?<depName>.*?):(?<currentValue>.*?)\\s'],
       datasourceTemplate: 'docker',
     },
     {
+      // Generic detection for container images to be copied.
       customType: 'regex',
-      fileMatch: [
-        '^config/images/images\\.yaml$',
-      ],
+      fileMatch: ['^config/images/images\\.yaml$'],
       matchStrings: [
-        '\\s+source:\\s+(?<depName>.+?)\\n\\s+destination:\\s+.*\\n\\s+tags:\\n(\\s+-\\s+v?[0-9][0-9a-zA-Z\\-\\.]*\\n)*\\s+-\\s+(?<currentValue>.+?)\\n',
+        '\\s+source:\\s+(?<depName>.+?)\\n\\s+destination:\\s+.*\\n\\s+tags:\\n(\\s+-\\s+v?[0-9][0-9a-zA-Z\\-\\.]*\\n)*\\s+-\\s+(?<currentValue>.+?)\\n'
       ],
       datasourceTemplate: 'docker',
     },
   ],
-  separateMinorPatch: true,
   packageRules: [
     {
-      groupName: 'update: prow apps',
-      matchDatasources: [
-        'github-releases',
-        'helm',
+      groupName: 'prow apps',
+      matchDatasources: ['github-releases', 'helm'],
+      matchPackageNames: [
+        '/athens-proxy/',
+        '/ingress-nginx/',
+        '/oauth2-proxy/',
+        '/renovate/',
+        '/prometheus-operator/kube-prometheus/',
       ],
       postUpgradeTasks: {
         commands: [
@@ -68,19 +60,13 @@
         ],
         executionMode: 'branch',
       },
-      matchPackageNames: [
-        '/athens-proxy/',
-        '/ingress-nginx/',
-        '/oauth2-proxy/',
-        '/renovate/',
-        '/prometheus-operator/kube-prometheus/',
-      ],
     },
     {
-      groupName: 'auto-update: renovate',
-      matchDatasources: [
-        'docker',
-        'helm',
+      groupName: 'renovate',
+      matchDatasources: ['docker', 'helm'],
+      matchPackageNames: [
+        '/^renovate$/',
+        '/^ghcr\\.io/renovatebot/renovate$/',
       ],
       postUpgradeTasks: {
         commands: [
@@ -90,73 +76,45 @@
         executionMode: 'branch',
       },
       automerge: true,
-      schedule: [
-        'after 08:30 and before 15:30 every weekday',
-      ],
-      matchPackageNames: [
-        '/^renovate$/',
-        '/^ghcr\\.io/renovatebot/renovate$/',
-      ],
+      schedule: ['after 08:30 and before 15:30 every weekday'],
     },
     {
-      matchDatasources: [
-        'go',
-      ],
-      extends: [
-        'schedule:monthly',
-      ],
-      matchPackageNames: [
-        '/sigs\\.k8s\\.io/prow/',
-      ],
+      // sigs.k8s.io/prow is too noisy because it does not create releases but is referenced by digest.
+      matchDatasources: ['go'],
+      matchPackageNames: ['/sigs\\.k8s\\.io/prow/'],
+      extends: ['schedule:monthly'],
     },
     {
-      matchDatasources: [
-        'go',
-      ],
-      enabled: false,
+      // Do not update Kubernetes dependencies except sigs.k8s.io/prow.
+      // The versions of api, apimachinery, client-go and controller-runtime depend on sigs.k8s.io/prow.
+      matchDatasources: ['go'],
       matchPackageNames: [
         '/k8s\\.io/(api|apimachinery|client-go)/',
         '/sigs\\.k8s\\.io/controller-runtime/',
       ],
+      enabled: false,
     },
     {
-      matchManagers: [
-        'gomod',
-      ],
-      matchUpdateTypes: [
-        'patch',
-      ],
+      // Do not update patch versions of the Go Toolchain.
+      // Default golang images set the environment variable GOTOOLCHAIN=local
+      // and we don't want to enforce every (test-)image to be on the latest patch level.
+      matchManagers: ['gomod'],
+      matchUpdateTypes: ['patch'],
+      matchPackageNames: ['/go/',],
       enabled: false,
-      matchPackageNames: [
-        '/go/',
-      ],
     },
     {
-      matchDatasources: [
-        'docker',
-      ],
-      matchUpdateTypes: [
-        'major',
-        'minor',
-      ],
+      // Pin grafana to the latest minor version published with Apache 2.0 license.
+      matchDatasources: ['docker'],
+      matchUpdateTypes: ['major', 'minor'],
+      matchPackageNames: ['/grafana/grafana/'],
       enabled: false,
-      matchPackageNames: [
-        '/grafana/grafana/',
-      ],
     },
     {
-      matchDatasources: [
-        'docker',
-      ],
-      matchUpdateTypes: [
-        'major',
-        'minor',
-        'patch',
-      ],
-      matchFileNames: [
-        'config/images/images.yaml',
-      ],
-      enabled: false,
+      // Pin certain components to the current version.
+      matchDatasources: ['docker'],
+      matchUpdateTypes: ['major', 'minor', 'patch'],
+      matchFileNames: ['config/images/images.yaml'],
       matchPackageNames: [
         '/coredns/coredns/',
         '/calico/node/',
@@ -174,11 +132,11 @@
         '/kubesphere/fluent-operator/',
         '/nginx/',
       ],
+      enabled: false,
     },
     {
-      matchFileNames: [
-        'config/images/images.yaml',
-      ],
+      // Add new versions instead of replacing old version to keep a list of all copied versions.
+      matchFileNames: ['config/images/images.yaml'],
       postUpgradeTasks: {
         commands: [
           'install-tool golang 1.22.5',
