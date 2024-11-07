@@ -13,8 +13,8 @@ When you want to consume a renovate preset from this repository, pick a preset f
 
 ```json5
 {
-  "extends": [
-    "github>gardener/ci-infra//config/renovate/automerge-with-tide.json5"
+  extends: [
+    'github>gardener/ci-infra//config/renovate/automerge-with-tide.json5',
   ]
 }
 ```
