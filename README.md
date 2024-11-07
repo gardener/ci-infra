@@ -180,6 +180,7 @@ Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted
 
 You can enable it by creating a `renovate.json5` file in the respective repository. Please check the [renovate docs](https://docs.renovatebot.com/configuration-options/) for the configuration options.
 
+This repository also hosts [shared config presets](config/renovate) for renovate to reuse common configuration across gardener repositories.
 
 ### Changing Renovate Configuration
 
