@@ -13,11 +13,22 @@ When you want to consume a renovate preset from this repository, pick a preset f
 
 ```json5
 {
-  "extends": [
-    "github>gardener/ci-infra//config/renovate/automerge-with-tide.json5"
+  extends: [
+    'github>gardener/ci-infra//config/renovate/automerge-with-tide.json5',
   ]
 }
 ```
+
+When using a [parametrized preset](https://docs.renovatebot.com/config-presets/#preset-parameters), add an `extends` item like this:
+
+```json5
+{
+  extends: [
+    'github>gardener/ci-infra//config/renovate/imagevector.json5(^imagevector\/images.yaml$)',
+  ]
+}
+```
+
 
 Note that consuming repositories hosted on GitHub could also use a `local>` preset rule.
 However, `local>` preset rules are not supported with `--platform=local`, i.e., when executing a [local renovate dry-run](../../README.md#local-dry-run).
