@@ -44,7 +44,6 @@ resources:
 - prow_controller_manager_rbac.yaml
 - prow_controller_manager_service.yaml
 - prow_controller_manager_vpa.yaml
-- rclone_config.yaml
 - sinker_deployment.yaml
 - sinker_rbac.yaml
 - sinker_service.yaml
