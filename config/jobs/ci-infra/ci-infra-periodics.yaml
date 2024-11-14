@@ -137,6 +137,7 @@ periodics:
           - --upstream-branch=master
           - --git-email=gardener.ci.robot@gmail.com
           - --labels-override=kind/enhancement,skip-review
+          - --release-branch-pattern="hotfix-v\d+\.\d+"
         volumeMounts:
           - name: github-token
             mountPath: /etc/github-token
