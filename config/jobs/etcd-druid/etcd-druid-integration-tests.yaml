@@ -1,0 +1,59 @@
+presubmits:
+  gardener/etcd-druid:
+    - name: pull-etcd-druid-integration
+      cluster: gardener-prow-build
+      always_run: true
+      skip_branches:
+        - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+      decorate: true
+      decoration_config:
+        timeout: 20m
+        grace_period: 10m
+      annotations:
+        description: Runs integration tests for etcd-druid for pull requests
+        fork-per-release: "true"
+      spec:
+        containers:
+          - name: test-integration
+            image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241112-62a64b1-1.23
+            command:
+              - make
+            args:
+              - test-integration
+            resources:
+              limits:
+                memory: 16Gi
+              requests:
+                cpu: 5
+                memory: 8Gi
+periodics:
+  - name: ci-etcd-druid-integration
+    cluster: gardener-prow-build
+    interval: 4h
+    extra_refs:
+      - org: gardener
+        repo: etcd-druid
+        base_ref: master
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs integration tests for etcd-druid periodically
+      testgrid-dashboards: gardener-etcd-druid
+      testgrid-days-of-results: "60"
+      fork-per-release: "true"
+    spec:
+      containers:
+        - name: test-integration
+          image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241112-62a64b1-1.23
+          command:
+            - make
+          args:
+            - test-integration
+          resources:
+            limits:
+              memory: 16Gi
+            requests:
+              cpu: 5
+              memory: 8Gi
