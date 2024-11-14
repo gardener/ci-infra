@@ -111,6 +111,41 @@ periodics:
       secret:
         secretName: github-token
 
+- cron: "44 * * * *"  # Every hour a couple of minutes before branchprotector
+  name: ci-job-forker-gardener-etcd-druid
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Fork gardener/etcd-druid prow jobs for release branches
+    testgrid-create-test-group: "false"
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  spec:
+    containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20241111-d15d824
+        command:
+          - /job-forker
+        args:
+          - --github-token-path=/etc/github-token/token
+          - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+          - --github-endpoint=https://api.github.com
+          - --dry-run=false
+          - --job-directory=config/jobs/etcd-druid
+          - --recursive=true
+          - --upstream-repository=gardener/ci-infra
+          - --upstream-branch=master
+          - --git-email=gardener.ci.robot@gmail.com
+          - --labels-override=kind/enhancement,skip-review
+        volumeMounts:
+          - name: github-token
+            mountPath: /etc/github-token
+            readOnly: true
+    volumes:
+      - name: github-token
+        secret:
+          secretName: github-token
+
 - cron: "30 * * * 1-5"
   name: ci-prow-autobump
   cluster: gardener-prow-trusted
