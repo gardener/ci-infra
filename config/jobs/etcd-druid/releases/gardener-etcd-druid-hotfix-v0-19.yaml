@@ -1,0 +1,280 @@
+periodics:
+- annotations:
+    created-by-job-forker: "true"
+    description: Runs KIND cluster based e2e tests for etcd druid developments periodically
+      with etcd-custom-image(nondistroless-etcd).
+    testgrid-dashboards: gardener-etcd-druid
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 15m0s
+    timeout: 1h0m0s
+  extra_refs:
+  - base_ref: hotfix-v0.19
+    org: gardener
+    repo: etcd-druid
+  interval: 4h
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+  name: ci-etcd-druid-e2e-kind-nondistroless-etcd-hotfix-v0-19
+  spec:
+    containers:
+    - command:
+      - wrapper.sh
+      - bash
+      - -c
+      - make ci-e2e-kind
+      env:
+      - name: USE_ETCD_DRUID_FEATURE_GATES
+        value: "false"
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240220-bd46ef3-1.20
+      name: ""
+      resources:
+        requests:
+          cpu: "6"
+          memory: 8Gi
+      securityContext:
+        privileged: true
+- annotations:
+    created-by-job-forker: "true"
+    description: Runs KIND cluster based e2e tests for etcd druid developments periodically
+    testgrid-dashboards: gardener-etcd-druid
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 15m0s
+    timeout: 1h0m0s
+  extra_refs:
+  - base_ref: hotfix-v0.19
+    org: gardener
+    repo: etcd-druid
+  interval: 4h
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+  name: ci-etcd-druid-e2e-kind-hotfix-v0-19
+  spec:
+    containers:
+    - command:
+      - wrapper.sh
+      - bash
+      - -c
+      - make ci-e2e-kind
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240220-bd46ef3-1.20
+      name: ""
+      resources:
+        requests:
+          cpu: "6"
+          memory: 8Gi
+      securityContext:
+        privileged: true
+- annotations:
+    created-by-job-forker: "true"
+    description: Runs integration tests for etcd-druid periodically
+    testgrid-dashboards: gardener-etcd-druid
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 10m0s
+    timeout: 20m0s
+  extra_refs:
+  - base_ref: hotfix-v0.19
+    org: gardener
+    repo: etcd-druid
+  interval: 4h
+  name: ci-etcd-druid-integration-hotfix-v0-19
+  spec:
+    containers:
+    - args:
+      - test-integration
+      command:
+      - make
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240216-792399a-1.20
+      name: test-integration
+      resources:
+        limits:
+          memory: 16Gi
+        requests:
+          cpu: "5"
+          memory: 8Gi
+- annotations:
+    created-by-job-forker: "true"
+    description: Runs unit tests for etcd-druid periodically
+    testgrid-dashboards: gardener-etcd-druid
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 10m0s
+    timeout: 40m0s
+  extra_refs:
+  - base_ref: hotfix-v0.19
+    org: gardener
+    repo: etcd-druid
+  interval: 4h
+  name: ci-etcd-druid-unit-hotfix-v0-19
+  spec:
+    containers:
+    - args:
+      - check-generate
+      - check
+      - test-unit
+      command:
+      - make
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240216-792399a-1.20
+      name: ""
+      resources:
+        limits:
+          memory: 16Gi
+        requests:
+          cpu: "4"
+          memory: 8Gi
+presubmits:
+  gardener/etcd-druid:
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests with etcd-custom-image(nondistroless-etcd).
+    branches:
+    - hotfix-v0.19
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 15m0s
+      timeout: 1h0m0s
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    name: pull-etcd-druid-e2e-kind-nondistroless-etcd-hotfix-v0-19
+    spec:
+      containers:
+      - command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        env:
+        - name: USE_ETCD_DRUID_FEATURE_GATES
+          value: "false"
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240220-bd46ef3-1.20
+        name: ""
+        resources:
+          requests:
+            cpu: "6"
+            memory: 8Gi
+        securityContext:
+          privileged: true
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
+    branches:
+    - hotfix-v0.19
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 15m0s
+      timeout: 1h0m0s
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    name: pull-etcd-druid-e2e-kind-hotfix-v0-19
+    spec:
+      containers:
+      - command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240220-bd46ef3-1.20
+        name: ""
+        resources:
+          requests:
+            cpu: "6"
+            memory: 8Gi
+        securityContext:
+          privileged: true
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs integration tests for etcd-druid for pull requests
+    branches:
+    - hotfix-v0.19
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 10m0s
+      timeout: 20m0s
+    name: pull-etcd-druid-integration-hotfix-v0-19
+    spec:
+      containers:
+      - args:
+        - test-integration
+        command:
+        - make
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240216-792399a-1.20
+        name: test-integration
+        resources:
+          limits:
+            memory: 16Gi
+          requests:
+            cpu: "5"
+            memory: 8Gi
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Verify etcd-druid image build on pull requests to master branch
+    branches:
+    - hotfix-v0.19
+    cluster: gardener-prow-build
+    decorate: true
+    name: pull-etcd-druid-verify-image-build-hotfix-v0-19
+    spec:
+      containers:
+      - args:
+        - --context=/home/prow/go/src/github.com/gardener/etcd-druid
+        - --dockerfile=Dockerfile
+        - --no-push
+        - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
+        - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
+        - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
+        command:
+        - /kaniko/executor
+        image: gcr.io/kaniko-project/executor:v1.23.2
+        name: kaniko
+        resources:
+          requests:
+            cpu: "6"
+            memory: 7Gi
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs unit tests for etcd-druid in pull requests
+    branches:
+    - hotfix-v0.19
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 10m0s
+      timeout: 40m0s
+    name: pull-etcd-druid-unit-hotfix-v0-19
+    spec:
+      containers:
+      - args:
+        - check-generate
+        - check
+        - test-unit
+        command:
+        - make
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20240216-792399a-1.20
+        name: ""
+        resources:
+          limits:
+            memory: 16Gi
+          requests:
+            cpu: "4"
+            memory: 8Gi
