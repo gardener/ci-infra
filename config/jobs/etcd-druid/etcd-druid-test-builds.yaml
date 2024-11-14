@@ -4,7 +4,7 @@ presubmits:
       cluster: gardener-prow-build
       always_run: true
       skip_branches:
-        - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+        - hotfix-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
       annotations:
         description: Verify etcd-druid image build on pull requests to master branch
         fork-per-release: "true"
