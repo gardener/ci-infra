@@ -138,6 +138,69 @@ presubmits:
   - always_run: true
     annotations:
       created-by-job-forker: "true"
+      description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests with etcd-custom-image(nondistroless-etcd).
+    branches:
+    - hotfix-v0.20
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 15m0s
+      timeout: 1h0m0s
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    name: pull-etcd-druid-e2e-kind-nondistroless-etcd-hotfix-v0-20
+    spec:
+      containers:
+      - command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        env:
+        - name: USE_ETCD_DRUID_FEATURE_GATES
+          value: "false"
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241114-98ed266-1.23
+        name: ""
+        resources:
+          requests:
+            cpu: "6"
+            memory: 8Gi
+        securityContext:
+          privileged: true
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
+    branches:
+    - hotfix-v0.20
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 15m0s
+      timeout: 1h0m0s
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    name: pull-etcd-druid-e2e-kind-hotfix-v0-20
+    spec:
+      containers:
+      - command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241114-98ed266-1.23
+        name: ""
+        resources:
+          requests:
+            cpu: "6"
+            memory: 8Gi
+        securityContext:
+          privileged: true
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
       description: Runs integration tests for etcd-druid for pull requests
     branches:
     - hotfix-v0.20
