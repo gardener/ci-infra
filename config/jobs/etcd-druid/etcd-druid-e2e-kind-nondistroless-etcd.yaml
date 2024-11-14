@@ -51,6 +51,7 @@ periodics:
       description: Runs KIND cluster based e2e tests for etcd druid developments periodically with etcd-custom-image(nondistroless-etcd).
       testgrid-dashboards: gardener-etcd-druid
       testgrid-days-of-results: "60"
+      fork-per-release: "true"
     spec:
       containers:
         - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240826-19b336b-1.21
