@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for cert-management developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         command:
         - wrapper.sh
         - bash
@@ -59,7 +59,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       command:
       - wrapper.sh
       - bash
@@ -69,15 +69,15 @@ periodics:
         set -o pipefail
         set -o errexit
 
-          # run test
-          make test-e2e-local
-        # we need privileged mode in order to do docker in docker
-        securityContext:
-          privileged: true
-        resources:
-          requests:
-            cpu: 4
-            memory: 8Gi
+        # run test
+        make test-e2e-local
+      # we need privileged mode in order to do docker in docker
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          cpu: 4
+          memory: 8Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"

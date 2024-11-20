@@ -17,10 +17,10 @@ plank:
       timeout: 2h
       grace_period: 15m
       utility_images:
-        clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20241015-f8a6bd32a"
-        initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20241015-f8a6bd32a"
-        entrypoint: "us-docker.pkg.dev/k8s-infra-prow/images/entrypoint:v20241015-f8a6bd32a"
-        sidecar: "us-docker.pkg.dev/k8s-infra-prow/images/sidecar:v20241015-f8a6bd32a"
+        clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20241116-cc8d4cf29"
+        initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20241116-cc8d4cf29"
+        entrypoint: "us-docker.pkg.dev/k8s-infra-prow/images/entrypoint:v20241116-cc8d4cf29"
+        sidecar: "us-docker.pkg.dev/k8s-infra-prow/images/sidecar:v20241116-cc8d4cf29"
       gcs_configuration:
         bucket: "gardener-prow"
         path_strategy: explicit
@@ -134,6 +134,9 @@ branch-protection:
           protect: true
           include:
           - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -148,6 +151,9 @@ branch-protection:
           include:
           - "master"
           - "release-.*"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -162,6 +168,9 @@ branch-protection:
           protect: true
           include:
           - "main"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -176,6 +185,9 @@ branch-protection:
           protect: true
           include:
             - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
               - license/cla
@@ -190,6 +202,9 @@ branch-protection:
           protect: true
           include:
           - "main"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -204,6 +219,9 @@ branch-protection:
           protect: true
           include:
           - "main"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -218,6 +236,9 @@ branch-protection:
           protect: true
           include:
           - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -236,131 +257,20 @@ branch-protection:
 tide:
   sync_period: 1m
   queries:
-  - repos:
+  # default configuration for repositories that should be onboarded to tide
+  - repos: &tide-onboarded-repos
     - gardener/ci-infra
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - author: gardener-ci-robot
-    repos:
-    - gardener/ci-infra
-    labels: # gardener-ci-robot should only create autobump PR with this label
-    - skip-review
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/gardener
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/gardener-extension-registry-cache
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
-      - gardener/dependency-watchdog
-    labels:
-      - lgtm
-      - approved
-      - "cla: yes"
-    missingLabels:
-      - do-not-merge/blocked-paths
-      - do-not-merge/contains-merge-commits
-      - do-not-merge/hold
-      - do-not-merge/invalid-commit-message
-      - do-not-merge/invalid-owners-file
-      - do-not-merge/needs-kind
-      - do-not-merge/release-note-label-needed
-      - do-not-merge/work-in-progress
-      - needs-rebase
-      - "cla: no"
-  - repos:
+    - gardener/dependency-watchdog
     - gardener/gardener-extension-shoot-rsyslog-relp
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/gardener-discovery-server
-    labels:
-    - lgtm
-    - approved
-    - "cla: yes"
-    missingLabels:
-    - do-not-merge/blocked-paths
-    - do-not-merge/contains-merge-commits
-    - do-not-merge/hold
-    - do-not-merge/invalid-commit-message
-    - do-not-merge/invalid-owners-file
-    - do-not-merge/needs-kind
-    - do-not-merge/release-note-label-needed
-    - do-not-merge/work-in-progress
-    - needs-rebase
-    - "cla: no"
-  - repos:
     - gardener/cert-management
     labels:
     - lgtm
     - approved
     - "cla: yes"
-    missingLabels:
+    missingLabels: &tide-default-missing-labels
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
     - do-not-merge/hold
@@ -388,6 +298,15 @@ tide:
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
+
+  # configuration for automerging robot PRs
+  - author: gardener-ci-robot
+    repos: *tide-onboarded-repos
+    labels:
+    # gardener-ci-robot adds this label to PRs that should be merged automatically
+    - skip-review
+    - "cla: yes"
+    missingLabels: *tide-default-missing-labels
 
   context_options:
     # Use branch protection options to define required and optional contexts

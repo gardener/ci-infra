@@ -56,7 +56,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/branchprotector:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/branchprotector:v20241116-cc8d4cf29
       command:
       - branchprotector
       args:
@@ -88,7 +88,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20241007-476b5db
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20241111-d15d824
       command:
       - /job-forker
       args:
@@ -111,6 +111,42 @@ periodics:
       secret:
         secretName: github-token
 
+- cron: "44 * * * *"  # Every hour a couple of minutes before branchprotector
+  name: ci-job-forker-gardener-etcd-druid
+  cluster: gardener-prow-trusted
+  decorate: true
+  annotations:
+    description: Fork gardener/etcd-druid prow jobs for release branches
+    testgrid-create-test-group: "false"
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  spec:
+    containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20241111-d15d824
+        command:
+          - /job-forker
+        args:
+          - --github-token-path=/etc/github-token/token
+          - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+          - --github-endpoint=https://api.github.com
+          - --dry-run=false
+          - --job-directory=config/jobs/etcd-druid
+          - --recursive=true
+          - --upstream-repository=gardener/ci-infra
+          - --upstream-branch=master
+          - --git-email=gardener.ci.robot@gmail.com
+          - --labels-override=kind/enhancement,skip-review
+          - --release-branch-pattern=hotfix-v\d+\.\d+
+        volumeMounts:
+          - name: github-token
+            mountPath: /etc/github-token
+            readOnly: true
+    volumes:
+      - name: github-token
+        secret:
+          secretName: github-token
+
 - cron: "30 * * * 1-5"
   name: ci-prow-autobump
   cluster: gardener-prow-trusted
@@ -127,7 +163,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241116-cc8d4cf29
       command:
       - generic-autobumper
       args:
@@ -158,7 +194,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241116-cc8d4cf29
       command:
       - generic-autobumper
       args:
@@ -189,7 +225,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241116-cc8d4cf29
       command:
       - generic-autobumper
       args:
@@ -220,7 +256,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20241116-cc8d4cf29
       command:
       - generic-autobumper
       args:
@@ -254,7 +290,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20241116-cc8d4cf29
       command:
       - checkconfig
       args:
@@ -286,7 +322,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20241015-f8a6bd32a
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20241116-cc8d4cf29
       command:
       - checkconfig
       args:
@@ -319,7 +355,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241119-3fbaf73-1.23
       command:
       - make
       args:
@@ -342,7 +378,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20241007-476b5db
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20241111-d15d824
       command:
       - /branch-cleaner
       args:
@@ -362,3 +398,56 @@ periodics:
     - name: github-token
       secret:
         secretName: github-token
+- cron: "0 23 * * *"
+  name: ci-gardener-cleanup-gardener-prow-gcs
+  cluster: gardener-prow-trusted
+  decorate: true
+  decoration_config:
+    timeout: 6h0m0s
+    grace_period: 15m
+  annotations:
+    description: Clean up test logs from gardener-prow GCS bucket
+    testgrid-create-test-group: "false"
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  spec:
+    containers:
+    - image: rclone/rclone:1.68.2
+      command:
+      - rclone
+      args:
+      - delete
+      - gcs:gardener-prow
+      - --min-age
+      - 6M
+      - --include
+      - '*/artifacts/**{.log,flb_kube.db}*'
+      - --disable
+      - ListR
+      - --use-server-modtime
+      - --transfers
+      - "1000"
+      - --checkers
+      - "2000"
+      - --max-backlog
+      - "1000000"
+      resources:
+        requests:
+          cpu: 3
+          memory: 1Gi
+      volumeMounts:
+      - name: gcp-service-account
+        mountPath: /etc/gcp-service-account
+        readOnly: true
+      - name: rclone-config
+        mountPath: /config/rclone/rclone.conf
+        subPath: rclone.conf
+        readOnly: true
+    volumes:
+    - name: gcp-service-account
+      secret:
+        secretName: gardener-prow-gcr
+    - name: rclone-config
+      configMap:
+        name: rclone-config

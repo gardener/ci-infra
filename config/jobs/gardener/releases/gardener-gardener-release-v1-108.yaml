@@ -11,14 +11,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h30m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-103
+  name: ci-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-108
   spec:
     containers:
     - command:
@@ -31,7 +31,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -51,14 +51,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-multi-zone-release-v1-103
+  name: ci-gardener-e2e-kind-ha-multi-zone-release-v1-108
   spec:
     containers:
     - command:
@@ -71,7 +71,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -91,14 +91,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-103
+  name: ci-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-108
   spec:
     containers:
     - command:
@@ -111,7 +111,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -131,14 +131,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ha-single-zone-release-v1-103
+  name: ci-gardener-e2e-kind-ha-single-zone-release-v1-108
   spec:
     containers:
     - command:
@@ -151,7 +151,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -168,16 +168,16 @@ periodics:
   decorate: true
   decoration_config:
     grace_period: 15m0s
-    timeout: 1h0m0s
+    timeout: 1h15m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-ipv6-release-v1-103
+  name: ci-gardener-e2e-kind-ipv6-release-v1-108
   spec:
     containers:
     - command:
@@ -192,7 +192,7 @@ periodics:
         value: "false"
       - name: IPFAMILY
         value: ipv6
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -212,14 +212,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-migration-ha-single-zone-release-v1-103
+  name: ci-gardener-e2e-kind-migration-ha-single-zone-release-v1-108
   spec:
     containers:
     - command:
@@ -232,7 +232,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -252,14 +252,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-migration-release-v1-103
+  name: ci-gardener-e2e-kind-migration-release-v1-108
   spec:
     containers:
     - command:
@@ -272,7 +272,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -293,14 +293,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-operator-seed-release-v1-103
+  name: ci-gardener-e2e-kind-operator-seed-release-v1-108
   spec:
     containers:
     - command:
@@ -313,7 +313,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -333,14 +333,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-operator-release-v1-103
+  name: ci-gardener-e2e-kind-operator-release-v1-108
   spec:
     containers:
     - command:
@@ -353,7 +353,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -373,14 +373,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-upgrade-release-v1-103
+  name: ci-gardener-e2e-kind-upgrade-release-v1-108
   spec:
     containers:
     - command:
@@ -393,7 +393,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -410,16 +410,16 @@ periodics:
   decorate: true
   decoration_config:
     grace_period: 15m0s
-    timeout: 1h0m0s
+    timeout: 1h15m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-e2e-kind-release-v1-103
+  name: ci-gardener-e2e-kind-release-v1-108
   spec:
     containers:
     - command:
@@ -432,7 +432,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       name: ""
       resources:
         requests:
@@ -451,11 +451,11 @@ periodics:
     grace_period: 10m0s
     timeout: 20m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
-  name: ci-gardener-integration-release-v1-103
+  name: ci-gardener-integration-release-v1-108
   spec:
     containers:
     - args:
@@ -463,7 +463,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241119-3fbaf73-1.23
       name: test-integration
       resources:
         limits:
@@ -482,11 +482,11 @@ periodics:
     grace_period: 10m0s
     timeout: 40m0s
   extra_refs:
-  - base_ref: release-v1.103
+  - base_ref: release-v1.108
     org: gardener
     repo: gardener
   interval: 4h
-  name: ci-gardener-unit-release-v1-103
+  name: ci-gardener-unit-release-v1-108
   spec:
     containers:
     - args:
@@ -498,14 +498,14 @@ periodics:
       - sast
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241119-3fbaf73-1.23
       name: ""
       resources:
         limits:
-          memory: 16Gi
+          memory: 24Gi
         requests:
           cpu: "6"
-          memory: 8Gi
+          memory: 16Gi
 presubmits:
   gardener/gardener:
   - always_run: true
@@ -515,7 +515,7 @@ presubmits:
         a Shoot with failure tolerance type 'zone' for gardener developments in pull
         requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -524,7 +524,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-103
+    name: pull-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-108
     spec:
       containers:
       - command:
@@ -537,7 +537,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -551,7 +551,7 @@ presubmits:
       description: Runs end-to-end tests on a Seed with 3 zones with a Shoot with
         failure tolerance type 'zone' for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -560,7 +560,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-multi-zone-release-v1-103
+    name: pull-gardener-e2e-kind-ha-multi-zone-release-v1-108
     spec:
       containers:
       - command:
@@ -573,7 +573,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -587,7 +587,7 @@ presubmits:
       description: Runs end-to-end tests on a Seed with single zone with a Shoot with
         failure tolerance type 'node' for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -596,7 +596,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-103
+    name: pull-gardener-e2e-kind-ha-single-zone-upgrade-release-v1-108
     spec:
       containers:
       - command:
@@ -609,7 +609,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -623,7 +623,7 @@ presubmits:
       description: Runs end-to-end tests on a Seed with single zone with a Shoot with
         failure tolerance type 'node' for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -632,7 +632,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ha-single-zone-release-v1-103
+    name: pull-gardener-e2e-kind-ha-single-zone-release-v1-108
     spec:
       containers:
       - command:
@@ -645,7 +645,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -658,16 +658,16 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs end-to-end tests for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 15m0s
-      timeout: 1h0m0s
+      timeout: 1h15m0s
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-ipv6-release-v1-103
+    name: pull-gardener-e2e-kind-ipv6-release-v1-108
     spec:
       containers:
       - command:
@@ -682,7 +682,7 @@ presubmits:
           value: "false"
         - name: IPFAMILY
           value: ipv6
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -696,7 +696,7 @@ presubmits:
       description: Runs control plane migration end-to-end tests of single zone HA
         shoots for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -705,7 +705,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-migration-ha-single-zone-release-v1-103
+    name: pull-gardener-e2e-kind-migration-ha-single-zone-release-v1-108
     spec:
       containers:
       - command:
@@ -718,7 +718,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -732,7 +732,7 @@ presubmits:
       description: Runs control plane migration end-to-end tests for gardener developments
         in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -741,7 +741,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-migration-release-v1-103
+    name: pull-gardener-e2e-kind-migration-release-v1-108
     spec:
       containers:
       - command:
@@ -754,7 +754,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -769,7 +769,7 @@ presubmits:
         the Garden resource and a Soil running on a kind cluster for gardener developments
         in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -778,7 +778,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-operator-seed-release-v1-103
+    name: pull-gardener-e2e-kind-operator-seed-release-v1-108
     spec:
       containers:
       - command:
@@ -791,7 +791,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -805,7 +805,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-operator managing Garden resources
         on a kind cluster for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -814,7 +814,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-operator-release-v1-103
+    name: pull-gardener-e2e-kind-operator-release-v1-108
     spec:
       containers:
       - command:
@@ -827,7 +827,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -841,7 +841,7 @@ presubmits:
       description: Runs end-to-end Gardener upgrade tests for gardener developments
         in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -850,7 +850,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-upgrade-release-v1-103
+    name: pull-gardener-e2e-kind-upgrade-release-v1-108
     spec:
       containers:
       - command:
@@ -863,7 +863,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -876,16 +876,16 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs end-to-end tests for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 15m0s
-      timeout: 1h0m0s
+      timeout: 1h15m0s
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-e2e-kind-release-v1-103
+    name: pull-gardener-e2e-kind-release-v1-108
     spec:
       containers:
       - command:
@@ -898,7 +898,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         name: ""
         resources:
           requests:
@@ -911,13 +911,13 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs integration tests for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 20m0s
-    name: pull-gardener-integration-release-v1-103
+    name: pull-gardener-integration-release-v1-108
     spec:
       containers:
       - args:
@@ -925,7 +925,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241119-3fbaf73-1.23
         name: test-integration
         resources:
           limits:
@@ -938,10 +938,10 @@ presubmits:
       created-by-job-forker: "true"
       description: Verify gardener image build on pull requests to master branch
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
-    name: pull-gardener-verify-image-build-release-v1-103
+    name: pull-gardener-verify-image-build-release-v1-108
     spec:
       containers:
       - args:
@@ -964,13 +964,13 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs unit tests for gardener developments in pull requests
     branches:
-    - release-v1.103
+    - release-v1.108
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 40m0s
-    name: pull-gardener-unit-release-v1-103
+    name: pull-gardener-unit-release-v1-108
     spec:
       containers:
       - args:
@@ -982,11 +982,11 @@ presubmits:
         - sast
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241015-6e96a7c-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20241119-3fbaf73-1.23
         name: ""
         resources:
           limits:
-            memory: 16Gi
+            memory: 24Gi
           requests:
             cpu: "6"
-            memory: 8Gi
+            memory: 16Gi

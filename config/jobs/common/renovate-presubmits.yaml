@@ -1,0 +1,51 @@
+presubmits:
+  gardener/ci-infra:
+  - &renovate-presubmit
+    name: pull-ci-infra-check-renovate-config
+    cluster: gardener-prow-build
+    # Matches all possible renovate config file paths:
+    # see https://docs.renovatebot.com/configuration-options/#configuration-options
+    # see https://regex101.com/r/SIZeMZ/1
+    run_if_changed: '^((\.github/|\.gitlab/)?renovate\.json5?|\.renovaterc(\.json5?)?|package.json)$'
+    annotations:
+      description: Runs renovate-config-validator to validate changes to renovate configs.
+    decorate: true
+    spec:
+      containers:
+      - image: ghcr.io/renovatebot/renovate:39.21.0
+        command:
+        - renovate-config-validator
+
+  gardener/gardener:
+  - <<: *renovate-presubmit
+    name: pull-gardener-check-renovate-config
+  gardener/gardener-extension-registry-cache:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-registry-cache-check-renovate-config
+  gardener/gardener-extension-shoot-oidc-service:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-oidc-service-check-renovate-config
+  gardener/dependency-watchdog:
+  - <<: *renovate-presubmit
+    name: pull-dependency-watchdog-check-renovate-config
+  gardener/etcd-druid:
+  - <<: *renovate-presubmit
+    name: pull-etcd-druid-check-renovate-config
+  gardener/gardener-extension-networking-cilium:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-networking-cilium-check-renovate-config
+  gardener/gardener-extension-networking-calico:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-networking-calico-check-renovate-config
+  gardener/gardener-extension-shoot-rsyslog-relp:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-rsyslog-relp-check-renovate-config
+  gardener/gardener-discovery-server:
+  - <<: *renovate-presubmit
+    name: pull-gardener-discovery-server-check-renovate-config
+  gardener/landscaper:
+  - <<: *renovate-presubmit
+    name: pull-landscaper-check-renovate-config
+  gardener/cert-management:
+  - <<: *renovate-presubmit
+    name: pull-cert-management-check-renovate-config

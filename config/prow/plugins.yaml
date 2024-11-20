@@ -51,6 +51,19 @@ label:
     - ipcei/oidc
     - ipcei/workload-identity
 
+  restricted_labels:
+    gardener:
+    # Allow gardener-ci-robot user to mark PRs for automerging without review using a `/label skip-review` command.
+    # This is useful with the following renovate configuration:
+    # {
+    #   "automergeType": "pr-comment",
+    #   "automergeComment": "/label skip-review"
+    # }
+    # Then, you can set `automerge=true` in the respective `packageRule`.
+    - allowed_users:
+      - gardener-ci-robot
+      label: skip-review
+
 lgtm:
 - repos:
   - gardener/ci-infra

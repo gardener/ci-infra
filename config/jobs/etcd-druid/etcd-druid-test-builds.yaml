@@ -1,0 +1,28 @@
+presubmits:
+  gardener/etcd-druid:
+    - name: pull-etcd-druid-verify-image-build
+      cluster: gardener-prow-build
+      always_run: true
+      skip_branches:
+        - hotfix-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+      annotations:
+        description: Verify etcd-druid image build on pull requests to master branch
+        fork-per-release: "true"
+      decorate: true
+      spec:
+        containers:
+          - name: kaniko
+            image: gcr.io/kaniko-project/executor:v1.23.2
+            command:
+              - /kaniko/executor
+            args:
+              - --context=/home/prow/go/src/github.com/gardener/etcd-druid
+              - --dockerfile=Dockerfile
+              - --no-push
+              - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
+              - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
+              - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
+            resources:
+              requests:
+                cpu: 6
+                memory: 7Gi

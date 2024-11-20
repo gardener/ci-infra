@@ -1,10 +1,10 @@
 presubmits:
   gardener/etcd-druid:
-    - name: pull-etcd-druid-e2e-kind
+    - name: pull-etcd-druid-e2e-kind-nondistroless-etcd
       cluster: gardener-prow-build
       always_run: true
       skip_branches:
-        - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+        - hotfix-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
       decorate: true
       decoration_config:
         timeout: 60m
@@ -13,10 +13,11 @@ presubmits:
         preset-dind-enabled: "true"
         preset-kind-volume-mounts: "true"
       annotations:
-        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
+        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests with etcd-custom-image(nondistroless-etcd).
+        fork-per-release: "true"
       spec:
         containers:
-          - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240826-19b336b-1.21
+          - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
             command:
             - wrapper.sh
             - bash
@@ -29,8 +30,11 @@ presubmits:
               requests:
                 cpu: 6
                 memory: 8Gi
+            env:
+            - name: USE_ETCD_DRUID_FEATURE_GATES
+              value: "false"
 periodics:
-  - name: ci-etcd-druid-e2e-kind
+  - name: ci-etcd-druid-e2e-kind-nondistroless-etcd
     cluster: gardener-prow-build
     interval: 4h
     extra_refs:
@@ -45,12 +49,13 @@ periodics:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
     annotations:
-      description: Runs KIND cluster based e2e tests for etcd druid developments periodically
+      description: Runs KIND cluster based e2e tests for etcd druid developments periodically with etcd-custom-image(nondistroless-etcd).
       testgrid-dashboards: gardener-etcd-druid
       testgrid-days-of-results: "60"
+      fork-per-release: "true"
     spec:
       containers:
-        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20240826-19b336b-1.21
+        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
           command:
           - wrapper.sh
           - bash
@@ -63,3 +68,6 @@ periodics:
             requests:
               cpu: 6
               memory: 8Gi
+          env:
+          - name: USE_ETCD_DRUID_FEATURE_GATES
+            value: "false"

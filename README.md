@@ -180,6 +180,7 @@ Grafana is available publicly at https://monitoring.prow.gardener.cloud (trusted
 
 You can enable it by creating a `renovate.json5` file in the respective repository. Please check the [renovate docs](https://docs.renovatebot.com/configuration-options/) for the configuration options.
 
+This repository also hosts [shared config presets](config/renovate) for renovate to reuse common configuration across gardener repositories.
 
 ### Changing Renovate Configuration
 
@@ -202,7 +203,7 @@ $ renovate-config-validator
  INFO: Config validated successfully
 ```
 
-[`config/jobs/ci-infra/ci-infra-presubmits.yaml`](./config/jobs/ci-infra/ci-infra-presubmits.yaml) has a reusable prow job definition that runs `renovate-config-validator` as a presubmit job.
+[`config/jobs/common/renovate-presubmits.yaml`](./config/jobs/common/renovate-presubmits.yaml) has a reusable prow job definition that runs `renovate-config-validator` as a presubmit job.
 
 #### Local Dry-Run
 

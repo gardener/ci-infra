@@ -1,0 +1,14 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  description: 'These options teach renovate to work with tide automerging. Instead of automerging PRs itself, renovate will comment on the PR to set the `skip-review` label. Tide respects the `skip-review` label on all PRs opened by the robot user and merges PRs without review as soon as tests succeed.',
+  // Note that we could also use `addLabels=['skip-review']` instead of `automerge=true`. However, this config
+  // helps with reusing automerge-based renovate presets and is more intuitive to configure in package rules.
+  // Furthermore, the renovate PR description will correctly say "🚦 Automerge: Enabled".
+  automergeType: 'pr-comment',
+  automergeComment: '/label skip-review',
+  // Tide always registers the `tide` status check, which is always yellow until the PR has been approved (or the
+  // `skip-review` label has been set. Renovate will not consider a PR for automerge as long as status checks are
+  // red/yellow. We need to teach renovate to ignore all status checks and set the `skip-review` label right away.
+  // Tide will still consider the required status checks before automerging a PR.
+  ignoreTests: true
+}

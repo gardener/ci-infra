@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-registry-cache developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         command:
         - wrapper.sh
         - bash
@@ -25,8 +25,8 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 6
-            memory: 18Gi
+            cpu: 9
+            memory: 27Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
@@ -53,7 +53,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       command:
       - wrapper.sh
       - bash
@@ -64,8 +64,8 @@ periodics:
         privileged: true
       resources:
         requests:
-          cpu: 6
-          memory: 18Gi
+          cpu: 9
+          memory: 27Gi
       env:
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"

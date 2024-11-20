@@ -7,7 +7,7 @@ presubmits:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
     decoration_config:
-      timeout: 60m
+      timeout: 1h15m
       grace_period: 15m
     labels:
       preset-dind-enabled: "true"
@@ -17,7 +17,7 @@ presubmits:
       fork-per-release: "true"
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
         command:
         - wrapper.sh
         - bash
@@ -47,7 +47,7 @@ periodics:
     base_ref: master
   decorate: true
   decoration_config:
-    timeout: 60m
+    timeout: 1h15m
     grace_period: 15m
   labels:
     preset-dind-enabled: "true"
@@ -59,7 +59,7 @@ periodics:
     fork-per-release: "true"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241016-1ce3c52-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241118-b4ed59c-1.23
       command:
       - wrapper.sh
       - bash
