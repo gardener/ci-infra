@@ -134,6 +134,9 @@ branch-protection:
           protect: true
           include:
           - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -148,6 +151,9 @@ branch-protection:
           include:
           - "master"
           - "release-.*"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -162,6 +168,9 @@ branch-protection:
           protect: true
           include:
           - "main"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -176,6 +185,9 @@ branch-protection:
           protect: true
           include:
             - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
               - license/cla
@@ -190,6 +202,9 @@ branch-protection:
           protect: true
           include:
           - "main"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -204,6 +219,9 @@ branch-protection:
           protect: true
           include:
           - "main"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
@@ -218,6 +236,9 @@ branch-protection:
           protect: true
           include:
           - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
           required_status_checks:
             contexts:
             - license/cla
