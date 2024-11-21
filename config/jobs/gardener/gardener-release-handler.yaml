@@ -15,7 +15,7 @@ postsubmits:
     spec:
       containers:
       - name: release-handler
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/release-handler:v20241111-d15d824
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/release-handler:v20241121-036b73c
         command:
         - /release-handler
         args:
