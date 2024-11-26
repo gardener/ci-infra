@@ -22,7 +22,7 @@ spec:
         - --config-path=/etc/config/config.yaml
         - --job-config-path=/etc/job-config
         - --dry-run=false
-        image: us-docker.pkg.dev/k8s-infra-prow/images/sinker:v20241122-ec19f2447
+        image: us-docker.pkg.dev/k8s-infra-prow/images/sinker:v20241126-8f1101b48
         env:
         # Use KUBECONFIG envvar rather than --kubeconfig flag in order to provide multiple configs to merge.
         - name: KUBECONFIG
