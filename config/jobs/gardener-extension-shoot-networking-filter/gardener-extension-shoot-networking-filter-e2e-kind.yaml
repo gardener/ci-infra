@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-shoot-networking-filter developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241202-daa6c1b-1.23
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241203-628aa77-1.23
         command:
         - wrapper.sh
         - bash
@@ -62,7 +62,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241202-daa6c1b-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20241203-628aa77-1.23
       command:
       - wrapper.sh
       - bash
