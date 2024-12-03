@@ -17,6 +17,11 @@ secretGenerator:
   - cluster-name.tmpl={{ define "cluster_name" }}Build Cluster{{ end }}
   name: alertmanager-main
   namespace: monitoring
+- name: grafana-datasources
+  namespace: monitoring
+  behavior: merge
+  files:
+  - datasources.yaml=grafana-datasources.yaml
 patches:
 - path: grafana-deployment.yaml
 - path: prometheus.yaml
