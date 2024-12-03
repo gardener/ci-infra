@@ -28,7 +28,7 @@ presubmits:
   - name: pull-ci-infra-prow-go-tests
     cluster: gardener-prow-build
     decorate: true
-    always_run: true
+    skip_if_only_changed: '^(clusters|config|deploy)\/'
     annotations:
       description: Runs go tests for prow developments in ci-infra 
     spec:
@@ -46,7 +46,7 @@ presubmits:
             memory: 2Gi
   - name: pull-ci-infra-verify-image-build
     cluster: gardener-prow-build
-    always_run: true
+    skip_if_only_changed: '^(clusters|config|deploy)\/'
     annotations:
       description: Verify ci-infra image build on pull requests to master branch
     decorate: true
