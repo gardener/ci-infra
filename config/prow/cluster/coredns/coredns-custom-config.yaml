@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  rewrites.override: |
+    rewrite stop {
+      # Add a local hostname that is rewritten to the in-cluster service name of the prow cluster.
+      # This hostname can be used by jobs to push collected performance metrics to the prometheus instance running in
+      # the prow cluster. The `cluster.local` name cannot be resolved from within e2e test setups running in a kind
+      # cluster in the test pod because the domain overlaps with the cluster domain of the inner (kind) cluster.
+      name exact prometheus-performance.prow.gardener.cloud.local prometheus-performance.monitoring.svc.cluster.local
+    }
