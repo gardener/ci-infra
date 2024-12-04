@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
 - flux-system
 - ../base
+- renovate-kustomization.yaml

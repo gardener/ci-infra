@@ -8,6 +8,12 @@
   labels: ['kind/enhancement'],
   postUpdateOptions: ['gomodTidy'],
   separateMinorPatch: true,
+  flux: {
+    fileMatch: [
+      '^clusters/.+\\.yaml$',
+      '^deploy/.+\\.yaml$',
+    ],
+  },
   customManagers: [
     {
       customType: 'regex',
@@ -42,7 +48,6 @@
         '/athens-proxy/',
         '/ingress-nginx/',
         '/oauth2-proxy/',
-        '/renovate/',
         '/prometheus-operator/kube-prometheus/',
       ],
       postUpgradeTasks: {
@@ -56,15 +61,9 @@
       groupName: 'renovate',
       matchDatasources: ['docker', 'helm'],
       matchPackageNames: [
-        '/^renovate$/',
-        '/^ghcr\\.io/renovatebot/renovate$/',
+        'renovate',
+        'ghcr.io/renovatebot/renovate',
       ],
-      postUpgradeTasks: {
-        commands: [
-          'make generate-prow-deployments',
-        ],
-        executionMode: 'branch',
-      },
       automerge: true,
       schedule: ['after 08:30 and before 15:30 every weekday'],
     },
