@@ -8,6 +8,12 @@
   labels: ['kind/enhancement'],
   postUpdateOptions: ['gomodTidy'],
   separateMinorPatch: true,
+  flux: {
+    fileMatch: [
+      '^clusters/.+\\.yaml$',
+      '^deploy/.+\\.yaml$',
+    ],
+  },
   customManagers: [
     {
       customType: 'regex',
