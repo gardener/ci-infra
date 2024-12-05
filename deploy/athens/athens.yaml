@@ -1,0 +1,66 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: athens
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: athens-proxy
+      version: '0.14.x'
+      sourceRef:
+        kind: HelmRepository
+        name: athens
+        namespace: flux-system
+      interval: 1m
+  releaseName: athens
+  targetNamespace: athens
+  values:
+    fullnameOverride: athens-proxy
+
+    replicaCount: 3
+
+    image:
+      runAsNonRoot: true
+
+    ingress:
+      enabled: false
+
+    service:
+      annotations:
+        service.kubernetes.io/topology-mode: Auto
+
+    storage:
+      type: gcp
+      gcp:
+        projectID: gardener-project
+        bucket: gardener-prow-goproxy
+
+    configEnvVars:
+    - name: ATHENS_GO_BINARY_ENV_VARS
+      value: GOPROXY=https://proxy.golang.org,direct
+    - name: ATHENS_SINGLE_FLIGHT_TYPE
+      value: gcp
+
+    goGetWorkers: 5
+
+    metrics:
+      serviceMonitor:
+        enabled: true
+        namespace: monitoring
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: worker.gardener.cloud/system-components
+                  operator: In
+                  values:
+                    - "true"
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 32Mi

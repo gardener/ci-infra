@@ -4,6 +4,8 @@ kind: Kustomization
 namespace: athens
 
 resources:
+- athens-helmrepo.yaml
+- athens.yaml
 - athens_namespace.yaml
 - athens_deployment.yaml
 - athens_prometheus_rbac.yaml
@@ -11,12 +13,6 @@ resources:
 
 patches:
   - path: patch-athens-proxy.yaml
-  - patch: |-
-      $patch: delete
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: athens-proxy-test-connection
   - patch: |-
       $patch: delete
       apiVersion: v1
