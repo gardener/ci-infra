@@ -1,31 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: athens
-
 resources:
 - athens-helmrepo.yaml
 - athens.yaml
 - athens_namespace.yaml
 - athens_prometheus_rbac.yaml
-- athens_vpa.yaml
-
-patches:
-  - path: patch-athens-proxy.yaml
-  - patch: |-
-      $patch: delete
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: athens-proxy-secret        
-
-transformers:
-    - |-
-        apiVersion: builtin
-        kind: PatchTransformer
-        metadata:
-          name: fix-servicemonitor-namespace
-        patch: '[{"op": "replace", "path": "/metadata/namespace", "value": "monitoring"}]'
-        target:
-          group: monitoring.coreos.com
-          kind: ServiceMonitor
+- athens_vpa.yaml    

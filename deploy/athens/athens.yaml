@@ -64,3 +64,40 @@ spec:
       requests:
         cpu: 200m
         memory: 32Mi
+
+  valuesFrom:
+    - kind: Secret
+      name: athens-gcp-serviceaccount
+      valuesKey: service-account.json
+      targetPath: storage.gcp.serviceAccount
+  postRenderers:
+    - kustomize:
+        patches:
+        - patch: |
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: athens-proxy
+              namespace: athens
+            spec:
+              strategy:
+                type: RollingUpdate
+                rollingUpdate:
+                  maxSurge: 0
+                  maxUnavailable: 1
+              template:
+                spec:
+                  topologySpreadConstraints:
+                    - labelSelector:
+                        matchExpressions:
+                          - key: app.kubernetes.io/name
+                            operator: In
+                            values:
+                              - athens-proxy
+                          - key: app.kubernetes.io/instance
+                            operator: In
+                            values:
+                              - athens
+                      maxSkew: 1
+                      topologyKey: topology.kubernetes.io/zone
+                      whenUnsatisfiable: DoNotSchedule
