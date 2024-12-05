@@ -60,11 +60,6 @@ ensure-context gardener-prow-trusted
 ensure-context gardener-prow-build
 echo " $(color-green "done")"
 
-echo "$(color-step "Deploying prow components to gardener-prow-trusted cluster...")"
-kubectl config use-context gardener-prow-trusted
-kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster"
-echo "$(color-green "done")"
-
 echo "$(color-step "Deploying ingress-nginx components to gardener-prow-trusted cluster...")"
 kubectl config use-context gardener-prow-trusted
 kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/ingress-nginx"
