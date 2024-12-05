@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
 - athens-kustomization.yaml
+- ingress-nginx-kustomization.yaml
 - storageclass-kustomization.yaml
 - test-pods-kustomization.yaml
