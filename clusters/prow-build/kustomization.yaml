@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
 - flux-system
 - ../base
+- coredns-kustomization.yaml

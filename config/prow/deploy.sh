@@ -102,9 +102,4 @@ kubectl config use-context gardener-prow-build
 kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/athens"
 echo "$(color-green "done")"
 
-echo "$(color-step "Deploying coredns components to gardener-prow-build cluster...")"
-kubectl config use-context gardener-prow-build
-kubectl apply --server-side=true --force-conflicts -k "$SCRIPT_DIR/cluster/coredns"
-echo "$(color-green "done")"
-
 echo "$(color-green "SUCCESS")"
