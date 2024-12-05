@@ -4,6 +4,7 @@ metadata:
   labels:
     app: athens-proxy
   name: athens-proxy
+  namespace: athens
 spec:
   resourcePolicy:
     containerPolicies:
