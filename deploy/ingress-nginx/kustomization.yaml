@@ -5,4 +5,4 @@ resources:
 - ingress-nginx-helmrepo.yaml
 - ingress-nginx.yaml
 - ingress-nginx-namespace.yaml
-- ingress-nginx_vpa.yaml
+- ingress-nginx-vpa.yaml
