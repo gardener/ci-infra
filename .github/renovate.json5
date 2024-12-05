@@ -45,7 +45,6 @@
       groupName: 'prow apps',
       matchDatasources: ['github-releases', 'helm'],
       matchPackageNames: [
-        '/athens-proxy/',
         '/ingress-nginx/',
         '/oauth2-proxy/',
         '/prometheus-operator/kube-prometheus/',
