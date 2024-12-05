@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
 - flux-system
 - ../base
+- prow-kustomization.yaml
 - renovate-kustomization.yaml
