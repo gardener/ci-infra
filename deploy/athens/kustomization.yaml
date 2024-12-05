@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
 - athens-helmrepo.yaml
 - athens.yaml
-- athens_namespace.yaml
-- athens_prometheus_rbac.yaml
-- athens_vpa.yaml    
+- athens-namespace.yaml
+- athens-prometheus-rbac.yaml
+- athens-vpa.yaml    
