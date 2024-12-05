@@ -78,7 +78,6 @@ spec:
             kind: Deployment
             metadata:
               name: athens-proxy
-              namespace: athens
             spec:
               strategy:
                 type: RollingUpdate
