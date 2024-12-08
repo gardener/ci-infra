@@ -133,6 +133,7 @@ images:
   - v7.5.32
   - v7.5.33
   - v7.5.34
+  - v7.5.35
 # gardener/pkg/provider-local/images.yaml
 - source: kindest/local-path-provisioner
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-provisioner
