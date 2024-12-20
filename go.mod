@@ -6,7 +6,6 @@ toolchain go1.23.4
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cenkalti/backoff/v5 v5.0.0
 	github.com/google/go-cmp v0.6.0
 	github.com/onsi/ginkgo/v2 v2.22.0

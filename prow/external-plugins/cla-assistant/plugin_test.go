@@ -182,6 +182,7 @@ func TestHandleIssueCommentEvent(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	log := logrus.StandardLogger().WithField("TestHandleIssueCommentEvent", pluginName)
 
 	p := newClaAssistantTestPlugin()
@@ -192,7 +193,7 @@ func TestHandleIssueCommentEvent(t *testing.T) {
 			test.name,
 			func(t *testing.T) {
 				p.http.serverReached = false
-				err := p.plugin.handleIssueCommentEvent(log, &test.ice)
+				err := p.plugin.handleIssueCommentEvent(ctx, log, &test.ice)
 				assert.NoError(t, err)
 				assert.Equal(t, test.reachedServerExpected, p.http.serverReached)
 			})
@@ -309,6 +310,7 @@ func TestHandleReviewCommentEvent(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	log := logrus.StandardLogger().WithField("TestHandleReviewCommentEvent", pluginName)
 
 	p := newClaAssistantTestPlugin()
@@ -319,7 +321,7 @@ func TestHandleReviewCommentEvent(t *testing.T) {
 			test.name,
 			func(t *testing.T) {
 				p.http.serverReached = false
-				err := p.plugin.handleReviewCommentEvent(log, &test.rce)
+				err := p.plugin.handleReviewCommentEvent(ctx, log, &test.rce)
 				assert.NoError(t, err)
 				assert.Equal(t, test.reachedServerExpected, p.http.serverReached)
 			})
@@ -436,6 +438,7 @@ func TestHandleReviewEvent(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	log := logrus.StandardLogger().WithField("TestHandleReviewCommentEvent", pluginName)
 
 	p := newClaAssistantTestPlugin()
@@ -446,7 +449,7 @@ func TestHandleReviewEvent(t *testing.T) {
 			test.name,
 			func(t *testing.T) {
 				p.http.serverReached = false
-				err := p.plugin.handleReviewEvent(log, &test.pre)
+				err := p.plugin.handleReviewEvent(ctx, log, &test.pre)
 				assert.NoError(t, err)
 				assert.Equal(t, test.reachedServerExpected, p.http.serverReached)
 			})
@@ -642,6 +645,7 @@ func TestHandleStatusEvent(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	log := logrus.StandardLogger().WithField("TestHandleIssueCommentEvent", pluginName)
 
 	for _, test := range tests {
@@ -651,7 +655,7 @@ func TestHandleStatusEvent(t *testing.T) {
 				p := newClaAssistantTestPlugin()
 				defer p.http.server.Close()
 				ingestDataIntoFakeClient(p.fakeClient)
-				err := p.plugin.handleStatusEvent(log, &test.se)
+				err := p.plugin.handleStatusEvent(ctx, log, &test.se)
 				if test.errorExpected {
 					assert.Error(t, err)
 				} else {
@@ -674,8 +678,9 @@ func TestHandleStatusEvent(t *testing.T) {
 }
 
 func TestHandleAllPRs(t *testing.T) {
-
+	ctx := context.Background()
 	log := logrus.StandardLogger().WithField("TestHandleIssueCommentEvent", pluginName)
+
 	p := newClaAssistantTestPlugin()
 	defer p.http.server.Close()
 	ingestDataIntoFakeClient(p.fakeClient)
@@ -695,7 +700,7 @@ func TestHandleAllPRs(t *testing.T) {
 		},
 	}
 
-	err := p.plugin.handleAllPRs(log, config)
+	err := p.plugin.handleAllPRs(ctx, log, config)
 
 	assert.NoError(t, err)
 
@@ -753,6 +758,8 @@ func TestForceClaRecheck(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
+
 	p := newClaAssistantTestPlugin()
 	defer p.http.server.Close()
 	ingestDataIntoFakeClient(p.fakeClient)
@@ -763,7 +770,7 @@ func TestForceClaRecheck(t *testing.T) {
 			func(t *testing.T) {
 
 				p.http.setServerParameters(&test.recoverFromError, &test.responseTimeout, &test.httpResponseCode)
-				err := p.plugin.enforceClaRecheck(testOwner, testRepo, 1, true)
+				err := p.plugin.enforceClaRecheck(ctx, testOwner, testRepo, 1, true)
 				if test.errorExpected {
 					assert.Error(t, err)
 				} else {
