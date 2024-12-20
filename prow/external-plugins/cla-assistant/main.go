@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net/http"
@@ -67,6 +68,8 @@ func gatherOptions() options {
 }
 
 func main() {
+	ctx := context.Background()
+
 	logrusutil.Init(&logrusutil.DefaultFieldsFormatter{
 		PrintLineNumber:  true,
 		WrappedFormatter: logrus.StandardLogger().Formatter,
@@ -112,7 +115,7 @@ func main() {
 
 	interrupts.TickLiteral(func() {
 		start := time.Now()
-		if err := cla.handleAllPRs(log, pa.Config()); err != nil {
+		if err := cla.handleAllPRs(ctx, log, pa.Config()); err != nil {
 			log.WithError(err).Error("Error during periodic check all PRs.")
 		}
 		log.WithField("duration", fmt.Sprintf("%v", time.Since(start))).Info("Periodic update complete.")

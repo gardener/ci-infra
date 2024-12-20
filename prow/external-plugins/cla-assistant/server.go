@@ -5,6 +5,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -40,6 +41,7 @@ func (s *httpServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) error {
+	ctx := context.Background()
 	l := s.log.WithFields(
 		logrus.Fields{
 			"event-type":     eventType,
@@ -47,6 +49,7 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 		},
 	)
 	l.Debugf("New event of type: %s", eventType)
+
 	switch eventType {
 	case "issue_comment":
 		var ice github.IssueCommentEvent
@@ -60,7 +63,7 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 			},
 		)
 		go func() {
-			if err := s.cla.handleIssueCommentEvent(l, &ice); err != nil {
+			if err := s.cla.handleIssueCommentEvent(ctx, l, &ice); err != nil {
 				l.WithError(err).Info("Error handling event.")
 			}
 		}()
@@ -76,7 +79,7 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 			},
 		)
 		go func() {
-			if err := s.cla.handleReviewCommentEvent(l, &rce); err != nil {
+			if err := s.cla.handleReviewCommentEvent(ctx, l, &rce); err != nil {
 				l.WithError(err).Info("Error handling event.")
 			}
 		}()
@@ -92,7 +95,7 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 			},
 		)
 		go func() {
-			if err := s.cla.handleReviewEvent(l, &pre); err != nil {
+			if err := s.cla.handleReviewEvent(ctx, l, &pre); err != nil {
 				l.WithError(err).Info("Error handling event.")
 			}
 		}()
@@ -108,12 +111,13 @@ func (s *httpServer) handleEvent(eventType, eventGUID string, payload []byte) er
 			},
 		)
 		go func() {
-			if err := s.cla.handleStatusEvent(l, &se); err != nil {
+			if err := s.cla.handleStatusEvent(ctx, l, &se); err != nil {
 				l.WithError(err).Info("Error handling event.")
 			}
 		}()
 	default:
 		s.log.Debugf("received an event of type %q but didn't ask for it", eventType)
 	}
+
 	return nil
 }
