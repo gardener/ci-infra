@@ -20,6 +20,7 @@ presubmits:
         - check
         - format
         - test
+        - sast-report
         resources:
           limits:
             memory: 16Gi
@@ -53,6 +54,7 @@ periodics:
       - check
       - format
       - test
+      - sast-report
       resources:
         limits:
           memory: 16Gi
