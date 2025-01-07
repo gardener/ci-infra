@@ -29,7 +29,7 @@ periodics:
       env:
       - name: USE_ETCD_DRUID_FEATURE_GATES
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-35b2b75-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-cb2d353-1.22
       name: ""
       resources:
         requests:
@@ -63,7 +63,7 @@ periodics:
       - bash
       - -c
       - make ci-e2e-kind
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-35b2b75-1.22
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-cb2d353-1.22
       name: ""
       resources:
         requests:
@@ -160,7 +160,7 @@ presubmits:
         env:
         - name: USE_ETCD_DRUID_FEATURE_GATES
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-35b2b75-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-cb2d353-1.22
         name: ""
         resources:
           requests:
@@ -190,7 +190,7 @@ presubmits:
         - bash
         - -c
         - make ci-e2e-kind
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-35b2b75-1.22
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250107-cb2d353-1.22
         name: ""
         resources:
           requests:
