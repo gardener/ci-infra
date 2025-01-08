@@ -311,9 +311,9 @@ tide:
   rebase_label: tide/merge-method-rebase
   merge_label: tide/merge-method-merge
   priority:
-  - labels: [ "kind/flake", "priority/critical-urgent" ]
-  - labels: [ "kind/regression", "priority/critical-urgent" ]
-  - labels: [ "kind/bug", "priority/critical-urgent" ]
+  - labels: [ "kind/flake" ]
+  - labels: [ "kind/regression" ]
+  - labels: [ "kind/bug" ]
 
 github_reporter:
   job_types_to_report:
