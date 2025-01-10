@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: monitoring-build
+  namespace: prow
+spec:
+  interval: 15s
+  module: http_2xx
+  prober:
+    url: blackbox-exporter.monitoring.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+      - https://monitoring-build.prow.gardener.cloud

@@ -5,3 +5,4 @@ resources:
 - flux-system
 - ../base
 - coredns-kustomization.yaml
+- monitoring-build-kustomization.yaml

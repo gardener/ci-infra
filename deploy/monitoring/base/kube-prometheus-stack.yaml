@@ -1,0 +1,322 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      version: '67.9.x'
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      interval: 1m
+  releaseName: kube-prometheus-stack
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 5
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 5
+  targetNamespace: monitoring
+  values:
+    # customize names so that they are shorter and easier to grasp
+    fullnameOverride: prometheus
+    cleanPrometheusOperatorObjectNames: true
+
+    alertmanager:
+      fullnameOverride: alertmanager
+
+      podDisruptionBudget:
+        enabled: true
+
+      config:
+        global:
+          slack_api_url_file: /etc/alertmanager/secrets/alertmanager-slack/api_url
+        route:
+          group_by: ['alertname', 'job']
+          group_wait: 30s
+          group_interval: 10m
+          repeat_interval: 4h
+          receiver: 'slack-warnings'
+          routes:
+          - receiver: 'slack-alerts'
+            group_interval: 5m
+            repeat_interval: 2h
+            match_re:
+              severity: 'critical|high'
+        receivers:
+        - name: 'slack-warnings'
+          slack_configs:
+          - channel: '#gardener-prow-alerts'
+            send_resolved: true
+            icon_url: https://avatars3.githubusercontent.com/u/3380462
+            username: Gardener Prow Alertmanager ({{ template "cluster_name" . }})
+            color: '{{ if eq .Status "firing" }}warning{{ else }}good{{ end }}'
+            title: '{{ template "custom_slack_title" . }}'
+            text: '{{ template "custom_slack_text" . }}'
+        - name: 'slack-alerts'
+          slack_configs:
+          - channel: '#gardener-prow-alerts'
+            send_resolved: true
+            icon_url: https://avatars3.githubusercontent.com/u/3380462
+            username: Gardener Prow Alertmanager ({{ template "cluster_name" . }})
+            title: '{{ template "custom_slack_title" . }}'
+            # notify oliver-goetz for firing critical alerts
+            # TODO: use a slack group instead
+            text: '{{ if eq .Status "firing" }}<@W8V9YC6PQ> {{ end }}{{ template "custom_slack_text" . }}'
+            link_names: true
+
+      templateFiles:
+        slack-messages.tmpl: |-
+          {{ define "custom_slack_title" }}
+          [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+          {{ end }}
+
+          {{ define "custom_slack_text" }}
+          {{ range .Alerts -}}
+          {{ .Annotations.description }} (`{{ .Labels.severity }}`)
+          {{ end }}
+          {{ end }}
+
+      serviceMonitor:
+        relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+      alertmanagerSpec:
+        secrets:
+        - alertmanager-slack
+
+        replicas: 3
+
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: gce-ssd
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
+
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: worker.gardener.cloud/system-components
+                  operator: In
+                  values:
+                  - "true"
+
+        topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              alertmanager: prometheus
+              app.kubernetes.io/instance: prometheus
+              app.kubernetes.io/managed-by: prometheus-operator
+              app.kubernetes.io/name: alertmanager
+
+    grafana:
+      fullnameOverride: grafana
+
+      admin:
+        existingSecret: grafana-admin
+        userKey: admin-user
+        passwordKey: admin-password
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker.gardener.cloud/system-components
+                operator: In
+                values:
+                - "true"
+
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+
+      env:
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+
+    kubelet:
+      serviceMonitor:
+        cAdvisorRelabelings:
+          - action: replace
+            sourceLabels: [__metrics_path__]
+            targetLabel: metrics_path
+          - sourceLabels: [__meta_kubernetes_endpoint_address_target_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+
+        probesRelabelings:
+          - action: replace
+            sourceLabels: [__metrics_path__]
+            targetLabel: metrics_path
+          - sourceLabels: [__meta_kubernetes_endpoint_address_target_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+
+        resourceRelabelings:
+          - action: replace
+            sourceLabels: [__metrics_path__]
+            targetLabel: metrics_path
+          - sourceLabels: [__meta_kubernetes_endpoint_address_target_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+
+        relabelings:
+          - action: replace
+            sourceLabels: [__metrics_path__]
+            targetLabel: metrics_path
+          - sourceLabels: [__meta_kubernetes_endpoint_address_target_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+
+    kube-state-metrics:
+      fullnameOverride: kube-state-metrics
+
+      verticalPodAutoscaler:
+        enabled: true
+        controlledValues: RequestsOnly
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker.gardener.cloud/system-components
+                operator: In
+                values:
+                - "true"
+
+    prometheus:
+      prometheusSpec:
+        # Disable chart-based selectors for prometheus-operator objects, which selects all objects.
+        # Otherwise, we would need to label our custom objects to match the chart-based selectors.
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false
+        scrapeConfigSelectorNilUsesHelmValues: false
+
+        retention: 10d
+
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: gce-ssd
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 100Gi
+        
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: worker.gardener.cloud/system-components
+                  operator: In
+                  values:
+                  - "true"
+
+    prometheus-node-exporter:
+      fullnameOverride: node-exporter
+
+      prometheus:
+        monitor:
+          relabelings:
+          - sourceLabels: [__meta_kubernetes_pod_node_name]
+            separator: ;
+            regex: ^(.*)$
+            targetLabel: instance
+            replacement: $1
+            action: replace
+
+      verticalPodAutoscaler:
+        enabled: true
+        controlledValues: RequestsOnly
+
+    prometheusOperator:
+      verticalPodAutoscaler:
+        enabled: true
+        controlledValues: RequestsOnly
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker.gardener.cloud/system-components
+                operator: In
+                values:
+                - "true"
+
+    # scrape target and rules customizations (on our managed service, you can't scrape the control plane components –
+    # and shouldn't need to)
+    kubeEtcd:
+      enabled: false
+    kubeApiServer:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    kubeScheduler:
+      enabled: false
+    kubeProxy:
+      service:
+        # gardener doesn't put the k8s-app=kube-proxy label on kube-proxy pods as kube-prometheus-stack expects
+        # hence, we overwrite the charts default selector with gardener's selector
+        selector:
+          app: kubernetes
+          role: proxy
+
+      serviceMonitor:
+        relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          separator: ;
+          regex: ^(.*)$
+          targetLabel: instance
+          replacement: $1
+          action: replace
+
+    defaultRules:
+      disabled:
+        # These alerts are very noisy
+        Watchdog: true
+        InfoInhibitor: true
+        # Alerts customized in prow-rules.yaml
+        KubePodNotReady: true
+        KubeContainerWaiting: true
+        KubeletClientCertificateExpiration: true
+        KubeletServerCertificateExpiration: true
+        # disable alerts that don't make sense in our CI environment
+        KubeMemoryOvercommit: true # we intentionally overcommit resources on the CI cluster
+        KubeCPUOvercommit: true
