@@ -11,6 +11,7 @@ aliases:
   - timuthy
   - ScheererJ
   - marc1404
+  - tobschli
   ci-infra-approvers:
   - timebertt
   - rfranzke
@@ -23,3 +24,4 @@ aliases:
   - timuthy
   - ScheererJ
   - marc1404
+  - tobschli
