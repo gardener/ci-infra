@@ -38,6 +38,16 @@ plank:
         sidecar:
           requests:
             cpu: 100m
+      scheduling_options:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: prow.k8s.io/jobs-allowed
+                  operator: In
+                  values:
+                  - "true"
 
 sinker:
   resync_period: 1m
