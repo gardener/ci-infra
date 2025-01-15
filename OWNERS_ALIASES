@@ -1,25 +1,27 @@
 aliases:
   ci-infra-reviewers:
-  - timebertt
-  - rfranzke
-  - oliver-goetz
   - acumino
   - ary1992
   - ialidzhikov
-  - plkokanov
-  - shafeeqes
-  - timuthy
-  - ScheererJ
   - marc1404
+  - oliver-goetz
+  - plkokanov
+  - rfranzke
+  - ScheererJ
+  - shafeeqes
+  - timebertt
+  - timuthy
+  - tobschli
   ci-infra-approvers:
-  - timebertt
-  - rfranzke
-  - oliver-goetz
   - acumino
   - ary1992
   - ialidzhikov
-  - plkokanov
-  - shafeeqes
-  - timuthy
-  - ScheererJ
   - marc1404
+  - oliver-goetz
+  - plkokanov
+  - rfranzke
+  - ScheererJ
+  - shafeeqes
+  - timebertt
+  - timuthy
+  - tobschli
