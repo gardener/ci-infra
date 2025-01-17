@@ -1,11 +1,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: monitoring-build
+  name: monitoring
   namespace: flux-system
 spec:
   interval: 30m
-  path: deploy/monitoring/build
   prune: true
   retryInterval: 2m
   sourceRef:

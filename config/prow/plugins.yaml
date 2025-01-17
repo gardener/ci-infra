@@ -193,11 +193,6 @@ config_updater:
       clusters:
         gardener-prow-trusted:
         - prow
-    config/prow/webserver-static-files/*:
-      name: webserver-static-files
-      clusters:
-        gardener-prow-trusted:
-        - prow
 
 welcome:
 - repos:
