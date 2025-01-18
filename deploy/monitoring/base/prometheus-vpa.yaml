@@ -1,0 +1,20 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/name: prometheus
+  name: prometheus-prometheus
+  namespace: monitoring
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+  targetRef:
+    apiVersion: monitoring.coreos.com/v1
+    kind: Prometheus
+    name: prometheus
+  updatePolicy:
+    updateMode: Auto

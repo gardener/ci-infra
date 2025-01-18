@@ -1,0 +1,127 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: deck
+  namespace: prow
+  labels:
+    app: deck
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: deck
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ghproxy
+  namespace: prow
+  labels:
+    app: ghproxy
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: ghproxy
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hook
+  namespace: prow
+  labels:
+    app: hook
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: hook
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prow-controller-manager
+  namespace: prow
+  labels:
+    app: prow-controller-manager
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: prow-controller-manager
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sinker
+  namespace: prow
+  labels:
+    app: sinker
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: sinker
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tide
+  namespace: prow
+  labels:
+    app: tide
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: tide
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: horologium
+  namespace: prow
+  labels:
+    app: horologium
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: horologium
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: crier
+  namespace: prow
+  labels:
+    app: crier
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app: crier

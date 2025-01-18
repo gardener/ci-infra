@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  values:
+    alertmanager:
+      templateFiles:
+        cluster-name.tmpl: |-
+          {{ define "cluster_name" }}Trusted Cluster{{ end }}
+
+    grafana:
+      ingress:
+        annotations:
+          cert.gardener.cloud/issuer: ci-issuer
+          cert.gardener.cloud/purpose: managed
+          dns.gardener.cloud/class: garden
+          dns.gardener.cloud/dnsnames: monitoring.prow.gardener.cloud
+          nginx.ingress.kubernetes.io/auth-url: https://oauth2.prow.gardener.cloud/oauth2/auth
+          nginx.ingress.kubernetes.io/auth-signin: https://oauth2.prow.gardener.cloud/oauth2/start?rd=https://monitoring.prow.gardener.cloud
+
+        hosts:
+        - monitoring.prow.gardener.cloud
+
+        tls:
+        - secretName: monitoring-ingress-tls
+          hosts:
+          - monitoring.prow.gardener.cloud
+
+    prometheus:
+      prometheusSpec:
+        retention: 90d

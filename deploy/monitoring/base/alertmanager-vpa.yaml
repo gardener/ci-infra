@@ -1,0 +1,18 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  labels:
+    app.kubernetes.io/name: alertmanager
+  name: alertmanager-prometheus
+  namespace: monitoring
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: '*'
+      controlledValues: RequestsOnly
+  targetRef:
+    apiVersion: monitoring.coreos.com/v1
+    kind: Alertmanager
+    name: prometheus
+  updatePolicy:
+    updateMode: Auto

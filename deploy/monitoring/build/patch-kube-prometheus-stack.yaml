@@ -1,0 +1,41 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  values:
+    alertmanager:
+      templateFiles:
+        cluster-name.tmpl: |-
+          {{ define "cluster_name" }}Build Cluster{{ end }}
+
+    grafana:
+      ingress:
+        annotations:
+          cert.gardener.cloud/issuer: ci-issuer
+          cert.gardener.cloud/purpose: managed
+          dns.gardener.cloud/class: garden
+          dns.gardener.cloud/dnsnames: monitoring-build.prow.gardener.cloud
+          nginx.ingress.kubernetes.io/auth-url: https://oauth2.prow.gardener.cloud/oauth2/auth
+          nginx.ingress.kubernetes.io/auth-signin: https://oauth2.prow.gardener.cloud/oauth2/start?rd=https://monitoring-build.prow.gardener.cloud
+
+        hosts:
+        - monitoring-build.prow.gardener.cloud
+
+        tls:
+        - secretName: monitoring-ingress-tls
+          hosts:
+          - monitoring-build.prow.gardener.cloud
+
+      env:
+        GF_USERS_VIEWERS_CAN_EDIT: "true"
+
+      additionalDataSources:
+      - access: proxy
+        editable: false
+        name: prometheus-performance
+        orgId: 1
+        type: prometheus
+        url: http://prometheus-performance.monitoring.svc:9090
+        version: 1
