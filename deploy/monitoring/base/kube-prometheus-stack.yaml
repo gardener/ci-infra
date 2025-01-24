@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: '67.11.x'
+      version: '68.3.x'
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
