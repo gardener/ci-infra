@@ -7,3 +7,6 @@ resources:
 - prow-kustomization.yaml
 - oauth2-proxy-kustomization.yaml
 - renovate-kustomization.yaml
+
+patches:
+- path: patch-monitoring-kustomization.yaml

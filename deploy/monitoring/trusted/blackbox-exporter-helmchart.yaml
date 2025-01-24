@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: blackbox-exporter
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: prometheus-blackbox-exporter
+      version: '9.1.x'
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      interval: 1m
+  targetNamespace: monitoring
+  values:
+    # customize names so that they are shorter and easier to grasp
+    fullnameOverride: blackbox-exporter
+
+    serviceMonitor:
+      selfMonitor:
+        enabled: true
+
+    verticalPodAutoscaler:
+      enabled: true
+      controlledValues: RequestsOnly
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: worker.gardener.cloud/system-components
+              operator: In
+              values:
+              - "true"
