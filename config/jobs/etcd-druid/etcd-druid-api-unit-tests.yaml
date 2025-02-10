@@ -12,53 +12,22 @@ presubmits:
         grace_period: 10m
       annotations:
         description: Runs unit tests for etcd-druid API in pull requests
-        fork-per-release: "true"
+        #fork-per-release: "true"
       spec:
         containers:
           # Run all tests sequentially in one container or as separate prow jobs.
           # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
           - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250129-fcd6b72-1.23
             command:
-              - bash
+              - make
             args:
-              - c
-              - "cd api && make check check-generate test-unit"
+              - --directory=api
+              - check
+              - check-generate
+              - test-unit
             resources:
               limits:
                 memory: 16Gi
               requests:
                 cpu: 4
                 memory: 8Gi
-periodics:
-  - name: ci-etcd-druid-api-unit
-    cluster: gardener-prow-build
-    interval: 4h
-    extra_refs:
-      - org: gardener
-        repo: etcd-druid
-        base_ref: master
-    decorate: true
-    decoration_config:
-      timeout: 40m
-      grace_period: 10m
-    annotations:
-      description: Runs unit tests for etcd-druid periodically
-      testgrid-dashboards: gardener-etcd-druid
-      testgrid-days-of-results: "60"
-      #fork-per-release: "true"
-    spec:
-      containers:
-        # Run all tests sequentially in one container or as separate prow jobs.
-        # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
-        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250129-fcd6b72-1.23
-          command:
-            - bash
-          args:
-            - c
-            - "cd api && make check check-generate test-unit"
-          resources:
-            limits:
-              memory: 16Gi
-            requests:
-              cpu: 4
-              memory: 8Gi
