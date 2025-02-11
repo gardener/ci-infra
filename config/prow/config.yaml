@@ -253,7 +253,8 @@ branch-protection:
             contexts:
             - license/cla
             - concourse-ci/build
-            - concourse-ci/build_oci_image_cert-management
+            - concourse-ci/build_oci_image_cert-management-linux-amd64
+            - concourse-ci/build_oci_image_cert-management-linux-arm64
             - concourse-ci/check
             - concourse-ci/publish
           restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
