@@ -12,3 +12,28 @@ data:
       # cluster in the test pod because the domain overlaps with the cluster domain of the inner (kind) cluster.
       name exact prometheus-performance.prow.gardener.cloud.local prometheus-performance.monitoring.svc.cluster.local
     }
+  # Manipulating /etc/hosts within prow test jobs is prone to races with kubelet creating /etc/hosts in side car containers
+  # (see https://github.com/gardener/gardener/issues/11410 for details)
+  # Fallback for gardener-operator virtual api and ingress entrypoints
+  gardeneroperator.override: |
+    template IN A virtual-garden.local.gardener.cloud ingress.runtime-garden.local.gardener.cloud {
+      answer "{{ .Name }} 60 IN A 172.18.255.3"
+    }
+    template IN AAAA virtual-garden.local.gardener.cloud ingress.runtime-garden.local.gardener.cloud {
+      answer "{{ .Name }} 60 IN AAAA ::3"
+    }
+  # Fallback for gardener.local.gardener.cloud
+  gardenerlocal.override: |
+    hosts {
+      127.0.0.1 garden.local.gardener.cloud
+      ::1 garden.local.gardener.cloud
+      fallthrough
+    }
+  # Fallback for shoot api and seed ingress entrypoints
+  shootapi.override: |
+    template IN A internal.local.gardener.cloud external.local.gardener.cloud seed.local.gardener.cloud {
+      answer "{{ .Name }} 60 IN A 172.18.255.1"
+    }
+    template IN AAAA internal.local.gardener.cloud external.local.gardener.cloud seed.local.gardener.cloud {
+      answer "{{ .Name }} 60 IN AAAA ::1"
+    }
