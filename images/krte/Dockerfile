@@ -92,7 +92,11 @@ RUN echo "Installing Packages ..." \
         && sed -i 's/ulimit -Hn/# ulimit -Hn/g' /etc/init.d/docker \
     && echo "Ensuring Legacy Iptables ..." \
         && update-alternatives --set iptables /usr/sbin/iptables-legacy \
-        && update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+        && update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy \
+    && echo "Getting runc v1.2.4 ..." \
+        && mkdir -p /get-runc \
+        && curl -fsSL "https://github.com/opencontainers/runc/releases/download/v1.2.4/runc.$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')" -o /get-runc/runc \
+        && chmod +x /get-runc/runc
 
 # entrypoint is our wrapper script, in Prow you will need to explicitly re-specify this
 ENTRYPOINT ["wrapper.sh"]
