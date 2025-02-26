@@ -76,6 +76,7 @@ deck:
           - "ERROR:"
           - "Error:"
           - (FAIL|Failure \[|FAILED)\b
+          - \bTIMEDOUT\b
           - panic\b
           - level=fatal\b
           - "fatal:"
