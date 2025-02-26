@@ -5,7 +5,7 @@ presubmits:
     always_run: true
     decorate: true
     decoration_config:
-      timeout: 60m
+      timeout: 1h10m
       grace_period: 15m
     labels:
       preset-dind-enabled: "true"
@@ -42,7 +42,7 @@ periodics:
     base_ref: main
   decorate: true
   decoration_config:
-    timeout: 60m
+    timeout: 1h10m
     grace_period: 15m
   labels:
     preset-dind-enabled: "true"
