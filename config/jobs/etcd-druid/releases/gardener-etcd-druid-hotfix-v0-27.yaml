@@ -25,7 +25,7 @@ periodics:
       - bash
       - -c
       - make ci-e2e-kind
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250303-fad2ccd-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250304-499f170-1.23
       name: ""
       resources:
         requests:
@@ -55,7 +55,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-fc3cb4b-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-71a5b27-1.23
       name: test-integration
       resources:
         limits:
@@ -87,7 +87,7 @@ periodics:
       - test-unit
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-fc3cb4b-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-71a5b27-1.23
       name: ""
       resources:
         limits:
@@ -120,7 +120,7 @@ presubmits:
         - bash
         - -c
         - make ci-e2e-kind
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250303-fad2ccd-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250304-499f170-1.23
         name: ""
         resources:
           requests:
@@ -146,7 +146,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-fc3cb4b-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-71a5b27-1.23
         name: test-integration
         resources:
           limits:
@@ -199,7 +199,7 @@ presubmits:
         - test-unit
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-fc3cb4b-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250304-71a5b27-1.23
         name: ""
         resources:
           limits:
