@@ -1,8 +1,6 @@
 module github.com/gardener/ci-infra
 
-go 1.23.0
-
-toolchain go1.24.1
+go 1.24
 
 require (
 	github.com/Masterminds/semver v1.5.0
