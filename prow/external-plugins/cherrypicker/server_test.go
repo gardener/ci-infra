@@ -1200,6 +1200,11 @@ func TestReleaseNoteFromParentPR(t *testing.T) {
 			input:    "foobar",
 			expected: "",
 		},
+		{
+			name:     "test11",
+			input:    "```feature developer\nUpdate the magic number from 42 to 49\n```\n```feature operator\nUpdate another magic number\nThis time with multiple lines\n```",
+			expected: "```feature developer github.com/foo/bar #123 @foo-author\nUpdate the magic number from 42 to 49\n```\n```feature operator github.com/foo/bar #123 @foo-author\nUpdate another magic number\nThis time with multiple lines\n```",
+		},
 	}
 
 	for _, tc := range testCases {

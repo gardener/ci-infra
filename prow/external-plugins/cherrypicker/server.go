@@ -43,7 +43,7 @@ const pluginName = "cherrypick"
 const defaultLabelPrefix = "cherrypick/"
 
 var cherryPickRe = regexp.MustCompile(`(?m)^(?:/cherrypick|/cherry-pick)\s+(.+)$`)
-var releaseNoteRe = regexp.MustCompile(`(\x60\x60\x60(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)( github\.com/\S+?/\S+?)?( #\d+?)?( @\S+?)?\s*\n(.+?)\n\x60\x60\x60)`)
+var releaseNoteRe = regexp.MustCompile(`(\x60\x60\x60(breaking|feature|bugfix|doc|other) (user|operator|developer|dependency)( github\.com/\S+?/\S+?)?( #\d+?)?( @\S+?)?\s*\n(((.+?)\n)+?)\x60\x60\x60)`)
 var titleTargetBranchIndicatorTemplate = `[%s] `
 
 var notOrgMemberMessageTemplate = "only [%s](https://github.com/orgs/%s/people) org members may request cherry picks. If you are already part of the org, make sure to [change](https://github.com/orgs/%s/people?query=%s) your membership to public. Otherwise you can still do the cherry-pick manually. "
