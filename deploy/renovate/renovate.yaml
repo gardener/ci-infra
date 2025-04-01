@@ -27,10 +27,10 @@ spec:
     cronjob:
       schedule: "*/5 * * * *"
       concurrencyPolicy: Forbid
-      postCommand: |
+      preCommand: |
         disk_usage=$(df /tmp/renovate | awk 'NR==2 {print $5}' | tr -d '%')
         inode_usage=$(df -i /tmp/renovate | awk 'NR==2 {print $5}' | tr -d '%')
-        if [ "$disk_usage" -gt 95 ] || [ "$inode_usage" -gt 95 ]; then
+        if [ "$disk_usage" -gt 90 ] || [ "$inode_usage" -gt 90 ]; then
           echo "Disk usage: $disk_usage %"
           echo "Inode usage: $inode_usage %"
           echo "Renovate cache disk is almost full. Deleting contents of /tmp/renovate"
