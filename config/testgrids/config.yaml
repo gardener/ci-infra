@@ -7,6 +7,7 @@ dashboard_groups:
     - gardener-extension-shoot-oidc-service
     - gardener-dependency-watchdog
     - gardener-etcd-druid
+    - gardener-etcd-backup-restore
     - gardener-extension-networking-cilium
     - gardener-extension-networking-calico
     - gardener-extension-shoot-networking-filter
@@ -21,6 +22,7 @@ dashboards:
 - name: gardener-extension-shoot-oidc-service
 - name: gardener-dependency-watchdog
 - name: gardener-etcd-druid
+- name: gardener-etcd-backup-restore
 - name: gardener-extension-networking-cilium
 - name: gardener-extension-networking-calico
 - name: gardener-extension-shoot-networking-filter
