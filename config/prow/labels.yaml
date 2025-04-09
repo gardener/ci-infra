@@ -1670,6 +1670,8 @@ repos:
     labels: *trigger-only-labels
   gardener/etcd-druid:
     labels: *trigger-only-labels
+  gardener/etcd-backup-restore:
+    labels: *trigger-only-labels
   gardener/gardener-extension-networking-calico:
     labels: *trigger-only-labels
   gardener/gardener-extension-shoot-networking-filter:

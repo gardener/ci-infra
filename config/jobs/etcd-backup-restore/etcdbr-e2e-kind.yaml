@@ -1,0 +1,65 @@
+presubmits:
+  gardener/etcd-backup-restore:
+    - name: pull-etcd-backup-restore-e2e-kind
+      cluster: gardener-prow-build
+      always_run: true
+      decorate: true
+      decoration_config:
+        timeout: 60m
+        grace_period: 15m
+      labels:
+        preset-dind-enabled: "true"
+        preset-kind-volume-mounts: "true"
+      annotations:
+        description: Runs KIND cluster based e2e tests for etcd backup restore developments in pull requests
+        fork-per-release: "true"
+      spec:
+        containers:
+          - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250407-5d056df-1.24
+            command:
+            - wrapper.sh
+            - bash
+            - -c
+            - make ci-e2e-kind
+            # we need privileged mode in order to do docker in docker
+            securityContext:
+              privileged: true
+            resources:
+              requests:
+                cpu: 6
+                memory: 8Gi
+periodics:
+  - name: ci-etcd-backup-restore-e2e-kind
+    cluster: gardener-prow-build
+    interval: 4h
+    extra_refs:
+      - org: gardener
+        repo: etcd-backup-restore
+        base_ref: master
+    decorate: true
+    decoration_config:
+      timeout: 60m
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    annotations:
+      description: Runs KIND cluster based e2e tests for etcd backup restore developments periodically
+      testgrid-dashboards: gardener-etcd-backup-restore
+      testgrid-days-of-results: "60"
+      fork-per-release: "true"
+    spec:
+      containers:
+        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250407-5d056df-1.24
+          command:
+          - wrapper.sh
+          - bash
+          - -c
+          - make ci-e2e-kind
+          # we need privileged mode in order to do docker in docker
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 6
+              memory: 8Gi
