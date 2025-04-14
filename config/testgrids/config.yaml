@@ -12,6 +12,7 @@ dashboard_groups:
     - gardener-extension-networking-calico
     - gardener-extension-shoot-networking-filter
     - gardener-extension-shoot-rsyslog-relp
+    - gardener-extension-shoot-cert-service
     - gardener-discovery-server
     - cert-management
 
@@ -27,5 +28,6 @@ dashboards:
 - name: gardener-extension-networking-calico
 - name: gardener-extension-shoot-networking-filter
 - name: gardener-extension-shoot-rsyslog-relp
+- name: gardener-extension-shoot-cert-service
 - name: gardener-discovery-server
 - name: cert-management
