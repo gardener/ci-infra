@@ -10,14 +10,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: hotfix-v0.25
+  - base_ref: hotfix-v0.29
     org: gardener
     repo: etcd-druid
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-etcd-druid-e2e-kind-hotfix-v0-25
+  name: ci-etcd-druid-e2e-kind-hotfix-v0-29
   spec:
     containers:
     - command:
@@ -25,7 +25,7 @@ periodics:
       - bash
       - -c
       - make ci-e2e-kind
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250411-0fe27f5-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250411-0fe27f5-1.24
       name: ""
       resources:
         requests:
@@ -44,18 +44,18 @@ periodics:
     grace_period: 10m0s
     timeout: 20m0s
   extra_refs:
-  - base_ref: hotfix-v0.25
+  - base_ref: hotfix-v0.29
     org: gardener
     repo: etcd-druid
   interval: 4h
-  name: ci-etcd-druid-integration-hotfix-v0-25
+  name: ci-etcd-druid-integration-hotfix-v0-29
   spec:
     containers:
     - args:
       - test-integration
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.24
       name: test-integration
       resources:
         limits:
@@ -74,11 +74,11 @@ periodics:
     grace_period: 10m0s
     timeout: 40m0s
   extra_refs:
-  - base_ref: hotfix-v0.25
+  - base_ref: hotfix-v0.29
     org: gardener
     repo: etcd-druid
   interval: 4h
-  name: ci-etcd-druid-unit-hotfix-v0-25
+  name: ci-etcd-druid-unit-hotfix-v0-29
   spec:
     containers:
     - args:
@@ -87,7 +87,7 @@ periodics:
       - test-unit
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.23
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.24
       name: ""
       resources:
         limits:
@@ -103,7 +103,7 @@ presubmits:
       description: Runs KIND cluster based e2e tests for etcd druid developments in
         pull requests
     branches:
-    - hotfix-v0.25
+    - hotfix-v0.29
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -112,7 +112,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-etcd-druid-e2e-kind-hotfix-v0-25
+    name: pull-etcd-druid-e2e-kind-hotfix-v0-29
     spec:
       containers:
       - command:
@@ -120,7 +120,7 @@ presubmits:
         - bash
         - -c
         - make ci-e2e-kind
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250411-0fe27f5-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250411-0fe27f5-1.24
         name: ""
         resources:
           requests:
@@ -133,20 +133,20 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs integration tests for etcd-druid for pull requests
     branches:
-    - hotfix-v0.25
+    - hotfix-v0.29
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 20m0s
-    name: pull-etcd-druid-integration-hotfix-v0-25
+    name: pull-etcd-druid-integration-hotfix-v0-29
     spec:
       containers:
       - args:
         - test-integration
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.24
         name: test-integration
         resources:
           limits:
@@ -159,10 +159,10 @@ presubmits:
       created-by-job-forker: "true"
       description: Verify etcd-druid image build on pull requests to master branch
     branches:
-    - hotfix-v0.25
+    - hotfix-v0.29
     cluster: gardener-prow-build
     decorate: true
-    name: pull-etcd-druid-verify-image-build-hotfix-v0-25
+    name: pull-etcd-druid-verify-image-build-hotfix-v0-29
     spec:
       containers:
       - args:
@@ -185,22 +185,21 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs unit tests for etcd-druid in pull requests
     branches:
-    - hotfix-v0.25
+    - hotfix-v0.29
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 40m0s
-    name: pull-etcd-druid-unit-hotfix-v0-25
+    name: pull-etcd-druid-unit-hotfix-v0-29
     spec:
       containers:
       - args:
-        - check-generate
         - check
         - test-unit
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.23
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.24
         name: ""
         resources:
           limits:
