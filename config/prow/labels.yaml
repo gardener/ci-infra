@@ -1679,7 +1679,7 @@ repos:
   gardener/gardener-extension-shoot-rsyslog-relp:
     labels: *default-labels
   gardener/gardener-extension-shoot-cert-service:
-    labels: *trigger-only-labels
+    labels: *default-labels
   gardener/gardener-discovery-server:
     labels: *default-labels
   gardener/landscaper:
