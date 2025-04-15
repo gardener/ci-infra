@@ -40,6 +40,9 @@ presubmits:
   gardener/gardener-extension-shoot-rsyslog-relp:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-shoot-rsyslog-relp-check-renovate-config
+  gardener/gardener-extension-shoot-cert-service:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-cert-service-check-renovate-config
   gardener/gardener-discovery-server:
   - <<: *renovate-presubmit
     name: pull-gardener-discovery-server-check-renovate-config

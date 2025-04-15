@@ -1,0 +1,53 @@
+presubmits:
+  gardener/gardener-extension-shoot-cert-service:
+  - name: pull-extension-shoot-cert-service-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener-extension-shoot-cert-service developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.24
+        command:
+        - make
+        args:
+        - verify-extended
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: 2
+            memory: 2Gi
+periodics:
+- name: ci-extension-shoot-cert-service-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-shoot-cert-service
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for extension-shoot-cert-service master branch
+    testgrid-dashboards: gardener-extension-shoot-cert-service
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250411-0df3391-1.24
+      command:
+      - make
+      args:
+      - verify-extended
+      resources:
+        limits:
+          memory: 4Gi
+        requests:
+          cpu: 2
+          memory: 2Gi
