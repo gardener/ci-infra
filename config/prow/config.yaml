@@ -293,6 +293,7 @@ tide:
     - gardener/gardener-extension-registry-cache
     - gardener/dependency-watchdog
     - gardener/gardener-extension-shoot-rsyslog-relp
+    - gardener/gardener-extension-shoot-cert-service
     - gardener/gardener-discovery-server
     - gardener/cert-management
     labels:
@@ -331,6 +332,7 @@ tide:
     gardener/gardener-extension-registry-cache: squash
     gardener/dependency-watchdog: squash
     gardener/gardener-extension-shoot-rsyslog-relp: squash
+    gardener/gardener-extension-shoot-cert-service: squash
     gardener/gardener-discovery-server: squash
     gardener/cert-management: squash
   pr_status_base_urls:
