@@ -56,7 +56,7 @@ periodics:
     app: branchprotector
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/branchprotector:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/branchprotector:v20250422-30713f381
       command:
       - branchprotector
       args:
@@ -163,7 +163,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-30713f381
       command:
       - generic-autobumper
       args:
@@ -194,7 +194,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-30713f381
       command:
       - generic-autobumper
       args:
@@ -225,7 +225,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-30713f381
       command:
       - generic-autobumper
       args:
@@ -256,7 +256,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20250422-30713f381
       command:
       - generic-autobumper
       args:
@@ -290,7 +290,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20250422-30713f381
       command:
       - checkconfig
       args:
@@ -322,7 +322,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20250422-d79ce707d
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20250422-30713f381
       command:
       - checkconfig
       args:
@@ -355,7 +355,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250422-9a0df09-1.24
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250423-ad19ed0-1.24
       command:
       - make
       args:
