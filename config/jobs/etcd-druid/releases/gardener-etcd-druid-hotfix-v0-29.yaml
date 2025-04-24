@@ -25,7 +25,7 @@ periodics:
       - bash
       - -c
       - make ci-e2e-kind
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250423-2c4ea5b-1.24
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250424-1d21b58-1.24
       name: ""
       resources:
         requests:
@@ -120,7 +120,7 @@ presubmits:
         - bash
         - -c
         - make ci-e2e-kind
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250423-2c4ea5b-1.24
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20250424-1d21b58-1.24
         name: ""
         resources:
           requests:
