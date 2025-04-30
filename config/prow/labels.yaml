@@ -1667,13 +1667,13 @@ repos:
   gardener/dependency-watchdog:
     labels: *default-labels
   gardener/gardener-extension-networking-cilium:
-    labels: *trigger-only-labels
+    labels: *default-labels
   gardener/etcd-druid:
     labels: *trigger-only-labels
   gardener/etcd-backup-restore:
     labels: *trigger-only-labels
   gardener/gardener-extension-networking-calico:
-    labels: *trigger-only-labels
+    labels: *default-labels
   gardener/gardener-extension-shoot-networking-filter:
     labels: *trigger-only-labels
   gardener/gardener-extension-shoot-rsyslog-relp:
