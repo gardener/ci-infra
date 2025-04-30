@@ -22,6 +22,8 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
+        repo:gardener/gardener-extension-networking-calico
+        repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
         is:issue
@@ -76,6 +78,8 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
+        repo:gardener/gardener-extension-networking-calico
+        repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
         is:issue
@@ -131,6 +135,8 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
+        repo:gardener/gardener-extension-networking-calico
+        repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
         is:issue
@@ -187,6 +193,8 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
+        repo:gardener/gardener-extension-networking-calico
+        repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
         is:pr
@@ -241,6 +249,8 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
+        repo:gardener/gardener-extension-networking-calico
+        repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
         is:pr
@@ -296,6 +306,8 @@ periodics:
         repo:gardener/dependency-watchdog
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
+        repo:gardener/gardener-extension-networking-calico
+        repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
         is:pr
