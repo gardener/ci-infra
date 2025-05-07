@@ -45,7 +45,7 @@ periodics:
     base_ref: master
   decorate: true
   decoration_config:
-    timeout: 1h15m
+    timeout: 2h
     grace_period: 15m
   labels:
     preset-dind-enabled: "true"
