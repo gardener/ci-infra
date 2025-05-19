@@ -29,6 +29,8 @@ approve:
   - gardener/gardener-extension-shoot-cert-service
   - gardener/gardener-discovery-server
   - gardener/cert-management
+  - gardener/gardener-extension-networking-calico
+  - gardener/gardener-extension-networking-cilium
   lgtm_acts_as_approve: false
   require_self_approval: true
   commandHelpLink: "https://prow.gardener.cloud/command-help"
@@ -75,6 +77,8 @@ lgtm:
   - gardener/gardener-extension-shoot-cert-service
   - gardener/gardener-discovery-server
   - gardener/cert-management
+  - gardener/gardener-extension-networking-calico
+  - gardener/gardener-extension-networking-cilium
   review_acts_as_lgtm: true
   store_tree_hash: true
 
