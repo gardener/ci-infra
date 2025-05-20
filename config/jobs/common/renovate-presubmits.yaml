@@ -12,7 +12,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: ghcr.io/renovatebot/renovate:40.18.3
+      - image: ghcr.io/renovatebot/renovate:40.19.0
         command:
         - renovate-config-validator
 
