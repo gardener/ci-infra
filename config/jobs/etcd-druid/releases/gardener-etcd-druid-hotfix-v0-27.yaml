@@ -174,7 +174,7 @@ presubmits:
         - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
         command:
         - /kaniko/executor
-        image: gcr.io/kaniko-project/executor:v1.23.2
+        image: gcr.io/kaniko-project/executor:v1.24.0
         name: kaniko
         resources:
           requests:
