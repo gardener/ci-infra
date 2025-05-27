@@ -15,6 +15,7 @@ dashboard_groups:
     - gardener-extension-shoot-cert-service
     - gardener-discovery-server
     - cert-management
+    - external-dns-management
 
 dashboards:
 - name: gardener-gardener
@@ -31,3 +32,4 @@ dashboards:
 - name: gardener-extension-shoot-cert-service
 - name: gardener-discovery-server
 - name: cert-management
+- name: external-dns-management

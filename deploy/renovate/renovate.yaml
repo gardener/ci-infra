@@ -64,6 +64,7 @@ spec:
             "gardener/terminal-controller-manager",
             "gardener/diki",
             "gardener/cert-management",
+            "gardener/external-dns-management",
             "gardener/ops-toolbelt"
           ],
           "allowedPostUpgradeCommands": [".*"]
