@@ -26,6 +26,7 @@ periodics:
         repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
+        repo:gardener/external-dns-management
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -82,6 +83,7 @@ periodics:
         repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
+        repo:gardener/external-dns-management
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -139,6 +141,7 @@ periodics:
         repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
+        repo:gardener/external-dns-management
         is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -197,6 +200,7 @@ periodics:
         repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
+        repo:gardener/external-dns-management
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -253,6 +257,7 @@ periodics:
         repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
+        repo:gardener/external-dns-management
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -310,6 +315,7 @@ periodics:
         repo:gardener/gardener-extension-networking-cilium
         repo:gardener/gardener-discovery-server
         repo:gardener/cert-management
+        repo:gardener/external-dns-management
         is:pr
         -label:lifecycle/frozen
         -label:lifecycle/stale

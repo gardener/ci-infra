@@ -52,3 +52,6 @@ presubmits:
   gardener/cert-management:
   - <<: *renovate-presubmit
     name: pull-cert-management-check-renovate-config
+  gardener/external-dns-management:
+    - <<: *renovate-presubmit
+      name: pull-external-dns-management-check-renovate-config
