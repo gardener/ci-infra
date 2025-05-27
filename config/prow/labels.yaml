@@ -1686,3 +1686,5 @@ repos:
     labels: *trigger-only-labels
   gardener/cert-management:
     labels: *labels-keep-gardener-robot
+  gardener/external-dns-management:
+    labels: *labels-keep-gardener-robot
