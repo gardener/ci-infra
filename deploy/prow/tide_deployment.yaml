@@ -20,7 +20,7 @@ spec:
       serviceAccountName: tide
       containers:
       - name: tide
-        image: us-docker.pkg.dev/k8s-infra-prow/images/tide:v20250606-9ad88fc8d
+        image: us-docker.pkg.dev/k8s-infra-prow/images/tide:v20250606-e2a3dbcc9
         args:
         - --dry-run=false
         - --github-endpoint=http://ghproxy
