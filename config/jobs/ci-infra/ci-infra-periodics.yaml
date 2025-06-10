@@ -355,7 +355,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250609-dac3286-1.24
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250609-1b2c324-1.24
       command:
       - make
       args:
