@@ -143,6 +143,7 @@ images:
   - v2.2.21
   - v2.2.22
   - v2.2.23
+  - v2.2.24
 - source: ghcr.io/credativ/plutono
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/plutono
   tags:
