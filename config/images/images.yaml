@@ -164,6 +164,17 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-operator/opentelemetry-operator
   tags:
   - v0.127.0
+- source: persesdev/perses
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses
+  tags:
+  - v0.50.3
+  - v0.51.0
+- source: persesdev/perses-operator
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses-operator
+  tags:
+  - v0.1.10
+  - v0.1.12
+  - v0.2.0
 # gardener/pkg/provider-local/images.yaml
 - source: kindest/local-path-provisioner
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/kindest/local-path-provisioner
