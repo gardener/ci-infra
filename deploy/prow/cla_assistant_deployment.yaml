@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: cla-assistant
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/cla-assistant:v20250610-f1ffe20
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/cla-assistant:v20250623-1d2d5ec
         imagePullPolicy: Always
         args:
         - --dry-run=false
