@@ -6,6 +6,7 @@ triggers:
   repos:
   - gardener/ci-infra
   - gardener/gardener
+  - gardener/gardener-extension-image-rewriter
   - gardener/gardener-extension-registry-cache
   - gardener/gardener-extension-shoot-oidc-service
   - gardener/dependency-watchdog
@@ -24,6 +25,7 @@ approve:
 - repos:
   - gardener/ci-infra
   - gardener/gardener
+  - gardener/gardener-extension-image-rewriter
   - gardener/gardener-extension-registry-cache
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
@@ -73,6 +75,7 @@ lgtm:
 - repos:
   - gardener/ci-infra
   - gardener/gardener
+  - gardener/gardener-extension-image-rewriter
   - gardener/gardener-extension-registry-cache
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
@@ -105,6 +108,17 @@ slack:
     - dependabot[bot]
   - repos:
     - gardener/gardener
+    channels:
+    - prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
+  - repos:
+    - gardener/gardener-extension-image-rewriter
     channels:
     - prow-alerts
     exempt_users:
@@ -197,6 +211,8 @@ repo_milestone:
     maintainers_team: ci-infra-maintainers
   gardener/gardener:
     maintainers_team: gardener-maintainers
+  gardener/gardener-extension-image-rewriter:
+    maintainers_team: gardener-extension-image-rewriter-maintainers
   gardener/gardener-extension-registry-cache:
     maintainers_team: gardener-extension-registry-cache-maintainers
   gardener/dependency-watchdog:
@@ -244,6 +260,7 @@ welcome:
 - repos:
   - gardener/ci-infra
   - gardener/gardener
+  - gardener/gardener-extension-image-rewriter
   - gardener/gardener-extension-registry-cache
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
@@ -264,6 +281,11 @@ require_matching_label:
 - missing_label: do-not-merge/needs-kind
   org: gardener
   repo: gardener
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: gardener-extension-image-rewriter
   prs: true
   regexp: ^kind/
 - missing_label: do-not-merge/needs-kind
@@ -351,6 +373,37 @@ plugins:
     - wip
     - yuks
   gardener/gardener:
+    plugins:
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
+  gardener/gardener-extension-image-rewriter:
     plugins:
     - approve
     - assign
@@ -703,6 +756,21 @@ external_plugins:
     - issue_comment
     - pull_request
   gardener/gardener:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
+    events:
+    - issue_comment
+    - pull_request
+  gardener/gardener-extension-image-rewriter:
   - name: cla-assistant
     events:
       - issue_comment

@@ -19,6 +19,9 @@ presubmits:
   gardener/gardener:
   - <<: *renovate-presubmit
     name: pull-gardener-check-renovate-config
+  gardener/gardener-extension-image-rewriter:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-image-rewriter-check-renovate-config
   gardener/gardener-extension-registry-cache:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-registry-cache-check-renovate-config
@@ -53,5 +56,5 @@ presubmits:
   - <<: *renovate-presubmit
     name: pull-cert-management-check-renovate-config
   gardener/external-dns-management:
-    - <<: *renovate-presubmit
-      name: pull-external-dns-management-check-renovate-config
+  - <<: *renovate-presubmit
+    name: pull-external-dns-management-check-renovate-config

@@ -103,6 +103,23 @@ var _ = Describe("activator", func() {
   #   includedBranches:
   #   - master
   - repos:
+    - gardener/gardener-extension-image-rewriter
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
     - gardener/gardener-extension-registry-cache
     labels:
     - lgtm
@@ -273,6 +290,23 @@ var _ = Describe("activator", func() {
   ##############################################################################
   ### End of Release Milestone section
   ##############################################################################
+  - repos:
+    - gardener/gardener-extension-image-rewriter
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
   - repos:
     - gardener/gardener-extension-registry-cache
     labels:
@@ -445,6 +479,23 @@ var _ = Describe("activator", func() {
   ### End of Release Milestone section
   ##############################################################################
   - repos:
+    - gardener/gardener-extension-image-rewriter
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
     - gardener/gardener-extension-registry-cache
     labels:
     - lgtm
@@ -615,6 +666,23 @@ var _ = Describe("activator", func() {
   ##############################################################################
   ### End of Release Milestone section
   ##############################################################################
+  - repos:
+    - gardener/gardener-extension-image-rewriter
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
   - repos:
     - gardener/gardener-extension-registry-cache
     labels:
@@ -787,6 +855,23 @@ var _ = Describe("activator", func() {
   ### End of Release Milestone section
   ##############################################################################
   - repos:
+    - gardener/gardener-extension-image-rewriter
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
     - gardener/gardener-extension-registry-cache
     labels:
     - lgtm
@@ -957,6 +1042,23 @@ var _ = Describe("activator", func() {
   ##############################################################################
   ### End of Release Milestone section
   ##############################################################################
+  - repos:
+    - gardener/gardener-extension-image-rewriter
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
   - repos:
     - gardener/gardener-extension-registry-cache
     labels:

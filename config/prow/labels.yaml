@@ -1660,6 +1660,8 @@ repos:
     labels: *default-labels
   gardener/gardener:
     labels: *default-labels
+  gardener/gardener-extension-image-rewriter:
+    labels: *default-labels
   gardener/gardener-extension-registry-cache:
     labels: *default-labels
   gardener/gardener-extension-shoot-oidc-service:

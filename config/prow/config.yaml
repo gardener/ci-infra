@@ -175,6 +175,23 @@ branch-protection:
             teams:
             - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
           enforce_admins: false # protections don't apply to admins
+        gardener-extension-image-rewriter:
+          protect: true
+          include:
+          - "master"
+          exclude:
+          - "^dependabot/" # don't protect branches created by dependabot
+          - "^renovate/" # don't protect branches created by renovate
+          required_status_checks:
+            contexts:
+            - license/cla
+          restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
+            apps:
+            - gardener-prow
+            users: []
+            teams:
+            - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
+          enforce_admins: false # protections don't apply to admins
         gardener-extension-registry-cache:
           protect: true
           include:
@@ -358,6 +375,7 @@ tide:
   - repos: &tide-onboarded-repos
     - gardener/ci-infra
     - gardener/gardener
+    - gardener/gardener-extension-image-rewriter
     - gardener/gardener-extension-registry-cache
     - gardener/dependency-watchdog
     - gardener/gardener-extension-shoot-rsyslog-relp
@@ -401,6 +419,7 @@ tide:
     gardener/ci-infra: squash
     gardener/gardener: squash
     gardener/gardener-extension-registry-cache: squash
+    gardener/gardener-extension-image-rewriter: squash
     gardener/dependency-watchdog: squash
     gardener/gardener-extension-shoot-rsyslog-relp: squash
     gardener/gardener-extension-shoot-cert-service: squash
