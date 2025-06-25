@@ -66,6 +66,7 @@ spec:
             "gardener/diki",
             "gardener/cert-management",
             "gardener/external-dns-management",
+            "gardener/cluster-api-provider-gardener",
             "gardener/ops-toolbelt"
           ],
           "allowedPostUpgradeCommands": [".*"]
