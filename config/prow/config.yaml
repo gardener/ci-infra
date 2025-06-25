@@ -400,6 +400,7 @@ tide:
     - gardener/gardener-discovery-server
     - gardener/cert-management
     - gardener/external-dns-management
+    - gardener/cluster-api-provider-gardener
     - gardener/gardener-extension-networking-calico
     - gardener/gardener-extension-networking-cilium
     labels:
@@ -443,6 +444,7 @@ tide:
     gardener/gardener-discovery-server: squash
     gardener/cert-management: squash
     gardener/external-dns-management: squash
+    gardener/cluster-api-provider-gardener: squash
     gardener/gardener-extension-networking-calico: squash
     gardener/gardener-extension-networking-cilium: squash
   pr_status_base_urls:
