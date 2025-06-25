@@ -1,0 +1,53 @@
+presubmits:
+  gardener/cluster-api-provider-gardener:
+  - name: pull-cluster-api-provider-gardener-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 40m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for Gardener Cluster API provider developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250623-0912f35-1.24
+        command:
+        - make
+        args:
+        - verify-extended
+        resources:
+          limits:
+            memory: 3Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-cluster-api-provider-gardener-unit
+  cluster: gardener-prow-build
+  interval: 24h
+  extra_refs:
+  - org: gardener
+    repo: cluster-api-provider-gardener
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 40m
+    grace_period: 10m
+  annotations:
+    description: Runs unit tests for Gardener Cluster API provider developments periodically
+    testgrid-dashboards: cluster-api-provider-gardener
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250623-0912f35-1.24
+      command:
+      - make
+      args:
+      - verify-extended
+      resources:
+        limits:
+          memory: 3Gi
+        requests:
+          cpu: 2
+          memory: 1Gi

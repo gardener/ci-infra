@@ -1690,3 +1690,5 @@ repos:
     labels: *labels-keep-gardener-robot
   gardener/external-dns-management:
     labels: *labels-keep-gardener-robot
+  gardener/cluster-api-provider-gardener:
+    labels: *default-labels
