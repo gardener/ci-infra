@@ -17,6 +17,7 @@ dashboard_groups:
     - gardener-discovery-server
     - cert-management
     - external-dns-management
+    - cluster-api-provider-gardener
 
 dashboards:
 - name: gardener-gardener
@@ -35,3 +36,4 @@ dashboards:
 - name: gardener-discovery-server
 - name: cert-management
 - name: external-dns-management
+- name: cluster-api-provider-gardener

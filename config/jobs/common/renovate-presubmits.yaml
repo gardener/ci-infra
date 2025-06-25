@@ -58,3 +58,6 @@ presubmits:
   gardener/external-dns-management:
   - <<: *renovate-presubmit
     name: pull-external-dns-management-check-renovate-config
+  gardener/cluster-api-provider-gardener:
+  - <<: *renovate-presubmit
+    name: pull-cluster-api-provider-gardener-check-renovate-config
