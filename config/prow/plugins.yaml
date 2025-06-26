@@ -342,6 +342,11 @@ require_matching_label:
   regexp: ^kind/
 - missing_label: do-not-merge/needs-kind
   org: gardener
+  repo: cluster-api-provider-gardener
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
   repo: gardener-extension-networking-cilium
   prs: true
   regexp: ^kind/
@@ -924,6 +929,21 @@ external_plugins:
     - issue_comment
     - pull_request
   gardener/external-dns-management:
+    - name: cla-assistant
+      events:
+        - issue_comment
+        - pull_request_review
+        - pull_request_review_comment
+        - status
+    - name: needs-rebase
+      events:
+        - issue_comment
+        - pull_request
+    - name: cherrypicker
+      events:
+        - issue_comment
+        - pull_request
+  gardener/cluster-api-provider-gardener:
     - name: cla-assistant
       events:
         - issue_comment
