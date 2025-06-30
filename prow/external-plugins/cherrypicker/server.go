@@ -695,7 +695,7 @@ func (s *Server) listTrustedUsers(org, repo string) ([]string, error) {
 }
 
 func normalize(input string) string {
-	return strings.Replace(input, "/", "-", -1)
+	return strings.ReplaceAll(input, "/", "-")
 }
 
 // releaseNoteNoteFromParentPR gets the release note from the

@@ -15,7 +15,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"sigs.k8s.io/prow/pkg/config/secret"
-	"sigs.k8s.io/prow/pkg/flagutil"
 	prowflagutil "sigs.k8s.io/prow/pkg/flagutil"
 	pluginsflagutil "sigs.k8s.io/prow/pkg/flagutil/plugins"
 	"sigs.k8s.io/prow/pkg/interrupts"
@@ -39,7 +38,7 @@ type options struct {
 }
 
 func (o *options) Validate() error {
-	for _, group := range []flagutil.OptionGroup{&o.github} {
+	for _, group := range []prowflagutil.OptionGroup{&o.github} {
 		if err := group.Validate(o.dryRun); err != nil {
 			return err
 		}
@@ -57,7 +56,7 @@ func gatherOptions() options {
 	fs.StringVar(&o.webhookSecretFile, "hmac-secret-file", "/etc/webhook/hmac", "Path to the file containing the GitHub HMAC secret.")
 	fs.StringVar(&o.logLevel, "log-level", "debug", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 
-	for _, group := range []flagutil.OptionGroup{&o.github, &o.instrumentationOptions, &o.pluginsConfig} {
+	for _, group := range []prowflagutil.OptionGroup{&o.github, &o.instrumentationOptions, &o.pluginsConfig} {
 		group.AddFlags(fs)
 	}
 	err := fs.Parse(os.Args[1:])

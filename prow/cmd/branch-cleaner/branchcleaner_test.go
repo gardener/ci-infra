@@ -59,7 +59,7 @@ func (f *fakeGithubClient) RemoveBranchProtection(_, _, branch string) error {
 func (f *fakeGithubClient) GetRepo(owner, name string) (github.FullRepo, error) {
 	repo, err := f.FakeClient.GetRepo(owner, name)
 	if strings.HasSuffix(owner, "-fork") {
-		repo.Repo.Fork = true
+		repo.Fork = true
 		repo.Parent.Owner.Login = strings.TrimSuffix(owner, "-fork")
 		repo.Parent.Name = name
 		repo.Parent.FullName = fmt.Sprintf("%s/%s", repo.Parent.Owner.Login, repo.Parent.Name)
