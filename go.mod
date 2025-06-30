@@ -18,7 +18,7 @@ require (
 	k8s.io/client-go v0.30.1
 	sigs.k8s.io/controller-runtime v0.18.5
 	sigs.k8s.io/prow v0.0.0-20250430215755-f422de9611c4
-	sigs.k8s.io/yaml v1.4.0
+	sigs.k8s.io/yaml v1.5.0
 )
 
 require (
@@ -134,6 +134,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.34.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
+	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go4.org v0.0.0-20201209231011-d4a079459e60 // indirect
 	gocloud.dev v0.40.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
