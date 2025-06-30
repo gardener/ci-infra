@@ -26,7 +26,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"sigs.k8s.io/prow/pkg/config/secret"
-	"sigs.k8s.io/prow/pkg/flagutil"
 	prowflagutil "sigs.k8s.io/prow/pkg/flagutil"
 	"sigs.k8s.io/prow/pkg/interrupts"
 	"sigs.k8s.io/prow/pkg/logrusutil"
@@ -52,7 +51,7 @@ type options struct {
 }
 
 func (o *options) Validate() error {
-	for idx, group := range []flagutil.OptionGroup{&o.github} {
+	for idx, group := range []prowflagutil.OptionGroup{&o.github} {
 		if err := group.Validate(o.dryRun); err != nil {
 			return fmt.Errorf("%d: %w", idx, err)
 		}
@@ -74,7 +73,7 @@ func gatherOptions() options {
 	fs.BoolVar(&o.onlyOrgMembers, "only-org-members", false, "Allow only users with a GitHub organization membership to use automated cherrypicks. Otherwise, collaborators are allowed to use it too.")
 	fs.BoolVar(&o.issueOnConflict, "create-issue-on-conflict", false, "Create a GitHub issue and assign it to the requestor on cherrypick conflict.")
 	fs.StringVar(&o.labelPrefix, "label-prefix", defaultLabelPrefix, "Set a custom label prefix.")
-	for _, group := range []flagutil.OptionGroup{&o.github, &o.instrumentationOptions} {
+	for _, group := range []prowflagutil.OptionGroup{&o.github, &o.instrumentationOptions} {
 		group.AddFlags(fs)
 	}
 	err := fs.Parse(os.Args[1:])
