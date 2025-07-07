@@ -359,6 +359,7 @@ branch-protection:
           restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
               - gardener-prow
+              - gardener-github-actions
             users: []
             teams:
               - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
@@ -380,6 +381,7 @@ branch-protection:
           restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
               - gardener-prow
+              - gardener-github-actions
             users: []
             teams:
               - ci # allow CI users (e.g. concourse) to push (e.g. release commits)
