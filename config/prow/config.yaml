@@ -253,10 +253,8 @@ branch-protection:
           required_status_checks:
             contexts:
               - license/cla
-              - concourse-ci/build_oci_image_gardener-extension-shoot-cert-service-linux-amd64
-              - concourse-ci/build_oci_image_gardener-extension-shoot-cert-service-linux-arm64
-              - concourse-ci/helmcharts
-              - concourse-ci/publish
+              - "Build / build"
+              - "Build / component-descriptor"
           restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
               - gardener-prow
