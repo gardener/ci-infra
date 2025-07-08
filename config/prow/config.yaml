@@ -253,8 +253,7 @@ branch-protection:
           required_status_checks:
             contexts:
               - license/cla
-              - "Build / build"
-              - "Build / component-descriptor"
+              - "component-descriptor / component-descriptor"
           restrictions: # prevent everyone from pushing/merging (except admins, gardener-prow and ci robots)
             apps:
               - gardener-prow
