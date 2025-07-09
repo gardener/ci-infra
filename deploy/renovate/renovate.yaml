@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: renovate
-      version: '41.27.x'
+      version: '41.28.x'
       sourceRef:
         kind: HelmRepository
         name: renovate
