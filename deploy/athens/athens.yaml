@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: athens-proxy
-      version: '0.14.x'
+      version: '0.15.x'
       sourceRef:
         kind: HelmRepository
         name: athens
@@ -40,8 +40,9 @@ spec:
     configEnvVars:
     - name: ATHENS_GO_BINARY_ENV_VARS
       value: GOPROXY=https://proxy.golang.org,direct
-    - name: ATHENS_SINGLE_FLIGHT_TYPE
-      value: gcp
+
+    singleFlight:
+      type: gcp
 
     goGetWorkers: 5
 
