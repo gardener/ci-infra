@@ -39,44 +39,7 @@ periodics:
       secret:
         secretName: github-token
 
-- cron: "54 * * * *"  # Every hour at 54 minutes past the hour
-  name: ci-prow-branchprotector
-  cluster: gardener-prow-trusted
-  decorate: true
-  decoration_config:
-    timeout: 5h
-  extra_refs:
-  - org: gardener
-    repo: ci-infra
-    base_ref: master
-  annotations:
-    description: Runs Prow's branchprotector to apply configured GitHub status context requirements and merge policies
-    testgrid-create-test-group: "false"
-  labels:
-    app: branchprotector
-  spec:
-    containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/branchprotector:v20250709-d01b8af18
-      command:
-      - branchprotector
-      args:
-      - --config-path=config/prow/config.yaml
-      - --confirm
-      - --enable-apps-restrictions=true
-      - --job-config-path=config/jobs
-      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
-      - --github-endpoint=https://api.github.com
-      - --github-token-path=/etc/github/token
-      volumeMounts:
-      - name: github-token
-        mountPath: /etc/github
-        readOnly: true
-    volumes:
-    - name: github-token
-      secret:
-        secretName: github-token
-
-- cron: "44 * * * *"  # Every hour a couple of minutes before branchprotector
+- cron: "44 * * * *"
   name: ci-job-forker-gardener-gardener
   cluster: gardener-prow-trusted
   decorate: true
@@ -111,7 +74,7 @@ periodics:
       secret:
         secretName: github-token
 
-- cron: "44 * * * *"  # Every hour a couple of minutes before branchprotector
+- cron: "44 * * * *"
   name: ci-job-forker-gardener-etcd-druid
   cluster: gardener-prow-trusted
   decorate: true
