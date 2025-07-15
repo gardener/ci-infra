@@ -68,6 +68,10 @@ spec:
       service:
         annotations:
           service.kubernetes.io/topology-mode: Auto
+        ipFamilyPolicy: PreferDualStack
+        ipFamilies:
+        - IPv4
+        - IPv6
       admissionWebhooks:
         service:
           annotations:
