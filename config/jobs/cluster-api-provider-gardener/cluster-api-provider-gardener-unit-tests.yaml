@@ -18,10 +18,10 @@ presubmits:
         - verify-extended
         resources:
           limits:
-            memory: 3Gi
+            memory: 4Gi
           requests:
-            cpu: 2
-            memory: 1Gi
+            cpu: 3
+            memory: 2Gi
 periodics:
 - name: ci-cluster-api-provider-gardener-unit
   cluster: gardener-prow-build
@@ -47,7 +47,7 @@ periodics:
       - verify-extended
       resources:
         limits:
-          memory: 3Gi
+          memory: 4Gi
         requests:
-          cpu: 2
-          memory: 1Gi
+          cpu: 3
+          memory: 2Gi
