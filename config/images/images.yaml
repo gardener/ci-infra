@@ -169,8 +169,8 @@ images:
 - source: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-collector-releases/opentelemetry-collector-contrib
   tags:
-  - v0.127.0
-  - v0.129.1
+  - 0.127.0
+  - 0.129.1
 - source: persesdev/perses
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses
   tags:
