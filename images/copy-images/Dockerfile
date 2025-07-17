@@ -1,5 +1,5 @@
 FROM alpine:3.22.1 AS copy-images
-LABEL ALPINE_VERSION=$ALPINE_VERSION
+# renovate: datasource=github-releases depName=google/go-containerregistry
 ARG CRANE_VERSION=v0.16.1
 LABEL CRANE_VERSION=$CRANE_VERSION
 RUN set -eux; \
