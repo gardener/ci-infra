@@ -132,6 +132,7 @@ images:
   - v2.2.22
   - v2.2.23
   - v2.2.24
+  - v2.2.25
 - source: ghcr.io/credativ/valitail
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/valitail
   tags:
