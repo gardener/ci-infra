@@ -57,6 +57,8 @@ spec:
     service:
       annotations:
         service.kubernetes.io/topology-mode: Auto
+      ipDualStack:
+        enabled: true
 
     config:
       existingSecret: oauth2-proxy
