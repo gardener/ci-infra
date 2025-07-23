@@ -11,7 +11,7 @@ presubmits:
       description: Runs integration tests for cert-management developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250722-8dd8caf-1.23
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250723-24c5394-1.23
         command:
         - make
         args:
@@ -40,7 +40,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250722-8dd8caf-1.23
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250723-24c5394-1.23
       command:
       - make
       args:
