@@ -59,6 +59,7 @@ spec:
         service.kubernetes.io/topology-mode: Auto
       ipDualStack:
         enabled: true
+      trafficDistribution: PreferClose
 
     config:
       existingSecret: oauth2-proxy
