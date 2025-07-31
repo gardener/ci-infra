@@ -67,7 +67,8 @@ spec:
             "gardener/cert-management",
             "gardener/external-dns-management",
             "gardener/cluster-api-provider-gardener",
-            "gardener/ops-toolbelt"
+            "gardener/ops-toolbelt",
+            "gardener/hyperkube",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
