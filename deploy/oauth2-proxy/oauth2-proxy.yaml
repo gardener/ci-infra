@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: oauth2-proxy
-      version: '7.15.x'
+      version: '7.16.x'
       sourceRef:
         kind: HelmRepository
         name: oauth2-proxy
@@ -55,8 +55,6 @@ spec:
           - authentication-proxy
 
     service:
-      annotations:
-        service.kubernetes.io/topology-mode: Auto
       ipDualStack:
         enabled: true
       trafficDistribution: PreferClose
