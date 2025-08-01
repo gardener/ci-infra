@@ -55,8 +55,6 @@ spec:
           - authentication-proxy
 
     service:
-      annotations:
-        service.kubernetes.io/topology-mode: Auto
       ipDualStack:
         enabled: true
       trafficDistribution: PreferClose
