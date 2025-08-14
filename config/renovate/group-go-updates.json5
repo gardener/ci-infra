@@ -1,0 +1,15 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  description: 'Groups all Go dependencies together.',
+  packageRules: [
+    {
+      groupName: 'go',
+      description: 'Group all Go dependencies together.',
+      matchPackageNames: [
+        'actions/go-versions',
+        'go',
+        'golang',
+      ],
+    },
+  ],
+}
