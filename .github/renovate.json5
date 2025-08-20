@@ -31,6 +31,7 @@
       datasourceTemplate: 'helm',
     },
     {
+      // Generic detection for pod-like and CLI-argument-like image specifications in prow jobs.
       customType: 'regex',
       managerFilePatterns: [
         '/^config/jobs/.+\\.yaml$/',
@@ -41,6 +42,7 @@
       datasourceTemplate: 'docker',
     },
     {
+      // Generic detection for container images to be copied.
       customType: 'regex',
       managerFilePatterns: [
         '/^config/images/images\\.yaml$/',
@@ -84,6 +86,7 @@
       ],
     },
     {
+      // sigs.k8s.io/prow is too noisy because it does not create releases but is referenced by digest.
       matchDatasources: [
         'go',
       ],
@@ -95,6 +98,8 @@
       ],
     },
     {
+      // Do not update Kubernetes dependencies except sigs.k8s.io/prow.
+      // The versions of api, apimachinery, client-go and controller-runtime depend on sigs.k8s.io/prow.
       matchDatasources: [
         'go',
       ],
@@ -105,6 +110,9 @@
       enabled: false,
     },
     {
+      // Do not update patch versions of the Go Toolchain.
+      // Default golang images set the environment variable GOTOOLCHAIN=local
+      // and we don't want to enforce every (test-)image to be on the latest patch level.
       matchManagers: [
         'gomod',
       ],
@@ -117,6 +125,7 @@
       enabled: false,
     },
     {
+      // Pin grafana to the latest minor version published with Apache 2.0 license.
       matchDatasources: [
         'docker',
       ],
@@ -130,6 +139,7 @@
       enabled: false,
     },
     {
+      // Pin certain components to the current version.
       matchDatasources: [
         'docker',
       ],
@@ -161,6 +171,7 @@
       enabled: false,
     },
     {
+      // Add new versions instead of replacing old version to keep a list of all copied versions.
       matchFileNames: [
         'config/images/images.yaml',
       ],
