@@ -4,4 +4,4 @@ variants:
     golangtestimage: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250819-c20d748-1.23
   "1.24":
     IMAGE_ARG: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.24
-    golangtestimage: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250820-30ed390-1.24
+    golangtestimage: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250820-6404db1-1.24
