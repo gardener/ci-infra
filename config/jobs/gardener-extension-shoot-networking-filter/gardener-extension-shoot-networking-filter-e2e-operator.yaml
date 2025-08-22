@@ -28,7 +28,7 @@ presubmits:
           iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 
           # run test
-          make test-e2e-operator
+          make import-tools-bin test-e2e-operator
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -76,7 +76,7 @@ periodics:
         iptables -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 
         # run test
-        make test-e2e-operator
+        make import-tools-bin test-e2e-operator
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true

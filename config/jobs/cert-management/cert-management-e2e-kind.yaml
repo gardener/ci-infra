@@ -25,7 +25,7 @@ presubmits:
           set -o errexit
 
           # run test
-          make test-e2e-local
+          make import-tools-bin test-e2e-local
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -70,7 +70,7 @@ periodics:
         set -o errexit
 
         # run test
-        make test-e2e-local
+        make import-tools-bin test-e2e-local
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
