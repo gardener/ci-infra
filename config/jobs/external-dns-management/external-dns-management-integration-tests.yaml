@@ -11,7 +11,7 @@ presubmits:
       description: Runs integration tests for external-dns-management developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250822-efecb20-1.24
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250826-53858ed-1.24
         command:
         - make
         args:
@@ -41,7 +41,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250822-efecb20-1.24
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250826-53858ed-1.24
       command:
       - make
       args:
