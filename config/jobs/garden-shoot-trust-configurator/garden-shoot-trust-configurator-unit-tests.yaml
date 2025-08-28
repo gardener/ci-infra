@@ -1,0 +1,55 @@
+presubmits:
+  gardener/garden-shoot-trust-configurator:
+  - name: pull-garden-shoot-trust-configurator-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for garden-shoot-trust-configurator developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250827-fa25151-1.24
+        command:
+        - make
+        args:
+        - import-tools-bin
+        - verify-extended
+        resources:
+          limits:
+            memory: 3Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-garden-shoot-trust-configurator-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: garden-shoot-trust-configurator
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for garden-shoot-trust-configurator main branch
+    testgrid-dashboards: garden-shoot-trust-configurator
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250827-fa25151-1.24
+      command:
+      - make
+      args:
+      - import-tools-bin
+      - verify-extended
+      resources:
+        limits:
+          memory: 3Gi
+        requests:
+          cpu: 2
+          memory: 1Gi

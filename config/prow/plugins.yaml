@@ -21,6 +21,7 @@ triggers:
   - gardener/cert-management
   - gardener/external-dns-management
   - gardener/cluster-api-provider-gardener
+  - gardener/garden-shoot-trust-configurator
 
 approve:
 - repos:
@@ -37,6 +38,7 @@ approve:
   - gardener/cluster-api-provider-gardener
   - gardener/gardener-extension-networking-calico
   - gardener/gardener-extension-networking-cilium
+  - gardener/garden-shoot-trust-configurator
   lgtm_acts_as_approve: false
   require_self_approval: true
   commandHelpLink: "https://prow.gardener.cloud/command-help"
@@ -88,6 +90,7 @@ lgtm:
   - gardener/cluster-api-provider-gardener
   - gardener/gardener-extension-networking-calico
   - gardener/gardener-extension-networking-cilium
+  - gardener/garden-shoot-trust-configurator
   review_acts_as_lgtm: true
   store_tree_hash: true
 
@@ -153,6 +156,17 @@ slack:
       - gardener-robot-ci-2
       - gardener-robot-ci-3
       - dependabot[bot]
+  - repos:
+    - gardener/garden-shoot-trust-configurator
+    channels:
+    - prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
   - repos:
     - gardener/gardener-extension-shoot-rsyslog-relp
     channels:
@@ -231,6 +245,8 @@ repo_milestone:
     maintainers_team: gardener-extension-registry-cache-maintainers
   gardener/dependency-watchdog:
     maintainers_team: dependency-watchdog-maintainers
+  gardener/garden-shoot-trust-configurator:
+    maintainers_team: oidc-webhook-authenticator-maintainers
   gardener/gardener-extension-shoot-rsyslog-relp:
     maintainers_team: rsyslog-relp-maintainers
   gardener/gardener-extension-shoot-cert-service:
@@ -282,6 +298,7 @@ welcome:
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-extension-shoot-cert-service
   - gardener/gardener-discovery-server
+  - gardener/garden-shoot-trust-configurator
   - gardener/cert-management
   - gardener/external-dns-management
   - gardener/cluster-api-provider-gardener
@@ -323,6 +340,11 @@ require_matching_label:
 - missing_label: do-not-merge/needs-kind
   org: gardener
   repo: gardener-extension-shoot-cert-service
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: garden-shoot-trust-configurator
   prs: true
   regexp: ^kind/
 - missing_label: do-not-merge/needs-kind
@@ -493,6 +515,37 @@ plugins:
     - skip
     - trigger
   gardener/dependency-watchdog:
+    plugins:
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
+  gardener/garden-shoot-trust-configurator:
     plugins:
     - approve
     - assign
@@ -899,6 +952,21 @@ external_plugins:
       - issue_comment
       - pull_request
   gardener/gardener-discovery-server:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
+    events:
+    - issue_comment
+    - pull_request
+  gardener/garden-shoot-trust-configurator:
   - name: cla-assistant
     events:
       - issue_comment
