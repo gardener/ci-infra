@@ -20,6 +20,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/garden-shoot-trust-configurator
         repo:gardener/gardener-extension-image-rewriter
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
@@ -79,6 +80,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/garden-shoot-trust-configurator
         repo:gardener/gardener-extension-image-rewriter
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
@@ -139,6 +141,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/garden-shoot-trust-configurator
         repo:gardener/gardener-extension-image-rewriter
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
@@ -200,6 +203,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/garden-shoot-trust-configurator
         repo:gardener/gardener-extension-image-rewriter
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
@@ -259,6 +263,7 @@ periodics:
         repo:gardener/gardener
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/garden-shoot-trust-configurator
         repo:gardener/gardener-extension-image-rewriter
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
@@ -320,6 +325,7 @@ periodics:
         repo:gardener/gardener-extension-image-rewriter
         repo:gardener/gardener-extension-registry-cache
         repo:gardener/dependency-watchdog
+        repo:gardener/garden-shoot-trust-configurator
         repo:gardener/gardener-extension-shoot-rsyslog-relp
         repo:gardener/gardener-extension-shoot-cert-service
         repo:gardener/gardener-extension-networking-calico
