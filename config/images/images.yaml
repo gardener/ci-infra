@@ -92,6 +92,8 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/grafana/promtail
   tags:
   - 2.2.1
+# This source seems to be outdated. No new images are pushed here anymore.
+# Please use envoyproxy/envoy:distroless-<version> instead.
 - source: envoyproxy/envoy-distroless
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/envoy-distroless
   tags:
@@ -119,6 +121,10 @@ images:
   - v1.34.2
   - v1.34.3
   - v1.35.0
+- source: envoyproxy/envoy
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/envoy
+  tags:
+  - distroless-v1.35.1
 - source: ghcr.io/credativ/vali
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/vali
   tags:
