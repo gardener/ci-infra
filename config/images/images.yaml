@@ -124,6 +124,7 @@ images:
 - source: envoyproxy/envoy
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/envoy
   tags:
+  - distroless-v1.35.0
   - distroless-v1.35.1
 - source: ghcr.io/credativ/vali
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/vali
