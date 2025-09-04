@@ -21,16 +21,6 @@
   },
   customManagers: [
     {
-      customType: 'regex',
-      managerFilePatterns: [
-        '/config/prow/cluster/.+/helm/generate-.+-deployments.sh$/',
-      ],
-      matchStrings: [
-        'helm repo add .+ (?<registryUrl>.+?)\\s(.|\\n)*helm template -n .+ .+ .+\\/(?<depName>.+?) --version "(?<currentValue>.*)"\\s',
-      ],
-      datasourceTemplate: 'helm',
-    },
-    {
       // Generic detection for pod-like and CLI-argument-like image specifications in prow jobs.
       customType: 'regex',
       managerFilePatterns: [
@@ -48,28 +38,12 @@
         '/^config/images/images\\.yaml$/',
       ],
       matchStrings: [
-        '\\s+source:\\s+(?<depName>.+?)\\n\\s+destination:\\s+.*\\n\\s+tags:\\n(\\s+-\\s+v?[0-9][0-9a-zA-Z\\-\\.]*\\n)*\\s+-\\s+(?<currentValue>.+?)\\n',
+        '\\s+source:\\s+(?<depName>.+?)\\n\\s+destination:\\s+.*\\n\\s+tags:\\n(\\s+-\\s+v?[0-9a-zA-Z\\-\\.]*[0-9][0-9a-zA-Z\\-\\.]*\\n)*\\s+-\\s+(?<currentValue>.+?)\\n',
       ],
       datasourceTemplate: 'docker',
     },
   ],
   packageRules: [
-    {
-      groupName: 'prow apps',
-      matchDatasources: [
-        'github-releases',
-        'helm',
-      ],
-      matchPackageNames: [
-        '/prometheus-operator/kube-prometheus/',
-      ],
-      postUpgradeTasks: {
-        commands: [
-          'make generate-prow-deployments',
-        ],
-        executionMode: 'branch',
-      },
-    },
     {
       groupName: 'renovate',
       matchDatasources: [
@@ -124,19 +98,18 @@
       ],
       enabled: false,
     },
+    // Support distroless versioning scheme for envoy images.
     {
-      // Pin grafana to the latest minor version published with Apache 2.0 license.
       matchDatasources: [
         'docker',
       ],
-      matchUpdateTypes: [
-        'major',
-        'minor',
-      ],
       matchPackageNames: [
-        '/grafana/grafana/',
+        'envoyproxy/envoy',
       ],
-      enabled: false,
+      matchFileNames: [
+        'config/images/images.yaml',
+      ],
+      versioning: 'regex:^distroless-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$'
     },
     {
       // Pin certain components to the current version.
