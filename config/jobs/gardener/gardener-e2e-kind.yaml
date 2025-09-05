@@ -2,7 +2,8 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-e2e-kind
     cluster: gardener-prow-build
-    always_run: true
+    always_run: false
+    skip_if_only_changed: "^(\\.ci|\\.github|\\.ocm|\\.test-defs|docs|logo)/|\\.md$|^(README|LICENSE|VERSION)$"
     skip_branches:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
