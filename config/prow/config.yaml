@@ -147,6 +147,7 @@ tide:
     - gardener/gardener-extension-image-rewriter
     - gardener/gardener-extension-registry-cache
     - gardener/dependency-watchdog
+    - gardener/garden-shoot-trust-configurator
     - gardener/gardener-extension-shoot-rsyslog-relp
     - gardener/gardener-extension-shoot-cert-service
     - gardener/gardener-discovery-server
@@ -191,6 +192,7 @@ tide:
     gardener/gardener-extension-registry-cache: squash
     gardener/gardener-extension-image-rewriter: squash
     gardener/dependency-watchdog: squash
+    gardener/garden-shoot-trust-configurator: squash
     gardener/gardener-extension-shoot-rsyslog-relp: squash
     gardener/gardener-extension-shoot-cert-service: squash
     gardener/gardener-discovery-server: squash

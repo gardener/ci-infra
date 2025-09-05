@@ -1692,3 +1692,5 @@ repos:
     labels: *labels-keep-gardener-robot
   gardener/cluster-api-provider-gardener:
     labels: *default-labels
+  gardener/garden-shoot-trust-configurator:
+    labels: *default-labels
