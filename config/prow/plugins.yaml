@@ -22,6 +22,7 @@ triggers:
   - gardener/external-dns-management
   - gardener/cluster-api-provider-gardener
   - gardener/garden-shoot-trust-configurator
+  - gardener/org
 
 approve:
 - repos:
@@ -39,6 +40,7 @@ approve:
   - gardener/gardener-extension-networking-calico
   - gardener/gardener-extension-networking-cilium
   - gardener/garden-shoot-trust-configurator
+  - gardener/org
   lgtm_acts_as_approve: false
   require_self_approval: true
   commandHelpLink: "https://prow.gardener.cloud/command-help"
@@ -91,6 +93,7 @@ lgtm:
   - gardener/gardener-extension-networking-calico
   - gardener/gardener-extension-networking-cilium
   - gardener/garden-shoot-trust-configurator
+  - gardener/org
   review_acts_as_lgtm: true
   store_tree_hash: true
 
@@ -233,6 +236,13 @@ slack:
     - gardener-robot-ci-2
     - gardener-robot-ci-3
     - dependabot[bot]
+  - repos:
+    - gardener/org
+    channels:
+    - prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+    - gardener-ci-robot
 
 repo_milestone:
   gardener/ci-infra:
@@ -263,6 +273,8 @@ repo_milestone:
     maintainers_team: gardener-extension-networking-cilium-maintainers
   gardener/gardener-extension-networking-calico:
     maintainers_team: gardener-extension-networking-calico-maintainers
+  gardener/org:
+    maintainers_team: org-maintainers
 
 config_updater:
   maps:
@@ -304,6 +316,7 @@ welcome:
   - gardener/cluster-api-provider-gardener
   - gardener/gardener-extension-networking-cilium
   - gardener/gardener-extension-networking-calico
+  - gardener/org
   message_template: "Welcome @{{.AuthorLogin}}! <br><br>It looks like this is your first PR to <a href='https://github.com/{{.Org}}/{{.Repo}}'>{{.Org}}/{{.Repo}}</a> 🎉. Please refer to our [pull request process documentation](https://gardener.cloud/docs/contribute/#pull-request-checklist) to help your PR have a smooth ride to approval. <br><br>You will be prompted by a bot to use commands during the review process. Do not be afraid to follow the prompts! It is okay to experiment. [Here is the bot commands documentation](https://prow.gardener.cloud/command-help). <br><br>You can also check if {{.Org}}/{{.Repo}} has [its own contribution guidelines](https://github.com/{{.Org}}/{{.Repo}}/tree/master/CONTRIBUTING.md). <br><br>Thank you, and welcome to Gardener. :smiley:"
 
 require_matching_label:
@@ -375,6 +388,11 @@ require_matching_label:
 - missing_label: do-not-merge/needs-kind
   org: gardener
   repo: gardener-extension-networking-calico
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: org
   prs: true
   regexp: ^kind/
 retitle:
@@ -784,66 +802,97 @@ plugins:
     - yuks
   gardener/external-dns-management:
     plugins:
-      - approve
-      - assign
-      - blunderbuss
-      - dog
-      - golint
-      - heart
-      - help
-      - hold
-      - invalidcommitmsg
-      - label
-      - lgtm
-      - lifecycle
-      - mergecommitblocker
-      - milestone
-      - override
-      - owners-label
-      - require-matching-label
-      - retitle
-      - shrug
-      - size
-      - skip
-      - slackevents
-      - transfer-issue
-      - trick-or-treat
-      - trigger
-      - verify-owners
-      - welcome
-      - wip
-      - yuks
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
   gardener/cluster-api-provider-gardener:
     plugins:
-      - approve
-      - assign
-      - blunderbuss
-      - dog
-      - golint
-      - heart
-      - help
-      - hold
-      - invalidcommitmsg
-      - label
-      - lgtm
-      - lifecycle
-      - mergecommitblocker
-      - milestone
-      - override
-      - owners-label
-      - require-matching-label
-      - retitle
-      - shrug
-      - size
-      - skip
-      - slackevents
-      - transfer-issue
-      - trick-or-treat
-      - trigger
-      - verify-owners
-      - welcome
-      - wip
-      - yuks
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
+  gardener/org:
+    plugins:
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
 
 external_plugins:
   gardener/ci-infra:
@@ -1056,3 +1105,14 @@ external_plugins:
     events:
     - issue_comment
     - pull_request
+  gardener/org:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request

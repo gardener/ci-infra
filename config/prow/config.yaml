@@ -156,6 +156,7 @@ tide:
     - gardener/cluster-api-provider-gardener
     - gardener/gardener-extension-networking-calico
     - gardener/gardener-extension-networking-cilium
+    - gardener/org
     labels:
     - lgtm
     - approved
@@ -201,6 +202,7 @@ tide:
     gardener/cluster-api-provider-gardener: squash
     gardener/gardener-extension-networking-calico: squash
     gardener/gardener-extension-networking-cilium: squash
+    gardener/org: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr
   blocker_label: tide/merge-blocker
