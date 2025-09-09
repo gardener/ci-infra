@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for gardener-extension-shoot-cert-service developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250909-f4b936f-1.24
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250909-2fc58b3-1.24
         command:
         - make
         args:
@@ -41,7 +41,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250909-f4b936f-1.24
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250909-2fc58b3-1.24
       command:
       - make
       args:
