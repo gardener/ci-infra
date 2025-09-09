@@ -30,6 +30,7 @@ periodics:
         repo:gardener/cert-management
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
+        repo:gardener/org
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -90,6 +91,7 @@ periodics:
         repo:gardener/cert-management
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
+        repo:gardener/org
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -151,6 +153,7 @@ periodics:
         repo:gardener/cert-management
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
+        repo:gardener/org
         is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -213,6 +216,7 @@ periodics:
         repo:gardener/cert-management
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
+        repo:gardener/org
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -273,6 +277,7 @@ periodics:
         repo:gardener/cert-management
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
+        repo:gardener/org
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -334,6 +339,7 @@ periodics:
         repo:gardener/cert-management
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
+        repo:gardener/org
         is:pr
         -label:lifecycle/frozen
         -label:lifecycle/stale

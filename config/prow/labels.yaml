@@ -1694,3 +1694,5 @@ repos:
     labels: *default-labels
   gardener/garden-shoot-trust-configurator:
     labels: *default-labels
+  gardener/org:
+    labels: *default-labels
