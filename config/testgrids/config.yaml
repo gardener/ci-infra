@@ -19,6 +19,7 @@ dashboard_groups:
     - external-dns-management
     - cluster-api-provider-gardener
     - garden-shoot-trust-configurator
+    - auditlog-forwarder
 
 dashboards:
 - name: gardener-gardener
@@ -39,3 +40,4 @@ dashboards:
 - name: external-dns-management
 - name: cluster-api-provider-gardener
 - name: garden-shoot-trust-configurator
+- name: auditlog-forwarder

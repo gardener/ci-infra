@@ -238,6 +238,23 @@ var _ = Describe("activator", func() {
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
+  - repos:
+    - gardener/auditlog-forwarder
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
 
 `
 
@@ -445,6 +462,23 @@ var _ = Describe("activator", func() {
     - "cla: no"
   - repos:
     - gardener/cluster-api-provider-gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
+    - gardener/auditlog-forwarder
     labels:
     - lgtm
     - approved
@@ -682,6 +716,23 @@ var _ = Describe("activator", func() {
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
+  - repos:
+    - gardener/auditlog-forwarder
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
 
 `
 
@@ -889,6 +940,23 @@ var _ = Describe("activator", func() {
     - "cla: no"
   - repos:
     - gardener/cluster-api-provider-gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
+    - gardener/auditlog-forwarder
     labels:
     - lgtm
     - approved
@@ -1126,6 +1194,23 @@ var _ = Describe("activator", func() {
     - do-not-merge/work-in-progress
     - needs-rebase
     - "cla: no"
+  - repos:
+    - gardener/auditlog-forwarder
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
 
 `
 
@@ -1333,6 +1418,23 @@ var _ = Describe("activator", func() {
     - "cla: no"
   - repos:
     - gardener/cluster-api-provider-gardener
+    labels:
+    - lgtm
+    - approved
+    - "cla: yes"
+    missingLabels:
+    - do-not-merge/blocked-paths
+    - do-not-merge/contains-merge-commits
+    - do-not-merge/hold
+    - do-not-merge/invalid-commit-message
+    - do-not-merge/invalid-owners-file
+    - do-not-merge/needs-kind
+    - do-not-merge/release-note-label-needed
+    - do-not-merge/work-in-progress
+    - needs-rebase
+    - "cla: no"
+  - repos:
+    - gardener/auditlog-forwarder
     labels:
     - lgtm
     - approved
