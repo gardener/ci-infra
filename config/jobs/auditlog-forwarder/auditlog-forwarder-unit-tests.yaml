@@ -1,0 +1,55 @@
+presubmits:
+  gardener/auditlog-forwarder:
+  - name: pull-auditlog-forwarder-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for auditlog-forwarder developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250910-18dcf47-1.25
+        command:
+        - make
+        args:
+        - import-tools-bin
+        - verify-extended
+        resources:
+          limits:
+            memory: 3Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-auditlog-forwarder-unit
+  cluster: gardener-prow-build
+  interval: 4h
+  extra_refs:
+  - org: gardener
+    repo: auditlog-forwarder
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for auditlog-forwarder main branch
+    testgrid-dashboards: auditlog-forwarder
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250910-18dcf47-1.25
+      command:
+      - make
+      args:
+      - import-tools-bin
+      - verify-extended
+      resources:
+        limits:
+          memory: 3Gi
+        requests:
+          cpu: 2
+          memory: 1Gi

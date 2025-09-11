@@ -1696,3 +1696,5 @@ repos:
     labels: *default-labels
   gardener/org:
     labels: *default-labels
+  gardener/auditlog-forwarder:
+    labels: *default-labels
