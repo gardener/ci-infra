@@ -1698,3 +1698,5 @@ repos:
     labels: *default-labels
   gardener/auditlog-forwarder:
     labels: *default-labels
+  gardener/diki:
+    labels: *default-labels
