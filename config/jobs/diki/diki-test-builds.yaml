@@ -18,6 +18,7 @@ presubmits:
         - --no-push
         - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
         - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
+        - --build-arg=TARGETARCH=amd64
         resources:
           requests:
             cpu: 6
