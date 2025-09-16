@@ -10,11 +10,11 @@ if [ -z "$filepath" ] ; then
 fi
 
 # Loop over the images in the YAML
-for source in $(yq '.images[].source' "$filepath"); do
-    image=$(yq '.images[] | select(.source == "'"$source"'")' "$filepath")
-    destination=$(echo "$image" | yq '.destination')
+for image in $(yq '.images[] | @json' "$filepath"); do
+    source=$(yq '.source' <<< $image)
+    destination=$(yq '.destination' <<< $image)
     # Loop over the tags for the current image
-    for tag in $(echo "$image" | yq '.tags[]'); do
+    for tag in $(yq '.tags[]' <<< $image ); do
         # Copy the container image for the current tag using crane
         crane copy "$source:$tag" "$destination:$tag"
     done
