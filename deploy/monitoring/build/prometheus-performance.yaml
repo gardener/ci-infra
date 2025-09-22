@@ -76,7 +76,7 @@ spec:
           requests:
             storage: 100Gi
   # renovate: datasource=github-releases depName=prometheus/prometheus
-  version: v3.5.0
+  version: v3.6.0
   walCompression: true
 ---
 apiVersion: v1
