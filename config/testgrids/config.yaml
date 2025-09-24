@@ -20,6 +20,7 @@ dashboard_groups:
     - cluster-api-provider-gardener
     - garden-shoot-trust-configurator
     - auditlog-forwarder
+    - gardener-extension-auditing
     - diki
 
 dashboards:
@@ -42,4 +43,5 @@ dashboards:
 - name: cluster-api-provider-gardener
 - name: garden-shoot-trust-configurator
 - name: auditlog-forwarder
+- name: gardener-extension-auditing
 - name: diki
