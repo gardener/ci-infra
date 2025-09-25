@@ -55,6 +55,7 @@ spec:
             "gardener/gardener-extension-networking-calico",
             "gardener/gardener-extension-shoot-rsyslog-relp",
             "gardener/gardener-extension-shoot-cert-service",
+            "gardener/gardener-extension-shoot-dns-service",
             "gardener/gardener-discovery-server",
             "gardener/landscaper",
             "gardener/landscaper-service",

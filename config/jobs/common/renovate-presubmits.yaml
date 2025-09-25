@@ -46,6 +46,9 @@ presubmits:
   gardener/gardener-extension-shoot-cert-service:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-shoot-cert-service-check-renovate-config
+  gardener/gardener-extension-shoot-dns-service:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-dns-service-check-renovate-config
   gardener/gardener-discovery-server:
   - <<: *renovate-presubmit
     name: pull-gardener-discovery-server-check-renovate-config
