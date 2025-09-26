@@ -16,6 +16,7 @@ triggers:
   - gardener/gardener-extension-networking-calico
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-extension-shoot-cert-service
+  - gardener/gardener-extension-shoot-dns-service
   - gardener/gardener-discovery-server
   - gardener/landscaper
   - gardener/cert-management
@@ -36,6 +37,7 @@ approve:
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-extension-shoot-cert-service
+  - gardener/gardener-extension-shoot-dns-service
   - gardener/gardener-discovery-server
   - gardener/cert-management
   - gardener/external-dns-management
@@ -92,6 +94,7 @@ lgtm:
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-extension-shoot-cert-service
+  - gardener/gardener-extension-shoot-dns-service
   - gardener/gardener-discovery-server
   - gardener/cert-management
   - gardener/external-dns-management
@@ -191,7 +194,18 @@ slack:
     - gardener-robot-ci-3
     - dependabot[bot]
   - repos:
-    - gardener/gardener-extension-shoot-cert-service
+    - gardener/gardener-extension-shoot-cert-service    
+    channels:
+    - prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
+  - repos:
+    - gardener/gardener-extension-shoot-dns-service    
     channels:
     - prow-alerts
     exempt_users:
@@ -303,6 +317,8 @@ repo_milestone:
     maintainers_team: rsyslog-relp-maintainers
   gardener/gardener-extension-shoot-cert-service:
     maintainers_team: gardener-extension-shoot-cert-service-maintainers
+  gardener/gardener-extension-shoot-dns-service:
+    maintainers_team: gardener-extension-shoot-dns-service-maintainers
   gardener/gardener-discovery-server:
     maintainers_team: oidc-webhook-authenticator-maintainers
   gardener/cert-management:
@@ -357,6 +373,7 @@ welcome:
   - gardener/dependency-watchdog
   - gardener/gardener-extension-shoot-rsyslog-relp
   - gardener/gardener-extension-shoot-cert-service
+  - gardener/gardener-extension-shoot-dns-service
   - gardener/gardener-discovery-server
   - gardener/garden-shoot-trust-configurator
   - gardener/cert-management
@@ -404,6 +421,11 @@ require_matching_label:
 - missing_label: do-not-merge/needs-kind
   org: gardener
   repo: gardener-extension-shoot-cert-service
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: gardener-extension-shoot-dns-service
   prs: true
   regexp: ^kind/
 - missing_label: do-not-merge/needs-kind
@@ -799,6 +821,37 @@ plugins:
     - welcome
     - wip
     - yuks
+  gardener/gardener-extension-shoot-dns-service:
+    plugins:
+    - approve
+    - assign
+    - blunderbuss
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
   gardener/gardener-discovery-server:
     plugins:
     - approve
@@ -1145,6 +1198,21 @@ external_plugins:
     - issue_comment
     - pull_request
   gardener/gardener-extension-shoot-cert-service:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
+    events:
+      - issue_comment
+      - pull_request
+  gardener/gardener-extension-shoot-dns-service:
   - name: cla-assistant
     events:
       - issue_comment

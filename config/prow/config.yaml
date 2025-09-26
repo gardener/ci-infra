@@ -150,6 +150,7 @@ tide:
     - gardener/garden-shoot-trust-configurator
     - gardener/gardener-extension-shoot-rsyslog-relp
     - gardener/gardener-extension-shoot-cert-service
+    - gardener/gardener-extension-shoot-dns-service
     - gardener/gardener-discovery-server
     - gardener/cert-management
     - gardener/external-dns-management
@@ -199,6 +200,7 @@ tide:
     gardener/garden-shoot-trust-configurator: squash
     gardener/gardener-extension-shoot-rsyslog-relp: squash
     gardener/gardener-extension-shoot-cert-service: squash
+    gardener/gardener-extension-shoot-dns-service: squash
     gardener/gardener-discovery-server: squash
     gardener/cert-management: squash
     gardener/external-dns-management: squash
