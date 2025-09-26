@@ -502,7 +502,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250923-3496d9e-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250926-90e9683-1.25
       name: test-integration
       resources:
         limits:
@@ -537,7 +537,7 @@ periodics:
       - sast
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250923-3496d9e-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250926-90e9683-1.25
       name: ""
       resources:
         limits:
@@ -1011,7 +1011,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250923-3496d9e-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250926-90e9683-1.25
         name: test-integration
         resources:
           limits:
@@ -1068,7 +1068,7 @@ presubmits:
         - sast
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250923-3496d9e-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20250926-90e9683-1.25
         name: ""
         resources:
           limits:
