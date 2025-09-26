@@ -158,6 +158,7 @@ tide:
     - gardener/gardener-extension-networking-cilium
     - gardener/org
     - gardener/auditlog-forwarder
+    - gardener/gardener-extension-auditing
     - gardener/diki
     labels:
     - lgtm
@@ -206,6 +207,7 @@ tide:
     gardener/gardener-extension-networking-cilium: squash
     gardener/org: squash
     gardener/auditlog-forwarder: squash
+    gardener/gardener-extension-auditing: squash
     gardener/diki: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr

@@ -32,6 +32,7 @@ periodics:
         repo:gardener/cluster-api-provider-gardener
         repo:gardener/org
         repo:gardener/auditlog-forwarder
+        repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         is:issue
         -label:lifecycle/frozen
@@ -94,6 +95,7 @@ periodics:
         repo:gardener/external-dns-management
         repo:gardener/cluster-api-provider-gardener
         repo:gardener/auditlog-forwarder
+        repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         repo:gardener/org
         is:issue
@@ -159,6 +161,7 @@ periodics:
         repo:gardener/cluster-api-provider-gardener
         repo:gardener/org
         repo:gardener/auditlog-forwarder
+        repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         is:issue
         -label:lifecycle/frozen
@@ -224,6 +227,7 @@ periodics:
         repo:gardener/cluster-api-provider-gardener
         repo:gardener/org
         repo:gardener/auditlog-forwarder
+        repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         is:pr
         -label:lifecycle/frozen
@@ -287,6 +291,7 @@ periodics:
         repo:gardener/cluster-api-provider-gardener
         repo:gardener/org
         repo:gardener/auditlog-forwarder
+        repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         is:pr
         -label:lifecycle/frozen
@@ -351,6 +356,7 @@ periodics:
         repo:gardener/cluster-api-provider-gardener
         repo:gardener/org
         repo:gardener/auditlog-forwarder
+        repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         is:pr
         -label:lifecycle/frozen
