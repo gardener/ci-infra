@@ -1,4 +1,4 @@
-FROM alpine:3.22.1 AS copy-images
+FROM alpine:3.22.2 AS copy-images
 # renovate: datasource=github-releases depName=google/go-containerregistry
 ARG CRANE_VERSION=v0.20.6
 LABEL CRANE_VERSION=$CRANE_VERSION
