@@ -35,7 +35,7 @@ presubmits:
 periodics:
 - name: ci-gardener-unit
   cluster: gardener-prow-build
-  interval: 4h
+  interval: 2h
   extra_refs:
   - org: gardener
     repo: gardener
