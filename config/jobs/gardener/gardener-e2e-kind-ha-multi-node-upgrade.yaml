@@ -39,7 +39,7 @@ presubmits:
 periodics:
 - name: ci-gardener-e2e-kind-ha-multi-node-upgrade
   cluster: gardener-prow-build
-  interval: 4h
+  interval: 2h
   extra_refs:
   - org: gardener
     repo: gardener
