@@ -10,14 +10,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: hotfix-v0.29
+  - base_ref: hotfix-v0.33
     org: gardener
     repo: etcd-druid
   interval: 4h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-etcd-druid-e2e-kind-hotfix-v0-29
+  name: ci-etcd-druid-e2e-kind-hotfix-v0-33
   spec:
     containers:
     - command:
@@ -44,11 +44,11 @@ periodics:
     grace_period: 10m0s
     timeout: 20m0s
   extra_refs:
-  - base_ref: hotfix-v0.29
+  - base_ref: hotfix-v0.33
     org: gardener
     repo: etcd-druid
   interval: 4h
-  name: ci-etcd-druid-integration-hotfix-v0-29
+  name: ci-etcd-druid-integration-hotfix-v0-33
   spec:
     containers:
     - args:
@@ -74,11 +74,11 @@ periodics:
     grace_period: 10m0s
     timeout: 40m0s
   extra_refs:
-  - base_ref: hotfix-v0.29
+  - base_ref: hotfix-v0.33
     org: gardener
     repo: etcd-druid
   interval: 4h
-  name: ci-etcd-druid-unit-hotfix-v0-29
+  name: ci-etcd-druid-unit-hotfix-v0-33
   spec:
     containers:
     - args:
@@ -103,7 +103,7 @@ presubmits:
       description: Runs KIND cluster based e2e tests for etcd druid developments in
         pull requests
     branches:
-    - hotfix-v0.29
+    - hotfix-v0.33
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -112,7 +112,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-etcd-druid-e2e-kind-hotfix-v0-29
+    name: pull-etcd-druid-e2e-kind-hotfix-v0-33
     spec:
       containers:
       - command:
@@ -133,13 +133,13 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs integration tests for etcd-druid for pull requests
     branches:
-    - hotfix-v0.29
+    - hotfix-v0.33
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 20m0s
-    name: pull-etcd-druid-integration-hotfix-v0-29
+    name: pull-etcd-druid-integration-hotfix-v0-33
     spec:
       containers:
       - args:
@@ -159,10 +159,10 @@ presubmits:
       created-by-job-forker: "true"
       description: Verify etcd-druid image build on pull requests to master branch
     branches:
-    - hotfix-v0.29
+    - hotfix-v0.33
     cluster: gardener-prow-build
     decorate: true
-    name: pull-etcd-druid-verify-image-build-hotfix-v0-29
+    name: pull-etcd-druid-verify-image-build-hotfix-v0-33
     spec:
       containers:
       - args:
@@ -185,13 +185,13 @@ presubmits:
       created-by-job-forker: "true"
       description: Runs unit tests for etcd-druid in pull requests
     branches:
-    - hotfix-v0.29
+    - hotfix-v0.33
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 40m0s
-    name: pull-etcd-druid-unit-hotfix-v0-29
+    name: pull-etcd-druid-unit-hotfix-v0-33
     spec:
       containers:
       - args:
