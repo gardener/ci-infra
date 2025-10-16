@@ -1704,3 +1704,5 @@ repos:
     labels: *default-labels
   gardener/diki:
     labels: *default-labels
+  gardener/pvc-autoscaler:
+    labels: *default-labels

@@ -23,6 +23,7 @@ dashboard_groups:
     - auditlog-forwarder
     - gardener-extension-auditing
     - diki
+    - pvc-autoscaler
 
 dashboards:
 - name: gardener-gardener
@@ -47,3 +48,4 @@ dashboards:
 - name: auditlog-forwarder
 - name: gardener-extension-auditing
 - name: diki
+- name: pvc-autoscaler
