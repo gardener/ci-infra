@@ -132,6 +132,7 @@ images:
   - distroless-v1.35.2
   - distroless-v1.35.3
   - distroless-v1.35.4
+  - distroless-v1.35.5
   - distroless-v1.36.0
   - distroless-v1.36.1
 - source: ghcr.io/credativ/vali
