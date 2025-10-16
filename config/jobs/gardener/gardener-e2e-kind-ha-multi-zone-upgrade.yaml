@@ -18,7 +18,7 @@ presubmits:
       fork-per-release: "true"
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251015-59f52c3-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251016-0f929d5-1.25
         command:
         - wrapper.sh
         - bash
@@ -58,7 +58,7 @@ periodics:
     fork-per-release: "true"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251015-59f52c3-1.25
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251016-0f929d5-1.25
       command:
       - wrapper.sh
       - bash
