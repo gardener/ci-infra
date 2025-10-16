@@ -189,6 +189,7 @@ images:
   - v7.5.40
   - v7.5.41
   - v7.5.42
+  - v7.5.43
 - source: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-operator/opentelemetry-operator
   tags:
