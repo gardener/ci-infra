@@ -11,12 +11,12 @@ presubmits:
       description: Runs unit tests for pvc-autoscaler developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20251020-0861092-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20251020-0861092-1.24
         command:
         - make
         args:
-        - import-tools-bin
-        - verify-extended
+        - lint
+        - test
         resources:
           limits:
             memory: 3Gi
@@ -30,23 +30,23 @@ periodics:
   extra_refs:
   - org: gardener
     repo: pvc-autoscaler
-    base_ref: main
+    base_ref: master
   decorate: true
   decoration_config:
     timeout: 20m
     grace_period: 10m
   annotations:
-    description: Periodically runs unit tests for pvc-autoscaler main branch
+    description: Periodically runs unit tests for pvc-autoscaler master branch
     testgrid-dashboards: pvc-autoscaler
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20251020-0861092-1.25
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20251020-0861092-1.24
       command:
       - make
       args:
-      - import-tools-bin
-      - verify-extended
+      - lint
+      - test
       resources:
         limits:
           memory: 3Gi
