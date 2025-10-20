@@ -7,3 +7,4 @@ resources:
 - cpu-limit-range_limitrange.yaml
 - mem-limit-range_limitrange.yaml
 - dind-docker-config_configmap.yaml
+- prow-test-admin_role.yaml
