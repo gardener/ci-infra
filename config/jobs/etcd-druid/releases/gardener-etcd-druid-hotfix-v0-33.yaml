@@ -82,7 +82,6 @@ periodics:
   spec:
     containers:
     - args:
-      - check-generate
       - check
       - test-unit
       command:
