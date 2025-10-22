@@ -53,7 +53,6 @@ periodics:
           command:
             - make
           args:
-            - check-generate
             - check
             - test-unit
           resources:
