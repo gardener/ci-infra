@@ -10,11 +10,6 @@ spec:
     containerPolicies:
     - containerName: '*'
       controlledValues: RequestsOnly
-      maxAllowed:
-        cpu: 3
-        memory: 512Mi
-      minAllowed:
-        memory: 24Mi
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
