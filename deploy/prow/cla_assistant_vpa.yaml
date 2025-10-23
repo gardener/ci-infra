@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: cla-assistant
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

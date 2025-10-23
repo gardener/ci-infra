@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: statusreconciler
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

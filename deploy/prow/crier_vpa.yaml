@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: crier
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

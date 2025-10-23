@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: ghproxy
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

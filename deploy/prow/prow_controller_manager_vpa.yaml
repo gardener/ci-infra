@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: prow-controller-manager
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

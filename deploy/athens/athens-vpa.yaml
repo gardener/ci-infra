@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: athens-proxy
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

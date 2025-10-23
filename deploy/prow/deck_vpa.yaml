@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: deck
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

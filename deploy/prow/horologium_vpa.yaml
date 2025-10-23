@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: horologium
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: ingress-nginx-controller
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

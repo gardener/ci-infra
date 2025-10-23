@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: needs-rebase
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

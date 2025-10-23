@@ -15,4 +15,4 @@ spec:
     kind: Deployment
     name: grafana
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

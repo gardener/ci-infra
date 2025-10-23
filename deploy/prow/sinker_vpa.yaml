@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: sinker
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

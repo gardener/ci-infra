@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: gcsweb
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

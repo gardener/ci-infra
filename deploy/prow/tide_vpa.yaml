@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: tide
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

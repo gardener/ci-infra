@@ -20,4 +20,4 @@ spec:
     kind: Deployment
     name: hook
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate
