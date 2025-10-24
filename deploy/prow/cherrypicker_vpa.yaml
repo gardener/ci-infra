@@ -10,14 +10,9 @@ spec:
     containerPolicies:
     - containerName: '*'
       controlledValues: RequestsOnly
-      maxAllowed:
-        cpu: 3
-        memory: 512Mi
-      minAllowed:
-        memory: 16Mi
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: cherrypicker
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate
