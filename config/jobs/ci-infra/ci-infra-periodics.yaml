@@ -51,7 +51,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251022-e2f72e3
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251027-7e51935
       command:
       - /job-forker
       args:
@@ -86,7 +86,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251022-e2f72e3
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251027-7e51935
         command:
           - /job-forker
         args:
@@ -126,7 +126,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251025-bffdbcf4f
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251027-8bc90f1ab
       command:
       - generic-autobumper
       args:
@@ -157,7 +157,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251025-bffdbcf4f
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251027-8bc90f1ab
       command:
       - generic-autobumper
       args:
@@ -188,7 +188,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251025-bffdbcf4f
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251027-8bc90f1ab
       command:
       - generic-autobumper
       args:
@@ -219,7 +219,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251025-bffdbcf4f
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20251027-8bc90f1ab
       command:
       - generic-autobumper
       args:
@@ -253,7 +253,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20251025-bffdbcf4f
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20251027-8bc90f1ab
       command:
       - checkconfig
       args:
@@ -285,7 +285,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20251025-bffdbcf4f
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20251027-8bc90f1ab
       command:
       - checkconfig
       args:
@@ -341,7 +341,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20251022-e2f72e3
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20251027-7e51935
       command:
       - /branch-cleaner
       args:
