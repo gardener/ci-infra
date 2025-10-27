@@ -15,4 +15,4 @@ spec:
     kind: Alertmanager
     name: prometheus
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

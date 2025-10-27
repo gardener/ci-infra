@@ -10,14 +10,9 @@ spec:
     containerPolicies:
     - containerName: '*'
       controlledValues: RequestsOnly
-      maxAllowed:
-        cpu: 3
-        memory: 1024Mi
-      minAllowed:
-        memory: 192Mi
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: crier
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

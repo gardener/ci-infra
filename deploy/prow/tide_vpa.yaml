@@ -10,14 +10,9 @@ spec:
     containerPolicies:
     - containerName: '*'
       controlledValues: RequestsOnly
-      maxAllowed:
-        cpu: 3
-        memory: 4096Mi
-      minAllowed:
-        memory: 196Mi
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: tide
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate

@@ -10,14 +10,9 @@ spec:
     containerPolicies:
     - containerName: '*'
       controlledValues: RequestsOnly
-      maxAllowed:
-        cpu: 3
-        memory: 1500Mi
-      minAllowed:
-        memory: 120Mi
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: ingress-nginx-controller
   updatePolicy:
-    updateMode: Auto
+    updateMode: Recreate
