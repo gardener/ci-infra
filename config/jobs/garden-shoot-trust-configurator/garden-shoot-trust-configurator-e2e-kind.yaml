@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for garden-shoot-trust-configurator developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251031-94e2292-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251103-f02fbe0-1.25
         command:
         - wrapper.sh
         - bash
@@ -53,7 +53,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251031-94e2292-1.25
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251103-f02fbe0-1.25
       command:
       - wrapper.sh
       - bash
