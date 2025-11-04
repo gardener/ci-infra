@@ -208,6 +208,7 @@ images:
   tags:
   - 0.127.0
   - 0.129.1
+  - 0.139.0
 - source: persesdev/perses
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses
   tags:
