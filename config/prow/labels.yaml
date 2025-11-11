@@ -1706,3 +1706,5 @@ repos:
     labels: *default-labels
   gardener/pvc-autoscaler:
     labels: *default-labels
+  gardener/gardener-landscape-kit:
+    labels: *default-labels

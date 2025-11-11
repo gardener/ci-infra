@@ -36,6 +36,7 @@ periodics:
         repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         repo:gardener/pvc-autoscaler
+        repo:gardener/gardener-landscape-kit
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -102,6 +103,7 @@ periodics:
         repo:gardener/diki
         repo:gardener/pvc-autoscaler
         repo:gardener/org
+        repo:gardener/gardener-landscape-kit
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -169,6 +171,7 @@ periodics:
         repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         repo:gardener/pvc-autoscaler
+        repo:gardener/gardener-landscape-kit
         is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -237,6 +240,7 @@ periodics:
         repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         repo:gardener/pvc-autoscaler
+        repo:gardener/gardener-landscape-kit
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -303,6 +307,7 @@ periodics:
         repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         repo:gardener/pvc-autoscaler
+        repo:gardener/gardener-landscape-kit
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -370,6 +375,7 @@ periodics:
         repo:gardener/gardener-extension-auditing
         repo:gardener/diki
         repo:gardener/pvc-autoscaler
+        repo:gardener/gardener-landscape-kit
         is:pr
         -label:lifecycle/frozen
         -label:lifecycle/stale

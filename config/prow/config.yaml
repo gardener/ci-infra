@@ -162,6 +162,7 @@ tide:
     - gardener/gardener-extension-auditing
     - gardener/diki
     - gardener/pvc-autoscaler
+    - gardener/gardener-landscape-kit
     labels:
     - lgtm
     - approved
@@ -213,6 +214,7 @@ tide:
     gardener/gardener-extension-auditing: squash
     gardener/diki: squash
     gardener/pvc-autoscaler: squash
+    gardener/gardener-landscape-kit: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr
   blocker_label: tide/merge-blocker
