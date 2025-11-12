@@ -480,6 +480,11 @@ require_matching_label:
   repo: pvc-autoscaler
   prs: true
   regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: gardener-landscape-kit
+  prs: true
+  regexp: ^kind/
 retitle:
   allow_closed_issues: true
 
@@ -1113,6 +1118,36 @@ plugins:
     - welcome
     - wip
     - yuks
+  gardener/gardener-landscape-kit:
+    plugins:
+    - approve
+    - assign
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
 
 external_plugins:
   gardener/ci-infra:
@@ -1397,6 +1432,21 @@ external_plugins:
     - issue_comment
     - pull_request
   gardener/pvc-autoscaler:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
+    events:
+    - issue_comment
+    - pull_request
+  gardener/gardener-landscape-kit:
   - name: cla-assistant
     events:
       - issue_comment
