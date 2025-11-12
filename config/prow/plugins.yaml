@@ -25,6 +25,7 @@ triggers:
   - gardener/gardener-extension-auditing
   - gardener/diki
   - gardener/pvc-autoscaler
+  - gardener/gardener-landscape-kit
   # Additional repos which do not use tide yet
   - gardener/gardener-extension-shoot-oidc-service
   - gardener/etcd-druid
@@ -53,6 +54,7 @@ approve:
   - gardener/gardener-extension-auditing
   - gardener/diki
   - gardener/pvc-autoscaler
+  - gardener/gardener-landscape-kit
   lgtm_acts_as_approve: false
   require_self_approval: true
   commandHelpLink: "https://prow.gardener.cloud/command-help"
@@ -295,6 +297,17 @@ slack:
     - gardener-robot-ci-2
     - gardener-robot-ci-3
     - dependabot[bot]
+  - repos:
+    - gardener/gardener-landscape-kit
+    channels:
+    - prow-alerts
+    exempt_users:
+    - gardener-prow[bot]
+    - gardener-ci-robot
+    - gardener-robot-ci-1
+    - gardener-robot-ci-2
+    - gardener-robot-ci-3
+    - dependabot[bot]
 
 repo_milestone:
   gardener/ci-infra:
@@ -465,6 +478,11 @@ require_matching_label:
 - missing_label: do-not-merge/needs-kind
   org: gardener
   repo: pvc-autoscaler
+  prs: true
+  regexp: ^kind/
+- missing_label: do-not-merge/needs-kind
+  org: gardener
+  repo: gardener-landscape-kit
   prs: true
   regexp: ^kind/
 retitle:
@@ -1100,6 +1118,36 @@ plugins:
     - welcome
     - wip
     - yuks
+  gardener/gardener-landscape-kit:
+    plugins:
+    - approve
+    - assign
+    - dog
+    - golint
+    - heart
+    - help
+    - hold
+    - invalidcommitmsg
+    - label
+    - lgtm
+    - lifecycle
+    - mergecommitblocker
+    - milestone
+    - override
+    - owners-label
+    - require-matching-label
+    - retitle
+    - shrug
+    - size
+    - skip
+    - slackevents
+    - transfer-issue
+    - trick-or-treat
+    - trigger
+    - verify-owners
+    - welcome
+    - wip
+    - yuks
 
 external_plugins:
   gardener/ci-infra:
@@ -1384,6 +1432,21 @@ external_plugins:
     - issue_comment
     - pull_request
   gardener/pvc-autoscaler:
+  - name: cla-assistant
+    events:
+      - issue_comment
+      - pull_request_review
+      - pull_request_review_comment
+      - status
+  - name: needs-rebase
+    events:
+      - issue_comment
+      - pull_request
+  - name: cherrypicker
+    events:
+    - issue_comment
+    - pull_request
+  gardener/gardener-landscape-kit:
   - name: cla-assistant
     events:
       - issue_comment
