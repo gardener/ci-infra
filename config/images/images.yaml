@@ -340,3 +340,8 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/nginx
   tags:
   - 1.17.6
+# x509-certificate-exporter
+- source: enix/x509-certificate-exporter
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/enix/x509-certificate-exporter
+  tags:
+  - 3.19.1
