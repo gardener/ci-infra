@@ -70,6 +70,7 @@ spec:
             "gardener/cluster-api-provider-gardener",
             "gardener/ops-toolbelt",
             "gardener/hyperkube",
+            "gardener/test-infra"
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
