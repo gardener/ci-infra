@@ -4,6 +4,8 @@ about: Report a bug
 
 ---
 
+<!-- Please ensure that you do not include company internal information. -->
+
 <!--
 Please select the kind of this issue.
 "/kind" identifiers:    api-change|bug|cleanup|discussion|enhancement|epic|impediment|poc|post-mortem|question|regression|task|technical-debt|test
