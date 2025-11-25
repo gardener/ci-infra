@@ -13,20 +13,43 @@ presubmits:
       description: Runs integration tests for gardener developments in pull requests
       fork-per-release: "true"
     spec:
+      # For PR jobs, use a read-only service account
+      serviceAccountName: gardener-prow-gobuildcache-ro
       containers:
       - name: test-integration
         image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20251125-be059e9-1.25
         command:
-        - make
+          - /bin/bash
+          - -c
+        # TODO(shafeeqes): Remove time command after some days.
         args:
-        - import-tools-bin
-        - test-integration
+          - |
+            go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
+            export GOCACHEPROG="gobuildcache -readonly gs://gardener-prow-gobuildcache"
+            time make import-tools-bin test-integration
         resources:
           limits:
             memory: 16Gi
           requests:
             cpu: 5
             memory: 8Gi
+        volumeMounts:
+        - name: oidc-config
+          readOnly: true
+          mountPath: "/root/.config/gcloud/application_default_credentials.json"
+          subPath: "credentials.json"
+        - name: oidc-token
+          mountPath: /var/run/secrets/tokens
+      volumes:
+        - name: oidc-config
+          secret:
+            secretName: gardener-prow-gobuildcache-oidc
+        - name: oidc-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: gobuildcache
+                  audience: gardener-prow-build-shoot/providers/prow-build
 periodics:
 - name: ci-gardener-integration
   cluster: gardener-prow-build
@@ -45,17 +68,40 @@ periodics:
     testgrid-days-of-results: "60"
     fork-per-release: "true"
   spec:
+    # For periodic jobs, use a read-write service account
+    serviceAccountName: gardener-prow-gobuildcache-rw
     containers:
     - name: test-integration
       image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20251125-be059e9-1.25
       command:
-      - make
+        - /bin/bash
+        - -c
+      # TODO(shafeeqes): Remove time command after some days.
       args:
-      - import-tools-bin
-      - test-integration
+        - |
+          go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
+          export GOCACHEPROG="gobuildcache gs://gardener-prow-gobuildcache"
+          time make import-tools-bin test-integration
       resources:
         limits:
           memory: 16Gi
         requests:
           cpu: 5
           memory: 8Gi
+      volumeMounts:
+        - name: oidc-config
+          readOnly: true
+          mountPath: "/root/.config/gcloud/application_default_credentials.json"
+          subPath: "credentials.json"
+        - name: oidc-token
+          mountPath: /var/run/secrets/tokens
+    volumes:
+      - name: oidc-config
+        secret:
+          secretName: gardener-prow-gobuildcache-oidc
+      - name: oidc-token
+        projected:
+          sources:
+            - serviceAccountToken:
+                path: gobuildcache
+                audience: gardener-prow-build-shoot/providers/prow-build
