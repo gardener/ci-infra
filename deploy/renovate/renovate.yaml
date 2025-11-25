@@ -57,6 +57,7 @@ spec:
             "gardener/gardener-extension-shoot-cert-service",
             "gardener/gardener-extension-shoot-dns-service",
             "gardener/gardener-discovery-server",
+            "gardener/gardener-landscape-kit",
             "gardener/landscaper",
             "gardener/landscaper-service",
             "gardener/landscapercli",
