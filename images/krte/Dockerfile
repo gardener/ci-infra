@@ -86,7 +86,7 @@ RUN echo "Installing Packages ..." \
             "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
             tee /etc/apt/sources.list.d/docker.list > /dev/null \
         && apt-get update \
-        && apt-get install -y --no-install-recommends docker-ce docker-buildx-plugin \
+        && apt-get install -y --no-install-recommends docker-ce docker-buildx-plugin docker-compose-plugin \
         && rm -rf /var/lib/apt/lists/* \
         && sed -i 's/cgroupfs_mount$/#cgroupfs_mount\n/' /etc/init.d/docker \
         && sed -i 's/ulimit -Hn/# ulimit -Hn/g' /etc/init.d/docker \
