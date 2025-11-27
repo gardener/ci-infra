@@ -13,17 +13,25 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
+      preset-gocache-mounts: "true"
     annotations:
       description: Runs end-to-end tests for gardener-operator managing Garden resources on a kind cluster for gardener developments in pull requests
       fork-per-release: "true"
     spec:
+      serviceAccountName: gardener-prow-gobuildcache-ro
       containers:
       - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251126-51275a0-1.25
         command:
         - wrapper.sh
         - bash
         - -c
-        - make import-tools-bin ci-e2e-kind-operator
+        # TODO(shafeeqes): Remove time command after some days.
+        args:
+        - |
+          go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
+          PATH=/home/prow/go/bin:$PATH
+          export GOCACHEPROG="gobuildcache -readonly gs://gardener-prow-gobuildcache"
+          time make import-tools-bin ci-e2e-kind-operator
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -51,19 +59,27 @@ periodics:
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
+    preset-gocache-mounts: "true"
   annotations:
     description: Runs end-to-end tests for gardener-operator managing Garden resources on a kind cluster for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
     fork-per-release: "true"
   spec:
+    serviceAccountName: gardener-prow-gobuildcache-rw
     containers:
     - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251126-51275a0-1.25
       command:
       - wrapper.sh
       - bash
       - -c
-      - make import-tools-bin ci-e2e-kind-operator
+      # TODO(shafeeqes): Remove time command after some days.
+      args:
+      - |
+        go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
+        PATH=/home/prow/go/bin:$PATH
+        export GOCACHEPROG="gobuildcache gs://gardener-prow-gobuildcache"
+        time make import-tools-bin ci-e2e-kind-operator
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
