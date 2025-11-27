@@ -279,6 +279,26 @@ presets:
       hostPath:
         path: /sys/fs/cgroup
         type: Directory
+# gobuildcache mounts for jobs
+- labels:
+    preset-gocache-mounts: "true"
+  volumeMounts:
+  - name: oidc-config
+    readOnly: true
+    mountPath: "/root/.config/gcloud/application_default_credentials.json"
+    subPath: "credentials.json"
+  - name: oidc-token
+    mountPath: /var/run/secrets/tokens
+  volumes:
+    - name: oidc-config
+      secret:
+        secretName: gardener-prow-gobuildcache-oidc
+    - name: oidc-token
+      projected:
+        sources:
+          - serviceAccountToken:
+              path: gobuildcache
+              audience: gardener-prow-build-shoot/providers/prow-build
 # enable GOPROXY by default and use local athens-proxy as primary choice
 - env:
   - name: GOPROXY
