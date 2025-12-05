@@ -34,6 +34,9 @@ presubmits:
   gardener/etcd-druid:
   - <<: *renovate-presubmit
     name: pull-etcd-druid-check-renovate-config
+  gardener/etcd-backup-restore:
+  - <<: *renovate-presubmit
+    name: pull-etcd-backup-restore-check-renovate-config
   gardener/gardener-extension-networking-cilium:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-networking-cilium-check-renovate-config
@@ -49,6 +52,9 @@ presubmits:
   gardener/gardener-extension-shoot-dns-service:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-shoot-dns-service-check-renovate-config
+  gardener/gardener-extension-shoot-networking-filter:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-networking-filter-check-renovate-config
   gardener/gardener-discovery-server:
   - <<: *renovate-presubmit
     name: pull-gardener-discovery-server-check-renovate-config
@@ -64,3 +70,24 @@ presubmits:
   gardener/cluster-api-provider-gardener:
   - <<: *renovate-presubmit
     name: pull-cluster-api-provider-gardener-check-renovate-config
+  gardener/garden-shoot-trust-configurator:
+  - <<: *renovate-presubmit
+    name: pull-garden-shoot-trust-configurator-check-renovate-config
+  gardener/org:
+  - <<: *renovate-presubmit
+    name: pull-org-check-renovate-config
+  gardener/auditlog-forwarder:
+  - <<: *renovate-presubmit
+    name: pull-auditlog-forwarder-check-renovate-config
+  gardener/gardener-extension-auditing:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-auditing-check-renovate-config
+  gardener/diki:
+  - <<: *renovate-presubmit
+    name: pull-diki-check-renovate-config
+  gardener/pvc-autoscaler:
+  - <<: *renovate-presubmit
+    name: pull-pvc-autoscaler-check-renovate-config
+  gardener/gardener-landscape-kit:
+  - <<: *renovate-presubmit
+    name: pull-gardener-landscape-kit-check-renovate-config
