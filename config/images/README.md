@@ -2,8 +2,7 @@
 
 ## Overview
 
-In order to avoid DockerHub rate limit for image pulls and to support IPv6 Single Stack it is necessary
-to copy all needed container images to gardener GCR.
+In order to avoid Docker Hub pull rate limiting and to support IPv6 single‑stack clusters, all required container images are mirrored to the Gardener GCR. Images originating from `ghcr.io` are also mirrored because `ghcr.io` does not publish an AAAA record. This ensures stable and IPv6‑reachable image distribution.
 
 In order to automate this effort, there is a CI job using crane to copy all specified images and tags for all architectures to GCP Artifact Registry.
 The images needed are all listed inside the `images.yaml` with the following schema:
