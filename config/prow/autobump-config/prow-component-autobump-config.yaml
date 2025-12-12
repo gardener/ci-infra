@@ -9,7 +9,8 @@ gitHubRepo: "ci-infra"
 remoteName: "ci-infra"
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
-  - "."
+  - "config/prow"
+  - "deploy/prow"
 extraFiles:
   - "config/mkpj.sh"
   - "hack/bootstrap-config.sh"
@@ -17,18 +18,18 @@ extraFiles:
   - "hack/check-testgrid-config.sh"
 targetVersion: "latest"
 prefixes:
-  - name: "Prow"
+  - name: "Prow components - prow"
     prefix: "us-docker.pkg.dev/k8s-infra-prow/images/"
     repo: "https://github.com/kubernetes-sigs/prow"
     summarise: true
     consistentImages: true
-  - name: "Prow - test-infra"
+  - name: "Prow components - test-infra"
     prefix: "gcr.io/k8s-staging-test-infra/"
     repo: "https://github.com/kubernetes/test-infra"
     summarise: true
     consistentImages: false
-  - name: "Prow - ci-infra"
+  - name: "Prow components - ci-infra"
     prefix: "europe-docker.pkg.dev/gardener-project/releases/ci-infra/"
     repo: "https://github.com/gardener/ci-infra"
     summarise: true
-    consistentImages: false
+    consistentImages: true
