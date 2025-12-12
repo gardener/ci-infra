@@ -17,7 +17,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/label_sync:v20251031-d6af3d3e19
+    - image: gcr.io/k8s-staging-test-infra/label_sync:v20251212-3f863f26d7
       command:
       - label_sync
       args:
@@ -51,7 +51,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251212-0ea6572
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251212-abd946d
       command:
       - /job-forker
       args:
@@ -86,7 +86,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251212-0ea6572
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20251212-abd946d
         command:
           - /job-forker
         args:
@@ -341,7 +341,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20251212-0ea6572
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20251212-abd946d
       command:
       - /branch-cleaner
       args:
