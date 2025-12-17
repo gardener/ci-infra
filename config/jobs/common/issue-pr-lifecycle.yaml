@@ -16,27 +16,7 @@ periodics:
       - commenter
       args:
       - |-
-        --query=repo:gardener/ci-infra
-        repo:gardener/gardener
-        repo:gardener/gardener-extension-registry-cache
-        repo:gardener/dependency-watchdog
-        repo:gardener/garden-shoot-trust-configurator
-        repo:gardener/gardener-extension-image-rewriter
-        repo:gardener/gardener-extension-shoot-rsyslog-relp
-        repo:gardener/gardener-extension-shoot-cert-service
-        repo:gardener/gardener-extension-shoot-dns-service
-        repo:gardener/gardener-extension-networking-calico
-        repo:gardener/gardener-extension-networking-cilium
-        repo:gardener/gardener-discovery-server
-        repo:gardener/cert-management
-        repo:gardener/external-dns-management
-        repo:gardener/cluster-api-provider-gardener
-        repo:gardener/org
-        repo:gardener/auditlog-forwarder
-        repo:gardener/gardener-extension-auditing
-        repo:gardener/diki
-        repo:gardener/pvc-autoscaler
-        repo:gardener/gardener-landscape-kit
+        --query=org:gardener
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -83,27 +63,7 @@ periodics:
       - commenter
       args:
       - |-
-        --query=repo:gardener/ci-infra
-        repo:gardener/gardener
-        repo:gardener/gardener-extension-registry-cache
-        repo:gardener/dependency-watchdog
-        repo:gardener/garden-shoot-trust-configurator
-        repo:gardener/gardener-extension-image-rewriter
-        repo:gardener/gardener-extension-shoot-rsyslog-relp
-        repo:gardener/gardener-extension-shoot-cert-service
-        repo:gardener/gardener-extension-shoot-dns-service
-        repo:gardener/gardener-extension-networking-calico
-        repo:gardener/gardener-extension-networking-cilium
-        repo:gardener/gardener-discovery-server
-        repo:gardener/cert-management
-        repo:gardener/external-dns-management
-        repo:gardener/cluster-api-provider-gardener
-        repo:gardener/auditlog-forwarder
-        repo:gardener/gardener-extension-auditing
-        repo:gardener/diki
-        repo:gardener/pvc-autoscaler
-        repo:gardener/org
-        repo:gardener/gardener-landscape-kit
+        --query=org:gardener
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -151,27 +111,7 @@ periodics:
       - commenter
       args:
       - |-
-        --query=repo:gardener/ci-infra
-        repo:gardener/gardener
-        repo:gardener/gardener-extension-registry-cache
-        repo:gardener/dependency-watchdog
-        repo:gardener/garden-shoot-trust-configurator
-        repo:gardener/gardener-extension-image-rewriter
-        repo:gardener/gardener-extension-shoot-rsyslog-relp
-        repo:gardener/gardener-extension-shoot-cert-service
-        repo:gardener/gardener-extension-shoot-dns-service
-        repo:gardener/gardener-extension-networking-calico
-        repo:gardener/gardener-extension-networking-cilium
-        repo:gardener/gardener-discovery-server
-        repo:gardener/cert-management
-        repo:gardener/external-dns-management
-        repo:gardener/cluster-api-provider-gardener
-        repo:gardener/org
-        repo:gardener/auditlog-forwarder
-        repo:gardener/gardener-extension-auditing
-        repo:gardener/diki
-        repo:gardener/pvc-autoscaler
-        repo:gardener/gardener-landscape-kit
+        --query=org:gardener
         is:issue
         -label:lifecycle/frozen
         -label:lifecycle/stale
@@ -220,27 +160,7 @@ periodics:
       - commenter
       args:
       - |-
-        --query=repo:gardener/ci-infra
-        repo:gardener/gardener
-        repo:gardener/gardener-extension-registry-cache
-        repo:gardener/dependency-watchdog
-        repo:gardener/garden-shoot-trust-configurator
-        repo:gardener/gardener-extension-image-rewriter
-        repo:gardener/gardener-extension-shoot-rsyslog-relp
-        repo:gardener/gardener-extension-shoot-cert-service
-        repo:gardener/gardener-extension-shoot-dns-service
-        repo:gardener/gardener-extension-networking-calico
-        repo:gardener/gardener-extension-networking-cilium
-        repo:gardener/gardener-discovery-server
-        repo:gardener/cert-management
-        repo:gardener/external-dns-management
-        repo:gardener/cluster-api-provider-gardener
-        repo:gardener/org
-        repo:gardener/auditlog-forwarder
-        repo:gardener/gardener-extension-auditing
-        repo:gardener/diki
-        repo:gardener/pvc-autoscaler
-        repo:gardener/gardener-landscape-kit
+        --query=org:gardener
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
@@ -287,27 +207,7 @@ periodics:
       - commenter
       args:
       - |-
-        --query=repo:gardener/ci-infra
-        repo:gardener/gardener
-        repo:gardener/gardener-extension-registry-cache
-        repo:gardener/dependency-watchdog
-        repo:gardener/garden-shoot-trust-configurator
-        repo:gardener/gardener-extension-image-rewriter
-        repo:gardener/gardener-extension-shoot-rsyslog-relp
-        repo:gardener/gardener-extension-shoot-cert-service
-        repo:gardener/gardener-extension-shoot-dns-service
-        repo:gardener/gardener-extension-networking-calico
-        repo:gardener/gardener-extension-networking-cilium
-        repo:gardener/gardener-discovery-server
-        repo:gardener/cert-management
-        repo:gardener/external-dns-management
-        repo:gardener/cluster-api-provider-gardener
-        repo:gardener/org
-        repo:gardener/auditlog-forwarder
-        repo:gardener/gardener-extension-auditing
-        repo:gardener/diki
-        repo:gardener/pvc-autoscaler
-        repo:gardener/gardener-landscape-kit
+        --query=org:gardener
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/stale
@@ -355,27 +255,7 @@ periodics:
       - commenter
       args:
       - |-
-        --query=repo:gardener/ci-infra
-        repo:gardener/gardener
-        repo:gardener/gardener-extension-image-rewriter
-        repo:gardener/gardener-extension-registry-cache
-        repo:gardener/dependency-watchdog
-        repo:gardener/garden-shoot-trust-configurator
-        repo:gardener/gardener-extension-shoot-rsyslog-relp
-        repo:gardener/gardener-extension-shoot-cert-service
-        repo:gardener/gardener-extension-shoot-dns-service
-        repo:gardener/gardener-extension-networking-calico
-        repo:gardener/gardener-extension-networking-cilium
-        repo:gardener/gardener-discovery-server
-        repo:gardener/cert-management
-        repo:gardener/external-dns-management
-        repo:gardener/cluster-api-provider-gardener
-        repo:gardener/org
-        repo:gardener/auditlog-forwarder
-        repo:gardener/gardener-extension-auditing
-        repo:gardener/diki
-        repo:gardener/pvc-autoscaler
-        repo:gardener/gardener-landscape-kit
+        --query=org:gardener
         is:pr
         -label:lifecycle/frozen
         -label:lifecycle/stale
