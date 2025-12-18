@@ -154,6 +154,12 @@ spec:
       env:
         GF_AUTH_ANONYMOUS_ENABLED: "true"
 
+      # Fixes a bug where datasources are not loaded properly in grafana.
+      # See https://github.com/grafana/helm-charts/issues/4023#issuecomment-3633527427
+      sidecar:
+        datasources:
+          watchMethod: "SLEEP"
+
     kubelet:
       serviceMonitor:
         cAdvisorRelabelings:
