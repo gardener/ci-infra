@@ -13,6 +13,7 @@ aliases:
   - timebertt
   - timuthy
   - tobschli
+  - dimityrmirchev
   ci-infra-approvers:
   - acumino
   - ary1992
@@ -27,3 +28,4 @@ aliases:
   - timebertt
   - timuthy
   - tobschli
+  - dimityrmirchev
