@@ -16,5 +16,30 @@
       matchStrings: ['\\s+sourceRepository:\\s+github.com\/(?<depName>.*?)\\n\\s+repository:\\s+.*\\n\\s+tag:\\s+"?(?<currentValue>.*?)"?\\n'],
       datasourceTemplate: 'github-releases',
     }
+  ],
+  packageRules: [
+    {
+      description: 'Adds a PR body note for images that depend on ci-infra PRs.',
+      matchManagers: [
+        'regex'
+      ],
+      matchDatasources: [
+        'docker',
+        'github-releases'
+      ],
+      matchPackageNames: [
+        'credativ/plutono',
+        'credativ/vali',
+        'credativ/valitail',
+        'envoyproxy/envoy',
+        'fluent/fluent-operator',
+        'open-telemetry/opentelemetry-operator',
+        'perses/perses',
+        'perses/perses-operator',
+      ],
+      prBodyNotes: [
+        '> [!TIP]\n> Updates to this image may depend on merging a pull request in the [ci-infra](https://github.com/gardener/ci-infra/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen) repository first.'
+      ],
+    }
   ]
 }
