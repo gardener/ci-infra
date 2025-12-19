@@ -58,9 +58,6 @@ presubmits:
   gardener/gardener-discovery-server:
   - <<: *renovate-presubmit
     name: pull-gardener-discovery-server-check-renovate-config
-  gardener/landscaper:
-  - <<: *renovate-presubmit
-    name: pull-landscaper-check-renovate-config
   gardener/cert-management:
   - <<: *renovate-presubmit
     name: pull-cert-management-check-renovate-config

@@ -30,7 +30,6 @@ triggers:
   - gardener/gardener-extension-shoot-oidc-service
   - gardener/etcd-druid
   - gardener/etcd-backup-restore
-  - gardener/landscaper
 
 approve:
 - repos: &tide-onboarded-repos
@@ -873,11 +872,6 @@ plugins:
     - welcome
     - wip
     - yuks
-  gardener/landscaper:
-    plugins:
-    - override
-    - skip
-    - trigger
   gardener/cert-management:
     plugins:
     - approve
