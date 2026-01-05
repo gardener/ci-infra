@@ -15,7 +15,7 @@ presubmits:
         command:
         - make
         args:
-        - lint
+        - verify-extended
         - test
         resources:
           limits:
@@ -45,7 +45,7 @@ periodics:
       command:
       - make
       args:
-      - lint
+      - verify-extended
       - test
       resources:
         limits:
