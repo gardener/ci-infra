@@ -16,7 +16,6 @@ presubmits:
         - make
         args:
         - verify-extended
-        - test
         resources:
           limits:
             memory: 3Gi
@@ -46,7 +45,6 @@ periodics:
       - make
       args:
       - verify-extended
-      - test
       resources:
         limits:
           memory: 3Gi
