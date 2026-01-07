@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for pvc-autoscaler developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20251215-74365b2-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260106-1e34496-1.25
         command:
         - wrapper.sh
         - bash
@@ -25,8 +25,8 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 9
-            memory: 27Gi
+            cpu: 4
+            memory: 8Gi
         env:
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
