@@ -15,8 +15,7 @@ presubmits:
         command:
         - make
         args:
-        - lint
-        - test
+        - verify-extended
         resources:
           limits:
             memory: 3Gi
@@ -45,8 +44,7 @@ periodics:
       command:
       - make
       args:
-      - lint
-      - test
+      - verify-extended
       resources:
         limits:
           memory: 3Gi
