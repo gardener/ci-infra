@@ -7,7 +7,7 @@ periodics:
     slack:
       channel: prow-alerts
   annotations:
-    description: Closes rotten issues after 30d of inactivity
+    description: Closes rotten issues after 60d of inactivity
     testgrid-create-test-group: "false"
   spec:
     containers:
@@ -20,15 +20,15 @@ periodics:
         is:issue
         -label:lifecycle/frozen
         label:lifecycle/rotten
-      - --updated=720h
+      - --updated=1440h
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
         This bot triages issues according to the following rules:
         - After 90d of inactivity, `lifecycle/stale` is applied
-        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
-        - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        - After 60d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 60d of inactivity since `lifecycle/rotten` was applied, the issue is closed
 
         You can:
         - Reopen this issue with `/reopen`
@@ -56,7 +56,7 @@ periodics:
     slack:
       channel: prow-alerts
   annotations:
-    description: Adds lifecycle/rotten to stale issues after 30d of inactivity
+    description: Adds lifecycle/rotten to stale issues after 60d of inactivity
     testgrid-create-test-group: "false"
   spec:
     containers:
@@ -70,15 +70,15 @@ periodics:
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
-      - --updated=720h
+      - --updated=1440h
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
         This bot triages issues according to the following rules:
         - After 90d of inactivity, `lifecycle/stale` is applied
-        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
-        - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        - After 60d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 60d of inactivity since `lifecycle/rotten` was applied, the issue is closed
 
         You can:
         - Mark this issue as active with `/lifecycle active`
@@ -127,8 +127,8 @@ periodics:
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
         This bot triages issues according to the following rules:
         - After 90d of inactivity, `lifecycle/stale` is applied
-        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
-        - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
+        - After 60d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 60d of inactivity since `lifecycle/rotten` was applied, the issue is closed
 
         You can:
         - Mark this issue as active with `/lifecycle active`
