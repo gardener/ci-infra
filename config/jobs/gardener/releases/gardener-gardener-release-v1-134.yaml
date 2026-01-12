@@ -30,7 +30,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -75,7 +75,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -122,7 +122,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -168,7 +168,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -214,7 +214,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -261,7 +261,7 @@ periodics:
         value: "false"
       - name: IPFAMILY
         value: ipv6
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -307,7 +307,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -353,7 +353,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -400,7 +400,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -446,7 +446,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -492,7 +492,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
       name: ""
       resources:
         requests:
@@ -607,7 +607,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -649,7 +649,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -693,7 +693,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -737,7 +737,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -780,7 +780,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -824,7 +824,7 @@ presubmits:
           value: "false"
         - name: IPFAMILY
           value: ipv6
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -867,7 +867,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -910,7 +910,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -954,7 +954,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -997,7 +997,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
@@ -1040,7 +1040,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-9b6c1a7-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260112-79964db-1.25
         name: ""
         resources:
           requests:
