@@ -157,7 +157,7 @@ periodics:
     slack:
       channel: prow-alerts
   annotations:
-    description: Closes rotten PRs after 7d of inactivity
+    description: Closes rotten PRs after 14d of inactivity
     testgrid-create-test-group: "false"
   spec:
     containers:
@@ -170,15 +170,15 @@ periodics:
         is:pr
         -label:lifecycle/frozen
         label:lifecycle/rotten
-      - --updated=168h
+      - --updated=336h
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
         This bot triages PRs according to the following rules:
-        - After 15d of inactivity, `lifecycle/stale` is applied
-        - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
-        - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
+        - After 30d of inactivity, `lifecycle/stale` is applied
+        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 14d of inactivity since `lifecycle/rotten` was applied, the PR is closed
 
         You can:
         - Reopen this PR with `/reopen`
@@ -205,7 +205,7 @@ periodics:
     slack:
       channel: prow-alerts
   annotations:
-    description: Adds lifecycle/rotten to stale PRs after 15d of inactivity
+    description: Adds lifecycle/rotten to stale PRs after 30d of inactivity
     testgrid-create-test-group: "false"
   spec:
     containers:
@@ -219,15 +219,15 @@ periodics:
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
-      - --updated=360h
+      - --updated=720h
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
         This bot triages PRs according to the following rules:
-        - After 15d of inactivity, `lifecycle/stale` is applied
-        - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
-        - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
+        - After 30d of inactivity, `lifecycle/stale` is applied
+        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 14d of inactivity since `lifecycle/rotten` was applied, the PR is closed
 
         You can:
         - Mark this PR as active with `/lifecycle active`
@@ -254,7 +254,7 @@ periodics:
     slack:
       channel: prow-alerts
   annotations:
-    description: Adds lifecycle/stale to PRs after 15d of inactivity
+    description: Adds lifecycle/stale to PRs after 30d of inactivity
     testgrid-create-test-group: "false"
   spec:
     containers:
@@ -268,15 +268,15 @@ periodics:
         -label:lifecycle/frozen
         -label:lifecycle/stale
         -label:lifecycle/rotten
-      - --updated=360h
+      - --updated=720h
       - --token=/etc/github-token/token
       - --endpoint=http://ghproxy.prow.svc.cluster.local
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
         This bot triages PRs according to the following rules:
-        - After 15d of inactivity, `lifecycle/stale` is applied
-        - After 15d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
-        - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
+        - After 30d of inactivity, `lifecycle/stale` is applied
+        - After 30d of inactivity since `lifecycle/stale` was applied, `lifecycle/rotten` is applied
+        - After 14d of inactivity since `lifecycle/rotten` was applied, the PR is closed
 
         You can:
         - Mark this PR as active with `/lifecycle active`
