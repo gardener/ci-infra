@@ -32,6 +32,8 @@ periodics:
 
         You can:
         - Reopen this issue with `/reopen`
+        - Mark this issue as active with `/lifecycle active`
+        - Mark this issue as frozen with `/lifecycle frozen`
         - Mark this issue as fresh with `/remove-lifecycle rotten`
 
         /close
@@ -79,6 +81,8 @@ periodics:
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
 
         You can:
+        - Mark this issue as active with `/lifecycle active`
+        - Mark this issue as frozen with `/lifecycle frozen`
         - Mark this issue as fresh with `/remove-lifecycle rotten`
         - Close this issue with `/close`
 
@@ -127,6 +131,8 @@ periodics:
         - After 30d of inactivity since `lifecycle/rotten` was applied, the issue is closed
 
         You can:
+        - Mark this issue as active with `/lifecycle active`
+        - Mark this issue as frozen with `/lifecycle frozen`
         - Mark this issue as fresh with `/remove-lifecycle stale`
         - Mark this issue as rotten with `/lifecycle rotten`
         - Close this issue with `/close`
@@ -176,6 +182,7 @@ periodics:
 
         You can:
         - Reopen this PR with `/reopen`
+        - Mark this PR as active with `/lifecycle active`
         - Mark this PR as fresh with `/remove-lifecycle rotten`
 
         /close
@@ -223,6 +230,7 @@ periodics:
         - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
 
         You can:
+        - Mark this PR as active with `/lifecycle active`
         - Mark this PR as fresh with `/remove-lifecycle rotten`
         - Close this PR with `/close`
 
@@ -271,6 +279,7 @@ periodics:
         - After 7d of inactivity since `lifecycle/rotten` was applied, the PR is closed
 
         You can:
+        - Mark this PR as active with `/lifecycle active`
         - Mark this PR as fresh with `/remove-lifecycle stale`
         - Mark this PR as rotten with `/lifecycle rotten`
         - Close this PR with `/close`
