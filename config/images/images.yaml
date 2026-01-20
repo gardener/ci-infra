@@ -226,6 +226,7 @@ images:
   - 0.140.0
   - 0.141.0
   - 0.143.1
+  - 0.144.0
 - source: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-operator/target-allocator
   tags:
