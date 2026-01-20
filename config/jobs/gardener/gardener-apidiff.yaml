@@ -10,7 +10,7 @@ presubmits:
     spec:
       containers:
       - name: test
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260120-a629bfe-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260120-05787bc-1.25
         command:
         - make
         args:
