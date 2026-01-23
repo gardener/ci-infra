@@ -70,6 +70,7 @@ spec:
             "gardener/ops-toolbelt",
             "gardener/hyperkube",
             "gardener/test-infra",
+            "gardener/gardener-extension-otelcol",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
