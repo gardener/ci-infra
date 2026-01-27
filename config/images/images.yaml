@@ -219,6 +219,7 @@ images:
   - v0.141.0
   - v0.142.0
   - v0.143.0
+  - v0.144.0
 - source: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-collector-releases/opentelemetry-collector-contrib
   tags:
@@ -228,6 +229,7 @@ images:
   - 0.140.0
   - 0.141.0
   - 0.143.1
+  - 0.144.0
 - source: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-operator/target-allocator
   tags:
@@ -235,6 +237,7 @@ images:
   - v0.141.0
   - v0.142.0
   - v0.143.0
+  - v0.144.0
 - source: persesdev/perses
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses
   tags:
