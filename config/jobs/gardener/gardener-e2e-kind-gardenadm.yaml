@@ -18,7 +18,7 @@ presubmits:
       fork-per-release: "true"
     spec: &e2e-kind-gardenadm-spec
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260129-c5d41f5-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260130-3f6072c-1.25
         command:
         - wrapper.sh
         - bash
