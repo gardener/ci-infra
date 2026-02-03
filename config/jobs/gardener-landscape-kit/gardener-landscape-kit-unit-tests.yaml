@@ -3,12 +3,15 @@ presubmits:
   - name: pull-gardener-landscape-kit-unit
     cluster: gardener-prow-build
     always_run: true
+    skip_branches:
+    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
     decoration_config:
       timeout: 40m
       grace_period: 10m
     annotations:
       description: Runs unit tests for Gardener Landscape Kit developments in pull requests
+      fork-per-release: "true"
     spec:
       containers:
       - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260202-202c73e-1.25
@@ -30,7 +33,7 @@ periodics:
   extra_refs:
   - org: gardener
     repo: gardener-landscape-kit
-    base_ref: master
+    base_ref: main
   decorate: true
   decoration_config:
     timeout: 40m
@@ -39,6 +42,7 @@ periodics:
     description: Runs unit tests for Gardener Landscape Kit periodically
     testgrid-dashboards: gardener-landscape-kit
     testgrid-days-of-results: "60"
+    fork-per-release: "true"
   spec:
     containers:
     - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260202-202c73e-1.25
