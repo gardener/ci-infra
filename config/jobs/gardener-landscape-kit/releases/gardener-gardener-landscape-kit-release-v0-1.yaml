@@ -1,0 +1,138 @@
+periodics:
+- annotations:
+    created-by-job-forker: "true"
+    description: Runs end-to-end tests for gardener-landscape-kit developments periodically
+    testgrid-dashboards: gardener-landscape-kit
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 15m0s
+    timeout: 1h0m0s
+  extra_refs:
+  - base_ref: release-v0.1
+    org: gardener
+    repo: gardener-landscape-kit
+  interval: 2h
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+  name: ci-gardener-landscape-kit-e2e-kind-release-v0-1
+  spec:
+    containers:
+    - command:
+      - wrapper.sh
+      - bash
+      - -c
+      - make ci-e2e-kind
+      env:
+      - name: SKAFFOLD_UPDATE_CHECK
+        value: "false"
+      - name: SKAFFOLD_INTERACTIVE
+        value: "false"
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260202-f6eb697-1.25
+      name: ""
+      resources:
+        requests:
+          cpu: "6"
+          memory: 16Gi
+      securityContext:
+        privileged: true
+- annotations:
+    created-by-job-forker: "true"
+    description: Runs unit tests for Gardener Landscape Kit periodically
+    testgrid-dashboards: gardener-landscape-kit
+    testgrid-days-of-results: "60"
+  cluster: gardener-prow-build
+  decorate: true
+  decoration_config:
+    grace_period: 10m0s
+    timeout: 40m0s
+  extra_refs:
+  - base_ref: release-v0.1
+    org: gardener
+    repo: gardener-landscape-kit
+  interval: 24h
+  name: ci-gardener-landscape-kit-unit-release-v0-1
+  spec:
+    containers:
+    - args:
+      - import-tools-bin
+      - verify-extended
+      command:
+      - make
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260202-202c73e-1.25
+      name: ""
+      resources:
+        limits:
+          memory: 3Gi
+        requests:
+          cpu: "2"
+          memory: 1Gi
+presubmits:
+  gardener/gardener-landscape-kit:
+  - always_run: false
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs end-to-end tests for gardener-landscape-kit developments in
+        pull requests
+    branches:
+    - release-v0.1
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 15m0s
+      timeout: 1h0m0s
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+    name: pull-gardener-landscape-kit-e2e-kind-release-v0-1
+    skip_if_only_changed: ^(\.github|docs|example)/|\.md$|^(LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    spec:
+      containers:
+      - command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make ci-e2e-kind
+        env:
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260202-f6eb697-1.25
+        name: ""
+        resources:
+          requests:
+            cpu: "6"
+            memory: 16Gi
+        securityContext:
+          privileged: true
+  - always_run: true
+    annotations:
+      created-by-job-forker: "true"
+      description: Runs unit tests for Gardener Landscape Kit developments in pull
+        requests
+    branches:
+    - release-v0.1
+    cluster: gardener-prow-build
+    decorate: true
+    decoration_config:
+      grace_period: 10m0s
+      timeout: 40m0s
+    name: pull-gardener-landscape-kit-unit-release-v0-1
+    spec:
+      containers:
+      - args:
+        - import-tools-bin
+        - verify-extended
+        command:
+        - make
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260202-202c73e-1.25
+        name: ""
+        resources:
+          limits:
+            memory: 3Gi
+          requests:
+            cpu: "2"
+            memory: 1Gi
