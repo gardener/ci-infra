@@ -14,7 +14,7 @@ presubmits:
       description: Runs end-to-end tests for pvc-autoscaler developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260204-cf701d8-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260204-958ccd9-1.25
         command:
         - wrapper.sh
         - bash
@@ -53,7 +53,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260204-cf701d8-1.25
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260204-958ccd9-1.25
       command:
       - wrapper.sh
       - bash
