@@ -1,28 +1,33 @@
 presubmits:
   gardener/etcd-druid:
-    - name: pull-etcd-druid-e2e-kind
-      cluster: gardener-prow-build
-      always_run: true
-      skip_branches:
-        - hotfix-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
-      decorate: true
-      decoration_config:
-        timeout: 60m
-        grace_period: 15m
-      labels:
-        preset-dind-enabled: "true"
-        preset-kind-volume-mounts: "true"
-      annotations:
-        description: Runs KIND cluster based e2e tests for etcd druid developments in pull requests
+    - name: pull-etcd-druid-e2e-kind-basic
+      <<: &e2e_common
+        cluster: gardener-prow-build
+        always_run: true
+        skip_branches:
+          - hotfix-v\d+.\d+
+        decorate: true
+        decoration_config:
+          timeout: 60m
+          grace_period: 15m
+        labels:
+          preset-dind-enabled: "true"
+          preset-kind-volume-mounts: "true"
+      annotations: &e2e_annotations
+        description: Runs KIND e2e basic tests for etcd-druid on PRs
         fork-per-release: "true"
       spec:
         containers:
-          - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260205-a095a21-1.24
+          - &e2e_container
+            image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260205-a095a21-1.24
             command:
-            - wrapper.sh
-            - bash
-            - -c
-            - make ci-e2e-kind
+              - wrapper.sh
+              - bash
+              - -c
+              - make ci-e2e-kind
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestBasic"
             # we need privileged mode in order to do docker in docker
             securityContext:
               privileged: true
@@ -30,6 +35,79 @@ presubmits:
               requests:
                 cpu: 6
                 memory: 8Gi
+
+    - name: pull-etcd-druid-e2e-kind-scaleout
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e scale out tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestScaleOut"
+
+    - name: pull-etcd-druid-e2e-kind-tls-label-updates
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e TLS and label update tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestTLSAndLabelUpdates"
+
+    - name: pull-etcd-druid-e2e-kind-recovery
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e recovery tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestRecovery"
+
+    - name: pull-etcd-druid-e2e-kind-cluster-update
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e cluster update tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestClusterUpdate"
+
+    - name: pull-etcd-druid-e2e-kind-snapshot-compaction
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e snapshot compaction tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestSnapshotCompaction"
+
+    - name: pull-etcd-druid-e2e-kind-secret-finalizers
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e secret finalizer tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestSecretFinalizers"
+
 periodics:
   - name: ci-etcd-druid-e2e-kind
     cluster: gardener-prow-build
@@ -54,10 +132,10 @@ periodics:
       containers:
         - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260205-a095a21-1.24
           command:
-          - wrapper.sh
-          - bash
-          - -c
-          - make ci-e2e-kind
+            - wrapper.sh
+            - bash
+            - -c
+            - make ci-e2e-kind
           # we need privileged mode in order to do docker in docker
           securityContext:
             privileged: true
