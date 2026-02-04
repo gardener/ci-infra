@@ -773,6 +773,12 @@ default:
     prowPlugin: cla-assistant
     isExternalPlugin: true
     addedBy: prow
+  - name: crypto
+    color: f9d0c4
+    description: Changes that affect cryptography or security mechanisms, such as encryption, keys, ciphers, hashes, signatures, or related configuration. Used to ensure visibility and review of crypto-impacting changes.
+    target: both
+    prowPlugin: label
+    addedBy: anyone
 
 x-cleanup-gardener-robot: &cleanup-gardener-robot
 # cleanup old labels added by gardener-robot
