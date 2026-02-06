@@ -140,29 +140,12 @@ slack_reporter_configs:
 tide:
   sync_period: 1m
   queries:
-  # default configuration for repositories that should be onboarded to tide
-  - repos: &tide-onboarded-repos
-    - gardener/ci-infra
-    - gardener/gardener
-    - gardener/gardener-extension-image-rewriter
-    - gardener/gardener-extension-registry-cache
-    - gardener/dependency-watchdog
-    - gardener/garden-shoot-trust-configurator
-    - gardener/gardener-extension-shoot-rsyslog-relp
-    - gardener/gardener-extension-shoot-cert-service
-    - gardener/gardener-extension-shoot-dns-service
-    - gardener/gardener-discovery-server
-    - gardener/cert-management
-    - gardener/external-dns-management
-    - gardener/cluster-api-provider-gardener
-    - gardener/gardener-extension-networking-calico
-    - gardener/gardener-extension-networking-cilium
-    - gardener/org
-    - gardener/auditlog-forwarder
-    - gardener/gardener-extension-auditing
-    - gardener/diki
-    - gardener/pvc-autoscaler
-    - gardener/gardener-landscape-kit
+  - orgs:
+    - gardener
+    excludedRepos: &tide-excluded-repos
+    - gardener/gardener-ai-conformance
+    - gardener/k8s-conformance
+    - gardener/demo
     labels:
     - lgtm
     - approved
@@ -181,7 +164,9 @@ tide:
 
   # configuration for automerging robot PRs
   - author: gardener-ci-robot
-    repos: *tide-onboarded-repos
+    orgs:
+    - gardener
+    excludedRepos: *tide-excluded-repos
     labels:
     # gardener-ci-robot adds this label to PRs that should be merged automatically
     - skip-review
@@ -194,27 +179,7 @@ tide:
     # Overwrite pending contexts of a PR when it can be merged because of a successful batch job
     overwrite-pending-contexts: true
   merge_method:
-    gardener/ci-infra: squash
-    gardener/gardener: squash
-    gardener/gardener-extension-registry-cache: squash
-    gardener/gardener-extension-image-rewriter: squash
-    gardener/dependency-watchdog: squash
-    gardener/garden-shoot-trust-configurator: squash
-    gardener/gardener-extension-shoot-rsyslog-relp: squash
-    gardener/gardener-extension-shoot-cert-service: squash
-    gardener/gardener-extension-shoot-dns-service: squash
-    gardener/gardener-discovery-server: squash
-    gardener/cert-management: squash
-    gardener/external-dns-management: squash
-    gardener/cluster-api-provider-gardener: squash
-    gardener/gardener-extension-networking-calico: squash
-    gardener/gardener-extension-networking-cilium: squash
-    gardener/org: squash
-    gardener/auditlog-forwarder: squash
-    gardener/gardener-extension-auditing: squash
-    gardener/diki: squash
-    gardener/pvc-autoscaler: squash
-    gardener/gardener-landscape-kit: squash
+    gardener: squash
   pr_status_base_urls:
     '*': https://prow.gardener.cloud/pr
   blocker_label: tide/merge-blocker
