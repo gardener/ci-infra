@@ -360,3 +360,7 @@ images:
   tags:
   - v0.65.0
   - v0.66.1
+- source: victoriametrics/victoria-logs
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/victoriametrics/victoria-logs
+  tags:
+  - v1.37.2
