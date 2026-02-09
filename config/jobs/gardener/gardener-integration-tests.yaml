@@ -19,7 +19,7 @@ presubmits:
       serviceAccountName: gardener-prow-gobuildcache-ro
       containers:
       - name: test-integration
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260206-af4ae09-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260209-b2bf390-1.25
         command:
           - bash
           - -c
@@ -60,7 +60,7 @@ periodics:
     serviceAccountName: gardener-prow-gobuildcache-rw
     containers:
     - name: test-integration
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260206-af4ae09-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260209-b2bf390-1.25
       command:
         - bash
         - -c
