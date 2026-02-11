@@ -66,9 +66,13 @@ spec:
         cpu: 200m
         memory: 32Mi
 
+    extraVolumeMounts:
+    - name: athens-proxy
+      mountPath: /var/run/secrets/tokens
+
   valuesFrom:
     - kind: Secret
-      name: athens-gcp-serviceaccount
+      name: athens-gcp-identity
       valuesKey: service-account.json
       targetPath: storage.gcp.serviceAccount
   postRenderers:
