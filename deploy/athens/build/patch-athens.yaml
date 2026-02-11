@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: athens
+  namespace: flux-system
+spec:
+  values:
+    extraVolumes:
+    - name: athens-proxy
+      projected:
+        sources:
+        - serviceAccountToken:
+            path: athens-proxy
+            expirationSeconds: 3600
+            audience: gardener-prow-build-shoot/providers/prow-build

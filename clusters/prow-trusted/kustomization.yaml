@@ -9,4 +9,5 @@ resources:
 - renovate-kustomization.yaml
 
 patches:
+- path: patch-athens-kustomization.yaml
 - path: patch-monitoring-kustomization.yaml
