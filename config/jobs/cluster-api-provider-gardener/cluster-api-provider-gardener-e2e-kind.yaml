@@ -15,7 +15,7 @@ presubmits:
       description: Runs end-to-end tests for cluster-api-provider-gardener developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260212-82c38de-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260213-981d1d1-1.25
         command:
         - wrapper.sh
         - bash
@@ -60,7 +60,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260212-82c38de-1.25
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260213-981d1d1-1.25
       command:
       - wrapper.sh
       - bash
