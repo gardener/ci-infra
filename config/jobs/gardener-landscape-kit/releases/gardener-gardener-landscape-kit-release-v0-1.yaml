@@ -30,7 +30,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260212-82c38de-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260213-981d1d1-1.25
       name: ""
       resources:
         requests:
@@ -61,7 +61,7 @@ periodics:
       - verify-extended
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260213-a7999ec-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260213-0db9bd7-1.25
       name: ""
       resources:
         limits:
@@ -100,7 +100,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260212-82c38de-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260213-981d1d1-1.25
         name: ""
         resources:
           requests:
@@ -128,7 +128,7 @@ presubmits:
         - verify-extended
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260213-a7999ec-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260213-0db9bd7-1.25
         name: ""
         resources:
           limits:
