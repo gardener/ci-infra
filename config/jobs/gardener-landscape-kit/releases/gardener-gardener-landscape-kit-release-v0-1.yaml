@@ -30,7 +30,7 @@ periodics:
         value: "false"
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260216-18b2c13-1.26
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260217-88f94cf-1.26
       name: ""
       resources:
         requests:
@@ -100,7 +100,7 @@ presubmits:
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260216-18b2c13-1.26
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260217-88f94cf-1.26
         name: ""
         resources:
           requests:
