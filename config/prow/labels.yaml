@@ -1708,7 +1708,7 @@ repos:
     target: issues
     addedBy: anyone
   - color: fa6b84
-    description: A team of >=4 people.
+    description: A team of 4 or more people.
     name: hackathon-teamsize/large
     target: issues
     addedBy: anyone
