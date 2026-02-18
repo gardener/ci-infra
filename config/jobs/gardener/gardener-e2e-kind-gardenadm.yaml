@@ -64,7 +64,7 @@ periodics:
   spec:
     serviceAccountName: gardener-prow-gobuildcache-rw
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260217-88f94cf-1.26
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260218-481f37d-1.26
       command:
       - wrapper.sh
       - bash
