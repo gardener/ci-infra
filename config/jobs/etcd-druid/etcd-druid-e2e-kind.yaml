@@ -19,7 +19,7 @@ presubmits:
       spec:
         containers:
           - &e2e_container
-            image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260217-88f94cf-1.25
+            image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260218-ce3adb2-1.25
             command:
               - wrapper.sh
               - bash
@@ -130,7 +130,7 @@ periodics:
       fork-per-release: "true"
     spec:
       containers:
-        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260217-88f94cf-1.25
+        - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260218-ce3adb2-1.25
           command:
             - wrapper.sh
             - bash
