@@ -95,8 +95,8 @@ slack:
     - gardener-ci-robot
     - gardener-robot-ci-1
     - gardener-robot-ci-2
-    - gardener-robot-ci-3
     - dependabot[bot]
+    - github-actions[bot]
   - repos:
     - gardener/org
     channels:
