@@ -25,12 +25,7 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        # TODO(shafeeqes): Remove time command after some days.
-        - |
-          go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
-          PATH=/home/prow/go/bin:$PATH
-          export GOCACHEPROG="gobuildcache -readonly gs://gardener-prow-gobuildcache"
-          time make import-tools-bin ci-e2e-kind-migration
+        - make import-tools-bin ci-e2e-kind-migration
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -39,6 +34,8 @@ presubmits:
             cpu: 6
             memory: 24Gi
         env:
+        - name: GOCACHEPROG
+          value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
         - name: SKAFFOLD_UPDATE_CHECK
           value: "false"
         - name: SKAFFOLD_INTERACTIVE
@@ -72,12 +69,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      # TODO(shafeeqes): Remove time command after some days.
-      - |
-        go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
-        PATH=/home/prow/go/bin:$PATH
-        export GOCACHEPROG="gobuildcache gs://gardener-prow-gobuildcache"
-        time make import-tools-bin ci-e2e-kind-migration
+      - make import-tools-bin ci-e2e-kind-migration
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
@@ -86,6 +78,8 @@ periodics:
           cpu: 6
           memory: 24Gi
       env:
+      - name: GOCACHEPROG
+        value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
       - name: SKAFFOLD_UPDATE_CHECK
         value: "false"
       - name: SKAFFOLD_INTERACTIVE

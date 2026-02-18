@@ -21,21 +21,19 @@ presubmits:
       - name: test-integration
         image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260218-3b08295-1.26
         command:
-          - bash
-          - -c
-        # TODO(shafeeqes): Remove time command after some days.
+          - make
         args:
-          - |
-            go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
-            PATH=/home/prow/go/bin:$PATH
-            export GOCACHEPROG="gobuildcache -readonly gs://gardener-prow-gobuildcache"
-            time make import-tools-bin test-integration
+        - import-tools-bin
+        - test-integration
         resources:
           limits:
             memory: 16Gi
           requests:
             cpu: 5
             memory: 8Gi
+        env:
+        - name: GOCACHEPROG
+          value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
 periodics:
 - name: ci-gardener-integration
   cluster: gardener-prow-build
@@ -62,18 +60,16 @@ periodics:
     - name: test-integration
       image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260218-3b08295-1.26
       command:
-        - bash
-        - -c
-      # TODO(shafeeqes): Remove time command after some days.
+        - make
       args:
-        - |
-          go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
-          PATH=/home/prow/go/bin:$PATH
-          export GOCACHEPROG="gobuildcache gs://gardener-prow-gobuildcache"
-          time make import-tools-bin test-integration
+        - import-tools-bin
+        - test-integration
       resources:
         limits:
           memory: 16Gi
         requests:
           cpu: 5
           memory: 8Gi
+      env:
+      - name: GOCACHEPROG
+        value: "gobuildcache gs://gardener-prow-gobuildcache"

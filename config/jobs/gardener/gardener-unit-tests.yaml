@@ -44,30 +44,25 @@ periodics:
   decoration_config:
     timeout: 60m
     grace_period: 10m
-  labels:
-    preset-gocache-mounts: "true"
   annotations:
     description: Runs unit tests for gardener developments periodically
     testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
     fork-per-release: "true"
   spec:
-    # For periodic jobs, use a read-write service account
-    serviceAccountName: gardener-prow-gobuildcache-rw
     containers:
     # Run all tests sequentially in one container or as separate prow jobs.
     # Test will fail when 'check-generate' (which includes a revendor) and 'test' or 'check' run in parallel on the same volume
     - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260218-3b08295-1.26
       command:
-        - bash
-        - -c
-      # TODO(shafeeqes): Remove time command after some days.
+        - make
       args:
-        - |
-          go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
-          PATH=/home/prow/go/bin:$PATH
-          export GOCACHEPROG="gobuildcache gs://gardener-prow-gobuildcache"
-          time make import-tools-bin check-generate check format test sast
+        - import-tools-bin
+        - check-generate
+        - check
+        - format
+        - test
+        - sast
       resources:
         limits:
           memory: 24Gi
