@@ -64,6 +64,7 @@ spec:
             "gardener/gardenlogin",
             "gardener/terminal-controller-manager",
             "gardener/diki",
+            "gardener/diki-operator",
             "gardener/cert-management",
             "gardener/external-dns-management",
             "gardener/cluster-api-provider-gardener",

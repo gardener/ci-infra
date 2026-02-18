@@ -82,6 +82,9 @@ presubmits:
   gardener/diki:
   - <<: *renovate-presubmit
     name: pull-diki-check-renovate-config
+  gardener/diki-operator:
+  - <<: *renovate-presubmit
+    name: pull-diki-operator-check-renovate-config
   gardener/pvc-autoscaler:
   - <<: *renovate-presubmit
     name: pull-pvc-autoscaler-check-renovate-config
