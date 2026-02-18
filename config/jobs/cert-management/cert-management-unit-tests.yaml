@@ -19,10 +19,10 @@ presubmits:
         - test
         resources:
           limits:
-            memory: 2Gi
+            memory: 3Gi
           requests:
             cpu: 2
-            memory: 1Gi
+            memory: 1.5Gi
 periodics:
 - name: ci-cert-management-unit
   cluster: gardener-prow-build
@@ -49,7 +49,7 @@ periodics:
       - test
       resources:
         limits:
-          memory: 2Gi
+          memory: 3Gi
         requests:
           cpu: 2
-          memory: 1Gi
+          memory: 1.5Gi
