@@ -31,13 +31,10 @@ label:
     # Allow the labels to be used via the `/label {labelName}` command.
     - ipcei/oidc
     - ipcei/workload-identity
-    - hackathon-teamsize/small
-    - hackathon-teamsize/medium
-    - hackathon-teamsize/large
-    - hackathon-difficulty/easy
-    - hackathon-difficulty/medium
-    - hackathon-difficulty/hard
-    - hackathon/fast-track
+    - teamsize/small
+    - teamsize/medium
+    - teamsize/large
+    - fast-track
     - crypto
 
   restricted_labels:
