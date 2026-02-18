@@ -878,3 +878,26 @@ x-cleanup-gardener-robot: &cleanup-gardener-robot
   deleteAfter: 2022-05-16T00:00:00Z
 - name: triage/wont-fix
   deleteAfter: 2022-05-16T00:00:00Z
+
+repos:
+  gardener/hackathon:
+  - color: daffd5
+    description: A team of 1-2 people.
+    name: teamsize/small
+    target: issues
+    addedBy: anyone
+  - color: fafb92
+    description: A team of 3 people.
+    name: teamsize/medium
+    target: issues
+    addedBy: anyone
+  - color: fa6b84
+    description: A team of 4 or more people.
+    name: teamsize/large
+    target: issues
+    addedBy: anyone
+  - color: 54b5d2
+    description: Task that can take a couple of hours or a day to solve.
+    name: fast-track
+    target: issues
+    addedBy: anyone
