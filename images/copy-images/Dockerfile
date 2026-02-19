@@ -1,6 +1,6 @@
 FROM alpine:3.23.3 AS copy-images
 # renovate: datasource=github-releases depName=google/go-containerregistry
-ARG CRANE_VERSION=v0.20.7
+ARG CRANE_VERSION=v0.21.0
 LABEL CRANE_VERSION=$CRANE_VERSION
 RUN set -eux; \
     apk add --no-cache yq; \
