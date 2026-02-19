@@ -19,10 +19,10 @@ presubmits:
         - unittests
         resources:
           limits:
-            memory: 4Gi
+            memory: 6Gi
           requests:
             cpu: 2
-            memory: 2Gi
+            memory: 3Gi
 periodics:
 - name: ci-external-dns-management-unit
   cluster: gardener-prow-build
@@ -49,7 +49,7 @@ periodics:
       - unittests
       resources:
         limits:
-          memory: 4Gi
+          memory: 6Gi
         requests:
           cpu: 2
-          memory: 2Gi
+          memory: 3Gi

@@ -19,10 +19,10 @@ presubmits:
         - test-integration
         resources:
           limits:
-            memory: 2Gi
+            memory: 4Gi
           requests:
             cpu: 2
-            memory: 1Gi
+            memory: 2Gi
 periodics:
 - name: ci-cert-management-integration
   cluster: gardener-prow-build
@@ -49,7 +49,7 @@ periodics:
       - test-integration
       resources:
         limits:
-          memory: 2Gi
+          memory: 4Gi
         requests:
           cpu: 2
-          memory: 1Gi
+          memory: 2Gi
