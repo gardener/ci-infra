@@ -31,8 +31,8 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 12
-            memory: 48Gi
+            cpu: 6
+            memory: 12Gi
         env:
         - name: GOCACHEPROG
           value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
@@ -76,8 +76,8 @@ periodics:
         privileged: true
       resources:
         requests:
-          cpu: 12
-          memory: 48Gi
+          cpu: 6
+          memory: 12Gi
       env:
       - name: GOCACHEPROG
         value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
