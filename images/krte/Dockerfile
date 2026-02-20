@@ -53,6 +53,7 @@ RUN echo "Installing Packages ..." \
             build-essential \
             ca-certificates \
             curl \
+            dnsmasq \
             file \
             git \
             gnupg2 \
