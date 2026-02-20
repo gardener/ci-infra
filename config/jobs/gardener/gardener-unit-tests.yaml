@@ -28,7 +28,7 @@ presubmits:
         - sast
         resources:
           limits:
-            memory: 24Gi
+            memory: 32Gi
           requests:
             cpu: 6
             memory: 16Gi
@@ -65,7 +65,7 @@ periodics:
         - sast
       resources:
         limits:
-          memory: 24Gi
+          memory: 32Gi
         requests:
           cpu: 6
           memory: 16Gi
