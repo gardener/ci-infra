@@ -32,6 +32,7 @@ jobs:
       version: ${{ needs.compute-versions.outputs.semver-version }}
       dockerfile: ${{ matrix.images.dockerfile }}
       target: ${{ matrix.images.target }}
+      commit-objects-artefact: ""
       oci-registry: europe-docker.pkg.dev/gardener-project/releases/ci-infra
       oci-repository: ${{ matrix.images.name }}
       oci-platforms: linux/amd64,linux/arm64
