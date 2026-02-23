@@ -1,0 +1,41 @@
+name: Build Prow Images
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+     - images/copy-images/**        
+
+jobs:
+  compute-versions:
+    name: Compute Versions
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    uses: ./.github/workflows/compute-versions.yaml
+
+  oci-images:
+    name: Build OCI-Images
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    needs: compute-versions
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    secrets: inherit
+    uses: gardener/cc-utils/.github/workflows/oci-ocm.yaml@master
+    strategy:
+      matrix:
+        images:
+          - name: copy-images
+            target: copy-images
+            dockerfile: images/copy-images/Dockerfile
+    with:
+      name: ${{ matrix.images.name }}
+      version: ${{ needs.compute-versions.outputs.semver-version }}
+      dockerfile: ${{ matrix.images.dockerfile }}
+      target: ${{ matrix.images.target }}
+      oci-registry: europe-docker.pkg.dev/gardener-project/releases/ci-infra
+      oci-repository: ${{ matrix.images.name }}
+      oci-platforms: linux/amd64,linux/arm64
+      ocm-labels: ""
+      extra-tags: ${{ needs.compute-versions.outputs.prow-version }},latest
