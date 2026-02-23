@@ -5,6 +5,7 @@ on:
     branches:
       - master
     paths:
+      - .github/workflows/copy-images-*
       - images/copy-images/**
 
 jobs:

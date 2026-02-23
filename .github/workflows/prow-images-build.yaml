@@ -5,9 +5,10 @@ on:
     branches:
       - master
     paths:
+      - .github/workflows/prow-images-*
+      - prow/**
       - Dockerfile
       - go.*
-      - prow/**
 
 jobs:
   build-prow-images:
