@@ -273,6 +273,7 @@ images:
   tags:
   - 5.0.8
   - 5.0.14
+  - 8.6.1
 # gardener-extension-networking-calico/charts/images.yaml
 #
 # DO NOT ADD NEW CALICO IMAGES.
