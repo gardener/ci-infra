@@ -1,10 +1,16 @@
 FROM alpine:3.23.3 AS copy-images
 # renovate: datasource=github-releases depName=google/go-containerregistry
 ARG CRANE_VERSION=v0.21.0
+ARG TARGETARCH=amd64
 LABEL CRANE_VERSION=$CRANE_VERSION
 RUN set -eux; \
     apk add --no-cache yq; \
-    wget -O /tmp/go-containerregistry.tar.gz "https://github.com/google/go-containerregistry/releases/download/$CRANE_VERSION/go-containerregistry_Linux_x86_64.tar.gz"; \
+    case "$TARGETARCH" in \
+        amd64) ARCH=x86_64 ;; \
+        arm64) ARCH=arm64 ;; \
+        *) ARCH=$TARGETARCH ;; \
+    esac; \
+    wget -O /tmp/go-containerregistry.tar.gz "https://github.com/google/go-containerregistry/releases/download/$CRANE_VERSION/go-containerregistry_linux_${ARCH}.tar.gz"; \
     tar -xf /tmp/go-containerregistry.tar.gz -C /usr/local/bin; \
     rm /tmp/go-containerregistry.tar.gz; \
     crane version
