@@ -1,9 +1,10 @@
 FROM alpine:3.23.3 AS copy-images
 # renovate: datasource=github-releases depName=google/go-containerregistry
 ARG CRANE_VERSION=v0.21.0
-ARG TARGETARCH=amd64
+ARG TARGETARCH
 LABEL CRANE_VERSION=$CRANE_VERSION
 RUN set -eux; \
+    echo "Building for target arch: ${TARGETARCH}"; \
     apk add --no-cache yq; \
     case "$TARGETARCH" in \
         amd64) ARCH=x86_64 ;; \
