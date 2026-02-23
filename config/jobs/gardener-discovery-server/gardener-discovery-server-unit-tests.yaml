@@ -11,7 +11,7 @@ presubmits:
       description: Runs unit tests for gardener-discovery-server developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260220-d6effc0-1.25
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260223-b4e5c83-1.25
         command:
         - make
         args:
@@ -41,7 +41,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260220-d6effc0-1.25
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260223-b4e5c83-1.25
       command:
       - make
       args:
