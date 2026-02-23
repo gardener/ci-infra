@@ -1,11 +1,13 @@
 name: Build Copy-Images Images
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-     - images/copy-images/**        
+  workflow_call:
+    inputs:
+      push:
+        description: Whether to push the built images to the registry. If false, the images will only be built and not pushed.
+        type: string
+        default: never
+        required: false    
 
 jobs:
   compute-versions:
@@ -17,10 +19,6 @@ jobs:
     name: Build OCI-Images
     if: ${{ github.repository == 'gardener/ci-infra' }}
     needs: compute-versions
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
     secrets: inherit
     uses: gardener/cc-utils/.github/workflows/oci-ocm.yaml@master
     strategy:
@@ -39,3 +37,4 @@ jobs:
       oci-platforms: linux/amd64,linux/arm64
       ocm-labels: ""
       extra-tags: ${{ needs.compute-versions.outputs.prow-version }},latest
+      push: ${{ inputs.push }}

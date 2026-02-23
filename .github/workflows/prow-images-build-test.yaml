@@ -1,0 +1,20 @@
+name: Test Prow Images Build
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - Dockerfile
+      - go.*
+      - prow/**
+
+jobs:
+  build-prow-images:
+    name: Build Prow Images
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    uses: ./.github/workflows/prow-images.yaml
+    permissions:
+      contents: read
+    with:
+      push: never

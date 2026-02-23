@@ -1,0 +1,20 @@
+name: Build and Push Copy-Images
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - images/copy-images/**
+
+jobs:
+  build-copy-images:
+    name: Build Copy-Images
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    uses: ./.github/workflows/copy-images.yaml
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    with:
+      push: always

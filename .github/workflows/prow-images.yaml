@@ -1,28 +1,22 @@
 name: Build Prow Images
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - Dockerfile
-      - go.*
-      - prow/**
+  workflow_call:
+    inputs:
+      push:
+        description: Whether to push the built images to the registry. If false, the images will only be built and not pushed.
+        type: string
+        default: never
+        required: false
 
 jobs:
   compute-versions:
     name: Compute Versions
-    if: ${{ github.repository == 'gardener/ci-infra' }}
     uses: ./.github/workflows/compute-versions.yaml
 
   oci-images:
     name: Build OCI-Images
-    if: ${{ github.repository == 'gardener/ci-infra' }}
     needs: compute-versions
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
     secrets: inherit
     uses: gardener/cc-utils/.github/workflows/oci-ocm.yaml@master
     strategy:
@@ -51,3 +45,4 @@ jobs:
       oci-platforms: linux/amd64,linux/arm64
       ocm-labels: ""
       extra-tags: ${{ needs.compute-versions.outputs.prow-version }},latest
+      push: ${{ inputs.push }}
