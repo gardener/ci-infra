@@ -1,0 +1,53 @@
+name: Build Prow Images
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - Dockerfile
+      - go.*
+      - prow/**
+
+jobs:
+  compute-versions:
+    name: Compute Versions
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    uses: ./.github/workflows/compute-versions.yaml
+
+  oci-images:
+    name: Build OCI-Images
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    needs: compute-versions
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    secrets: inherit
+    uses: gardener/cc-utils/.github/workflows/oci-ocm.yaml@master
+    strategy:
+      matrix:
+        images:
+          - name: branch-cleaner
+            target: branch-cleaner
+          - name: cherrypicker
+            target: cherrypicker
+          - name: cla-assistant
+            target: cla-assistant
+          - name: image-builder
+            target: image-builder
+          - name: job-forker
+            target: job-forker
+          - name: milestone-activator
+            target: milestone-activator
+          - name: release-handler
+            target: release-handler
+    with:
+      name: ${{ matrix.images.name }}
+      version: ${{ needs.compute-versions.outputs.semver-version }}
+      target: ${{ matrix.images.target }}
+      oci-registry: europe-docker.pkg.dev/gardener-project/releases/ci-infra
+      oci-repository: ${{ matrix.images.name }}
+      oci-platforms: linux/amd64,linux/arm64
+      ocm-labels: ""
+      extra-tags: ${{ needs.compute-versions.outputs.prow-version }},latest

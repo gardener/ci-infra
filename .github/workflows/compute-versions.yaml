@@ -1,0 +1,28 @@
+name: Compute Versions
+
+on:
+  workflow_call:
+    outputs:
+      semver-version:
+        description: "Semantic version with short SHA"
+        value: ${{ jobs.compute-versions.outputs.semver-version }}
+      prow-version:
+        description: "Prow version with date and short SHA"
+        value: ${{ jobs.compute-versions.outputs.prow-version }}
+
+jobs:
+  compute-versions:
+    name: Compute Versions
+    runs-on: ubuntu-latest
+    outputs:
+      semver-version: ${{ steps.semver-version.outputs.version }}
+      prow-version: ${{ steps.prow-version.outputs.version }}
+    steps:
+      - name: Compute semver version
+        id: semver-version
+        # This repository does not use semver versioning.
+        # This is just to satisfy the input requirements of gardener/cc-utils/.github/workflows/oci-ocm.yaml.
+        run: echo "version=v1.0.0+${GITHUB_SHA:0:7}" >> ${GITHUB_OUTPUT}
+      - name: Compute prow version
+        id: prow-version
+        run: echo "version=v$(date +%Y%m%d)-${GITHUB_SHA:0:7}" >> ${GITHUB_OUTPUT}
