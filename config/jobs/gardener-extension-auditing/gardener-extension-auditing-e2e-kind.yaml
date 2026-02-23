@@ -1,0 +1,88 @@
+presubmits:
+  gardener/gardener-extension-auditing:
+  - name: pull-gardener-extension-auditing-e2e-kind
+    cluster: gardener-prow-build
+    always_run: false
+    skip_if_only_changed: "^(\\.ci|\\.github|\\.ocm|\\.test-defs|docs)/|\\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$"
+    decorate: true
+    decoration_config:
+      timeout: 2h
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+      preset-gocache-mounts: "true"
+    annotations:
+      description: Runs end-to-end tests for gardener-extension-auditing
+    spec:
+      serviceAccountName: gardener-prow-gobuildcache-ro
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.26
+        command:
+        - wrapper.sh
+        - bash
+        - -c
+        args:
+        - |
+          go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
+          PATH=/home/prow/go/bin:$PATH
+          export GOCACHEPROG="gobuildcache -readonly gs://gardener-prow-gobuildcache"
+          make ci-e2e-kind
+        # we need privileged mode in order to do docker in docker
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 6
+            memory: 24Gi
+        env:
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
+periodics:
+- name: ci-gardener-extension-auditing-e2e-kind
+  cluster: gardener-prow-build
+  interval: 24h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-auditing
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 2h
+    grace_period: 15m
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+    preset-gocache-mounts: "true"
+  annotations:
+    description: Runs end-to-end tests for gardener-extension-auditing periodically
+    testgrid-dashboards: gardener-extension-auditing
+    testgrid-days-of-results: "60"
+  spec:
+    serviceAccountName: gardener-prow-gobuildcache-rw
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.26
+      command:
+      - wrapper.sh
+      - bash
+      - -c
+      args:
+      - |
+        go install github.com/saracen/gobuildcache@83bfeb837b93a786ff37b33d0be108bcc74b089f
+        PATH=/home/prow/go/bin:$PATH
+        export GOCACHEPROG="gobuildcache gs://gardener-prow-gobuildcache"
+        make ci-e2e-kind
+      # we need privileged mode in order to do docker in docker
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          cpu: 6
+          memory: 24Gi
+      env:
+      - name: SKAFFOLD_UPDATE_CHECK
+        value: "false"
+      - name: SKAFFOLD_INTERACTIVE
+        value: "false"
