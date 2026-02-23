@@ -28,7 +28,7 @@ presubmits:
   - name: pull-ci-infra-prow-go-tests
     cluster: gardener-prow-build
     decorate: true
-    skip_if_only_changed: '^(clusters|config|deploy)\/'
+    skip_if_only_changed: '^(.github|clusters|config|deploy|images)\/'
     annotations:
       description: Runs go tests for prow developments in ci-infra 
     spec:
