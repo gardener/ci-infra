@@ -22,7 +22,7 @@ jobs:
         id: semver-version
         # This repository does not use semver versioning.
         # This is just to satisfy the input requirements of gardener/cc-utils/.github/workflows/oci-ocm.yaml.
-        run: echo "version=v1.0.0+${GITHUB_SHA:0:7}" >> ${GITHUB_OUTPUT}
+        run: echo "version=v1.0.0-${GITHUB_SHA:0:7}" >> ${GITHUB_OUTPUT}
       - name: Compute prow version
         id: prow-version
         run: echo "version=v$(date +%Y%m%d)-${GITHUB_SHA:0:7}" >> ${GITHUB_OUTPUT}

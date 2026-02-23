@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - .github/workflows/prow-images-*
+      - .github/workflows/**
       - prow/**
       - Dockerfile
       - go.*
