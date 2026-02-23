@@ -19,10 +19,10 @@ presubmits:
         - verify-extended
         resources:
           limits:
-            memory: 4Gi
+            memory: 6Gi
           requests:
             cpu: 2
-            memory: 2Gi
+            memory: 3Gi
 periodics:
 - name: ci-extension-shoot-dns-service-unit
   cluster: gardener-prow-build
@@ -49,7 +49,7 @@ periodics:
       - verify-extended
       resources:
         limits:
-          memory: 4Gi
+          memory: 6Gi
         requests:
           cpu: 2
-          memory: 2Gi
+          memory: 3Gi
