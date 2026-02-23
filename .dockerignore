@@ -7,7 +7,6 @@
 # ALLOW:
 !go.mod
 !go.sum
-!vendor/**
 
 !prow/**
 
