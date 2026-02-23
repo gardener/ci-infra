@@ -1,4 +1,4 @@
-name: Build Prow Images
+name: Build Copy-Images Images
 
 on:
   push:
