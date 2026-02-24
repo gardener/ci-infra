@@ -90,6 +90,7 @@ slack:
     - gardener/auditlog-forwarder
     - gardener/gardener-extension-auditing
     - gardener/diki
+    - gardener/diki-operator
     - gardener/pvc-autoscaler
     - gardener/gardener-landscape-kit
     channels:
