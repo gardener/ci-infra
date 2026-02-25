@@ -31,11 +31,12 @@ jobs:
         images:
           - name: copy-images
             target: copy-images
-            dockerfile: images/copy-images/Dockerfile
+            dockerfile: ./images/copy-images/Dockerfile
     with:
       name: ${{ matrix.images.name }}
       version: ${{ needs.compute-versions.outputs.semver-version }}
       dockerfile: ${{ matrix.images.dockerfile }}
+      build-directory: ./images/copy-images
       target: ${{ matrix.images.target }}
       commit-objects-artefact: ""
       oci-registry: europe-docker.pkg.dev/gardener-project/releases/ci-infra
