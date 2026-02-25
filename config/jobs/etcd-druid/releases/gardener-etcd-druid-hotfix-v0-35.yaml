@@ -25,7 +25,7 @@ periodics:
       - bash
       - -c
       - make ci-e2e-kind
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
       name: ""
       resources:
         requests:
@@ -55,7 +55,7 @@ periodics:
       - test-integration
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260223-b4e5c83-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260225-4be0bb3-1.25
       name: test-integration
       resources:
         limits:
@@ -86,7 +86,7 @@ periodics:
       - test-unit
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260223-b4e5c83-1.25
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260225-4be0bb3-1.25
       name: ""
       resources:
         limits:
@@ -121,7 +121,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestBasic
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -154,7 +154,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestScaleOut
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -187,7 +187,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestTLSAndLabelUpdates
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -220,7 +220,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestRecovery
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -253,7 +253,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestClusterUpdate
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -286,7 +286,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestSnapshotCompaction
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -319,7 +319,7 @@ presubmits:
         env:
         - name: GO_TEST_ARGS
           value: -run TestSecretFinalizers
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260223-c2ad828-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260225-17d2ea6-1.25
         name: ""
         resources:
           requests:
@@ -345,7 +345,7 @@ presubmits:
         - test-integration
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260223-b4e5c83-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260225-4be0bb3-1.25
         name: test-integration
         resources:
           limits:
@@ -398,7 +398,7 @@ presubmits:
         - test-unit
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260223-b4e5c83-1.25
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260225-4be0bb3-1.25
         name: ""
         resources:
           limits:
