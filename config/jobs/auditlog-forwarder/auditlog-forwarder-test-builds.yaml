@@ -6,6 +6,8 @@ presubmits:
     annotations:
       description: Verify Audit Log Forwarder image build on pull requests
     decorate: true
+    labels:
+      preset-buildkit-testbuild: "true"
     spec:
       containers:
       - name: buildkit
@@ -42,23 +44,7 @@ presubmits:
             type: Unconfined
           runAsUser: 1000
           runAsGroup: 1000
-        volumeMounts:
-        - name: buildctl-testbuild-script
-          mountPath: /usr/local/bin/buildctl-testbuild-daemonless.sh
-          subPath: buildctl-testbuild-daemonless.sh
-          readOnly: true
-        - name: buildkit-config
-          mountPath: /home/user/.config/buildkit
-          readOnly: true
         resources:
           requests:
             cpu: 6
             memory: 7Gi
-      volumes:
-      - name: buildctl-testbuild-script
-        configMap:
-          name: buildctl-testbuild-script
-          defaultMode: 0555
-      - name: buildkit-config
-        configMap:
-          name: buildkit-config
