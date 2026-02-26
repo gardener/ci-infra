@@ -10,59 +10,55 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - name: kaniko
-        image: gcr.io/kaniko-project/executor:v1.24.0
+      - name: buildkit
+        image: moby/buildkit:v0.27.1-rootless
         command:
-        - /kaniko/executor
+        - buildctl-daemonless.sh
         args:
-        - --context=/home/prow/go/src/github.com/gardener/dependency-watchdog
-        - --dockerfile=Dockerfile
-        - --no-push
-        - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
-        - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
+        - build
+        - --frontend
+        - dockerfile.v0
+        - --local
+        - context=/home/prow/go/src/github.com/gardener/dependency-watchdog
+        - --local
+        - dockerfile=/home/prow/go/src/github.com/gardener/dependency-watchdog
+        - --output
+        - type=image,push=false
+        env:
+          - name: BUILDKITD_FLAGS
+            value: --oci-worker-no-process-sandbox
+        readinessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        livenessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+          appArmorProfile:
+            type: Unconfined
+          runAsUser: 1000
+          runAsGroup: 1000
+        volumeMounts:
+        - name: buildkit-config
+          mountPath: /home/user/.config/buildkit
+          readOnly: true
         resources:
           requests:
             cpu: 6
-            memory: 2Gi
-  - name: pull-dependency-watchdog-publish-test-images
-    cluster: gardener-prow-trusted
-    skip_branches:
-    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
-    annotations:
-      description: Publish dependency-watchdog development images on pull requests
-    decorate: true
-    optional: true
-    spec:
-      serviceAccountName: image-builder
-      containers:
-      - name: image-builder
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/image-builder:v20260226-1b0123f
-        command:
-        - /image-builder
-        args:
-        - --log-level=info
-        - --docker-config-secret=gardener-prow-gcr-docker-config
-        - --registry=europe-docker.pkg.dev/gardener-project/snapshots/gardener
-        - --cache-registry=europe-docker.pkg.dev/gardener-project/snapshots/ci-infra/kaniko-cache
-        - --target=dependency-watchdog
-        - --add-version-sha-tag=true
-        - --inject-effective-version=true
-        - --kaniko-image=gcr.io/kaniko-project/executor:v1.24.0
-        # image-builder is the pod which is "scheduled" to a node. The pods created by image-builder have an affinity rule
-        # which schedules them to the same node as their parent image-builder. This needs to be done, that PVCs could be mounted
-        # to multiple build pods in parallel.
-        # For a proper scheduling the combined resource requests of all build pods are assigned to this pod, even though it does not
-        # use them. The resource requests of build pods themselves are "0"
-        resources:
-          requests:
-            cpu: 6
-            memory: 2Gi
-      # Node selector is copied to build pods
-      nodeSelector:
-        dedicated: high-cpu
-      # Tolerations are copied to build pods
-      tolerations:
-      - key: "dedicated"
-        operator: "Equal"
-        value: "high-cpu"
-        effect: "NoSchedule"
+            memory: 7Gi
+      volumes:
+      - name: buildkit-config
+        configMap:
+          name: buildkit-config
