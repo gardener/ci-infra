@@ -251,6 +251,7 @@ images:
   - v0.51.0
   - v0.51.1
   - v0.52.0
+  - v0.53.0
 - source: persesdev/perses-operator
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses-operator
   tags:
