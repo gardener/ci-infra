@@ -1094,21 +1094,60 @@ presubmits:
     name: pull-gardener-verify-image-build-release-v1-135
     spec:
       containers:
-      - args:
-        - --context=/home/prow/go/src/github.com/gardener/gardener
-        - --dockerfile=Dockerfile
-        - --no-push
-        - --registry-mirror=registry-docker-io.kube-system.svc.cluster.local:5000
-        - --insecure-registry=registry-docker-io.kube-system.svc.cluster.local:5000
-        - --build-arg=GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
+      - name: buildkit
+        image: moby/buildkit:v0.27.1-rootless
         command:
-        - /kaniko/executor
-        image: gcr.io/kaniko-project/executor:v1.24.0
-        name: kaniko
+        - buildctl-daemonless.sh
+        args:
+        - build
+        - --frontend
+        - dockerfile.v0
+        - --local
+        - context=/home/prow/go/src/github.com/gardener/gardener
+        - --local
+        - dockerfile=/home/prow/go/src/github.com/gardener/gardener
+        - --output
+        - type=image,push=false
+        - --opt
+        - build-arg:GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
+        env:
+          - name: BUILDKITD_FLAGS
+            value: --oci-worker-no-process-sandbox
+        readinessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        livenessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+          appArmorProfile:
+            type: Unconfined
+          runAsUser: 1000
+          runAsGroup: 1000
+        volumeMounts:
+        - name: buildkit-config
+          mountPath: /home/user/.config/buildkit
+          readOnly: true
         resources:
           requests:
-            cpu: "6"
+            cpu: 6
             memory: 7Gi
+      volumes:
+      - name: buildkit-config
+        configMap:
+          name: buildkit-config
   - always_run: true
     annotations:
       created-by-job-forker: "true"

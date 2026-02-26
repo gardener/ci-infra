@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: buildkit-config
+  namespace: test-pods
+data:
+  buildkitd.toml: |-
+    [registry."docker.io"]
+      mirrors = ["registry-docker-io.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-docker-io.kube-system.svc.cluster.local:5000"]
+      http = true
+
+    [registry."europe.docker.pkg.dev"]
+      mirrors = ["registry-europe-docker-pkg-dev.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-europe-docker-pkg-dev.kube-system.svc.cluster.local:5000"]
+      http = true
+
+    [registry."gcr.io"]
+      mirrors = ["registry-gcr-io.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-gcr-io.kube-system.svc.cluster.local:5000"]
+      http = true
+
+    [registry."ghcr.io"]
+      mirrors = ["registry-ghcr-io.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-ghcr-io.kube-system.svc.cluster.local:5000"]
+      http = true
+
+    [registry."quay.io"]
+      mirrors = ["registry-quay-io.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-quay-io.kube-system.svc.cluster.local:5000"]
+      http = true
+
+    [registry."registry.k8s.io"]
+      mirrors = ["registry-registry-k8s-io.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-registry-k8s-io.kube-system.svc.cluster.local:5000"]
+      http = true
+
+    [registry."us.docker.pkg.dev"]
+      mirrors = ["registry-us-docker-pkg-dev.kube-system.svc.cluster.local:5000"]
+      http = true
+    
+    [registry."registry-us-docker-pkg-dev.kube-system.svc.cluster.local:5000"]
+      http = true
