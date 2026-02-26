@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: buildctl-testbuild-script
+  namespace: test-pods
+data:
+  buildctl-testbuild-daemonless.sh: |-
+    #!/bin/sh
+    # buildctl-testbuild-daemonless.sh spawns ephemeral buildkitd for executing buildctl.
+    # It was built based on https://github.com/moby/buildkit/blob/master/examples/buildctl-daemonless/buildctl-daemonless.sh.
+    #
+    # This script starts a temporary buildkitd daemon and executes buildctl build commands
+    # to build Docker images using the dockerfile frontend. The output is a local image 
+    # (push=false). When multiple targets are specified, buildctl is executed separately 
+    # for each target.
+    #
+    # Usage: buildctl-testbuild-daemonless.sh [OPTIONS]
+    #
+    # Options:
+    #   --context <path>           Path to the build context directory (required)
+    #   --dockerfile <path>        Path to the Dockerfile directory (required)
+    #   --build-arg KEY=VALUE      Build argument to pass to buildctl (can be specified multiple times)
+    #   --target <name>            Build target to execute (can be specified multiple times)
+    #
+    # The script automatically includes these buildctl arguments:
+    #   - build                           (buildctl subcommand)
+    #   - --frontend dockerfile.v0        (use Dockerfile frontend)
+    #   - --output type=image,push=false  (build local image without pushing)
+    #
+    # Environment Variables:
+    #   BUILDCTL                   Path to buildctl binary (default: buildctl)
+    #   BUILDCTL_CONNECT_RETRIES_MAX  Maximum connection retries (default: 10)
+    #   BUILDKITD                  Path to buildkitd binary (default: buildkitd)
+    #   BUILDKITD_FLAGS            Additional flags for buildkitd (default: --oci-worker-no-process-sandbox)
+    #   ROOTLESSKIT                Path to rootlesskit binary (default: rootlesskit)
+    #
+    # Examples:
+    #   # Build with context and dockerfile
+    #   buildctl-testbuild-daemonless.sh --context ./app --dockerfile ./app
+    #
+    #   # Build with build arguments
+    #   buildctl-testbuild-daemonless.sh --context . --dockerfile . --build-arg VERSION=1.0 --build-arg ENV=prod
+    #
+    #   # Build multiple targets (executes buildctl separately for each target)
+    #   buildctl-testbuild-daemonless.sh --context . --dockerfile . --target builder --target runtime
+    #
+    # The script is compatible with BusyBox shell.
+    set -eu
+
+    : ${BUILDCTL=buildctl}
+    : ${BUILDCTL_CONNECT_RETRIES_MAX=10}
+    : ${BUILDKITD=buildkitd}
+    : ${BUILDKITD_FLAGS="--oci-worker-no-process-sandbox"}
+    : ${ROOTLESSKIT=rootlesskit}
+
+    # Parse parameters
+    CONTEXT=""
+    DOCKERFILE=""
+    BUILD_ARGS=""
+    TARGETS=""
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --context)
+                CONTEXT="$2"
+                shift 2
+                ;;
+            --dockerfile)
+                DOCKERFILE="$2"
+                shift 2
+                ;;
+            --build-arg)
+                BUILD_ARGS="$BUILD_ARGS --opt build-arg:$2"
+                shift 2
+                ;;
+            --target)
+                TARGETS="$TARGETS $2"
+                shift 2
+                ;;
+            *)
+                echo >&2 "Error: Unknown parameter: $1"
+                exit 1
+                ;;
+        esac
+    done
+
+    # Build the buildctl command arguments
+    BUILDCTL_ARGS="build --frontend dockerfile.v0 --output type=image,push=false"
+    if [ -n "$CONTEXT" ]; then
+        BUILDCTL_ARGS="$BUILDCTL_ARGS --local context=$CONTEXT"
+    fi
+    if [ -n "$DOCKERFILE" ]; then
+        BUILDCTL_ARGS="$BUILDCTL_ARGS --local dockerfile=$DOCKERFILE"
+    fi
+    if [ -n "$BUILD_ARGS" ]; then
+        BUILDCTL_ARGS="$BUILDCTL_ARGS$BUILD_ARGS"
+    fi
+
+
+
+    # $tmp holds the following files:
+    # * pid
+    # * addr
+    # * log
+    tmp=$(mktemp -d /tmp/buildctl-daemonless.XXXXXX)
+    trap "kill \$(cat $tmp/pid) || true; wait \$(cat $tmp/pid) || true; rm -rf $tmp" EXIT
+
+    startBuildkitd() {
+        addr=
+        helper=
+        if [ $(id -u) = 0 ]; then
+            addr=unix:///run/buildkit/buildkitd.sock
+        else
+            addr=unix://$XDG_RUNTIME_DIR/buildkit/buildkitd.sock
+            helper=$ROOTLESSKIT
+        fi
+        $helper $BUILDKITD $BUILDKITD_FLAGS --addr=$addr >$tmp/log 2>&1 &
+        pid=$!
+        echo $pid >$tmp/pid
+        echo $addr >$tmp/addr
+    }
+
+    # buildkitd supports NOTIFY_SOCKET but as far as we know, there is no easy way
+    # to wait for NOTIFY_SOCKET activation using busybox-builtin commands...
+    waitForBuildkitd() {
+        addr=$(cat $tmp/addr)
+        try=0
+        max=$BUILDCTL_CONNECT_RETRIES_MAX
+        until $BUILDCTL --addr=$addr debug workers >/dev/null 2>&1; do
+            if [ $try -gt $max ]; then
+                echo >&2 "could not connect to $addr after $max trials"
+                echo >&2 "========== log =========="
+                cat >&2 $tmp/log
+                exit 1
+            fi
+            sleep $(awk "BEGIN{print (100 + $try * 20) * 0.001}")
+            try=$(expr $try + 1)
+        done
+    }
+
+    startBuildkitd
+    waitForBuildkitd
+
+    # Execute buildctl for each target, or once if no targets specified
+    if [ -n "$TARGETS" ]; then
+        echo "========== Start building targets: $TARGETS =========="
+        for target in $TARGETS; do
+            echo "========== Building target: $target =========="
+            $BUILDCTL --addr=$(cat $tmp/addr) $BUILDCTL_ARGS --opt target=$target
+        done
+        echo "========== Build completed for targets: $TARGETS =========="
+    else
+        $BUILDCTL --addr=$(cat $tmp/addr) $BUILDCTL_ARGS
+    fi

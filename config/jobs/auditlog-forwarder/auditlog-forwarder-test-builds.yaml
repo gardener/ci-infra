@@ -11,20 +11,14 @@ presubmits:
       - name: buildkit
         image: moby/buildkit:v0.27.1-rootless
         command:
-        - buildctl-daemonless.sh
+        - /usr/local/bin/buildctl-testbuild-daemonless.sh
         args:
-        - build
-        - --frontend
-        - dockerfile.v0
-        - --local
-        - context=/home/prow/go/src/github.com/gardener/auditlog-forwarder
-        - --local
-        - dockerfile=/home/prow/go/src/github.com/gardener/auditlog-forwarder
-        - --output
-        - type=image,push=false
-        env:
-          - name: BUILDKITD_FLAGS
-            value: --oci-worker-no-process-sandbox
+        - --context
+        - /home/prow/go/src/github.com/gardener/auditlog-forwarder
+        - --dockerfile
+        - /home/prow/go/src/github.com/gardener/auditlog-forwarder
+        - --target
+        - auditlog-forwarder
         readinessProbe:
           exec:
             command:
@@ -49,6 +43,10 @@ presubmits:
           runAsUser: 1000
           runAsGroup: 1000
         volumeMounts:
+        - name: buildctl-testbuild-script
+          mountPath: /usr/local/bin/buildctl-testbuild-daemonless.sh
+          subPath: buildctl-testbuild-daemonless.sh
+          readOnly: true
         - name: buildkit-config
           mountPath: /home/user/.config/buildkit
           readOnly: true
@@ -57,6 +55,10 @@ presubmits:
             cpu: 6
             memory: 7Gi
       volumes:
+      - name: buildctl-testbuild-script
+        configMap:
+          name: buildctl-testbuild-script
+          defaultMode: 0555
       - name: buildkit-config
         configMap:
           name: buildkit-config
