@@ -1091,28 +1091,44 @@ presubmits:
     - release-v1.136
     cluster: gardener-prow-build
     decorate: true
+    labels:
+      preset-buildkit-testbuild: "true"
     name: pull-gardener-verify-image-build-release-v1-136
     spec:
       containers:
       - name: buildkit
         image: moby/buildkit:v0.27.1-rootless
         command:
-        - buildctl-daemonless.sh
+        - /usr/local/bin/buildctl-testbuild-daemonless.sh
         args:
-        - build
-        - --frontend
-        - dockerfile.v0
-        - --local
-        - context=/home/prow/go/src/github.com/gardener/gardener
-        - --local
-        - dockerfile=/home/prow/go/src/github.com/gardener/gardener
-        - --output
-        - type=image,push=false
-        - --opt
-        - build-arg:GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
-        env:
-          - name: BUILDKITD_FLAGS
-            value: --oci-worker-no-process-sandbox
+        - --context
+        - /home/prow/go/src/github.com/gardener/gardener
+        - --dockerfile
+        - /home/prow/go/src/github.com/gardener/gardener
+        - --build-arg
+        - GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
+        - --target
+        - apiserver
+        - --target
+        - controller-manager
+        - --target
+        - scheduler
+        - --target
+        - gardenlet
+        - --target
+        - gardenadm
+        - --target
+        - admission-controller
+        - --target
+        - resource-manager
+        - --target
+        - node-agent
+        - --target
+        - operator
+        - --target
+        - gardener-extension-provider-local
+        - --target
+        - gardener-extension-admission-local
         readinessProbe:
           exec:
             command:
@@ -1136,18 +1152,10 @@ presubmits:
             type: Unconfined
           runAsUser: 1000
           runAsGroup: 1000
-        volumeMounts:
-        - name: buildkit-config
-          mountPath: /home/user/.config/buildkit
-          readOnly: true
         resources:
           requests:
             cpu: 6
             memory: 7Gi
-      volumes:
-      - name: buildkit-config
-        configMap:
-          name: buildkit-config
   - always_run: true
     annotations:
       created-by-job-forker: "true"
