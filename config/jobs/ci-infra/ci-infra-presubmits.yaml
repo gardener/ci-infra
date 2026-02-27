@@ -9,7 +9,7 @@ presubmits:
       description: Runs checkconfig to validate changes to job configs, config.yaml and friends
     spec:
       containers:
-      - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260227-fa76ab79c
+      - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260227-937f24a5d
         command:
         - checkconfig
         args:
@@ -33,7 +33,7 @@ presubmits:
       description: Runs go tests for prow developments in ci-infra 
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260225-4be0bb3-1.26
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260227-085711a-1.26
         command:
         - make
         args:
