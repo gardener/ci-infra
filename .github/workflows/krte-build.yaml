@@ -1,0 +1,62 @@
+name: Build and Push krte Image
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/krte-build.yaml
+      - .github/workflows/krte-images.yaml
+      - images/krte/**
+
+jobs:
+  prepare-metadata:
+    name: Prepare Metadata
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.date.outputs.date }}
+      short-sha: ${{ steps.short-sha.outputs.short-sha }}
+    steps:
+      - name: Generate date
+        id: date
+        run: echo "date=$(date +%Y%m%d)" >> $GITHUB_OUTPUT
+      - name: Generate short-sha
+        id: short-sha
+        run: echo "short-sha=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+
+  generate-matrix:
+    name: Generate Matrix
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    uses: ./.github/workflows/krte-images.yaml
+
+  oci-images:
+    name: Build OCI-Images
+    if: ${{ github.repository == 'gardener/ci-infra' }}
+    needs:
+      - prepare-metadata
+      - generate-matrix
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    secrets: inherit
+    uses: gardener/cc-utils/.github/workflows/oci-ocm.yaml@master
+    strategy:
+      matrix: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
+    with:
+      name: krte
+      version: ${{ matrix.images.version }}
+      dockerfile: ./images/krte/Dockerfile
+      build-directory: ./images/krte
+      build-args: |
+        golangtestimage=${{ matrix.images.golangtestimage }}
+        IMAGE_ARG=${{ matrix.images.IMAGE_ARG }}
+      target: krte
+      commit-objects-artefact: ""
+      oci-registry: europe-docker.pkg.dev/gardener-project/releases/ci-infra
+      oci-repository: krte
+      oci-platforms: linux/amd64,linux/arm64
+      ocm-labels: ""
+      extra-tags: v${{ needs.prepare-metadata.outputs.date }}-${{ needs.prepare-metadata.outputs.short-sha }}-${{ matrix.images.version }}
+      push: always
