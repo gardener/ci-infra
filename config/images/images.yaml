@@ -369,6 +369,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/victoriametrics/victoria-logs
   tags:
   - v1.37.2
+  - v1.47.0
 - source: ubuntu/bind9
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/ubuntu/bind9
   tags:
