@@ -90,6 +90,7 @@ images:
   - v3.3.0
   - v3.5.0
   - v3.6.0
+  - v3.7.0
 # DO NOT ADD NEW LOKI IMAGES.
 # With https://github.com/gardener/gardener/pull/7318 loki is replaced by vali.
 - source: grafana/loki
