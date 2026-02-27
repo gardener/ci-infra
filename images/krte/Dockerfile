@@ -17,6 +17,7 @@
 # supporting kubernetes builds, kind installation, etc.
 
 # krte
+ARG golangtestimage
 FROM ${golangtestimage} AS krte
 
 # arg that specifies the image name (for debugging)
@@ -34,7 +35,7 @@ ENV KRTE_IMAGE=${IMAGE_ARG} \
     CONTAINER=docker
 
 # copy in image utility scripts
-COPY images/krte/wrapper.sh /usr/local/bin/
+COPY wrapper.sh /usr/local/bin/
 
 # Install tools needed to:
 # - install docker

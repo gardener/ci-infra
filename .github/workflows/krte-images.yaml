@@ -1,0 +1,37 @@
+name: krte Images
+
+on:
+  workflow_call:
+    outputs:
+      matrix:
+        description: "Matrix configuration for krte images"
+        value: ${{ jobs.generate-matrix.outputs.matrix }}
+
+jobs:
+  generate-matrix:
+    name: Generate Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set matrix
+        id: set-matrix
+        run: |
+          cat <<'EOF' >> $GITHUB_OUTPUT
+          matrix<<MATRIX_EOF
+          {
+            "images": [
+              {
+                "version": "1.25",
+                "IMAGE_ARG": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.25",
+                "golangtestimage": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260227-cc3ac8f-1.25"
+              },
+              {
+                "version": "1.26",
+                "IMAGE_ARG": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.26",
+                "golangtestimage": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260227-cc3ac8f-1.26"
+              }
+            ]
+          }
+          MATRIX_EOF
+          EOF

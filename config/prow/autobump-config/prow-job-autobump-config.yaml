@@ -10,8 +10,8 @@ remoteName: "ci-infra"
 headBranchName: "prowjobs-autobump"
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
+  - ".github/workflows"
   - "config/jobs"
-  - "images"
 targetVersion: "latest"
 prefixes:
   - name: "Prow jobs - prow"
