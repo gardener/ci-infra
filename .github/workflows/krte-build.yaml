@@ -17,6 +17,8 @@ jobs:
     outputs:
       date: ${{ steps.date.outputs.date }}
       short-sha: ${{ steps.short-sha.outputs.short-sha }}
+    permissions:
+      contents: read
     steps:
       - name: Generate date
         id: date
@@ -28,6 +30,8 @@ jobs:
   generate-matrix:
     name: Generate Matrix
     if: ${{ github.repository == 'gardener/ci-infra' }}
+    permissions:
+      contents: read
     uses: ./.github/workflows/krte-images.yaml
 
   oci-images:
