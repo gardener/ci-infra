@@ -13,6 +13,8 @@ jobs:
   generate-matrix:
     name: Generate Matrix
     if: ${{ github.repository == 'gardener/ci-infra' }}
+    permissions:
+      contents: read
     uses: ./.github/workflows/krte-images.yaml
 
   build-krte:
