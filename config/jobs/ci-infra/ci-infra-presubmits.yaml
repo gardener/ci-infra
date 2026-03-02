@@ -44,3 +44,65 @@ presubmits:
           requests:
             cpu: 4
             memory: 2Gi
+  - name: pull-ci-infra-verify-image-build
+    cluster: gardener-prow-build
+    skip_if_only_changed: '^(clusters|config|deploy)\/'
+    annotations:
+      description: Verify ci-infra image build on pull requests to master branch
+    decorate: true
+    labels:
+      preset-buildkit-testbuild: "true"
+    spec:
+      containers:
+      - name: buildkit
+        image: moby/buildkit:v0.27.1-rootless
+        command:
+        - /usr/local/bin/buildctl-testbuild-daemonless.sh
+        args:
+        - --context
+        - /home/prow/go/src/github.com/gardener/ci-infra
+        - --dockerfile
+        - /home/prow/go/src/github.com/gardener/ci-infra
+        - --build-arg
+        - GOPROXY=http://athens-proxy.athens.svc.cluster.local,direct
+        - --target
+        - branch-cleaner
+        - --target
+        - cherrypicker
+        - --target
+        - cla-assistant
+        - --target
+        - image-builder
+        - --target
+        - job-forker
+        - --target
+        - milestone-activator
+        - --target
+        - release-handler
+        readinessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        livenessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+          appArmorProfile:
+            type: Unconfined
+          runAsUser: 1000
+          runAsGroup: 1000
+        resources:
+          requests:
+            cpu: 6
+            memory: 7Gi
