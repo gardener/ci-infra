@@ -11,7 +11,7 @@ set -o pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
-  us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260302-c5b800fc6 \
+  us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260304-f92e22b4d \
   --config-path=config/prow/config.yaml \
   --job-config-path=config/jobs \
   --plugin-config=config/prow/plugins.yaml \
