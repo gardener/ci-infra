@@ -76,7 +76,7 @@ func gatherOptions() options {
 	fs.StringVar(&o.jobDirectory, "job-directory", "", "Directory with the prow jobs which should be forked")
 	fs.StringVar(&o.outputDirectory, "output-directory", "releases", "Output directory for forked prow jobs (relative path to the original prow job)")
 	fs.BoolVar(&o.recursive, "recursive", false, "When set to true, all sub-folders of job-directory will be searched for prow-jobs")
-	fs.StringVar(&o.releaseBranchPattern, "release-branch-pattern", "release-v\\d+\\.\\d+", "Pattern to identify release branches for which prow jobs should be forked")
+	fs.StringVar(&o.releaseBranchPattern, "release-branch-pattern", "^release-v\\d+\\.\\d+", "Pattern to identify release branches for which prow jobs should be forked")
 	fs.StringVar(&labelsOverride, "labels-override", "", "Labels which should be added to the PR")
 	fs.StringVar(&o.gitEmail, "git-email", "", "E-Mail the bot should use to commit changes")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "DryRun")
