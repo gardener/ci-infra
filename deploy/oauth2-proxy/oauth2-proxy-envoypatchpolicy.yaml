@@ -1,0 +1,21 @@
+# Patch the oauth2-proxy virtual host to accept "*.prow.gardener.cloud" Host header.
+# The HTTPS listener is scoped to SNI oauth2.prow.gardener.cloud via Gateway configuration.
+# ext_authz set the correct SNI forwards the original Host header (e.g. monitoring-build.prow.gardener.cloud).
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyPatchPolicy
+metadata:
+  name: oauth2-proxy-wildcard-host
+  namespace: oauth2-proxy
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: GatewayClass
+    name: envoy-gateway
+  type: JSONPatch
+  jsonPatches:
+  - type: "type.googleapis.com/envoy.config.route.v3.RouteConfiguration"
+    name: "oauth2-proxy/oauth2-proxy/https"
+    operation:
+      op: add
+      path: "/virtual_hosts/0/domains/-"
+      value: "*.prow.gardener.cloud"

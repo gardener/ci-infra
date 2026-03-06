@@ -5,11 +5,6 @@ metadata:
   namespace: gcsweb
   labels:
     app: gcsweb
-  annotations:
-    cert.gardener.cloud/issuer: ci-issuer
-    cert.gardener.cloud/purpose: managed
-    dns.gardener.cloud/class: garden
-    dns.gardener.cloud/dnsnames: gcsweb.prow.gardener.cloud
 spec:
   rules:
   - host: gcsweb.prow.gardener.cloud
