@@ -82,11 +82,6 @@ spec:
       pathType: Prefix
       hosts:
       - oauth2.prow.gardener.cloud
-      annotations:
-        cert.gardener.cloud/issuer: ci-issuer
-        cert.gardener.cloud/purpose: managed
-        dns.gardener.cloud/class: garden
-        dns.gardener.cloud/dnsnames: oauth2.prow.gardener.cloud
       tls:
       - secretName: oauth2-proxy-tls
         hosts:
