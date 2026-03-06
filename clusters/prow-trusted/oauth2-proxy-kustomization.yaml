@@ -4,6 +4,8 @@ metadata:
   name: oauth2-proxy
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: envoy-gateway
   interval: 30m
   path: deploy/oauth2-proxy
   prune: true

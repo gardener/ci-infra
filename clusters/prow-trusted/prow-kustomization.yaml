@@ -4,6 +4,8 @@ metadata:
   name: prow
   namespace: flux-system
 spec:
+  dependsOn:
+  - name: envoy-gateway
   interval: 30m
   path: ./deploy/prow
   prune: true
