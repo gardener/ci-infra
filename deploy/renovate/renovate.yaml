@@ -72,6 +72,7 @@ spec:
             "gardener/hyperkube",
             "gardener/test-infra",
             "gardener/gardener-extension-otelcol",
+            "gardener/ingress-default-backend",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
