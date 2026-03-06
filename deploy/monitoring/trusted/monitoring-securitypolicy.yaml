@@ -1,0 +1,29 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: monitoring-ext-auth
+  namespace: monitoring
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: monitoring
+  extAuth:
+    failOpen: false
+    headersToExtAuth:
+    - Cookie
+    - X-Auth-Request-User
+    - X-Auth-Request-Groups
+    - X-Auth-Request-Email
+    - X-Auth-Request-Preferred-Username
+    - X-Auth-Request-Redirect
+    http:
+      backendRefs:
+      - name: oauth2-proxy
+        namespace: oauth2-proxy
+        port: 80
+      path: /oauth2/auth
+      headersToBackend:
+      - X-Auth-Request-User
+      - X-Auth-Request-Groups
+      - X-Auth-Request-Email

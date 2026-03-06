@@ -9,6 +9,10 @@ resources:
 - deck-probe.yaml
 - monitoring-trusted-probe.yaml
 - monitoring-build-probe.yaml
+- monitoring-gateway.yaml
+- monitoring-httproute.yaml
+- monitoring-referencegrant.yaml
+- monitoring-securitypolicy.yaml
 
 patches:
 - path: patch-kube-prometheus-stack.yaml
