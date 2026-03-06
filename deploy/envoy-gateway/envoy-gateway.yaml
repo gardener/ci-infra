@@ -1,0 +1,49 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: envoy-gateway
+  namespace: flux-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: gateway-helm
+      version: 'v1.6.x'
+      sourceRef:
+        kind: HelmRepository
+        name: envoy-gateway
+        namespace: flux-system
+      interval: 1m
+  releaseName: envoy-gateway
+  targetNamespace: envoy-gateway-system
+  values:
+    # Check https://gateway.envoyproxy.io/docs/install/gateway-helm-api/ for all available values.
+    config:
+      envoyGateway:
+        extensionApis:
+          enableBackend: true
+          enableEnvoyPatchPolicy: true
+
+    deployment:
+      replicas: 2
+      pod:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: worker.gardener.cloud/system-components
+                  operator: In
+                  values:
+                  - "true"
+        topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: envoy-gateway
+              app.kubernetes.io/instance: envoy-gateway
+
+    podDisruptionBudget:
+      maxUnavailable: 1
