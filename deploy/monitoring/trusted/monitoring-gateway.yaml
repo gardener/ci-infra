@@ -23,10 +23,3 @@ spec:
     allowedRoutes:
       namespaces:
         from: Same
-  - name: http
-    protocol: HTTP
-    port: 80
-    hostname: monitoring.prow.gardener.cloud
-    allowedRoutes:
-      namespaces:
-        from: Same
