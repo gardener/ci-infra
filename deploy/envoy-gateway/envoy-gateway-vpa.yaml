@@ -15,14 +15,14 @@ spec:
     kind: Deployment
     name: envoy-gateway
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
   labels:
     app.kubernetes.io/name: envoy-gateway
-  name: envoy-envoy-gateway
+  name: envoy-prow
   namespace: envoy-gateway-system
 spec:
   resourcePolicy:
@@ -32,6 +32,6 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: envoy-envoy-gateway
+    name: envoy-prow
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate

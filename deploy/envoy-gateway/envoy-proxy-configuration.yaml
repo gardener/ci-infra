@@ -1,7 +1,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: ha-proxy-config
+  name: high-availability-config
   namespace: envoy-gateway-system
 spec:
   ipFamily: DualStack

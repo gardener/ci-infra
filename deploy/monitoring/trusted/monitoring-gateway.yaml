@@ -9,7 +9,7 @@ metadata:
     dns.gardener.cloud/class: garden
     dns.gardener.cloud/dnsnames: monitoring.prow.gardener.cloud
 spec:
-  gatewayClassName: envoy-gateway
+  gatewayClassName: prow
   listeners:
   - name: https
     protocol: HTTPS

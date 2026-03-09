@@ -9,7 +9,7 @@ metadata:
     dns.gardener.cloud/class: garden
     dns.gardener.cloud/dnsnames: prow.gardener.cloud
 spec:
-  gatewayClassName: envoy-gateway
+  gatewayClassName: prow
   listeners:
   - name: https
     protocol: HTTPS
@@ -20,13 +20,6 @@ spec:
       certificateRefs:
       - name: prow-tls
         namespace: prow
-    allowedRoutes:
-      namespaces:
-        from: Same
-  - name: http
-    protocol: HTTP
-    port: 80
-    hostname: prow.gardener.cloud
     allowedRoutes:
       namespaces:
         from: Same
