@@ -147,10 +147,6 @@ spec:
                 values:
                 - "true"
 
-      ingress:
-        enabled: true
-        ingressClassName: nginx
-
       env:
         GF_AUTH_ANONYMOUS_ENABLED: "true"
 

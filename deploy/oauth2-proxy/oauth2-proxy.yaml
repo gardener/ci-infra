@@ -76,17 +76,6 @@ spec:
         cookie_secure = true
         cookie_httponly = true
 
-    ingress:
-      enabled: true
-      path: /
-      pathType: Prefix
-      hosts:
-      - oauth2.prow.gardener.cloud
-      tls:
-      - secretName: oauth2-proxy-tls
-        hosts:
-        - oauth2.prow.gardener.cloud
-
     resources:
       limits:
         memory: 500Mi
