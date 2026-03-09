@@ -3,6 +3,10 @@ kind: Kustomization
 
 resources:
 - ../base
+- monitoring-gateway.yaml
+- monitoring-httproute.yaml
+- monitoring-oauth2-proxy-backend.yaml
+- monitoring-securitypolicy.yaml
 - prometheus-performance.yaml
 - prow-rules.yaml
 

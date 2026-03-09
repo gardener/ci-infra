@@ -3,11 +3,6 @@ kind: Ingress
 metadata:
   namespace: prow
   name: prow
-  annotations:
-    cert.gardener.cloud/issuer: ci-issuer
-    cert.gardener.cloud/purpose: managed
-    dns.gardener.cloud/class: garden
-    dns.gardener.cloud/dnsnames: prow.gardener.cloud
 spec:
   rules:
   - host: prow.gardener.cloud

@@ -1,0 +1,45 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: monitoring-oauth2
+  namespace: monitoring
+spec:
+  parentRefs:
+  - name: monitoring
+    namespace: monitoring
+    sectionName: https
+  hostnames:
+  - monitoring.prow.gardener.cloud
+  rules:
+  - matches:
+    - path:
+        value: /oauth2/start
+    filters:
+    - type: RequestRedirect
+      requestRedirect:
+        hostname: oauth2.prow.gardener.cloud
+        path:
+          type: ReplaceFullPath
+          replaceFullPath: /oauth2/start?rd=https%3A%2F%2Fmonitoring.prow.gardener.cloud%2F
+        statusCode: 302
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: monitoring
+  namespace: monitoring
+spec:
+  parentRefs:
+  - name: monitoring
+    namespace: monitoring
+    sectionName: https
+  hostnames:
+  - monitoring.prow.gardener.cloud
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: grafana
+      port: 80

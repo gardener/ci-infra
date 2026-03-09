@@ -1,0 +1,14 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: oauth2-proxy-external
+  namespace: monitoring
+spec:
+  endpoints:
+  - fqdn:
+      hostname: oauth2.prow.gardener.cloud
+      port: 443
+    hostname: oauth2.prow.gardener.cloud
+  tls:
+    wellKnownCACertificates: System
+    sni: oauth2.prow.gardener.cloud

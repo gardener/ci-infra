@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- envoy-gateway-helmrepo.yaml
+- envoy-gateway-namespace.yaml
+- envoy-gateway.yaml
+- envoy-gateway-vpa.yaml
+- envoy-proxy-configuration.yaml
+- gatewayclass.yaml

@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gcsweb
+  namespace: gcsweb
+  labels:
+    app: gcsweb
+  annotations:
+    cert.gardener.cloud/issuer: ci-issuer
+    cert.gardener.cloud/purpose: managed
+    dns.gardener.cloud/class: garden
+    dns.gardener.cloud/dnsnames: gcsweb.prow.gardener.cloud
+spec:
+  gatewayClassName: prow
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: gcsweb.prow.gardener.cloud
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: gcsweb-tls
+        namespace: gcsweb
+    allowedRoutes:
+      namespaces:
+        from: Same

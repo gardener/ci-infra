@@ -1,0 +1,25 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: oauth2-proxy
+  namespace: oauth2-proxy
+  annotations:
+    cert.gardener.cloud/issuer: ci-issuer
+    cert.gardener.cloud/purpose: managed
+    dns.gardener.cloud/class: garden
+    dns.gardener.cloud/dnsnames: oauth2.prow.gardener.cloud
+spec:
+  gatewayClassName: prow
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: oauth2.prow.gardener.cloud
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: oauth2-proxy-tls
+        namespace: oauth2-proxy
+    allowedRoutes:
+      namespaces:
+        from: Same
