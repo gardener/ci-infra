@@ -18,6 +18,7 @@ periodics:
       - |-
         --query=org:gardener
         is:issue
+        -label:lifecycle/active
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=1440h
@@ -67,6 +68,7 @@ periodics:
       - |-
         --query=org:gardener
         is:issue
+        -label:lifecycle/active
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
@@ -117,6 +119,7 @@ periodics:
       - |-
         --query=org:gardener
         is:issue
+        -label:lifecycle/active
         -label:lifecycle/frozen
         -label:lifecycle/stale
         -label:lifecycle/rotten
@@ -168,6 +171,7 @@ periodics:
       - |-
         --query=org:gardener
         is:pr
+        -label:lifecycle/active
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=336h
@@ -216,6 +220,7 @@ periodics:
       - |-
         --query=org:gardener
         is:pr
+        -label:lifecycle/active
         -label:lifecycle/frozen
         label:lifecycle/stale
         -label:lifecycle/rotten
@@ -265,6 +270,7 @@ periodics:
       - |-
         --query=org:gardener
         is:pr
+        -label:lifecycle/active
         -label:lifecycle/frozen
         -label:lifecycle/stale
         -label:lifecycle/rotten
