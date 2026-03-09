@@ -4,6 +4,7 @@ metadata:
   name: high-availability-config
   namespace: envoy-gateway-system
 spec:
+  mergeGateways: true
   ipFamily: DualStack
   provider:
     type: Kubernetes

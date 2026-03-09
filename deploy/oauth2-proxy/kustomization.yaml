@@ -6,3 +6,6 @@ resources:
 - oauth2-proxy.yaml
 - oauth2-proxy-namespace.yaml
 - oauth2-proxy-vpa.yaml
+- oauth2-proxy-envoypatchpolicy.yaml
+- oauth2-proxy-gateway.yaml
+- oauth2-proxy-httproute.yaml
