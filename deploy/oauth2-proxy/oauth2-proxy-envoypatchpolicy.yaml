@@ -10,7 +10,7 @@ spec:
   targetRef:
     group: gateway.networking.k8s.io
     kind: GatewayClass
-    name: envoy-gateway
+    name: prow
   type: JSONPatch
   jsonPatches:
   - type: "type.googleapis.com/envoy.config.route.v3.RouteConfiguration"
