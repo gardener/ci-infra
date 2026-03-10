@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: deck
-        image: us-docker.pkg.dev/k8s-infra-prow/images/deck:v20260309-c6334a44a
+        image: us-docker.pkg.dev/k8s-infra-prow/images/deck:v20260310-df7422152
         imagePullPolicy: Always
         ports:
         - name: http
