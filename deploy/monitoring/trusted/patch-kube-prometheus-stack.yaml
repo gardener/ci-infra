@@ -10,20 +10,6 @@ spec:
         cluster-name.tmpl: |-
           {{ define "cluster_name" }}Trusted Cluster{{ end }}
 
-    grafana:
-      ingress:
-        annotations:
-          nginx.ingress.kubernetes.io/auth-url: https://oauth2.prow.gardener.cloud/oauth2/auth
-          nginx.ingress.kubernetes.io/auth-signin: https://oauth2.prow.gardener.cloud/oauth2/start?rd=https://monitoring.prow.gardener.cloud
-
-        hosts:
-        - monitoring.prow.gardener.cloud
-
-        tls:
-        - secretName: monitoring-ingress-tls
-          hosts:
-          - monitoring.prow.gardener.cloud
-
     prometheus:
       prometheusSpec:
         retention: 90d

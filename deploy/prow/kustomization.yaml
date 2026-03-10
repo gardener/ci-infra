@@ -24,7 +24,6 @@ resources:
 - gcsweb_service.yaml
 - gcsweb_gateway.yaml
 - gcsweb_httproute.yaml
-- gcsweb_ingress.yaml
 - gcsweb_vpa.yaml
 - ghproxy_deployment.yaml
 - ghproxy_pvc.yaml
@@ -40,7 +39,6 @@ resources:
 - horologium_vpa.yaml
 - prow_gateway.yaml
 - prow_httproute.yaml
-- prow_ingress.yaml
 - needs-rebase_deployment.yaml
 - needs-rebase_service.yaml
 - needs-rebase_vpa.yaml
