@@ -22,7 +22,7 @@ presubmits:
         - verify-extended
         resources:
           limits:
-            memory: 3Gi
+            memory: 4Gi
           requests:
             cpu: 2
             memory: 1Gi
@@ -53,7 +53,7 @@ periodics:
       - verify-extended
       resources:
         limits:
-          memory: 3Gi
+          memory: 4Gi
         requests:
           cpu: 2
           memory: 1Gi
