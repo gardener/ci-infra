@@ -19,6 +19,19 @@ spec:
     # customize names so that they are shorter and easier to grasp
     fullnameOverride: blackbox-exporter
 
+    config:
+      modules:
+        http_auth_protected:
+          prober: http
+          timeout: 5s
+          http:
+            valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+            valid_status_codes:
+            - 401
+            - 403
+            follow_redirects: true
+            preferred_ip_protocol: ip4
+
     serviceMonitor:
       selfMonitor:
         enabled: true
