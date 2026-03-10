@@ -39,6 +39,8 @@ spec:
     verticalPodAutoscaler:
       enabled: true
       controlledValues: RequestsOnly
+      updatePolicy:
+        updateMode: InPlaceOrRecreate
 
     affinity:
       nodeAffinity:

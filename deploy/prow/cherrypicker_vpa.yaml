@@ -15,4 +15,4 @@ spec:
     kind: Deployment
     name: cherrypicker
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate
