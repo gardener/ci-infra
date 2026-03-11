@@ -17,4 +17,4 @@ spec:
     kind: Prometheus
     name: prometheus
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate

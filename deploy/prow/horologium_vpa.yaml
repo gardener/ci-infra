@@ -15,4 +15,4 @@ spec:
     kind: Deployment
     name: horologium
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate

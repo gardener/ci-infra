@@ -15,4 +15,4 @@ spec:
     kind: Deployment
     name: prow-controller-manager
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate

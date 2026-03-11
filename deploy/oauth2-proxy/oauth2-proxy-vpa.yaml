@@ -15,4 +15,4 @@ spec:
     kind: Deployment
     name: oauth2-proxy
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate

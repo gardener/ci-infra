@@ -15,4 +15,4 @@ spec:
     kind: Deployment
     name: needs-rebase
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate

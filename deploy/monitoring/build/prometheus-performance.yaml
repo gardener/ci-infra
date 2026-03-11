@@ -123,4 +123,4 @@ spec:
     kind: Prometheus
     name: performance
   updatePolicy:
-    updateMode: Recreate
+    updateMode: InPlaceOrRecreate
