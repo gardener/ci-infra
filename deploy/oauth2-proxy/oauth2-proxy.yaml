@@ -57,7 +57,7 @@ spec:
     service:
       ipDualStack:
         enabled: true
-      trafficDistribution: PreferClose
+      trafficDistribution: PreferSameZone
 
     config:
       existingSecret: oauth2-proxy

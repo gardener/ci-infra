@@ -1,8 +1,6 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    service.kubernetes.io/topology-mode: Auto
   labels:
     app: hook
   namespace: prow
@@ -18,3 +16,4 @@ spec:
     port: 9090
     protocol: TCP
   type: ClusterIP
+  trafficDistribution: PreferSameZone
