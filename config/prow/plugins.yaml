@@ -5,6 +5,7 @@ triggers:
     - dependabot
   repos:
   - gardener
+  join_org_url: "https://gardener.cloud/docs/contribute/code/roles/"
 
 approve:
 - repos:
