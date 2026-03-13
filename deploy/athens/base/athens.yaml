@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: athens-proxy
-      version: '0.15.x'
+      version: '0.15.5'
       sourceRef:
         kind: HelmRepository
         name: athens

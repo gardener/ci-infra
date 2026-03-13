@@ -45,6 +45,7 @@
   ],
   packageRules: [
     {
+      // Automerge renovate
       groupName: 'renovate',
       matchDatasources: [
         'docker',
@@ -53,6 +54,26 @@
       matchPackageNames: [
         'renovate',
         'ghcr.io/renovatebot/renovate',
+      ],
+      automerge: true,
+      schedule: [
+        'after 08:30 and before 15:30 every weekday',
+      ],
+    },
+    {
+      // Automerge patch updates for helm charts deployed via Flux.
+      matchDatasources: [
+        'helm',
+      ],
+      matchPackageNames: [
+        'athens-proxy',
+        'gateway-helm',
+        'kube-prometheus-stack',
+        'prometheus-blackbox-exporter',
+        'oauth2-proxy',
+      ],
+      matchUpdateTypes: [
+        'patch',
       ],
       automerge: true,
       schedule: [
