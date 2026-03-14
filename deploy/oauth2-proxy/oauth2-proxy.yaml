@@ -67,7 +67,8 @@ spec:
         reverse_proxy = true
         
         redirect_url = "https://oauth2.prow.gardener.cloud/oauth2/callback"
-        
+        upstreams = "static://200"
+
         pass_host_header = true
         pass_access_token = false
         
