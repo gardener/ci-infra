@@ -74,6 +74,7 @@ spec:
             "gardener/test-infra",
             "gardener/gardener-extension-otelcol",
             "gardener/ingress-default-backend",
+            "gardener/pvc-autoscaler",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
