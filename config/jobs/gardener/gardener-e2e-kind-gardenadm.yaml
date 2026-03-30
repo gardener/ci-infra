@@ -1,3 +1,4 @@
+# TODO(rfranzke): Remove this job once https://github.com/gardener/gardener/pull/14451 was merged.
 presubmits:
   gardener/gardener:
   - name: pull-gardener-e2e-kind-gardenadm
