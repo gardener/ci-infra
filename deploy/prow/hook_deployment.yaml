@@ -70,6 +70,9 @@ spec:
         - name: kubeconfig
           mountPath: /etc/kubeconfig
           readOnly: true
+        - mountPath: /var/run/secrets/prow-build-cluster/serviceaccount
+          name: prow-build-cluster
+          readOnly: true
         livenessProbe:
           httpGet:
             path: /healthz
@@ -119,4 +122,12 @@ spec:
       - name: kubeconfig
         secret:
           defaultMode: 420
-          secretName: kubeconfig
+          secretName: prow-kubeconfig
+      - name: prow-build-cluster
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              audience: prow-build-cluster
+              expirationSeconds: 3607
+              path: token
