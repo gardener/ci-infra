@@ -1,6 +1,6 @@
 module github.com/gardener/ci-infra
 
-go 1.25.6
+go 1.25.8
 
 require (
 	github.com/Masterminds/semver v1.5.0
@@ -17,7 +17,7 @@ require (
 	k8s.io/apimachinery v0.34.3
 	k8s.io/client-go v0.34.3
 	sigs.k8s.io/controller-runtime v0.20.1
-	sigs.k8s.io/prow v0.0.0-20260227184331-937f24a5dcd2
+	sigs.k8s.io/prow v0.0.0-20260328234611-dc2bbc9fcefa
 	sigs.k8s.io/yaml v1.6.0
 )
 
