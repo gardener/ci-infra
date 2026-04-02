@@ -31,7 +31,7 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 12
+            cpu: 14
             memory: 24Gi
         env:
         - name: GOCACHEPROG
@@ -75,7 +75,7 @@ periodics:
         privileged: true
       resources:
         requests:
-          cpu: 12
+          cpu: 14
           memory: 24Gi
       env:
       - name: GOCACHEPROG
