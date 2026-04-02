@@ -663,13 +663,13 @@ func TestHandleStatusEvent(t *testing.T) {
 				}
 				if test.expectedLabelAdded != "" {
 					assert.NotEmpty(t, p.fakeClient.IssueLabelsAdded)
-					assert.Contains(t, p.fakeClient.IssueLabelsAdded, testLabelString(testOwner, testRepo, prNumberForSha[test.se.SHA], test.expectedLabelAdded))
+					assert.Contains(t, p.fakeClient.IssueLabelsAdded, testLabelString(testOwner, testRepo, prNumberForOrgRepoSha[fmt.Sprintf("%s-%s-%s", testOwner, testRepo, test.se.SHA)], test.expectedLabelAdded))
 				} else {
 					assert.Nil(t, p.fakeClient.IssueLabelsAdded)
 				}
 				if test.expectedLabelRemoved != "" {
 					assert.NotEmpty(t, p.fakeClient.IssueLabelsRemoved)
-					assert.Contains(t, p.fakeClient.IssueLabelsRemoved, testLabelString(testOwner, testRepo, prNumberForSha[test.se.SHA], test.expectedLabelRemoved))
+					assert.Contains(t, p.fakeClient.IssueLabelsRemoved, testLabelString(testOwner, testRepo, prNumberForOrgRepoSha[fmt.Sprintf("%s-%s-%s", testOwner, testRepo, test.se.SHA)], test.expectedLabelRemoved))
 				} else {
 					assert.Nil(t, p.fakeClient.IssueLabelsRemoved)
 				}
@@ -697,6 +697,18 @@ func TestHandleAllPRs(t *testing.T) {
 					},
 				},
 			},
+			// Repos of kubernetes org are returned by GetRepos method of fake client.
+			"kubernetes": {
+				{
+					Name: pluginName,
+					Events: []string{
+						"issue_comment",
+						"pull_request_review_comment",
+						"pull_request_review",
+						"status",
+					},
+				},
+			},
 		},
 	}
 
@@ -704,11 +716,26 @@ func TestHandleAllPRs(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	for sha, label := range shaPlusPRLabels {
-		if label != nil {
-			assert.Contains(t, p.fakeClient.PullRequests[prNumberForSha[sha]].Labels, *label)
+	var (
+		urisReachedCount int
+		labelsAddedCount int
+	)
+
+	for _, pr := range p.fakeClient.PullRequests {
+		switch pr.Head.SHA {
+		case shaWithPRClaStatusPending:
+			urisReachedCount++
+			labelsAddedCount++
+			assert.Contains(t, p.http.urisReached, fmt.Sprintf("/check/%s/%s?pullRequest=%d", pr.Base.Repo.Owner.Login, pr.Base.Repo.Name, pr.Number))
+			assert.Contains(t, p.fakeClient.IssueLabelsAdded, testLabelString(pr.Base.Repo.Owner.Login, pr.Base.Repo.Name, prNumberForOrgRepoSha[fmt.Sprintf("%s-%s-%s", pr.Base.Repo.Owner.Login, pr.Base.Repo.Name, pr.Head.SHA)], labelClaNo))
+		case shaWithPR:
+			labelsAddedCount++
+			assert.Contains(t, p.fakeClient.IssueLabelsAdded, testLabelString(pr.Base.Repo.Owner.Login, pr.Base.Repo.Name, prNumberForOrgRepoSha[fmt.Sprintf("%s-%s-%s", pr.Base.Repo.Owner.Login, pr.Base.Repo.Name, pr.Head.SHA)], labelClaYes))
 		}
 	}
+
+	assert.Len(t, p.http.urisReached, urisReachedCount)
+	assert.Len(t, p.fakeClient.IssueLabelsAdded, labelsAddedCount)
 }
 
 func TestForceClaRecheck(t *testing.T) {
@@ -805,12 +832,16 @@ type claTestServer struct {
 	mu               sync.Mutex
 
 	serverReached bool
+	urisReached   []string
 }
 
-func (c *claTestServer) serveHTTP(w http.ResponseWriter, _ *http.Request) {
+func (c *claTestServer) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.serverReached = true
+	if r != nil {
+		c.urisReached = append(c.urisReached, r.RequestURI)
+	}
 	if c.responseTimeout {
 		time.Sleep(httpTestTimeout + time.Millisecond*1)
 	}
@@ -972,43 +1003,58 @@ var (
 		shaWithPRAndYesLabel:      &prLabelYes,
 		shaWithPRAndNoLabel:       &prLabelNo,
 	}
-	prNumberForSha = map[string]int{}
+	prNumberForOrgRepoSha = map[string]int{}
 )
 
 func ingestDataIntoFakeClient(f *fakeClient) {
-	// SHA must be convertable to integer
-	err := f.CreateStatus(testOwner, testRepo, shaWithPRClaStatusPending, github.Status{Context: claGithubContext, State: github.StatusPending})
-	if err != nil {
-		logrus.Fatalf("Error creating status: %v", err)
-	}
-	err = f.CreateStatus(testOwner, testRepo, shaWithoutPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
-	if err != nil {
-		logrus.Fatalf("Error creating status: %v", err)
-	}
-	err = f.CreateStatus(testOwner, testRepo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
-	if err != nil {
-		logrus.Fatalf("Error creating status: %v", err)
-	}
-	err = f.CreateStatus(testOwner, testRepo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusFailure})
-	if err != nil {
-		logrus.Fatalf("Error creating status: %v", err)
-	}
-	err = f.AddRepoLabel(testOwner, testRepo, labelClaYes, labelClaYes, "")
-	if err != nil {
-		logrus.Fatalf("Error adding label: %v", err)
-	}
-	err = f.AddRepoLabel(testOwner, testRepo, labelClaNo, labelClaNo, "")
-	if err != nil {
-		logrus.Fatalf("Error adding label: %v", err)
+	ownerRepoMap := map[string][]string{
+		testOwner: {testRepo},
+		// These kubernetes repos are returned by GetRepos method of fake client.
+		"kubernetes": {"kubernetes", "community"},
 	}
 
-	for s, l := range shaPlusPRLabels {
-		i, _ := f.CreatePullRequest(testOwner, testRepo, "Without label", "Body", "HEAD", "BASE", true)
-		f.PullRequests[i].Head = github.PullRequestBranch{SHA: s}
-		prNumberForSha[s] = i
-		f.CommitMap[createCommitMapKey(testOwner, testRepo, i)] = append(f.CommitMap[createCommitMapKey(testOwner, testRepo, i)], github.RepositoryCommit{SHA: s})
-		if l != nil {
-			f.PullRequests[i].Labels = append(f.PullRequests[i].Labels, *l)
+	for org, repos := range ownerRepoMap {
+		for _, repo := range repos {
+
+			// SHA must be convertable to integer
+			err := f.CreateStatus(org, repo, shaWithPRClaStatusPending, github.Status{Context: claGithubContext, State: github.StatusPending})
+			if err != nil {
+				logrus.Fatalf("Error creating status: %v", err)
+			}
+			err = f.CreateStatus(org, repo, shaWithoutPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
+			if err != nil {
+				logrus.Fatalf("Error creating status: %v", err)
+			}
+			err = f.CreateStatus(org, repo, shaWithPR, github.Status{Context: claGithubContext, State: github.StatusSuccess})
+			if err != nil {
+				logrus.Fatalf("Error creating status: %v", err)
+			}
+			err = f.CreateStatus(org, repo, shaWithPRAndYesLabel, github.Status{Context: claGithubContext, State: github.StatusSuccess})
+			if err != nil {
+				logrus.Fatalf("Error creating status: %v", err)
+			}
+			err = f.CreateStatus(org, repo, shaWithPRAndNoLabel, github.Status{Context: claGithubContext, State: github.StatusFailure})
+			if err != nil {
+				logrus.Fatalf("Error creating status: %v", err)
+			}
+			err = f.AddRepoLabel(org, repo, labelClaYes, labelClaYes, "")
+			if err != nil {
+				logrus.Fatalf("Error adding label: %v", err)
+			}
+			err = f.AddRepoLabel(org, repo, labelClaNo, labelClaNo, "")
+			if err != nil {
+				logrus.Fatalf("Error adding label: %v", err)
+			}
+
+			for s, l := range shaPlusPRLabels {
+				i, _ := f.CreatePullRequest(org, repo, "Without label", "Body", "HEAD", "BASE", true)
+				f.PullRequests[i].Head = github.PullRequestBranch{SHA: s}
+				prNumberForOrgRepoSha[fmt.Sprintf("%s-%s-%s", org, repo, s)] = i
+				f.CommitMap[createCommitMapKey(org, repo, i)] = append(f.CommitMap[createCommitMapKey(org, repo, i)], github.RepositoryCommit{SHA: s})
+				if l != nil {
+					f.PullRequests[i].Labels = append(f.PullRequests[i].Labels, *l)
+				}
+			}
 		}
 	}
 }
