@@ -32,7 +32,7 @@ presubmits:
         resources:
           requests:
             cpu: 14
-            memory: 48Gi
+            memory: 72Gi
         env:
         - name: GOCACHEPROG
           value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
@@ -79,7 +79,7 @@ periodics:
       resources:
         requests:
           cpu: 14
-          memory: 48Gi
+          memory: 72Gi
       env:
       - name: GOCACHEPROG
         value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
