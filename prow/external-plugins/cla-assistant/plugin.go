@@ -42,6 +42,7 @@ type githubClient interface {
 	CreateComment(org, repo string, number int, comment string) error
 	ListStatuses(org, repo, ref string) ([]github.Status, error)
 	GetPullRequest(org, repo string, number int) (*github.PullRequest, error)
+	GetRepos(org string, isUser bool) ([]github.Repo, error)
 	QueryWithGitHubAppsSupport(ctx context.Context, q interface{}, vars map[string]interface{}, org string) error
 }
 
@@ -269,6 +270,27 @@ func (c *claAssistantPlugin) handleAllPRs(ctx context.Context, l *logrus.Entry, 
 		l.Warnf("No repos have been configured for the %s plugin", pluginName)
 		return nil
 	}
+
+	l.Infof("Plugin enabled for orgs: %v and repos: %v", orgs, repos)
+
+	for _, o := range orgs {
+		l = l.WithField("org", o)
+		l.Info("Getting repos for org.")
+		orgRepos, err := c.ghc.GetRepos(o, false)
+		if err != nil {
+			l.WithError(err).Error("Error getting repos for org.")
+			continue
+		}
+		for _, r := range orgRepos {
+			// cla-assistant.io can only be used for public repositories, so skip private ones.
+			if r.Private {
+				continue
+			}
+			repos = append(repos, fmt.Sprintf("%s/%s", o, r.Name))
+		}
+	}
+
+	l.Infof("Checking repositories %v", repos)
 
 	for _, r := range repos {
 		repoSplit := strings.Split(r, "/")
