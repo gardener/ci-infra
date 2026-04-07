@@ -266,10 +266,6 @@ func (c *claAssistantPlugin) ensureClaLabels(l *logrus.Entry, org, repo, claStat
 func (c *claAssistantPlugin) handleAllPRs(ctx context.Context, l *logrus.Entry, config *plugins.Configuration) error {
 	l.Info("Checking cla labels of all open PRs.")
 	orgs, repos := config.EnabledReposForExternalPlugin(pluginName)
-	if len(orgs) == 0 && len(repos) == 0 {
-		l.Warnf("No repos have been configured for the %s plugin", pluginName)
-		return nil
-	}
 
 	l.Infof("Plugin enabled for orgs: %v and repos: %v", orgs, repos)
 
