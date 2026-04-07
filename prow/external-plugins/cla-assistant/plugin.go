@@ -280,7 +280,8 @@ func (c *claAssistantPlugin) handleAllPRs(ctx context.Context, l *logrus.Entry, 
 		}
 		for _, r := range orgRepos {
 			// cla-assistant.io can only be used for public repositories, so skip private ones.
-			if r.Private {
+			// Archived repositories are also skipped, as they are read-only.
+			if r.Private || r.Archived {
 				continue
 			}
 
