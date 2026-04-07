@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"slices"
 	"strings"
 	"time"
 
@@ -282,7 +283,11 @@ func (c *claAssistantPlugin) handleAllPRs(ctx context.Context, l *logrus.Entry, 
 			if r.Private {
 				continue
 			}
-			repos = append(repos, fmt.Sprintf("%s/%s", o, r.Name))
+
+			repoName := fmt.Sprintf("%s/%s", o, r.Name)
+			if !slices.Contains(repos, repoName) {
+				repos = append(repos, repoName)
+			}
 		}
 	}
 
