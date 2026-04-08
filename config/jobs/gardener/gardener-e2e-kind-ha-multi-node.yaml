@@ -41,7 +41,7 @@ presubmits:
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
         - name: PARALLEL_E2E_TESTS
-          value: "6"
+          value: "5"
 periodics:
 - name: ci-gardener-e2e-kind-ha-multi-node
   cluster: gardener-prow-build
@@ -88,4 +88,4 @@ periodics:
       - name: SKAFFOLD_INTERACTIVE
         value: "false"
       - name: PARALLEL_E2E_TESTS
-        value: "6"
+        value: "5"
