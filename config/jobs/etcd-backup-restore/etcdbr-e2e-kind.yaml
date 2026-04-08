@@ -21,6 +21,12 @@ presubmits:
             - bash
             - -c
             - make ci-e2e-kind
+            env:
+            - name: LOCALSTACK_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: etcdbr-localstack-auth-token
+                  key: auth-token
             # we need privileged mode in order to do docker in docker
             securityContext:
               privileged: true
@@ -56,6 +62,12 @@ periodics:
           - bash
           - -c
           - make ci-e2e-kind
+          env:
+          - name: LOCALSTACK_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: etcdbr-localstack-auth-token
+                key: auth-token
           # we need privileged mode in order to do docker in docker
           securityContext:
             privileged: true
