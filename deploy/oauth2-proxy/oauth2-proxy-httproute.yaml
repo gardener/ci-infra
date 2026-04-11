@@ -9,6 +9,7 @@ spec:
     namespace: oauth2-proxy
     sectionName: https
   hostnames:
+  # This wildcard is required that other prow clusters can use this oauth2-proxy for ExtAuth.
   - "*.prow.gardener.cloud"
   rules:
   - matches:

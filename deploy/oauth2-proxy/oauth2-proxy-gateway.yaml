@@ -6,6 +6,7 @@ metadata:
   annotations:
     cert.gardener.cloud/issuer: ci-issuer
     cert.gardener.cloud/purpose: managed
+    cert.gardener.cloud/dnsnames: oauth2.prow.gardener.cloud
     dns.gardener.cloud/class: garden
     dns.gardener.cloud/dnsnames: oauth2.prow.gardener.cloud
 spec:
