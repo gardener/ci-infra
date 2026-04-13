@@ -1,6 +1,6 @@
 presubmits:
   gardener/gardener:
-  - name: pull-gardener-e2e-kind-gardenadm-unmanaged-infra
+  - name: pull-gardener-e2e-kind-gardenadm-unmanaged-infra-external-gardener
     cluster: gardener-prow-build
     always_run: false
     skip_if_only_changed: "^(\\.ci|\\.github|\\.ocm|\\.test-defs|docs|logo)/|\\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$"
@@ -15,7 +15,7 @@ presubmits:
       preset-kind-volume-mounts: "true"
       preset-gocache-mounts: "true"
     annotations:
-      description: Runs end-to-end tests in pull requests for gardenadm unmanaged infrastructure developments with self-contained Gardener
+      description: Runs end-to-end tests in pull requests for gardenadm unmanaged infrastructure developments with external Gardener deployment
       fork-per-release: "true"
     spec:
       serviceAccountName: gardener-prow-gobuildcache-ro
@@ -25,7 +25,7 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - make import-tools-bin ci-e2e-kind-gardenadm-unmanaged-infra
+        - make import-tools-bin ci-e2e-kind-gardenadm-unmanaged-infra-external-gardener
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -41,7 +41,7 @@ presubmits:
         - name: SKAFFOLD_INTERACTIVE
           value: "false"
 periodics:
-- name: ci-gardener-e2e-kind-gardenadm-unmanaged-infra
+- name: ci-gardener-e2e-kind-gardenadm-unmanaged-infra-external-gardener
   cluster: gardener-prow-build
   interval: 2h
   extra_refs:
@@ -57,8 +57,8 @@ periodics:
     preset-kind-volume-mounts: "true"
     preset-gocache-mounts: "true"
   annotations:
-    description: Runs end-to-end tests periodically for gardenadm unmanaged infrastructure developments with self-contained Gardener
     testgrid-dashboards: gardener-gardener
+    description: Runs end-to-end tests periodically for gardenadm unmanaged infrastructure developments with external Gardener deployment
     testgrid-days-of-results: "60"
     fork-per-release: "true"
   spec:
@@ -69,7 +69,7 @@ periodics:
       - wrapper.sh
       - bash
       - -c
-      - make import-tools-bin ci-e2e-kind-gardenadm-unmanaged-infra
+      - make import-tools-bin ci-e2e-kind-gardenadm-unmanaged-infra-external-gardener
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
