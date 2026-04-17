@@ -12,7 +12,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20260417-daeeaf7
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20260417-0d2cf79
       command:
       - /job-forker
       args:
@@ -47,7 +47,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20260417-daeeaf7
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20260417-0d2cf79
         command:
           - /job-forker
         args:
@@ -83,7 +83,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20260417-daeeaf7
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20260417-0d2cf79
       command:
       - /job-forker
       args:
@@ -337,7 +337,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20260417-daeeaf7
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20260417-0d2cf79
       command:
       - /branch-cleaner
       args:
