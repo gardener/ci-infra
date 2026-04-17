@@ -27,13 +27,19 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"sigs.k8s.io/prow/pkg/git/localgit"
-	v2 "sigs.k8s.io/prow/pkg/git/v2"
+	"sigs.k8s.io/prow/pkg/git/v2"
 	"sigs.k8s.io/prow/pkg/github"
 )
 
 var commentFormat = "%s/%s#%d %s"
 
 var fakePR prNumberGenerator
+
+type testPusher struct{}
+
+func (p *testPusher) Push(_ git.RepoClient, _ string, _ bool) error {
+	return nil
+}
 
 type fghc struct {
 	sync.Mutex
@@ -148,6 +154,9 @@ func (f *fghc) EnsureFork(_, _, repo string) (string, error) {
 	}
 	if repo == "error" {
 		return repo, errors.New("errors")
+	}
+	if repo == "forbidden" {
+		return repo, github.NewForbidden()
 	}
 	return repo, nil
 }
@@ -290,7 +299,7 @@ index 1ea52dc..5bd70a9 100644
 
 var body = "This PR updates the magic number.\n\n```feature developer\nUpdate the magic number from 42 to 49\n```"
 
-func makeFakeRepoWithCommit(clients localgit.Clients, t *testing.T) (*localgit.LocalGit, v2.ClientFactory) {
+func makeFakeRepoWithCommit(clients localgit.Clients, t *testing.T) (*localgit.LocalGit, git.ClientFactory) {
 	lg, c, err := clients()
 	if err != nil {
 		t.Fatalf("Making localgit: %v", err)
@@ -377,16 +386,15 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 	s := &Server{
 		botUser:        botUser,
 		gc:             c,
-		push:           func(_, _ string, _ bool) error { return nil },
+		pusher:         &testPusher{},
 		ghc:            ghc,
 		tokenGenerator: getSecret,
 		log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
-		repos:          []github.Repo{{Fork: true, FullName: "ci-robot/bar"}},
 
 		prowAssignments: true,
 	}
 
-	if err := s.handleIssueComment(logrus.NewEntry(logrus.StandardLogger()), ic); err != nil {
+	if _, err := s.handleIssueComment(logrus.NewEntry(logrus.StandardLogger()), ic); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	got := prToString(ghc.prs[1])
@@ -515,16 +523,15 @@ func testCherryPickPR(clients localgit.Clients, t *testing.T) {
 	s := &Server{
 		botUser:        botUser,
 		gc:             c,
-		push:           func(_, _ string, _ bool) error { return nil },
+		pusher:         &testPusher{},
 		ghc:            ghc,
 		tokenGenerator: getSecret,
 		log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
-		repos:          []github.Repo{{Fork: true, FullName: "ci-robot/bar"}},
 
 		prowAssignments: false,
 	}
 
-	if err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
+	if _, err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -629,17 +636,16 @@ func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
 	s := &Server{
 		botUser:        botUser,
 		gc:             c,
-		push:           func(_, _ string, _ bool) error { return nil },
+		pusher:         &testPusher{},
 		ghc:            ghc,
 		tokenGenerator: getSecret,
 		log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
-		repos:          []github.Repo{{Fork: true, FullName: "ci-robot/bar"}},
 
 		prowAssignments: false,
 	}
 
 	// Cherry pick master -> release-1.8
-	if err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
+	if _, err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -647,7 +653,7 @@ func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
 	pr.PullRequest.Base.Ref = "release-1.8"
 	pr.PullRequest.Title = "[release-1.8] This is a fix for Y"
 	ghc.prComments[0].Body = "/cherrypick release-1.6"
-	if err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
+	if _, err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -655,7 +661,7 @@ func testCherryPickOfCherryPickPR(clients localgit.Clients, t *testing.T) {
 	pr.PullRequest.Base.Ref = "release-1.6"
 	pr.PullRequest.Title = "[release-1.6] This is a fix for Y"
 	ghc.prComments[0].Body = "/cherrypick release-1.5"
-	if err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
+	if _, err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
@@ -816,18 +822,17 @@ func testCherryPickPRWithLabels(clients localgit.Clients, t *testing.T) {
 					s := &Server{
 						botUser:        botUser,
 						gc:             c,
-						push:           func(_, _ string, _ bool) error { return nil },
+						pusher:         &testPusher{},
 						ghc:            ghc,
 						tokenGenerator: getSecret,
 						log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
-						repos:          []github.Repo{{Fork: true, FullName: "ci-robot/bar"}},
 
 						labels:          []string{"cla: yes"},
 						prowAssignments: false,
 						labelPrefix:     tc.labelPrefix,
 					}
 
-					if err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr(evt)); err != nil {
+					if _, err := s.handlePullRequest(logrus.NewEntry(logrus.StandardLogger()), pr(evt)); err != nil {
 						t.Fatalf("unexpected error: %v", err)
 					}
 
@@ -1027,16 +1032,15 @@ func testCherryPickPRAssignments(clients localgit.Clients, t *testing.T) {
 		s := &Server{
 			botUser:        botUser,
 			gc:             c,
-			push:           func(_, _ string, _ bool) error { return nil },
+			pusher:         &testPusher{},
 			ghc:            ghc,
 			tokenGenerator: getSecret,
 			log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
-			repos:          []github.Repo{{Fork: true, FullName: "ci-robot/bar"}},
 
 			prowAssignments: prowAssignments,
 		}
 
-		if err := s.handleIssueComment(logrus.NewEntry(logrus.StandardLogger()), ic); err != nil {
+		if _, err := s.handleIssueComment(logrus.NewEntry(logrus.StandardLogger()), ic); err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
 
@@ -1085,7 +1089,7 @@ func TestHandleLocks(t *testing.T) {
 	}
 }
 
-func TestEnsureForkExists(t *testing.T) {
+func TestGetPusherAndOrg(t *testing.T) {
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 
 	ghc := &fghc{}
@@ -1093,49 +1097,70 @@ func TestEnsureForkExists(t *testing.T) {
 	s := &Server{
 		botUser: botUser,
 		ghc:     ghc,
-		repos:   []github.Repo{{Fork: true, FullName: "ci-robot/bar"}},
 	}
 
 	testCases := []struct {
-		name     string
-		org      string
-		repo     string
-		expected string
-		errors   bool
+		name           string
+		org            string
+		repo           string
+		expectedOrg    string
+		expectedPusher string
+		errors         bool
 	}{
 		{
-			name:     "Repo name does not change after ensured",
-			org:      "whatever",
-			repo:     "repo",
-			expected: "repo",
-			errors:   false,
+			name:           "Repo name does not change after ensured",
+			org:            "whatever",
+			repo:           "repo",
+			expectedOrg:    "ci-robot",
+			expectedPusher: "forkPusher",
+			errors:         false,
 		},
 		{
-			name:     "EnsureFork changes repo name",
-			org:      "whatever",
-			repo:     "changeme",
-			expected: "changed",
-			errors:   false,
+			name:           "EnsureFork changes repo name",
+			org:            "whatever",
+			repo:           "changeme",
+			expectedOrg:    "ci-robot",
+			expectedPusher: "forkPusher",
+			errors:         false,
 		},
 		{
-			name:     "EnsureFork errors",
-			org:      "whatever",
-			repo:     "error",
-			expected: "error",
-			errors:   true,
+			name:           "EnsureFork errors",
+			org:            "whatever",
+			repo:           "error",
+			expectedOrg:    "",
+			expectedPusher: "",
+			errors:         true,
+		},
+		{
+			name:           "EnsureFork forbidden returns centralPusher",
+			org:            "whatever",
+			repo:           "forbidden",
+			expectedOrg:    "whatever",
+			expectedPusher: "centralPusher",
+			errors:         false,
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			res, err := s.ensureForkExists(tc.org, tc.repo)
+			p, org, err := s.getPusherAndOrg(logrus.WithField("test", t.Name()), tc.org, tc.repo)
 			if tc.errors && err == nil {
 				t.Errorf("expected error, but did not get one")
 			}
 			if !tc.errors && err != nil {
-				t.Errorf("expected no error, but got one")
+				t.Errorf("expected no error, but got one: %v", err)
 			}
-			if res != tc.expected {
-				t.Errorf("expected %s but got %s", tc.expected, res)
+			if org != tc.expectedOrg {
+				t.Errorf("expected org %s but got %s", tc.expectedOrg, org)
+			}
+			if tc.expectedPusher == "forkPusher" {
+				if _, ok := p.(*forkPusher); !ok {
+					t.Errorf("expected forkPusher but got %T", p)
+				}
+			}
+			if tc.expectedPusher == "centralPusher" {
+				if _, ok := p.(*centralPusher); !ok {
+					t.Errorf("expected centralPusher but got %T", p)
+				}
 			}
 		})
 	}
