@@ -1,0 +1,14 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  description: 'Groups Go modules from gardener/gardener together.',
+  packageRules: [
+    {
+      groupName: 'gardener/gardener',
+      description: 'Group Go modules from gardener/gardener together.',
+      matchPackageNames: [
+        'github.com/gardener/gardener',
+        'github.com/gardener/gardener/pkg/apis',
+      ],
+    },
+  ],
+}
