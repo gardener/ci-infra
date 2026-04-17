@@ -1,6 +1,6 @@
 # Cherrypicker
 
-**Note: This is a fork of [cherrypicker from kubernetes-sigs/prow (commit 6d1ac1c)](https://github.com/kubernetes-sigs/prow/tree/6d1ac1c1017a2fbf8e77048a7506f6042fb47cb8/cmd/external-plugins/cherrypicker) repository.
+**Note: This is a fork of [cherrypicker from kubernetes-sigs/prow (commit 5edbb8e)](https://github.com/kubernetes-sigs/prow/tree/5edbb8e3ab3d4033eb5fe2f735e3e061d483032b/cmd/external-plugins/cherrypicker) repository.
 It changes the release note regexp to fit the gardener release note format**
 
 Cherrypicker is an external prow plugin that can also run as a standalone bot.
@@ -11,9 +11,10 @@ For comments:
 
 ```
 /cherrypick release-1.10
+/cherrypick release-1.11
 ```
 
-The above comment will result in opening a new PR against the `release-1.10` branch
+The above comment will result in opening a new PR against the `release-1.10` and `release-1.11` branches
 once the PR where the comment was made gets merged or is already merged.
 
 To use label, you need to apply labels that contain the name of the branch in the form:
