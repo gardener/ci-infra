@@ -1,4 +1,4 @@
-FROM alpine:3.23.3 AS copy-images
+FROM alpine:3.23.4 AS copy-images
 # renovate: datasource=github-releases depName=google/go-containerregistry
 ARG CRANE_VERSION=v0.21.5
 ARG TARGETARCH
