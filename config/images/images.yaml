@@ -151,6 +151,7 @@ images:
   - distroless-v1.37.0
   - distroless-v1.37.1
   - distroless-v1.37.2
+  - distroless-v1.38.0
 - source: ghcr.io/credativ/vali
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/vali
   tags:
