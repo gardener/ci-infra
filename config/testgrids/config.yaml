@@ -11,6 +11,7 @@ dashboard_groups:
     - gardener-etcd-backup-restore
     - gardener-extension-networking-cilium
     - gardener-extension-networking-calico
+    - gardener-extension-shoot-falco-service
     - gardener-extension-shoot-networking-filter
     - gardener-extension-shoot-rsyslog-relp
     - gardener-extension-shoot-cert-service
@@ -38,6 +39,7 @@ dashboards:
 - name: gardener-etcd-backup-restore
 - name: gardener-extension-networking-cilium
 - name: gardener-extension-networking-calico
+- name: gardener-extension-shoot-falco-service
 - name: gardener-extension-shoot-networking-filter
 - name: gardener-extension-shoot-rsyslog-relp
 - name: gardener-extension-shoot-cert-service
