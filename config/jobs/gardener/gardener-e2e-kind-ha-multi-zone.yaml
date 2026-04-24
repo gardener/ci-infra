@@ -8,7 +8,7 @@ presubmits:
     - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
     decorate: true
     decoration_config:
-      timeout: 2h
+      timeout: 3h
       grace_period: 15m
     labels:
       preset-dind-enabled: "true"
@@ -45,14 +45,14 @@ presubmits:
 periodics:
 - name: ci-gardener-e2e-kind-ha-multi-zone
   cluster: gardener-prow-build
-  interval: 2h
+  interval: 3h
   extra_refs:
   - org: gardener
     repo: gardener
     base_ref: master
   decorate: true
   decoration_config:
-    timeout: 2h
+    timeout: 3h
     grace_period: 15m
   labels:
     preset-dind-enabled: "true"
