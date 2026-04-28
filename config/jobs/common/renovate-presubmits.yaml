@@ -43,6 +43,9 @@ presubmits:
   gardener/gardener-extension-networking-calico:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-networking-calico-check-renovate-config
+  gardener/gardener-extension-shoot-falco-service:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-falco-service-check-renovate-config
   gardener/gardener-extension-shoot-rsyslog-relp:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-shoot-rsyslog-relp-check-renovate-config

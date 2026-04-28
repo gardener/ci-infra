@@ -81,6 +81,7 @@ slack:
     - gardener/gardener-extension-registry-cache
     - gardener/dependency-watchdog
     - gardener/garden-shoot-trust-configurator
+    - gardener/gardener-extension-shoot-falco-service
     - gardener/gardener-extension-shoot-rsyslog-relp
     - gardener/gardener-extension-shoot-cert-service    
     - gardener/gardener-extension-shoot-dns-service    
