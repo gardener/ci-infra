@@ -11,7 +11,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20260504-5175f95
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20260505-adc3c05
       command:
       - /branch-cleaner
       args:
