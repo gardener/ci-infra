@@ -116,6 +116,12 @@ default:
     target: both
     prowPlugin: label
     addedBy: anyone
+  - name: area/observability
+    color: 0052cc
+    description: Observability (logging, monitoring, OpenTelemetry, distributed tracing, etc.) related
+    target: both
+    prowPlugin: label
+    addedBy: anyone
   - name: area/open-source
     color: 0052cc
     description: Open Source (community, enablement, contributions, conferences, CNCF, etc.) related
