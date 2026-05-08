@@ -94,3 +94,21 @@ presubmits:
   gardener/gardener-landscape-kit:
   - <<: *renovate-presubmit
     name: pull-gardener-landscape-kit-check-renovate-config
+  gardener/dashboard:
+  - <<: *renovate-presubmit
+    name: pull-dashboard-check-renovate-config
+  gardener/gardenctl-v2:
+  - <<: *renovate-presubmit
+    name: pull-gardenctl-v2-check-renovate-config
+  gardener/gardenlogin:
+  - <<: *renovate-presubmit
+    name: pull-gardenlogin-check-renovate-config
+  gardener/terminal-controller-manager:
+  - <<: *renovate-presubmit
+    name: pull-terminal-controller-manager-check-renovate-config
+  gardener/chocolatey-packages:
+  - <<: *renovate-presubmit
+    name: pull-chocolatey-packages-check-renovate-config
+  gardener/homebrew-tap:
+  - <<: *renovate-presubmit
+    name: pull-homebrew-tap-check-renovate-config
