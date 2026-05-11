@@ -112,3 +112,6 @@ presubmits:
   gardener/homebrew-tap:
   - <<: *renovate-presubmit
     name: pull-homebrew-tap-check-renovate-config
+  gardener/aws-ipam-controller:
+  - <<: *renovate-presubmit
+    name: pull-aws-ipam-controller-check-renovate-config
