@@ -11,7 +11,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-b47732df19
+    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-6f8992cc6b
       command:
       - commenter
       args:
@@ -61,7 +61,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-b47732df19
+    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-6f8992cc6b
       command:
       - commenter
       args:
@@ -112,7 +112,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-b47732df19
+    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-6f8992cc6b
       command:
       - commenter
       args:
@@ -164,7 +164,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-b47732df19
+    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-6f8992cc6b
       command:
       - commenter
       args:
@@ -213,7 +213,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-b47732df19
+    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-6f8992cc6b
       command:
       - commenter
       args:
@@ -263,7 +263,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-b47732df19
+    - image: gcr.io/k8s-staging-test-infra/commenter:v20260512-6f8992cc6b
       command:
       - commenter
       args:
