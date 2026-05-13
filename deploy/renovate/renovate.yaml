@@ -78,6 +78,7 @@ spec:
             "gardener/ingress-default-backend",
             "gardener/pvc-autoscaler",
             "gardener/aws-ipam-controller",
+            "gardener/alpine-conntrack",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
