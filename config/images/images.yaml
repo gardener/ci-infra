@@ -258,6 +258,7 @@ images:
   - v0.143.0
   - v0.144.0
   - v0.150.0
+  - v0.151.0
 - source: persesdev/perses
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/persesdev/perses
   tags:
