@@ -31,7 +31,7 @@ presubmits:
           privileged: true
         resources:
           requests:
-            cpu: 14
+            cpu: 30
             memory: 72Gi
         env:
         - name: GOCACHEPROG
@@ -42,6 +42,10 @@ presubmits:
           value: "false"
         - name: PARALLEL_E2E_TESTS
           value: "5"
+      tolerations:
+      - key: resources
+        value: 32-cpu
+        effect: NoSchedule
 periodics:
 - name: ci-gardener-e2e-kind-ha-multi-zone
   cluster: gardener-prow-build
@@ -77,7 +81,7 @@ periodics:
         privileged: true
       resources:
         requests:
-          cpu: 14
+          cpu: 30
           memory: 72Gi
       env:
       - name: GOCACHEPROG
@@ -88,3 +92,7 @@ periodics:
         value: "false"
       - name: PARALLEL_E2E_TESTS
         value: "5"
+    tolerations:
+    - key: resources
+      value: 32-cpu
+      effect: NoSchedule
