@@ -49,4 +49,4 @@ presubmits:
         resources:
           requests:
             cpu: 6
-            memory: 7Gi
+            memory: 3Gi
