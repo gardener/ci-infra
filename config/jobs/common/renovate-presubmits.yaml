@@ -118,3 +118,6 @@ presubmits:
   gardener/alpine-conntrack:
   - <<: *renovate-presubmit
     name: pull-alpine-conntrack-check-renovate-config
+  gardener/vpn2:
+  - <<: *renovate-presubmit
+    name: pull-vpn2-check-renovate-config

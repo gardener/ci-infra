@@ -79,6 +79,7 @@ spec:
             "gardener/pvc-autoscaler",
             "gardener/aws-ipam-controller",
             "gardener/alpine-conntrack",
+            "gardener/vpn2",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
