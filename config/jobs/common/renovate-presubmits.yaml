@@ -58,6 +58,9 @@ presubmits:
   gardener/gardener-extension-shoot-networking-filter:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-shoot-networking-filter-check-renovate-config
+  gardener/gardener-extension-shoot-networking-problemdetector:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-networking-problemdetector-check-renovate-config
   gardener/gardener-discovery-server:
   - <<: *renovate-presubmit
     name: pull-gardener-discovery-server-check-renovate-config
