@@ -58,6 +58,7 @@ spec:
             "gardener/gardener-extension-shoot-dns-service",
             "gardener/gardener-extension-shoot-falco-service",
             "gardener/gardener-extension-shoot-traefik",
+            "gardener/gardener-extension-shoot-networking-problemdetector",
             "gardener/gardener-discovery-server",
             "gardener/gardener-landscape-kit",
             "gardener/dashboard",
