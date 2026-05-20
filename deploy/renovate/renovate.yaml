@@ -80,6 +80,7 @@ spec:
             "gardener/aws-ipam-controller",
             "gardener/alpine-conntrack",
             "gardener/vpn2",
+            "gardener/gardener-extension-shoot-networking-filter",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
