@@ -127,3 +127,6 @@ presubmits:
   gardener/ext-authz-server:
   - <<: *renovate-presubmit
     name: pull-ext-authz-server-renovate-config
+  gardener/apiserver-proxy:
+  - <<: *renovate-presubmit
+    name: pull-apiserver-proxy-renovate-config

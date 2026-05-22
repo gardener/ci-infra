@@ -83,6 +83,7 @@ spec:
             "gardener/vpn2",
             "gardener/gardener-extension-shoot-networking-filter",
             "gardener/ext-authz-server",
+            "gardener/apiserver-proxy",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
