@@ -82,6 +82,7 @@ spec:
             "gardener/alpine-conntrack",
             "gardener/vpn2",
             "gardener/gardener-extension-shoot-networking-filter",
+            "gardener/ext-authz-server",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
