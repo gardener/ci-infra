@@ -124,3 +124,6 @@ presubmits:
   gardener/vpn2:
   - <<: *renovate-presubmit
     name: pull-vpn2-check-renovate-config
+  gardener/ext-authz-server:
+  - <<: *renovate-presubmit
+    name: pull-ext-authz-server-renovate-config
