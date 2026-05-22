@@ -42,6 +42,8 @@ presubmits:
           value: "false"
         - name: IPFAMILY
           value: "ipv6"
+        - name: PARALLEL_E2E_TESTS
+          value: "5"
 periodics:
 - name: ci-gardener-e2e-kind-ipv6
   cluster: gardener-prow-build
@@ -88,3 +90,5 @@ periodics:
         value: "false"
       - name: IPFAMILY
         value: "ipv6"
+      - name: PARALLEL_E2E_TESTS
+        value: "5"
