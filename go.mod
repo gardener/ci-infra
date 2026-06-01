@@ -17,7 +17,7 @@ require (
 	k8s.io/apimachinery v0.34.3
 	k8s.io/client-go v0.34.3
 	sigs.k8s.io/controller-runtime v0.21.0
-	sigs.k8s.io/prow v0.0.0-20260519230345-32fe11af9437
+	sigs.k8s.io/prow v0.0.0-20260531012246-24f6b2904e92
 	sigs.k8s.io/yaml v1.6.0
 )
 
@@ -122,6 +122,7 @@ require (
 	github.com/prometheus/common v0.67.4 // indirect
 	github.com/prometheus/otlptranslator v1.0.0 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.6.0 // indirect
@@ -173,7 +174,6 @@ require (
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gopkg.in/robfig/cron.v2 v2.0.0-20150107220207-be2e0b0deed5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apiextensions-apiserver v0.34.3 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
