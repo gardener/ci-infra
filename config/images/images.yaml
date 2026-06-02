@@ -415,4 +415,4 @@ images:
 - source: busybox
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/busybox
   tags:
-  - stable
+  - "1.38.0"
