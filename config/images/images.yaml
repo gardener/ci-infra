@@ -407,3 +407,12 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/ubuntu/bind9
   tags:
   - 9.18-24.04_beta
+# agent-sandbox
+- source: registry.k8s.io/agent-sandbox/agent-sandbox-controller
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/agent-sandbox/agent-sandbox-controller
+  tags:
+  - v0.4.6
+- source: busybox
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/busybox
+  tags:
+  - stable
