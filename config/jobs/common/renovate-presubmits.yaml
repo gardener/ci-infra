@@ -130,3 +130,6 @@ presubmits:
   gardener/apiserver-proxy:
   - <<: *renovate-presubmit
     name: pull-apiserver-proxy-renovate-config
+  gardener/gardener-extension-shoot-networking-traffic-gauger:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-shoot-networking-traffic-gauger-renovate-config

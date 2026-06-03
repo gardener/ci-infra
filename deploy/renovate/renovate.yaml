@@ -84,6 +84,7 @@ spec:
             "gardener/gardener-extension-shoot-networking-filter",
             "gardener/ext-authz-server",
             "gardener/apiserver-proxy",
+            "gardener/gardener-extension-shoot-networking-traffic-gauger",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
