@@ -424,3 +424,4 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/traefik
   tags:
   - v3.7.1
+  - v3.7.5
