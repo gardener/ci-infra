@@ -4,7 +4,6 @@ go 1.25.8
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cenkalti/backoff/v6 v6.0.1
 	github.com/google/go-cmp v0.7.0
 	github.com/onsi/ginkgo/v2 v2.31.0
@@ -62,6 +61,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bombsimon/logrusr/v4 v4.1.0 // indirect
 	github.com/bwmarrin/snowflake v0.0.0 // indirect
+	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cjwagner/httpcache v0.0.0-20230907212505-d4841bbad466 // indirect
 	github.com/clarketm/json v1.13.4 // indirect

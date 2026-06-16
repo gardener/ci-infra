@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	backoff "github.com/cenkalti/backoff/v5"
+	backoff "github.com/cenkalti/backoff/v6"
 	githubql "github.com/shurcooL/githubv4"
 	"github.com/sirupsen/logrus"
 	"sigs.k8s.io/prow/pkg/config"
