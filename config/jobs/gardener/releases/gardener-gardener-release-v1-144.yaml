@@ -1289,7 +1289,7 @@ presubmits:
         - gardener-extension-admission-local
         command:
         - /usr/local/bin/buildctl-testbuild-daemonless.sh
-        image: moby/buildkit:v0.30.0-rootless
+        image: moby/buildkit:v0.31.0-rootless
         livenessProbe:
           exec:
             command:
