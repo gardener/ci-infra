@@ -10,14 +10,14 @@ periodics:
     grace_period: 15m0s
     timeout: 1h0m0s
   extra_refs:
-  - base_ref: release-v0.3-dev
+  - base_ref: release-v0.2
     org: gardener
     repo: gardener-landscape-kit
   interval: 2h
   labels:
     preset-dind-enabled: "true"
     preset-kind-volume-mounts: "true"
-  name: ci-gardener-landscape-kit-e2e-kind-release-v0-3-dev
+  name: ci-gardener-landscape-kit-e2e-kind-release-v0-2
   spec:
     containers:
     - command:
@@ -49,11 +49,11 @@ periodics:
     grace_period: 10m0s
     timeout: 40m0s
   extra_refs:
-  - base_ref: release-v0.3-dev
+  - base_ref: release-v0.2
     org: gardener
     repo: gardener-landscape-kit
   interval: 24h
-  name: ci-gardener-landscape-kit-unit-release-v0-3-dev
+  name: ci-gardener-landscape-kit-unit-release-v0-2
   spec:
     containers:
     - args:
@@ -77,7 +77,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-landscape-kit developments in
         pull requests
     branches:
-    - release-v0.3-dev
+    - release-v0.2
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
@@ -86,7 +86,7 @@ presubmits:
     labels:
       preset-dind-enabled: "true"
       preset-kind-volume-mounts: "true"
-    name: pull-gardener-landscape-kit-e2e-kind-release-v0-3-dev
+    name: pull-gardener-landscape-kit-e2e-kind-release-v0-2
     skip_if_only_changed: ^(\.github|docs|example)/|\.md$|^(LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
     spec:
       containers:
@@ -114,13 +114,13 @@ presubmits:
       description: Runs unit tests for Gardener Landscape Kit developments in pull
         requests
     branches:
-    - release-v0.3-dev
+    - release-v0.2
     cluster: gardener-prow-build
     decorate: true
     decoration_config:
       grace_period: 10m0s
       timeout: 40m0s
-    name: pull-gardener-landscape-kit-unit-release-v0-3-dev
+    name: pull-gardener-landscape-kit-unit-release-v0-2
     spec:
       containers:
       - args:
