@@ -2,7 +2,7 @@ presubmits:
   gardener/gardener:
   - name: pull-gardener-apidiff
     cluster: gardener-prow-build
-    skip_if_only_changed: "^docs/|\\.md$"
+    skip_if_only_changed: "^docs/|\\.md$|^example/.*\\.ya?ml$"
     decorate: true
     optional: true
     branches:

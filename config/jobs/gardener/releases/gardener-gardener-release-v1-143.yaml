@@ -677,7 +677,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-gardenadm-managed-infra-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -718,7 +718,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-gardenadm-unmanaged-infra-external-gardener-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -759,7 +759,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-gardenadm-unmanaged-infra-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -800,7 +800,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-ha-multi-node-upgrade-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -841,7 +841,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-ha-multi-node-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -889,7 +889,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-ha-multi-zone-upgrade-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -930,7 +930,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-ha-multi-zone-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -976,7 +976,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-ipv6-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -1019,7 +1019,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-migration-ha-multi-node-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -1060,7 +1060,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-migration-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -1101,7 +1101,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-operator-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -1142,7 +1142,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-upgrade-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
@@ -1182,7 +1182,7 @@ presubmits:
       preset-gocache-mounts: "true"
       preset-kind-volume-mounts: "true"
     name: pull-gardener-e2e-kind-release-v1-143
-    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$
+    skip_if_only_changed: ^(\.ci|\.github|\.ocm|\.test-defs|docs|logo)/|\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\.ya?ml$
     spec:
       containers:
       - command:
