@@ -118,6 +118,9 @@ presubmits:
   gardener/aws-ipam-controller:
   - <<: *renovate-presubmit
     name: pull-aws-ipam-controller-check-renovate-config
+  gardener/aws-custom-route-controller:
+  - <<: *renovate-presubmit
+    name: pull-aws-custom-route-controller-check-renovate-config
   gardener/alpine-conntrack:
   - <<: *renovate-presubmit
     name: pull-alpine-conntrack-check-renovate-config

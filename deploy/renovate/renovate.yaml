@@ -79,6 +79,7 @@ spec:
             "gardener/ingress-default-backend",
             "gardener/pvc-autoscaler",
             "gardener/aws-ipam-controller",
+            "gardener/aws-custom-route-controller",
             "gardener/alpine-conntrack",
             "gardener/alpine-iptables",
             "gardener/vpn2",
