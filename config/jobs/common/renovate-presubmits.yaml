@@ -142,3 +142,6 @@ presubmits:
   gardener/gardener-extension-shoot-traefik:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-shoot-traefik-renovate-config
+  gardener/coredns-config-adapter:
+  - <<: *renovate-presubmit
+    name: pull-coredns-config-adapter-renovate-config

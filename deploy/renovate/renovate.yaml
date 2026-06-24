@@ -87,6 +87,7 @@ spec:
             "gardener/ext-authz-server",
             "gardener/apiserver-proxy",
             "gardener/gardener-extension-shoot-networking-traffic-gauger",
+            "gardener/coredns-config-adapter",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
