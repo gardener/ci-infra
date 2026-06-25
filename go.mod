@@ -12,7 +12,7 @@ require (
 	github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/tools v0.46.0
+	golang.org/x/tools v0.47.0
 	k8s.io/api v0.34.3
 	k8s.io/apimachinery v0.34.3
 	k8s.io/client-go v0.34.3
@@ -159,7 +159,7 @@ require (
 	golang.org/x/oauth2 v0.35.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/telemetry v0.0.0-20260610154732-fb80ec83bdd9 // indirect
+	golang.org/x/telemetry v0.0.0-20260625142307-59b4966ccb57 // indirect
 	golang.org/x/term v0.44.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
