@@ -11,6 +11,7 @@ upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
   - "config/prow"
   - "deploy/prow"
+  - "deploy/peribolos"
 extraFiles:
   - "config/mkpj.sh"
   - "hack/bootstrap-config.sh"
