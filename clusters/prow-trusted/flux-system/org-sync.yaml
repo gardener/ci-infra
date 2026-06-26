@@ -1,0 +1,23 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: org
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: master
+  url: https://github.com/gardener/org.git
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: org-repository
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: org
