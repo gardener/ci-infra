@@ -26,8 +26,6 @@ spec:
             - --require-self
             - --config-path=/etc/config/org.yaml
             - --github-token-path=/etc/github-token/token
-            - --github-endpoint=http://ghproxy.prow.svc.cluster.local
-            - --github-endpoint=https://api.github.com
             - --github-hourly-tokens=0
             - --github-allowed-burst=0
             - --ignore-secret-teams
