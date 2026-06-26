@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: peribolos
+  namespace: peribolos
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: peribolos
+        app.kubernetes.io/name: peribolos
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/instance: peribolos
+            app.kubernetes.io/name: peribolos
+        spec:
+          containers:
+          - name: peribolos
+            image: us-docker.pkg.dev/k8s-infra-prow/images/peribolos:v20260624-2b5fea27a
+            args:
+            - --min-admins=5
+            - --require-self
+            - --config-path=/etc/config/org.yaml
+            - --github-token-path=/etc/github-token/token
+            - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+            - --github-endpoint=https://api.github.com
+            - --github-hourly-tokens=0
+            - --github-allowed-burst=0
+            - --ignore-secret-teams
+            - --ignore-enterprise-teams
+            - --fix-org
+            - --fix-org-members
+            - --fix-teams
+            - --fix-team-members
+            - --confirm
+            volumeMounts:
+            - name: github-token
+              mountPath: /etc/github-token
+              readOnly: true
+            - name: peribolos-config
+              mountPath: /etc/config
+              readOnly: true
+          restartPolicy: Never
+          volumes:
+          - name: github-token
+            secret:
+              secretName: github-token
+          - name: peribolos-config
+            configMap:
+              name: peribolos-config
+  schedule: '0 * * * *'
+  successfulJobsHistoryLimit: 10
+  suspend: false
