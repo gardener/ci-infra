@@ -92,6 +92,7 @@ spec:
             "gardener/gardener-extension-provider-azure",
             "gardener/gardener-extension-provider-openstack",
             "gardener/gardener-extension-provider-gcp",
+            "gardener/oidc-apps-controller",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }

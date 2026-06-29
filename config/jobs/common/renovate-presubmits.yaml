@@ -157,3 +157,6 @@ presubmits:
   gardener/gardener-extension-provider-gcp:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-provider-gcp-check-renovate-config
+  gardener/oidc-apps-controller:
+  - <<: *renovate-presubmit
+    name: pull-oidc-apps-controller-check-renovate-config
