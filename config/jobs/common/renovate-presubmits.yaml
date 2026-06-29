@@ -145,3 +145,15 @@ presubmits:
   gardener/coredns-config-adapter:
   - <<: *renovate-presubmit
     name: pull-coredns-config-adapter-renovate-config
+  gardener/gardener-extension-provider-aws:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-provider-aws-check-renovate-config
+  gardener/gardener-extension-provider-azure:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-provider-azure-check-renovate-config
+  gardener/gardener-extension-provider-openstack:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-provider-openstack-check-renovate-config
+  gardener/gardener-extension-provider-gcp:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-provider-gcp-check-renovate-config

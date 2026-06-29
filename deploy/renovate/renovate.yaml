@@ -88,6 +88,10 @@ spec:
             "gardener/apiserver-proxy",
             "gardener/gardener-extension-shoot-networking-traffic-gauger",
             "gardener/coredns-config-adapter",
+            "gardener/gardener-extension-provider-aws",
+            "gardener/gardener-extension-provider-azure",
+            "gardener/gardener-extension-provider-openstack",
+            "gardener/gardener-extension-provider-gcp",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
