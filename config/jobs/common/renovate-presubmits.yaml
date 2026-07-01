@@ -160,3 +160,6 @@ presubmits:
   gardener/oidc-apps-controller:
   - <<: *renovate-presubmit
     name: pull-oidc-apps-controller-check-renovate-config
+  gardener/opentelemetry-collector:
+  - <<: *renovate-presubmit
+    name: pull-opentelemetry-collector-check-renovate-config

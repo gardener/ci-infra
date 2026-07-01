@@ -93,6 +93,7 @@ spec:
             "gardener/gardener-extension-provider-openstack",
             "gardener/gardener-extension-provider-gcp",
             "gardener/oidc-apps-controller",
+            "gardener/opentelemetry-collector",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
