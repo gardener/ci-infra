@@ -5,6 +5,7 @@ go 1.25.8
 require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/cenkalti/backoff/v6 v6.0.1
+	github.com/cenkalti/backoff/v7 v7.0.0
 	github.com/google/go-cmp v0.7.0
 	github.com/onsi/ginkgo/v2 v2.32.0
 	github.com/onsi/gomega v1.42.0
