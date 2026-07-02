@@ -44,7 +44,7 @@ spec:
     singleFlight:
       type: gcp
 
-    goGetWorkers: 5
+    goGetWorkers: 10
 
     metrics:
       serviceMonitor:
