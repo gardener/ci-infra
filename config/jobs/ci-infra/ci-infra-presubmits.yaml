@@ -79,6 +79,8 @@ presubmits:
         - milestone-activator
         - --target
         - release-handler
+        - --target
+        - peribolos-checkconfig
         readinessProbe:
           exec:
             command:
