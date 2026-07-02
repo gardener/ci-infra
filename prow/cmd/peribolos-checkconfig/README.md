@@ -46,12 +46,12 @@ peribolos-checkconfig \
 
 ### Flags
 
-| Flag                 | Default | Description                                                |
-| -------------------- | ------- | ---------------------------------------------------------- |
-| `--config-path`      | *(required)* | Path to peribolos org config YAML.                    |
-| `--min-admins`       | `5`     | Fail if any org has fewer admins than this. Must be ≥ 2.   |
-| `--required-admins`  | *(none)* | Repeatable; usernames that must appear as admins in every org. |
-| `--log-level`        | `info`  | One of `panic`, `fatal`, `error`, `warn`, `info`, `debug`, `trace`. |
+| Flag                | Default      | Description                                                         |
+| ------------------- | ------------ | ------------------------------------------------------------------- |
+| `--config-path`     | _(required)_ | Path to peribolos org config YAML.                                  |
+| `--min-admins`      | `5`          | Fail if any org has fewer admins than this. Must be ≥ 2.            |
+| `--required-admins` | _(none)_     | Repeatable; usernames that must appear as admins in every org.      |
+| `--log-level`       | `info`       | One of `panic`, `fatal`, `error`, `warn`, `info`, `debug`, `trace`. |
 
 ### Exit codes
 
