@@ -45,6 +45,8 @@ jobs:
             target: milestone-activator
           - name: release-handler
             target: release-handler
+          - name: peribolos-checkconfig
+            target: peribolos-checkconfig
     with:
       name: ${{ matrix.images.name }}
       version: ${{ needs.compute-versions.outputs.semver-version }}

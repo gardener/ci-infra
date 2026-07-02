@@ -71,3 +71,9 @@ LABEL app=branch-cleaner
 WORKDIR /
 COPY --from=builder /build/branch-cleaner /branch-cleaner
 ENTRYPOINT [ "/branch-cleaner" ]
+
+FROM base_nonroot AS peribolos-checkconfig
+LABEL app=peribolos-checkconfig
+WORKDIR /
+COPY --from=builder /build/peribolos-checkconfig /peribolos-checkconfig
+ENTRYPOINT [ "/peribolos-checkconfig" ]
