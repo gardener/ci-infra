@@ -102,7 +102,7 @@ spec:
         cache:
           enabled: true
           storageClass: gce-ssd
-          storageSize: 10Gi
+          storageSize: 50Gi
 
     existingSecret: github
 
