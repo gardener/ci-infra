@@ -337,6 +337,83 @@ func TestCheckOrg(t *testing.T) {
 			},
 		},
 		{
+			name: "user is both team member and maintainer",
+			opt: options{
+				minAdmins:      2,
+				requiredAdmins: flagutil.NewStrings(),
+			},
+			orgName: "myorg",
+			orgConfig: org.Config{
+				Admins: []string{"alice", "bob"},
+				Teams: map[string]org.Team{
+					"team-a": {
+						Maintainers: []string{"alice"},
+						Members:     []string{"alice"},
+					},
+				},
+			},
+			expectError: true,
+		},
+		{
+			name: "user is both team member and maintainer, case differs",
+			opt: options{
+				minAdmins:      2,
+				requiredAdmins: flagutil.NewStrings(),
+			},
+			orgName: "myorg",
+			orgConfig: org.Config{
+				Admins: []string{"alice", "bob"},
+				Teams: map[string]org.Team{
+					"team-a": {
+						Maintainers: []string{"Alice"},
+						Members:     []string{"alice"},
+					},
+				},
+			},
+			expectError: true,
+		},
+		{
+			name: "user is member of one team and maintainer of another — allowed",
+			opt: options{
+				minAdmins:      2,
+				requiredAdmins: flagutil.NewStrings(),
+			},
+			orgName: "myorg",
+			orgConfig: org.Config{
+				Admins: []string{"alice", "bob"},
+				Teams: map[string]org.Team{
+					"team-a": {
+						Maintainers: []string{"alice"},
+					},
+					"team-b": {
+						Maintainers: []string{"bob"},
+						Members:     []string{"alice"},
+					},
+				},
+			},
+		},
+		{
+			name: "user is maintainer of parent and member of child — allowed",
+			opt: options{
+				minAdmins:      2,
+				requiredAdmins: flagutil.NewStrings(),
+			},
+			orgName: "myorg",
+			orgConfig: org.Config{
+				Admins: []string{"alice", "bob"},
+				Teams: map[string]org.Team{
+					"parent": {
+						Maintainers: []string{"alice"},
+						Children: map[string]org.Team{
+							"child": {
+								Members: []string{"alice"},
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name: "duplicate repo names case-insensitively",
 			opt: options{
 				minAdmins:      2,

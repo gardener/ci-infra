@@ -150,11 +150,22 @@ func checkOrg(opt *options, orgName string, orgConfig org.Config) error {
 	teamNames := sets.Set[string]{}
 	duplicateTeamNames := sets.Set[string]{}
 	nestedNotClosed := []string{}
+	dualRoleTeams := []string{}
 	var walkTeams func(teams map[string]org.Team, parentIsNested bool)
 	walkTeams = func(teams map[string]org.Team, parentIsNested bool) {
 		for name, team := range teams {
 			teamMembers.Insert(team.Members...)
 			teamMembers.Insert(team.Maintainers...)
+
+			// A user must not be both a member and a maintainer of the same team.
+			// Peribolos rejects this at apply time (see cmd/peribolos/main.go
+			// configureMembers), but only when --fix-team-members is set — so
+			// bad configs can accumulate silently. Check statically here.
+			teamMemberSet := normalize(sets.New[string](team.Members...))
+			teamMaintainerSet := normalize(sets.New[string](team.Maintainers...))
+			if both := teamMemberSet.Intersection(teamMaintainerSet); len(both) > 0 {
+				dualRoleTeams = append(dualRoleTeams, fmt.Sprintf("%s: %s", name, strings.Join(sets.List(both), ", ")))
+			}
 
 			if teamNames.Has(name) {
 				duplicateTeamNames.Insert(name)
@@ -190,6 +201,10 @@ func checkOrg(opt *options, orgName string, orgConfig org.Config) error {
 
 	if len(nestedNotClosed) > 0 {
 		errs = append(errs, fmt.Errorf("%s: nested teams must have privacy: closed: %s", orgName, strings.Join(nestedNotClosed, ", ")))
+	}
+
+	if len(dualRoleTeams) > 0 {
+		errs = append(errs, fmt.Errorf("%s: users listed as both member and maintainer of the same team: %s", orgName, strings.Join(dualRoleTeams, "; ")))
 	}
 
 	// repo-level checks

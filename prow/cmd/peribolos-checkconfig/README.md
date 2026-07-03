@@ -17,6 +17,10 @@ Given a peribolos `org.FullConfig`, for each org it verifies:
 - **No dual-role users** — no user is listed as both an `admin` and a `member`
   of the same org. Comparison is done after `github.NormLogin` so casing
   differences (e.g. `Alice` vs `alice`) are caught.
+- **No dual-role team users** — no user is listed as both `member` and
+  `maintainer` of the same team. Peribolos itself only enforces this at apply
+  time when `--fix-team-members` is set, so bad configs can otherwise
+  accumulate silently. Normalized the same way as the org check.
 - **Team members are org members** — every user listed as a team `member` or
   `maintainer` (recursively across `children`) is also listed at the org level
   as `admin` or `member`.
