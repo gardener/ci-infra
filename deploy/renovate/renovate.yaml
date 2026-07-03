@@ -123,5 +123,5 @@ spec:
       fsGroup: 12021
       fsGroupChangePolicy: OnRootMismatch
 
-    env:
-      GOPROXY: http://athens-proxy.athens.svc.cluster.local,direct
+#    env:
+#      GOPROXY: http://athens-proxy.athens.svc.cluster.local,direct
