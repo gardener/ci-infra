@@ -146,65 +146,27 @@ func checkOrg(opt *options, orgName string, orgConfig org.Config) error {
 	orgUsers := normAdmins.Union(wantMembers)
 
 	// team-level checks: collect team members recursively, verify uniqueness of team names
-	teamMembers := sets.Set[string]{}
-	teamNames := sets.Set[string]{}
-	duplicateTeamNames := sets.Set[string]{}
-	nestedNotClosed := []string{}
-	dualRoleTeams := []string{}
-	var walkTeams func(teams map[string]org.Team, parentIsNested bool)
-	walkTeams = func(teams map[string]org.Team, parentIsNested bool) {
-		for name, team := range teams {
-			teamMembers.Insert(team.Members...)
-			teamMembers.Insert(team.Maintainers...)
-
-			// A user must not be both a member and a maintainer of the same team.
-			// Peribolos rejects this at apply time (see cmd/peribolos/main.go
-			// configureMembers), but only when --fix-team-members is set — so
-			// bad configs can accumulate silently. Check statically here.
-			teamMemberSet := normalize(sets.New[string](team.Members...))
-			teamMaintainerSet := normalize(sets.New[string](team.Maintainers...))
-			if both := teamMemberSet.Intersection(teamMaintainerSet); len(both) > 0 {
-				dualRoleTeams = append(dualRoleTeams, fmt.Sprintf("%s: %s", name, strings.Join(sets.List(both), ", ")))
-			}
-
-			if teamNames.Has(name) {
-				duplicateTeamNames.Insert(name)
-			}
-			teamNames.Insert(name)
-			for _, n := range team.Previously {
-				if teamNames.Has(n) {
-					duplicateTeamNames.Insert(n)
-				}
-				teamNames.Insert(n)
-			}
-
-			// Nested teams (either they have a parent, or they have children) must be "closed" per GitHub.
-			isNested := parentIsNested || len(team.Children) > 0
-			if isNested {
-				if team.Privacy != nil && *team.Privacy != org.Closed {
-					nestedNotClosed = append(nestedNotClosed, fmt.Sprintf("%s (privacy=%s)", name, *team.Privacy))
-				}
-			}
-
-			walkTeams(team.Children, true)
-		}
+	state := &teamWalkState{
+		members:        sets.Set[string]{},
+		names:          sets.Set[string]{},
+		duplicateNames: sets.Set[string]{},
 	}
-	walkTeams(orgConfig.Teams, false)
+	walkTeams(orgConfig.Teams, false, state)
 
-	if outside := normalize(teamMembers).Difference(orgUsers); len(outside) > 0 {
+	if outside := normalize(state.members).Difference(orgUsers); len(outside) > 0 {
 		errs = append(errs, fmt.Errorf("%s: team members/maintainers must also be org members: %s", orgName, strings.Join(sets.List(outside), ", ")))
 	}
 
-	if n := len(duplicateTeamNames); n > 0 {
-		errs = append(errs, fmt.Errorf("%s: team names must be unique (including previous names), %d duplicated: %s", orgName, n, strings.Join(sets.List(duplicateTeamNames), ", ")))
+	if n := len(state.duplicateNames); n > 0 {
+		errs = append(errs, fmt.Errorf("%s: team names must be unique (including previous names), %d duplicated: %s", orgName, n, strings.Join(sets.List(state.duplicateNames), ", ")))
 	}
 
-	if len(nestedNotClosed) > 0 {
-		errs = append(errs, fmt.Errorf("%s: nested teams must have privacy: closed: %s", orgName, strings.Join(nestedNotClosed, ", ")))
+	if len(state.nestedNotClosed) > 0 {
+		errs = append(errs, fmt.Errorf("%s: nested teams must have privacy: closed: %s", orgName, strings.Join(state.nestedNotClosed, ", ")))
 	}
 
-	if len(dualRoleTeams) > 0 {
-		errs = append(errs, fmt.Errorf("%s: users listed as both member and maintainer of the same team: %s", orgName, strings.Join(dualRoleTeams, "; ")))
+	if len(state.dualRoleTeams) > 0 {
+		errs = append(errs, fmt.Errorf("%s: users listed as both member and maintainer of the same team: %s", orgName, strings.Join(state.dualRoleTeams, "; ")))
 	}
 
 	// repo-level checks
@@ -255,4 +217,54 @@ func normalize(s sets.Set[string]) sets.Set[string] {
 		out.Insert(github.NormLogin(i))
 	}
 	return out
+}
+
+// teamWalkState accumulates findings while walkTeams recurses through a team tree.
+type teamWalkState struct {
+	members         sets.Set[string] // all team members and maintainers (raw logins)
+	names           sets.Set[string] // team names seen so far (including Previously names)
+	duplicateNames  sets.Set[string] // team names seen more than once
+	nestedNotClosed []string         // "<team> (privacy=<p>)" for nested teams that aren't closed
+	dualRoleTeams   []string         // "<team>: <users>" for teams where a user is both member and maintainer
+}
+
+// walkTeams recurses through a team tree, populating state with any findings.
+// parentIsNested is true when the caller is already a nested team (so its
+// children are transitively nested regardless of whether they have children).
+func walkTeams(teams map[string]org.Team, parentIsNested bool, state *teamWalkState) {
+	for name, team := range teams {
+		state.members.Insert(team.Members...)
+		state.members.Insert(team.Maintainers...)
+
+		// A user must not be both a member and a maintainer of the same team.
+		// Peribolos rejects this at apply time (see cmd/peribolos/main.go
+		// configureMembers), but only when --fix-team-members is set — so
+		// bad configs can accumulate silently. Check statically here.
+		teamMemberSet := normalize(sets.New[string](team.Members...))
+		teamMaintainerSet := normalize(sets.New[string](team.Maintainers...))
+		if both := teamMemberSet.Intersection(teamMaintainerSet); len(both) > 0 {
+			state.dualRoleTeams = append(state.dualRoleTeams, fmt.Sprintf("%s: %s", name, strings.Join(sets.List(both), ", ")))
+		}
+
+		if state.names.Has(name) {
+			state.duplicateNames.Insert(name)
+		}
+		state.names.Insert(name)
+		for _, n := range team.Previously {
+			if state.names.Has(n) {
+				state.duplicateNames.Insert(n)
+			}
+			state.names.Insert(n)
+		}
+
+		// Nested teams (either they have a parent, or they have children) must be "closed" per GitHub.
+		isNested := parentIsNested || len(team.Children) > 0
+		if isNested {
+			if team.Privacy != nil && *team.Privacy != org.Closed {
+				state.nestedNotClosed = append(state.nestedNotClosed, fmt.Sprintf("%s (privacy=%s)", name, *team.Privacy))
+			}
+		}
+
+		walkTeams(team.Children, true, state)
+	}
 }
