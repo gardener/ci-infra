@@ -28,14 +28,13 @@ var _ = Describe("PeribolosCheckconfig", func() {
 			flags := flag.NewFlagSet("test", flag.ContinueOnError)
 			var actual options
 			err := actual.parseArgs(flags, args)
-			switch {
-			case expected == nil:
+			if expected == nil {
 				Expect(err).To(HaveOccurred(), "expected error, got none")
-			default:
-				Expect(err).ToNot(HaveOccurred())
-				Expect(reflect.DeepEqual(*expected, actual)).To(BeTrue(),
-					"got incorrect options: %s", cmp.Diff(actual, *expected, cmp.AllowUnexported(options{}, flagutil.Strings{})))
+				return
 			}
+			Expect(err).ToNot(HaveOccurred())
+			Expect(reflect.DeepEqual(*expected, actual)).To(BeTrue(),
+				"got incorrect options: %s", cmp.Diff(actual, *expected, cmp.AllowUnexported(options{}, flagutil.Strings{})))
 		},
 		Entry("missing --config",
 			[]string{},
