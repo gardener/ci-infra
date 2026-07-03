@@ -123,5 +123,7 @@ spec:
       fsGroup: 12021
       fsGroupChangePolicy: OnRootMismatch
 
+## Athens seems to cause renovate issues.
+## we saw multiple occurences of type: "Failed to look up go package github.com/aws/aws-sdk-go-v2/config: no-result"
 #    env:
 #      GOPROXY: http://athens-proxy.athens.svc.cluster.local,direct
