@@ -83,12 +83,12 @@ var _ = Describe("PeribolosCheckconfig", func() {
 	secret := org.Secret
 
 	DescribeTable("#checkOrg",
-		func(opt options, orgName string, orgConfig org.Config, expectError bool) {
+		func(opt options, orgName string, orgConfig org.Config, expectedErrMsg string) {
 			err := checkOrg(&opt, orgName, orgConfig)
-			if expectError {
-				Expect(err).To(HaveOccurred(), "expected error, got none")
-			} else {
+			if expectedErrMsg == "" {
 				Expect(err).ToNot(HaveOccurred(), "unexpected error")
+			} else {
+				Expect(err).To(MatchError(ContainSubstring(expectedErrMsg)))
 			}
 		},
 		Entry("happy path",
@@ -101,7 +101,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 				Admins:  []string{"alice", "bob"},
 				Members: []string{"carol"},
 			},
-			false),
+			""),
 		Entry("too few admins",
 			options{
 				minAdmins:      3,
@@ -111,7 +111,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 			org.Config{
 				Admins: []string{"alice", "bob"},
 			},
-			true),
+			"must specify at least 3 admins, only found 2"),
 		Entry("missing required admin",
 			options{
 				minAdmins:      2,
@@ -121,7 +121,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 			org.Config{
 				Admins: []string{"alice", "bob"},
 			},
-			true),
+			"missing [missing]"),
 		Entry("user in both admins and members",
 			options{
 				minAdmins:      2,
@@ -132,7 +132,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 				Admins:  []string{"alice", "bob"},
 				Members: []string{"alice"},
 			},
-			true),
+			"users listed as both admin and member: alice"),
 		Entry("user in both admins and members, case differs",
 			options{
 				minAdmins:      2,
@@ -143,7 +143,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 				Admins:  []string{"Alice", "bob"},
 				Members: []string{"alice"},
 			},
-			true),
+			"users listed as both admin and member: alice"),
 		Entry("required-admins matches case-insensitively is not enough — currently strict",
 			options{
 				minAdmins:      2,
@@ -154,7 +154,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 				// "Alice" != "alice" for the required-admins check (matches peribolos behavior)
 				Admins: []string{"Alice", "bob"},
 			},
-			true),
+			"missing [alice]"),
 		Entry("team member is not an org member",
 			options{
 				minAdmins:      2,
@@ -170,7 +170,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"team members/maintainers must also be org members: dave"),
 		Entry("team maintainer is not an org member",
 			options{
 				minAdmins:      2,
@@ -185,7 +185,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"team members/maintainers must also be org members: eve"),
 		Entry("team member is an admin — ok",
 			options{
 				minAdmins:      2,
@@ -201,7 +201,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			false),
+			""),
 		Entry("child team member is not an org member",
 			options{
 				minAdmins:      2,
@@ -227,7 +227,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"team members/maintainers must also be org members: stranger"),
 		Entry("duplicate team name",
 			options{
 				minAdmins:      2,
@@ -246,7 +246,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"team names must be unique"),
 		Entry("team with parent must be closed",
 			options{
 				minAdmins:      2,
@@ -272,7 +272,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"nested teams must have privacy: closed"),
 		Entry("team with children privacy unset — allowed (defaults handled by peribolos)",
 			options{
 				minAdmins:      2,
@@ -294,7 +294,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			false),
+			""),
 		Entry("user is both team member and maintainer",
 			options{
 				minAdmins:      2,
@@ -310,7 +310,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"users listed as both member and maintainer of the same team: team-a: alice"),
 		Entry("user is both team member and maintainer, case differs",
 			options{
 				minAdmins:      2,
@@ -326,7 +326,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			true),
+			"users listed as both member and maintainer of the same team: team-a: alice"),
 		Entry("user is member of one team and maintainer of another — allowed",
 			options{
 				minAdmins:      2,
@@ -345,7 +345,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			false),
+			""),
 		Entry("user is maintainer of parent and member of child — allowed",
 			options{
 				minAdmins:      2,
@@ -365,7 +365,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					},
 				},
 			},
-			false),
+			""),
 		Entry("duplicate repo names case-insensitively",
 			options{
 				minAdmins:      2,
@@ -379,7 +379,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					"Repo": {Description: strP("desc")},
 				},
 			},
-			true),
+			"found duplicate repo names"),
 		Entry("repo archived: false is rejected",
 			options{
 				minAdmins:      2,
@@ -392,7 +392,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					"repo": {Archived: boolP(false)},
 				},
 			},
-			true),
+			"repos configured with archived: false"),
 		Entry("repo archived: true is allowed",
 			options{
 				minAdmins:      2,
@@ -405,60 +405,60 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					"repo": {Archived: boolP(true)},
 				},
 			},
-			false),
+			""),
 	)
 
 	Describe("#validateRepos", func() {
 		description := "cool repo"
 
 		DescribeTable("validates repo configs",
-			func(config map[string]org.Repo, expectError bool) {
+			func(config map[string]org.Repo, expectedErrMsg string) {
 				err := validateRepos("myorg", config)
-				if expectError {
-					Expect(err).To(HaveOccurred(), "expected error, got none")
-				} else {
+				if expectedErrMsg == "" {
 					Expect(err).ToNot(HaveOccurred(), "unexpected error")
+				} else {
+					Expect(err).To(MatchError(ContainSubstring(expectedErrMsg)))
 				}
 			},
 			Entry("handles nil map",
 				nil,
-				false),
+				""),
 			Entry("handles empty map",
 				map[string]org.Repo{},
-				false),
+				""),
 			Entry("handles valid config",
 				map[string]org.Repo{
 					"repo": {Description: &description},
 				},
-				false),
+				""),
 			Entry("finds repo names duplicate when normalized",
 				map[string]org.Repo{
 					"repo": {Description: &description},
 					"Repo": {Description: &description},
 				},
-				true),
+				"found duplicate repo names"),
 			Entry("finds name conflict between previous and current names",
 				map[string]org.Repo{
 					"repo":     {Previously: []string{"conflict"}},
 					"conflict": {Description: &description},
 				},
-				true),
+				"found duplicate repo names"),
 			Entry("finds name conflict between two previous names",
 				map[string]org.Repo{
 					"repo":         {Previously: []string{"conflict"}},
 					"another-repo": {Previously: []string{"conflict"}},
 				},
-				true),
+				"found duplicate repo names"),
 			Entry("flags archived: false",
 				map[string]org.Repo{
 					"repo": {Archived: boolP(false)},
 				},
-				true),
+				"repos configured with archived: false"),
 			Entry("allows archived: true",
 				map[string]org.Repo{
 					"repo": {Archived: boolP(true)},
 				},
-				false),
+				""),
 		)
 	})
 })
