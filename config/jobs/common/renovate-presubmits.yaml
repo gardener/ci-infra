@@ -163,3 +163,6 @@ presubmits:
   gardener/opentelemetry-collector:
   - <<: *renovate-presubmit
     name: pull-opentelemetry-collector-check-renovate-config
+  gardener/egress-filter-refresher:
+  - <<: *renovate-presubmit
+    name: pull-egress-filter-refresher-check-renovate-config

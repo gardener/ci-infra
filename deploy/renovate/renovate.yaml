@@ -94,6 +94,7 @@ spec:
             "gardener/gardener-extension-provider-gcp",
             "gardener/oidc-apps-controller",
             "gardener/opentelemetry-collector",
+            "gardener/egress-filter-refresher",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
