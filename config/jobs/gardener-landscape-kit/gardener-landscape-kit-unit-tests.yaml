@@ -9,6 +9,8 @@ presubmits:
     decoration_config:
       timeout: 40m
       grace_period: 10m
+    labels:
+      preset-dind-enabled: "true"
     annotations:
       description: Runs unit tests for Gardener Landscape Kit developments in pull requests
       fork-per-release: "true"
@@ -16,10 +18,10 @@ presubmits:
       containers:
       - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260715-5c1072d-1.26
         command:
-        - make
-        args:
-        - import-tools-bin
-        - verify-extended
+        - wrapper.sh
+        - bash
+        - c
+        - make import-tools-bin verify-extended
         # we need privileged mode in order to do docker in docker
         securityContext:
           privileged: true
@@ -41,6 +43,8 @@ periodics:
   decoration_config:
     timeout: 40m
     grace_period: 10m
+  labels:
+    preset-dind-enabled: "true"
   annotations:
     description: Runs unit tests for Gardener Landscape Kit periodically
     testgrid-dashboards: gardener-landscape-kit
@@ -50,10 +54,10 @@ periodics:
     containers:
     - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260715-5c1072d-1.26
       command:
-      - make
-      args:
-      - import-tools-bin
-      - verify-extended
+      - wrapper.sh
+      - bash
+      - c
+      - make import-tools-bin verify-extended
       # we need privileged mode in order to do docker in docker
       securityContext:
         privileged: true
