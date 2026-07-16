@@ -169,6 +169,7 @@
       matchFileNames: [
         'config/images/images.yaml',
       ],
+      automerge: true,
       postUpgradeTasks: {
         commands: [
           'go install github.com/mikefarah/yq/v4@latest',
