@@ -25,7 +25,7 @@ postsubmits:
         - --github-endpoint=https://api.github.com
         - --log-level=info
         - --release-branch-prefix=release-
-        - --version-file-path=VERSION
+        - --version-file-path=pkg/utils/version/VERSION
         volumeMounts:
         - name: github-token
           mountPath: /etc/github-token
