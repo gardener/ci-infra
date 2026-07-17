@@ -2,7 +2,7 @@ postsubmits:
   gardener/gardener-landscape-kit:
   - name: post-gardener-landscape-kit-release-handler
     cluster: gardener-prow-trusted
-    run_if_changed: '^VERSION$'
+    run_if_changed: '^(VERSION|pkg/utils/version/VERSION)$'
     branches:
     - ^main$
     - ^release-v\d+.\d+
