@@ -38,7 +38,7 @@
         'perses/perses-operator',
       ],
       prBodyNotes: [
-        '> [!TIP]\n> Updates to this image may depend on merging a pull request in the [ci-infra](https://github.com/gardener/ci-infra/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen) repository first.'
+        '> [!TIP]\n> Updates to this image may depend on merging a pull request in the [ci-infra](https://github.com/gardener/ci-infra/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen) repository. Usually, the PRs are auto-merged. However, there is no guarantee that the PRs will be merged in time for this update. If tests fail, please check that the the PR for your component is not stuck and trigger a retest.',
       ],
     }
   ]
