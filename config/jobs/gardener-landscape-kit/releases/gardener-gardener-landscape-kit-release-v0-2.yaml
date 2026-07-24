@@ -61,7 +61,7 @@ periodics:
       - verify-extended
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260722-ab32831-1.26
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260724-ec29b65-1.26
       name: ""
       resources:
         limits:
@@ -128,7 +128,7 @@ presubmits:
         - verify-extended
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260722-ab32831-1.26
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260724-ec29b65-1.26
         name: ""
         resources:
           limits:
