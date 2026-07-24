@@ -97,6 +97,8 @@ spec:
             "gardener/opentelemetry-collector",
             "gardener/egress-filter-refresher",
             "gardener/gardener-ghsa-tracker",
+            "gardener/gardener-extension-os-coreos",
+            "gardener/gardener-extension-os-ubuntu",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
