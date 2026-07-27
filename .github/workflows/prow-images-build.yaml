@@ -47,6 +47,8 @@ jobs:
             target: release-handler
           - name: peribolos-checkconfig
             target: peribolos-checkconfig
+          - name: owners-aliases-bumper
+            target: owners-aliases-bumper
     with:
       name: ${{ matrix.images.name }}
       version: ${{ needs.compute-versions.outputs.semver-version }}

@@ -77,3 +77,9 @@ LABEL app=peribolos-checkconfig
 WORKDIR /
 COPY --from=builder /build/peribolos-checkconfig /peribolos-checkconfig
 ENTRYPOINT [ "/peribolos-checkconfig" ]
+
+FROM base_nonroot AS owners-aliases-bumper
+LABEL app=owners-aliases-bumper
+WORKDIR /
+COPY --from=builder /build/owners-aliases-bumper /owners-aliases-bumper
+ENTRYPOINT [ "/owners-aliases-bumper" ]

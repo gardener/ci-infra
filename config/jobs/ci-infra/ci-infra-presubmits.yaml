@@ -81,6 +81,8 @@ presubmits:
         - release-handler
         - --target
         - peribolos-checkconfig
+        - --target
+        - owners-aliases-bumper
         readinessProbe:
           exec:
             command:
