@@ -1,0 +1,29 @@
+postsubmits:
+  gardener/org:
+  - name: post-org-owners-aliases-bumper
+    cluster: gardener-prow-trusted
+    branches:
+    - ^master$
+    run_if_changed: '^config/org\.yaml$'
+    decorate: true
+    annotations:
+      description: Bumps OWNERS_ALIASES in all configured repos to match the Peribolos config.
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20260727-9acf867
+        command:
+        - /owners-aliases-bumper
+        args:
+        - --peribolos-conf=config/org.yaml
+        - --github-token-path=/etc/github-token/token
+        - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+        - --github-endpoint=https://api.github.com
+        - --confirm
+        volumeMounts:
+        - name: github-token
+          mountPath: /etc/github-token
+          readOnly: true
+      volumes:
+      - name: github-token
+        secret:
+          secretName: github-token
