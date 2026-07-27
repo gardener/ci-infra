@@ -8,6 +8,7 @@ postsubmits:
     decorate: true
     annotations:
       description: Bumps OWNERS_ALIASES in all configured repos to match the Peribolos config.
+      testgrid-create-test-group: "false"
     spec:
       containers:
       - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20260727-9acf867
