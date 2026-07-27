@@ -141,20 +141,34 @@ func findOrCreatePR(ghClient prClient, orgName, repoName string, cfg prConfig) (
 	prs = slices.DeleteFunc(prs, func(pr github.PullRequest) bool {
 		return pr.Head.Ref != cfg.branch || pr.State != "open"
 	})
+	prsDefaultBranch := slices.DeleteFunc(slices.Clone(prs), func(pr github.PullRequest) bool {
+		return pr.Base.Ref != repoInfo.DefaultBranch
+	})
 
 	var prNum int
-	if len(prs) < 1 { // no open PR
+	if len(prsDefaultBranch) == 0 { // no open PR
 		prNum, err = ghClient.CreatePullRequest(orgName, repoName, cfg.prTitle, cfg.prBody, cfg.branch, repoInfo.DefaultBranch, false)
 		if err != nil {
 			return 0, fmt.Errorf("failed to create PR for repo %s/%s: %w", orgName, repoName, err)
 		}
 	} else { // one or more open PRs
-		prNum = prs[0].Number
-		// close all other PRs, someone must have opened a PR manually
-		for _, pr := range prs[1:] {
+		prNum = prsDefaultBranch[0].Number
+		// close all other PRs with same base branch
+		for _, pr := range prsDefaultBranch[1:] {
 			if err := ghClient.ClosePullRequest(orgName, repoName, pr.Number); err != nil {
 				logrus.WithError(err).Warnf("failed closing PR %d from repo %s/%s", pr.Number, orgName, repoName)
 			}
+		}
+	}
+
+	// close prs with other base refs
+	prs = slices.DeleteFunc(prs, func(pr github.PullRequest) bool {
+		return pr.Base.Ref == repoInfo.DefaultBranch
+	})
+
+	for _, pr := range prs {
+		if err := ghClient.ClosePullRequest(orgName, repoName, pr.Number); err != nil {
+			logrus.WithError(err).Warnf("failed closing PR %d from repo %s/%s", pr.Number, orgName, repoName)
 		}
 	}
 
