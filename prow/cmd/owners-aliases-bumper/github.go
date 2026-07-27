@@ -60,7 +60,7 @@ type prConfig struct {
 	prBody      string
 }
 
-func forkAndCheckoutRepo(ghClient github.Client, gitClient git.ClientFactory, orgName, repoName string, cfg prConfig) (git.RepoClient, error) {
+func checkoutRepo(ghClient github.Client, gitClient git.ClientFactory, orgName, repoName string, cfg prConfig) (git.RepoClient, error) {
 	log := logrus.WithField("repo", orgName+"/"+repoName)
 
 	log.Debug("Cloning repo (git client factory)")

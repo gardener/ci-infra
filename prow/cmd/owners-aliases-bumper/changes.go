@@ -131,6 +131,7 @@ func writeChanges(aliasesPath string, aliasChanges map[string]change) (err error
 		for user := range change.add {
 			aliasModified.Aliases[alias] = append(aliasModified.Aliases[alias], user)
 		}
+		slices.Sort(aliasModified.Aliases[alias])
 	}
 
 	modifiedMarshaled, err := yaml.Marshal(aliasModified)

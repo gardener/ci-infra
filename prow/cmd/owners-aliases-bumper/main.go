@@ -117,7 +117,7 @@ func main() {
 			}
 
 			// download repo
-			repoClient, err := forkAndCheckoutRepo(ghClient, commitFactory, orgName, repoName, prCfg)
+			repoClient, err := checkoutRepo(ghClient, commitFactory, orgName, repoName, prCfg)
 			if err != nil {
 				logrus.WithError(err).Errorf("Failed to initialize Git Client for %s/%s", orgName, repoName)
 				continue
