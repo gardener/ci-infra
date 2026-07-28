@@ -3,7 +3,7 @@ postsubmits:
   - name: post-org-owners-aliases-bumper
     cluster: gardener-prow-trusted
     branches:
-    - ^master$
+    - ^main$
     run_if_changed: '^config/org\.yaml$'
     decorate: true
     annotations:
