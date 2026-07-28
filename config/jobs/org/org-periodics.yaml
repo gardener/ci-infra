@@ -6,7 +6,7 @@ periodics:
   extra_refs:
   - org: gardener
     repo: org
-    base_ref: master
+    base_ref: main
   annotations:
     description: Bumps OWNERS_ALIASES in all configured repos to match the Peribolos config. Periodic run.
     testgrid-create-test-group: "false"
