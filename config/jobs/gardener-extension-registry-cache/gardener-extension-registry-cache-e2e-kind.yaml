@@ -3,7 +3,7 @@ presubmits:
   - name: pull-gardener-extension-registry-cache-e2e-kind
     cluster: gardener-prow-build
     always_run: false
-    skip_if_only_changed: "^(\\.ci|\\.github|\\.ocm|\\.test-defs|docs|logo)/|\\.md$|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$"
+    skip_if_only_changed: "^(\\.ci|\\.github|\\.ocm|\\.test-defs|docs)/|\\.md$|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$"
     decorate: true
     decoration_config:
       timeout: 1h10m
