@@ -172,3 +172,9 @@ presubmits:
   gardener/gardener-ghsa-tracker:
   - <<: *renovate-presubmit
     name: pull-gardener-ghsa-tracker-check-renovate-config
+  gardener/gardener-extension-os-coreos:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-os-coreos-check-renovate-config
+  gardener/gardener-extension-os-ubuntu:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-os-ubuntu-check-renovate-config
