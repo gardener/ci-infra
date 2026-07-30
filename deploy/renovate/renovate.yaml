@@ -96,6 +96,7 @@ spec:
             "gardener/oidc-apps-controller",
             "gardener/opentelemetry-collector",
             "gardener/egress-filter-refresher",
+            "gardener/gardener-ghsa-tracker",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }
