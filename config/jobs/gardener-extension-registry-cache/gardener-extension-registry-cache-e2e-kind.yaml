@@ -15,7 +15,7 @@ presubmits:
       description: Runs end-to-end tests for gardener-extension-registry-cache developments in pull requests
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260731-64dba33-1.26
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260731-2224ae2-1.26
         command:
         - wrapper.sh
         - bash
@@ -54,7 +54,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260731-64dba33-1.26
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20260731-2224ae2-1.26
       command:
       - wrapper.sh
       - bash
