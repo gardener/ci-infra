@@ -22,6 +22,9 @@ presubmits:
   gardener/gardener-extension-image-rewriter:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-image-rewriter-check-renovate-config
+  gardener/gardener-extension-envoy-gateway:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-envoy-gateway-check-renovate-config
   gardener/gardener-extension-registry-cache:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-registry-cache-check-renovate-config
