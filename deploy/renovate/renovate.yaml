@@ -57,6 +57,7 @@ spec:
             "gardener/gardener-extension-shoot-cert-service",
             "gardener/gardener-extension-shoot-dns-service",
             "gardener/gardener-extension-shoot-falco-service",
+            "gardener/gardener-extension-envoy-gateway",
             "gardener/gardener-extension-shoot-traefik",
             "gardener/gardener-extension-shoot-networking-problemdetector",
             "gardener/network-problem-detector",
