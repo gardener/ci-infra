@@ -16,6 +16,7 @@ dashboard_groups:
     - gardener-extension-shoot-rsyslog-relp
     - gardener-extension-shoot-cert-service
     - gardener-extension-shoot-dns-service
+    - gardener-extension-shoot-lakom-service
     - gardener-discovery-server
     - cert-management
     - external-dns-management
@@ -44,6 +45,7 @@ dashboards:
 - name: gardener-extension-shoot-rsyslog-relp
 - name: gardener-extension-shoot-cert-service
 - name: gardener-extension-shoot-dns-service
+- name: gardener-extension-shoot-lakom-service
 - name: gardener-discovery-server
 - name: cert-management
 - name: external-dns-management
