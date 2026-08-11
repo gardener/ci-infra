@@ -205,6 +205,7 @@ plugins:
     - help
     - hold
     - invalidcommitmsg
+    - issue-management
     - label
     - lgtm
     - lifecycle
@@ -218,7 +219,6 @@ plugins:
     - size
     - skip
     - slackevents
-    - transfer-issue
     - trick-or-treat
     - trigger
     - verify-owners
