@@ -17,10 +17,10 @@ plank:
       timeout: 2h
       grace_period: 15m
       utility_images:
-        clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20260810-85e45f6d2"
-        initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20260810-85e45f6d2"
-        entrypoint: "us-docker.pkg.dev/k8s-infra-prow/images/entrypoint:v20260810-85e45f6d2"
-        sidecar: "us-docker.pkg.dev/k8s-infra-prow/images/sidecar:v20260810-85e45f6d2"
+        clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20260811-3e9812ab0"
+        initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20260811-3e9812ab0"
+        entrypoint: "us-docker.pkg.dev/k8s-infra-prow/images/entrypoint:v20260811-3e9812ab0"
+        sidecar: "us-docker.pkg.dev/k8s-infra-prow/images/sidecar:v20260811-3e9812ab0"
       gcs_configuration:
         bucket: "gardener-prow"
         path_strategy: explicit
