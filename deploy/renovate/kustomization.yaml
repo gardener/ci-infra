@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
 - renovate-helmrepo.yaml
 - renovate.yaml
+- vpa.yaml
