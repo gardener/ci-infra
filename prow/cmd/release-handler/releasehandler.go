@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/Masterminds/semver"
@@ -81,11 +82,9 @@ func (r *releaseHandler) isVersionFileUpdated() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	for _, change := range changes {
-		if change == r.options.versionFilePath {
-			logrus.Infof("Version file %q updated with last commit", r.options.versionFilePath)
-			return true, nil
-		}
+	if slices.Contains(changes, r.options.versionFilePath) {
+		logrus.Infof("Version file %q updated with last commit", r.options.versionFilePath)
+		return true, nil
 	}
 	return false, nil
 }

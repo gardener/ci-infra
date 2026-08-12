@@ -17,7 +17,7 @@ func TestHandleEvent(t *testing.T) {
 	type testCase struct {
 		name          string
 		eventType     string
-		event         interface{}
+		event         any
 		errorExpected bool
 	}
 

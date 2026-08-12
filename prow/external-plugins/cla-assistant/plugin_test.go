@@ -900,7 +900,7 @@ type fakeClient struct {
 	fakegithub.FakeClient
 }
 
-func (f *fakeClient) QueryWithGitHubAppsSupport(_ context.Context, q interface{}, vars map[string]interface{}, _ string) error {
+func (f *fakeClient) QueryWithGitHubAppsSupport(_ context.Context, q any, vars map[string]any, _ string) error {
 
 	sq, ok := q.(*searchQuery)
 	if !ok {

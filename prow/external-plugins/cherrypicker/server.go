@@ -802,7 +802,7 @@ func normalize(input string) string {
 // parent PR and formats it as per the PR template so that
 // it can be copied to the cherry-pick PR.
 func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) string {
-	var output string
+	var output strings.Builder
 	potentialMatches := releaseNoteRe.FindAllStringSubmatch(body, -1)
 	for i, potentialMatch := range potentialMatches {
 		source := strings.TrimSpace(potentialMatch[4])
@@ -815,7 +815,7 @@ func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) s
 		if author == "" {
 			author = fmt.Sprintf("@%s", prAuthor)
 		}
-		output += fmt.Sprintf("```%s %s %s %s %s\n%s\n```",
+		fmt.Fprintf(&output, "```%s %s %s %s %s\n%s\n```",
 			strings.TrimSpace(potentialMatch[2]),
 			strings.TrimSpace(potentialMatch[3]),
 			source,
@@ -824,8 +824,8 @@ func releaseNoteFromParentPR(prAuthor, org, repo string, num int, body string) s
 			strings.TrimSpace(potentialMatch[7]),
 		)
 		if i+1 < len(potentialMatches) {
-			output += "\n"
+			output.WriteString("\n")
 		}
 	}
-	return output
+	return output.String()
 }
