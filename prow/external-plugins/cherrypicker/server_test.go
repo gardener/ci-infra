@@ -348,6 +348,10 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 		},
 		isMember: true,
 		patch:    patch,
+		prLabels: []github.Label{
+			{Name: "kind/bug"},
+			{Name: "kind/cleanup"},
+		},
 	}
 	ic := github.IssueCommentEvent{
 		Action: github.IssueCommentActionCreated,
@@ -373,7 +377,7 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 
 	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
 	expectedTitle := "[stage] This is a fix for X"
-	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer github.com/foo/bar #%d @foo-author\nUpdate the magic number from 42 to 49\n```", iNumber, iNumber+1)
+	expectedBody := fmt.Sprintf("This is an automated cherry-pick of #%d\n\n/assign wiseguy\n\n```feature developer github.com/foo/bar #%d @foo-author\nUpdate the magic number from 42 to 49\n```\n\n/kind bug\n/kind cleanup", iNumber, iNumber+1)
 	expectedBase := "stage"
 	expectedHead := fmt.Sprintf(botUser.Login+":"+cherryPickBranchFmt, iNumber, expectedBase)
 	expectedLabels := []string{}

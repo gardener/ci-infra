@@ -72,7 +72,7 @@ type githubClient interface {
 // HelpProvider construct the pluginhelp.PluginHelp for this plugin.
 func HelpProvider(_ []config.OrgRepo) (*pluginhelp.PluginHelp, error) {
 	pluginHelp := &pluginhelp.PluginHelp{
-		Description: `The cherrypick plugin is used for cherrypicking PRs across branches. For every successful cherrypick invocation a new PR is opened against the target branch and assigned to the requestor. If the parent PR contains a release note, it is copied to the cherrypick PR.`,
+		Description: `The cherrypick plugin is used for cherrypicking PRs across branches. For every successful cherrypick invocation a new PR is opened against the target branch and assigned to the requestor. If the parent PR contains a release note, it is copied to the cherrypick PR. Kind labels (e.g. kind/bug, kind/cleanup) from the original PR are copied into the cherry-pick PR description as /kind commands so the bot can re-apply them.`,
 	}
 	pluginHelp.AddCommand(pluginhelp.Command{
 		Usage:       "/cherrypick [branch]",
@@ -589,11 +589,17 @@ func (s *Server) handle(logger logrus.FieldLogger, author, requestor string, com
 	}
 
 	// Open a PR in GitHub.
+	var kindLabels []string
+	if labels, err := s.ghc.GetIssueLabels(org, repo, num); err != nil {
+		logger.WithError(err).Debug("Failed to get issue labels, omitting kind commands from cherry-pick PR body.")
+	} else {
+		kindLabels = kindLabelsFromIssueLabels(labels)
+	}
 	var cherryPickBody string
 	if s.prowAssignments {
-		cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(author, org, repo, num, body), chainBranches)
+		cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(author, org, repo, num, body), chainBranches, kindLabels)
 	} else {
-		cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(author, org, repo, num, body), chainBranches)
+		cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(author, org, repo, num, body), chainBranches, kindLabels)
 	}
 
 	head := fmt.Sprintf("%s:%s", pushOrg, newBranch)
@@ -620,9 +626,9 @@ func (s *Server) handle(logger logrus.FieldLogger, author, requestor string, com
 	createdPR, err := s.ghc.GetPullRequest(org, repo, createdNum)
 	if err == nil {
 		if s.prowAssignments {
-			cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(author, org, repo, createdNum, body), chainBranches)
+			cherryPickBody = cherrypicker.CreateCherrypickBody(num, requestor, releaseNoteFromParentPR(author, org, repo, createdNum, body), chainBranches, kindLabels)
 		} else {
-			cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(author, org, repo, createdNum, body), chainBranches)
+			cherryPickBody = cherrypicker.CreateCherrypickBody(num, "", releaseNoteFromParentPR(author, org, repo, createdNum, body), chainBranches, kindLabels)
 		}
 		createdPR.Body = cherryPickBody
 		if _, err := s.ghc.EditPullRequest(org, repo, createdNum, createdPR); err != nil {
@@ -744,6 +750,25 @@ func (s *Server) isTrustedUser(org, repo, login string) (bool, error) {
 	}
 	// Collaborators are allowed to do cherry-picks
 	return s.ghc.IsCollaborator(org, repo, login)
+}
+
+const kindLabelPrefix = "kind/"
+
+// kindLabelsFromIssueLabels returns the kind names (without "kind/" prefix) from
+// the given labels, deduplicated and sorted. Labels that are not kind/* or have
+// an empty name after stripping the prefix are skipped.
+func kindLabelsFromIssueLabels(labels []github.Label) []string {
+	kindSet := sets.New[string]()
+	for _, label := range labels {
+		if !strings.HasPrefix(label.Name, kindLabelPrefix) {
+			continue
+		}
+		name := strings.TrimPrefix(label.Name, kindLabelPrefix)
+		if name != "" {
+			kindSet.Insert(name)
+		}
+	}
+	return sets.List(kindSet)
 }
 
 // List all trusted users of the repository
