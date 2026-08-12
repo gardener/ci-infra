@@ -74,7 +74,7 @@ variants:
 
 }
 
-func unmarshalYAML(t *testing.T, v interface{}, s string) {
+func unmarshalYAML(t *testing.T, v any, s string) {
 	t.Helper()
 	if err := yaml.Unmarshal([]byte(strings.TrimSpace(s)), v); err != nil {
 		t.Fatal(err)

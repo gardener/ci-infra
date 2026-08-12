@@ -44,7 +44,7 @@ type githubClient interface {
 	ListStatuses(org, repo, ref string) ([]github.Status, error)
 	GetPullRequest(org, repo string, number int) (*github.PullRequest, error)
 	GetRepos(org string, isUser bool) ([]github.Repo, error)
-	QueryWithGitHubAppsSupport(ctx context.Context, q interface{}, vars map[string]interface{}, org string) error
+	QueryWithGitHubAppsSupport(ctx context.Context, q any, vars map[string]any, org string) error
 }
 
 // claAssistantPlugin
@@ -424,7 +424,7 @@ func (c *claAssistantPlugin) enforceClaRecheck(ctx context.Context, org string, 
 
 func (c *claAssistantPlugin) search(ctx context.Context, log *logrus.Entry, q, org string) ([]pullRequest, error) {
 	var ret []pullRequest
-	vars := map[string]interface{}{
+	vars := map[string]any{
 		"query":        githubql.String(q),
 		"searchCursor": (*githubql.String)(nil),
 	}
@@ -446,7 +446,7 @@ func (c *claAssistantPlugin) search(ctx context.Context, log *logrus.Entry, q, o
 		if !sq.Search.PageInfo.HasNextPage {
 			break
 		}
-		vars["searchCursor"] = githubql.NewString(sq.Search.PageInfo.EndCursor)
+		vars["searchCursor"] = new(sq.Search.PageInfo.EndCursor)
 	}
 	log = log.WithFields(logrus.Fields{
 		"query":          q,

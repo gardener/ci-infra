@@ -16,12 +16,6 @@ import (
 	"sigs.k8s.io/prow/pkg/flagutil"
 )
 
-func strP(s string) *string { return &s }
-func boolP(b bool) *bool    { return &b }
-func privP(p org.Privacy) *org.Privacy {
-	return &p
-}
-
 var _ = Describe("PeribolosCheckconfig", func() {
 	DescribeTable("#parseArgs",
 		func(args []string, expected *options) {
@@ -214,13 +208,13 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					"parent": {
 						Maintainers: []string{"alice"},
 						TeamMetadata: org.TeamMetadata{
-							Privacy: privP(closed),
+							Privacy: new(closed),
 						},
 						Children: map[string]org.Team{
 							"child": {
 								Members: []string{"stranger"},
 								TeamMetadata: org.TeamMetadata{
-									Privacy: privP(closed),
+									Privacy: new(closed),
 								},
 							},
 						},
@@ -259,13 +253,13 @@ var _ = Describe("PeribolosCheckconfig", func() {
 					"parent": {
 						Maintainers: []string{"alice"},
 						TeamMetadata: org.TeamMetadata{
-							Privacy: privP(closed),
+							Privacy: new(closed),
 						},
 						Children: map[string]org.Team{
 							"child": {
 								Maintainers: []string{"alice"},
 								TeamMetadata: org.TeamMetadata{
-									Privacy: privP(secret),
+									Privacy: new(secret),
 								},
 							},
 						},
@@ -375,8 +369,8 @@ var _ = Describe("PeribolosCheckconfig", func() {
 			org.Config{
 				Admins: []string{"alice", "bob"},
 				Repos: map[string]org.Repo{
-					"repo": {Description: strP("desc")},
-					"Repo": {Description: strP("desc")},
+					"repo": {Description: new("desc")},
+					"Repo": {Description: new("desc")},
 				},
 			},
 			"found duplicate repo names"),
@@ -389,7 +383,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 			org.Config{
 				Admins: []string{"alice", "bob"},
 				Repos: map[string]org.Repo{
-					"repo": {Archived: boolP(false)},
+					"repo": {Archived: new(false)},
 				},
 			},
 			"repos configured with archived: false"),
@@ -402,7 +396,7 @@ var _ = Describe("PeribolosCheckconfig", func() {
 			org.Config{
 				Admins: []string{"alice", "bob"},
 				Repos: map[string]org.Repo{
-					"repo": {Archived: boolP(true)},
+					"repo": {Archived: new(true)},
 				},
 			},
 			""),
@@ -451,12 +445,12 @@ var _ = Describe("PeribolosCheckconfig", func() {
 				"found duplicate repo names"),
 			Entry("flags archived: false",
 				map[string]org.Repo{
-					"repo": {Archived: boolP(false)},
+					"repo": {Archived: new(false)},
 				},
 				"repos configured with archived: false"),
 			Entry("allows archived: true",
 				map[string]org.Repo{
-					"repo": {Archived: boolP(true)},
+					"repo": {Archived: new(true)},
 				},
 				""),
 		)
