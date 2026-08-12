@@ -34,6 +34,10 @@ spec:
             - --fix-org-members
             - --fix-teams
             - --fix-team-members
+            - --fix-team-repos
+            - --fix-repos
+            - --fix-collaborators
+            - --allow-repo-archival
             - --confirm
             volumeMounts:
             - name: github-token
