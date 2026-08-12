@@ -16,6 +16,8 @@ presubmits:
       preset-gocache-mounts: "true"
     annotations:
       description: Runs end-to-end tests on a Seed with 3 zones with a Shoot with failure tolerance type 'zone' for gardener developments in pull requests
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
       fork-per-release: "true"
     spec:
       serviceAccountName: gardener-prow-gobuildcache-ro
