@@ -100,6 +100,9 @@ spec:
             "gardener/gardener-ghsa-tracker",
             "gardener/gardener-extension-os-coreos",
             "gardener/gardener-extension-os-ubuntu",
+            "gardener/gardener-extension-runtime-gvisor",
+            "gardener/gardener-extension-os-gardenlinux",
+            "gardener/gardener-extension-os-suse-chost",
           ],
           "allowedPostUpgradeCommands": [".*"]
         }

@@ -181,3 +181,12 @@ presubmits:
   gardener/gardener-extension-os-ubuntu:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-os-ubuntu-check-renovate-config
+  gardener/gardener-extension-runtime-gvisor:
+    - <<: *renovate-presubmit
+      name: pull-gardener-extension-runtime-gvisor-check-renovate-config
+  gardener/gardener-extension-os-gardenlinux:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-os-gardenlinux-check-renovate-config
+  gardener/gardener-extension-os-suse-chost:
+  - <<: *renovate-presubmit
+    name: pull-gardener-extension-os-suse-chost-check-renovate-config
