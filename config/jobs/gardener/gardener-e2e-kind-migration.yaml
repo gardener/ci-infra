@@ -16,6 +16,8 @@ presubmits:
       preset-gocache-mounts: "true"
     annotations:
       description: Runs control plane migration end-to-end tests for gardener developments in pull requests
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
       fork-per-release: "true"
     spec:
       serviceAccountName: gardener-prow-gobuildcache-ro

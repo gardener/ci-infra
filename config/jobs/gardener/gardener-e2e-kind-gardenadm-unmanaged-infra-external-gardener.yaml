@@ -16,6 +16,8 @@ presubmits:
       preset-gocache-mounts: "true"
     annotations:
       description: Runs end-to-end tests in pull requests for gardenadm unmanaged infrastructure developments with external Gardener deployment
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
       fork-per-release: "true"
     spec:
       serviceAccountName: gardener-prow-gobuildcache-ro
@@ -57,8 +59,8 @@ periodics:
     preset-kind-volume-mounts: "true"
     preset-gocache-mounts: "true"
   annotations:
-    testgrid-dashboards: gardener-gardener
     description: Runs end-to-end tests periodically for gardenadm unmanaged infrastructure developments with external Gardener deployment
+    testgrid-dashboards: gardener-gardener
     testgrid-days-of-results: "60"
     fork-per-release: "true"
   spec:

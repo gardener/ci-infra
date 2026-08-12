@@ -13,6 +13,8 @@ presubmits:
       preset-gocache-mounts: "true"
     annotations:
       description: Runs integration tests for gardener developments in pull requests
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
       fork-per-release: "true"
     spec:
       # For PR jobs, use a read-only service account

@@ -11,6 +11,8 @@ presubmits:
       grace_period: 10m
     annotations:
       description: Runs unit tests for gardener developments in pull requests
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
       fork-per-release: "true"
     spec:
       containers:
