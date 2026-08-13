@@ -266,6 +266,7 @@ images:
   - v0.154.0
   - v0.155.0
   - v0.156.0
+  - v0.157.0
 - source: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/opentelemetry-collector-releases/opentelemetry-collector-contrib
   tags:
