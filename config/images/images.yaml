@@ -165,6 +165,7 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/gateway
   tags:
   - v1.8.3
+  - v1.9.0
 - source: ghcr.io/credativ/vali
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/credativ/vali
   tags:
