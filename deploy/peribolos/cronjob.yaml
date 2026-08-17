@@ -20,7 +20,7 @@ spec:
         spec:
           containers:
           - name: peribolos
-            image: us-docker.pkg.dev/k8s-infra-prow/images/peribolos:v20260812-7e14d3334
+            image: us-docker.pkg.dev/k8s-infra-prow/images/peribolos:v20260817-c8b6c2ce8
             args:
             - --min-admins=5
             - --require-self
