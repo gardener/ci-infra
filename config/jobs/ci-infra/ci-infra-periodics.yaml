@@ -122,7 +122,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260817-c8b6c2ce8
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260818-89129737d
       command:
       - generic-autobumper
       args:
@@ -153,7 +153,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260817-c8b6c2ce8
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260818-89129737d
       command:
       - generic-autobumper
       args:
@@ -184,7 +184,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260817-c8b6c2ce8
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260818-89129737d
       command:
       - generic-autobumper
       args:
@@ -215,7 +215,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260817-c8b6c2ce8
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20260818-89129737d
       command:
       - generic-autobumper
       args:
@@ -249,7 +249,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260817-c8b6c2ce8
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260818-89129737d
       command:
       - checkconfig
       args:
@@ -281,7 +281,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260817-c8b6c2ce8
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20260818-89129737d
       command:
       - checkconfig
       args:
