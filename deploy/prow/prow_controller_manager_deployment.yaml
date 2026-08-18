@@ -20,7 +20,7 @@ spec:
       serviceAccountName: prow-controller-manager
       containers:
       - name: prow-controller-manager
-        image: us-docker.pkg.dev/k8s-infra-prow/images/prow-controller-manager:v20260817-c8b6c2ce8
+        image: us-docker.pkg.dev/k8s-infra-prow/images/prow-controller-manager:v20260818-89129737d
         args:
         - --config-path=/etc/config/config.yaml
         - --dry-run=false
