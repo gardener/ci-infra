@@ -93,6 +93,7 @@ slack:
     - gardener/gardener-extension-auditing
     - gardener/diki
     - gardener/diki-operator
+    - gardener/gardener-extension-diki
     - gardener/pvc-autoscaler
     - gardener/gardener-landscape-kit
     channels:

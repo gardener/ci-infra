@@ -26,6 +26,7 @@ dashboard_groups:
     - gardener-extension-auditing
     - diki
     - diki-operator
+    - gardener-extension-diki
     - pvc-autoscaler
     - gardener-landscape-kit
 
@@ -55,5 +56,6 @@ dashboards:
 - name: gardener-extension-auditing
 - name: diki
 - name: diki-operator
+- name: gardener-extension-diki
 - name: pvc-autoscaler
 - name: gardener-landscape-kit

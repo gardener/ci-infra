@@ -71,6 +71,7 @@ spec:
             "gardener/homebrew-tap",
             "gardener/diki",
             "gardener/diki-operator",
+            "gardener/gardener-extension-diki",
             "gardener/cert-management",
             "gardener/external-dns-management",
             "gardener/cluster-api-provider-gardener",
