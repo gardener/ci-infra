@@ -16,10 +16,10 @@ presubmits:
         - .ci/verify
         resources:
           limits:
-            memory: 3Gi
+            memory: 8Gi
           requests:
             cpu: 2
-            memory: 1Gi
+            memory: 4Gi
 periodics:
 - name: ci-gardener-extension-shoot-falco-service-unit
   cluster: gardener-prow-build
@@ -43,7 +43,7 @@ periodics:
       - .ci/verify
       resources:
         limits:
-          memory: 3Gi
+          memory: 8Gi
         requests:
           cpu: 2
-          memory: 1Gi
+          memory: 4Gi
