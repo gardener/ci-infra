@@ -146,6 +146,9 @@ tide:
     - gardener/gardener-ai-conformance
     - gardener/k8s-conformance
     - gardener/demo
+    # private repos have own tide query below that does not require 'cla: yes' label
+    - gardener/.github-oidc
+    - gardener/gardener-ghsa-tracker
     labels:
     - lgtm
     - approved
@@ -171,6 +174,16 @@ tide:
     # gardener-ci-robot adds this label to PRs that should be merged automatically
     - skip-review
     - "cla: yes"
+    missingLabels: *tide-default-missing-labels
+
+  # Private repos cannot be enabled for the CLA assistant and will never get the 'cla: yes' label,
+  # therefore set tide to merge their PRs only on 'lgtm' and 'approved' labels.
+  - repos:
+    - gardener/.github-oidc
+    - gardener/gardener-ghsa-tracker
+    labels:
+    - lgtm
+    - approved
     missingLabels: *tide-default-missing-labels
 
   context_options:
