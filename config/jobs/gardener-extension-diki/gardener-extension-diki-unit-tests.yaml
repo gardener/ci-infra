@@ -1,0 +1,55 @@
+presubmits:
+  gardener/gardener-extension-diki:
+  - name: pull-gardener-extension-diki-unit
+    cluster: gardener-prow-build
+    always_run: true
+    decorate: true
+    decoration_config:
+      timeout: 20m
+      grace_period: 10m
+    annotations:
+      description: Runs unit tests for gardener-extension-diki developments in pull requests
+    spec:
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260811-2830edb-1.26
+        command:
+        - make
+        args:
+        - import-tools-bin
+        - verify-extended
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            cpu: 2
+            memory: 1Gi
+periodics:
+- name: ci-gardener-extension-diki-unit
+  cluster: gardener-prow-build
+  interval: 8h
+  extra_refs:
+  - org: gardener
+    repo: gardener-extension-diki
+    base_ref: main
+  decorate: true
+  decoration_config:
+    timeout: 20m
+    grace_period: 10m
+  annotations:
+    description: Periodically runs unit tests for gardener-extension-diki main branch
+    testgrid-dashboards: gardener-extension-diki
+    testgrid-days-of-results: "60"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260811-2830edb-1.26
+      command:
+      - make
+      args:
+      - import-tools-bin
+      - verify-extended
+      resources:
+        limits:
+          memory: 4Gi
+        requests:
+          cpu: 2
+          memory: 1Gi
