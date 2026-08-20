@@ -108,6 +108,18 @@ presubmits:
               - name: GO_TEST_ARGS
                 value: "-run TestSecretFinalizers"
 
+    - name: pull-etcd-druid-e2e-kind-etcdopstask
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e etcdopstask tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestAdmit|TestOnDemandSnapshotLifecycle"
+
 periodics:
   - name: ci-etcd-druid-e2e-kind
     cluster: gardener-prow-build
