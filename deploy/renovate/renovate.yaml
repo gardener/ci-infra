@@ -105,7 +105,10 @@ spec:
             "gardener/gardener-extension-os-gardenlinux",
             "gardener/gardener-extension-os-suse-chost",
           ],
-          "allowedPostUpgradeCommands": [".*"]
+          "allowedPostUpgradeCommands": [".*"],
+          "commitTrailers": [
+            "Signed-off-by: gardener-renovate <renovate@gardener.cloud>"
+          ]
         }
 
       persistence:
