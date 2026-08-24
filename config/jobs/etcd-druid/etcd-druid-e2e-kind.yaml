@@ -117,8 +117,8 @@ presubmits:
         containers:
           - <<: *e2e_container
             env:
-              - name: GO_TEST_ARGS
-                value: "-run TestAdmit|TestOnDemandSnapshotLifecycle"
+              - name: TEST_PATH
+                value: "controller/etcdopstask"
 
 periodics:
   - name: ci-etcd-druid-e2e-kind
