@@ -162,7 +162,7 @@ tide:
     - needs-rebase
     - "cla: no"
 
-  # configuration for automerging robot PRs
+  # configuration for automerging gardener-ci-robot PRs
   - author: gardener-ci-robot
     orgs:
     - gardener
@@ -171,6 +171,17 @@ tide:
     # gardener-ci-robot adds this label to PRs that should be merged automatically
     - skip-review
     - "cla: yes"
+    missingLabels: *tide-default-missing-labels
+
+  # configuration for automerging gardener-renovate PRs
+  - author: gardener-renovate
+    orgs:
+      - gardener
+    excludedRepos: *tide-excluded-repos
+    labels:
+      # gardener-renovate adds this label to PRs that should be merged automatically
+      - skip-review
+      - "cla: yes"
     missingLabels: *tide-default-missing-labels
 
   context_options:
