@@ -149,7 +149,6 @@ tide:
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels: &tide-default-missing-labels
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -160,7 +159,6 @@ tide:
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
 
   # configuration for automerging gardener-ci-robot PRs
   - author: gardener-ci-robot
@@ -170,7 +168,6 @@ tide:
     labels:
     # gardener-ci-robot adds this label to PRs that should be merged automatically
     - skip-review
-    - "cla: yes"
     missingLabels: *tide-default-missing-labels
 
   # configuration for automerging gardener-renovate PRs
@@ -181,7 +178,6 @@ tide:
     labels:
       # gardener-renovate adds this label to PRs that should be merged automatically
       - skip-review
-      - "cla: yes"
     missingLabels: *tide-default-missing-labels
 
   context_options:
