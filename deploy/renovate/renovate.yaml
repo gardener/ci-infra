@@ -106,7 +106,7 @@ spec:
             "gardener/gardener-extension-os-suse-chost",
           ],
           "allowedPostUpgradeCommands": [".*"],
-          "gitAuthor": "gardener-renovate <gardener-renovate@vornetran.de>",
+          "gitAuthor": "gardener-renovate <renovate@gardener.cloud>",
           "extends": [":gitSignOff"]
         }
 
