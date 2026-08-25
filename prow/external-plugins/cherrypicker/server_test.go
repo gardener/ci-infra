@@ -831,7 +831,7 @@ func testCherryPickPRWithLabels(clients localgit.Clients, t *testing.T) {
 						tokenGenerator: getSecret,
 						log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
 
-						labels:          []string{"cla: yes"},
+						labels:          []string{},
 						prowAssignments: false,
 						labelPrefix:     tc.labelPrefix,
 					}

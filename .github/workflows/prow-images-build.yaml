@@ -35,8 +35,6 @@ jobs:
             target: branch-cleaner
           - name: cherrypicker
             target: cherrypicker
-          - name: cla-assistant
-            target: cla-assistant
           - name: image-builder
             target: image-builder
           - name: job-forker

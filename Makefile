@@ -10,8 +10,6 @@ VERSION             := v$(shell date '+%Y%m%d')-$(shell git rev-parse --short HE
 
 IMG_CHERRYPICKER := cherrypicker
 REG_CHERRYPICKER := $(REGISTRY)/$(IMG_CHERRYPICKER)
-IMG_CLA_ASSISTANT := cla-assistant
-REG_CLA_ASSISTANT := $(REGISTRY)/$(IMG_CLA_ASSISTANT)
 IMG_IMAGE_BUILDER := image-builder
 REG_IMAGE_BUILDER := $(REGISTRY)/$(IMG_IMAGE_BUILDER)
 IMG_JOB_FORKER := job-forker
@@ -45,7 +43,6 @@ ifeq ("$(REGISTRY)", "")
 endif
 	@echo "Building docker images with version and tag $(VERSION)"
 	@docker build -t $(REG_CHERRYPICKER):$(VERSION) -t $(REG_CHERRYPICKER):latest -f Dockerfile --target $(IMG_CHERRYPICKER) .
-	@docker build -t $(REG_CLA_ASSISTANT):$(VERSION) -t $(REG_CLA_ASSISTANT):latest -f Dockerfile --target $(IMG_CLA_ASSISTANT) .
 	@docker build -t $(REG_IMAGE_BUILDER):$(VERSION) -t $(REG_IMAGE_BUILDER):latest -f Dockerfile --target $(IMG_IMAGE_BUILDER) .
 	@docker build -t $(REG_JOB_FORKER):$(VERSION) -t $(REG_JOB_FORKER):latest -f Dockerfile --target $(IMG_JOB_FORKER) .
 	@docker build -t $(REG_MILESTONE_ACTIVATOR):$(VERSION) -t $(REG_MILESTONE_ACTIVATOR):latest -f Dockerfile --target $(IMG_MILESTONE_ACTIVATOR) .
@@ -60,7 +57,6 @@ ifeq ("$(REGISTRY)", "")
 	@echo "Please set your docker registry in REGISTRY variable or .REGISTRY file first."; false;
 endif
 	@if ! docker images $(REG_CHERRYPICKER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CHERRYPICKER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
-	@if ! docker images $(REG_CLA_ASSISTANT) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CLA_ASSISTANT) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_IMAGE_BUILDER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_IMAGE_BUILDER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_JOB_FORKER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_JOB_FORKER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_MILESTONE_ACTIVATOR) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_MILESTONE_ACTIVATOR) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
@@ -69,7 +65,6 @@ endif
 	@if ! docker images $(REG_PERIBOLOS_CHECK_CONFIG) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_PERIBOLOS_CHECK_CONFIG) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_OWNERS_ALIASES_BUMPER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_OWNERS_ALIASES_BUMPER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_CHERRYPICKER):$(VERSION)
-	@docker push $(REG_CLA_ASSISTANT):$(VERSION)
 	@docker push $(REG_IMAGE_BUILDER):$(VERSION)
 	@docker push $(REG_JOB_FORKER):$(VERSION)
 	@docker push $(REG_MILESTONE_ACTIVATOR):$(VERSION)
@@ -79,7 +74,6 @@ endif
 	@docker push $(REG_OWNERS_ALIASES_BUMPER):$(VERSION)
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_CHERRYPICKER):latest
-	@docker push $(REG_CLA_ASSISTANT):latest
 	@docker push $(REG_IMAGE_BUILDER):latest
 	@docker push $(REG_JOB_FORKER):latest
 	@docker push $(REG_MILESTONE_ACTIVATOR):latest

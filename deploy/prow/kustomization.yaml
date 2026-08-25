@@ -8,9 +8,6 @@ resources:
 - cherrypicker_service.yaml
 - cherrypicker_vpa.yaml
 - builder_serviceaccount.yaml
-- cla_assistant_deployment.yaml
-- cla_assistant_service.yaml
-- cla_assistant_vpa.yaml
 - crier_deployment.yaml
 - crier_rbac.yaml
 - crier_service.yaml
