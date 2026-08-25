@@ -4,13 +4,11 @@ go 1.26.3
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/cenkalti/backoff/v7 v7.0.0
 	github.com/gardener/gardener-landscape-kit v0.3.0
 	github.com/google/go-cmp v0.7.0
 	github.com/onsi/ginkgo/v2 v2.32.0
 	github.com/onsi/gomega v1.42.0
 	github.com/pkg/errors v0.9.1
-	github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed
 	github.com/sirupsen/logrus v1.10.1
 	github.com/stretchr/testify v1.12.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.3
@@ -134,6 +132,7 @@ require (
 	github.com/prometheus/otlptranslator v1.0.0 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed // indirect
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.6.0 // indirect

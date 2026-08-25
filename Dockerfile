@@ -47,13 +47,6 @@ WORKDIR /
 COPY --from=builder /build/milestone-activator /milestone-activator
 ENTRYPOINT [ "/milestone-activator" ]
 
-FROM base_nonroot AS cla-assistant
-LABEL app=cla-assistant
-WORKDIR /
-COPY --from=builder /build/cla-assistant /cla-assistant
-EXPOSE 8080
-ENTRYPOINT [ "/cla-assistant" ]
-
 FROM base_nonroot AS image-builder
 LABEL app=image-builder
 WORKDIR /

@@ -35,7 +35,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -46,13 +45,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -62,13 +59,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - repos:
     - gardener/gardener
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -79,7 +74,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   #   excludedBranches:
   #   - master
   # - repos:
@@ -87,7 +81,6 @@ var _ = Describe("activator", func() {
   #   labels:
   #   - lgtm
   #   - approved
-  #   - "cla: yes"
   #   missingLabels:
   #   - do-not-merge/blocked-paths
   #   - do-not-merge/contains-merge-commits
@@ -98,7 +91,6 @@ var _ = Describe("activator", func() {
   #   - do-not-merge/release-note-label-needed
   #   - do-not-merge/work-in-progress
   #   - needs-rebase
-  #   - "cla: no"
   #   milestone: v1.60
   #   includedBranches:
   #   - master
@@ -113,7 +105,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -124,13 +115,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -140,13 +129,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - repos:
     - gardener/gardener
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -157,7 +144,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
   #############################################################################
@@ -169,7 +155,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -180,7 +165,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
     milestone: v1.60
     includedBranches:
     - master
@@ -199,7 +183,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -210,13 +193,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -226,13 +207,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - repos:
     - gardener/gardener
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -243,7 +222,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
   #############################################################################
@@ -255,7 +233,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -266,7 +243,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
     milestone: v1.60
     includedBranches:
     - master
@@ -285,7 +261,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -296,13 +271,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -312,13 +285,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - repos:
     - gardener/gardener
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -329,7 +300,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
   #############################################################################
@@ -341,7 +311,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -352,7 +321,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
     milestone: v1.61
     includedBranches:
     - master
@@ -371,7 +339,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -382,13 +349,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -398,13 +363,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - repos:
     - gardener/gardener
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -415,7 +378,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
   #############################################################################
@@ -427,7 +389,6 @@ var _ = Describe("activator", func() {
   #   labels:
   #   - lgtm
   #   - approved
-  #   - "cla: yes"
   #   missingLabels:
   #   - do-not-merge/blocked-paths
   #   - do-not-merge/contains-merge-commits
@@ -438,7 +399,6 @@ var _ = Describe("activator", func() {
   #   - do-not-merge/release-note-label-needed
   #   - do-not-merge/work-in-progress
   #   - needs-rebase
-  #   - "cla: no"
   #   milestone: v1.60
   #   includedBranches:
   #   - master
@@ -457,7 +417,6 @@ var _ = Describe("activator", func() {
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -468,13 +427,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - author: gardener-ci-robot
     repos:
     - gardener/ci-infra
     labels: # gardener-ci-robot should only create autobump PR with this label
     - skip-review
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -484,13 +441,11 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   - repos:
     - gardener/gardener
     labels:
     - lgtm
     - approved
-    - "cla: yes"
     missingLabels:
     - do-not-merge/blocked-paths
     - do-not-merge/contains-merge-commits
@@ -501,7 +456,6 @@ var _ = Describe("activator", func() {
     - do-not-merge/release-note-label-needed
     - do-not-merge/work-in-progress
     - needs-rebase
-    - "cla: no"
   #############################################################################
   ### Release Milestone section starts here
   #############################################################################
@@ -513,7 +467,6 @@ var _ = Describe("activator", func() {
 #     labels:
 #     - lgtm
 #     - approved
-#     - "cla: yes"
 #     missingLabels:
 #     - do-not-merge/blocked-paths
 #     - do-not-merge/contains-merge-commits
@@ -524,7 +477,6 @@ var _ = Describe("activator", func() {
 #     - do-not-merge/release-note-label-needed
 #     - do-not-merge/work-in-progress
 #     - needs-rebase
-#     - "cla: no"
 #     milestone: v1.60
 #     includedBranches:
 #     - master
