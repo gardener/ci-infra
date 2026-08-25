@@ -211,7 +211,7 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 			logrus.WithError(err).Infof("Error on cleaning up repo")
 		}
 	}()
-	if err := r.Gh.Gc.Commit(r.RepoClient.Directory(), r.Gh.BotUser.Name, r.Gh.GetEmail(), commitMessage, false); err != nil {
+	if err := r.Gh.Gc.Commit(r.RepoClient.Directory(), r.Gh.BotUser.Name, r.Gh.GetEmail(), commitMessage, true); err != nil {
 		return err
 	}
 
