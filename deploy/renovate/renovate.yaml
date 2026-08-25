@@ -106,9 +106,8 @@ spec:
             "gardener/gardener-extension-os-suse-chost",
           ],
           "allowedPostUpgradeCommands": [".*"],
-          "commitTrailers": [
-            "Signed-off-by: gardener-renovate <renovate@gardener.cloud>"
-          ]
+          "gitAuthor": "gardener-ci-robot <gardener.ci.robot@gmail.com>",
+          "extends": [":gitSignOff"]
         }
 
       persistence:
