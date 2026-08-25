@@ -765,20 +765,6 @@ default:
     target: both
     prowPlugin: shrug
     addedBy: humans
-  - color: e11d21
-    description: Indicates the PR's author has not signed the cla-assistant.io CLA.
-    name: 'cla: no'
-    target: prs
-    prowPlugin: cla-assistant
-    isExternalPlugin: true
-    addedBy: prow
-  - color: bfe5bf
-    description: Indicates the PR's author has signed the cla-assistant.io CLA.
-    name: 'cla: yes'
-    target: prs
-    prowPlugin: cla-assistant
-    isExternalPlugin: true
-    addedBy: prow
   - name: crypto
     color: f9d0c4
     description: Affecting cryptography or security mechanisms (encryption, keys, ciphers, hashes, signatures, etc.).
