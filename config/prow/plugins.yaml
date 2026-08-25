@@ -49,7 +49,6 @@ label:
     # Then, you can set `automerge=true` in the respective `packageRule`.
     - allowed_users:
       - gardener-ci-robot
-      - gardener-renovate
       label: skip-review
 
 lgtm:
@@ -75,7 +74,6 @@ slack:
     exempt_users:
     - gardener-prow[bot]
     - gardener-ci-robot
-    - gardener-renovate
     - dependabot[bot]
   - repos:
     - gardener/gardener
@@ -103,7 +101,6 @@ slack:
     exempt_users:
     - gardener-prow[bot]
     - gardener-ci-robot
-    - gardener-renovate
     - gardener-robot-ci-1
     - gardener-robot-ci-2
     - dependabot[bot]
@@ -115,7 +112,6 @@ slack:
     exempt_users:
     - gardener-prow[bot]
     - gardener-ci-robot
-    - gardener-renovate
 
 repo_milestone:
   gardener/ci-infra:
