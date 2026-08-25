@@ -70,8 +70,6 @@ presubmits:
         - --target
         - cherrypicker
         - --target
-        - cla-assistant
-        - --target
         - image-builder
         - --target
         - job-forker
