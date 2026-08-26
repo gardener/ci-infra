@@ -7,7 +7,6 @@ skipPullRequest: false
 gitHubOrg: "gardener"
 gitHubRepo: "ci-infra"
 remoteName: "ci-infra"
-signoff: true
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
   - "config/prow"
