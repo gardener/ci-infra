@@ -98,7 +98,7 @@ spec:
             "gardener/oidc-apps-controller",
             "gardener/opentelemetry-collector",
             "gardener/egress-filter-refresher",
-            "gardener/gardener-ghsa-tracker",
+            "gardener/gardener-security-advisories-tracker",
             "gardener/gardener-extension-os-coreos",
             "gardener/gardener-extension-os-ubuntu",
             "gardener/gardener-extension-runtime-gvisor",

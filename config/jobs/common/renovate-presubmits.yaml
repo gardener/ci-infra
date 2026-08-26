@@ -175,9 +175,9 @@ presubmits:
   gardener/egress-filter-refresher:
   - <<: *renovate-presubmit
     name: pull-egress-filter-refresher-check-renovate-config
-  gardener/gardener-ghsa-tracker:
+  gardener/gardener-security-advisories-tracker:
   - <<: *renovate-presubmit
-    name: pull-gardener-ghsa-tracker-check-renovate-config
+    name: pull-gardener-security-advisories-tracker-check-renovate-config
   gardener/gardener-extension-os-coreos:
   - <<: *renovate-presubmit
     name: pull-gardener-extension-os-coreos-check-renovate-config
