@@ -616,7 +616,7 @@ periodics:
       env:
       - name: GOCACHEPROG
         value: gobuildcache gs://gardener-prow-gobuildcache
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260826-1a4c585-1.26
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260827-3dbaa56-1.26
       name: test-integration
       resources:
         limits:
@@ -652,7 +652,7 @@ periodics:
       - sast
       command:
       - make
-      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260826-1a4c585-1.26
+      image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260827-3dbaa56-1.26
       name: ""
       resources:
         limits:
@@ -1264,7 +1264,7 @@ presubmits:
         env:
         - name: GOCACHEPROG
           value: gobuildcache -readonly gs://gardener-prow-gobuildcache
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260826-1a4c585-1.26
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260827-3dbaa56-1.26
         name: test-integration
         resources:
           limits:
@@ -1371,7 +1371,7 @@ presubmits:
         - sast
         command:
         - make
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260826-1a4c585-1.26
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20260827-3dbaa56-1.26
         name: ""
         resources:
           limits:
