@@ -9,9 +9,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"sigs.k8s.io/prow/pkg/config/secret"
-	gitv2 "sigs.k8s.io/prow/pkg/git/v2"
 	"sigs.k8s.io/prow/pkg/logrusutil"
+
+	ghi "github.com/gardener/ci-infra/prow/pkg/githubinteractor"
 )
 
 func main() {
@@ -45,22 +45,20 @@ func main() {
 		logrus.WithError(err).Fatal("Failed to initialize GitHub client!")
 	}
 
-	// pushFactory is fully authenticated (PAT or GitHub App) and is used only to
-	// push the branch to the remote.
-	pushFactory, err := o.ghOpts.GitClientFactory("", nil, !o.applyChanges, false)
-
+	// gitFactory is the authenticated git client factory used for clone
+	// and push.
+	gitFactory, err := o.ghOpts.GitClientFactory("", nil, !o.applyChanges, false)
 	if err != nil {
 		logrus.WithError(err).Fatal("Failed to initialize git client!")
 	}
 
-	// commitFactory carries the commit author identity (GitUser). GitClientFactory
-	// never wires GitUser, so repoClient.Commit would nil-panic without this. Commit
-	// is a purely local operation, so this factory needs no token and stays auth-agnostic.
-	// The authenticated pushFactory handles the networked push separately.
-	//
-	// Only built in apply mode: BotUser()/Email() require an authenticated client, and
-	// a dry run never commits, so building it unconditionally would break anonymous runs.
-	var commitFactory gitv2.ClientFactory
+	// BotUser/Email require an authenticated client, we only fetch them in apply
+	// mode. Dry runs never checkout/commit so leaving them unset is fine.
+	gh := &ghi.GithubServer{
+		Ghc: ghClient,
+		Gcf: gitFactory,
+		Gc:  &ghi.CommitClient{},
+	}
 	if o.applyChanges {
 		botUser, err := ghClient.BotUser()
 		if err != nil {
@@ -70,16 +68,8 @@ func main() {
 		if err != nil {
 			logrus.WithError(err).Fatal("Failed to get bot email for git commit identity!")
 		}
-
-		commitFactory, err = gitv2.NewClientFactory(
-			gitv2.WithGitUser(func() (name, gitEmail string, err error) {
-				return botUser.Name, email, nil
-			}),
-			gitv2.WithCensor(secret.Censor),
-		)
-		if err != nil {
-			logrus.WithError(err).Fatal("Failed to initialize commit git client!")
-		}
+		gh.BotUser = botUser
+		gh.Email = email
 	}
 
 	// build our available aliases from the teams information we have
@@ -117,14 +107,14 @@ func main() {
 			}
 
 			// download repo
-			repoClient, err := checkoutRepo(ghClient, commitFactory, orgName, repoName, prCfg)
+			rep, err := checkoutRepo(ghClient, gh, orgName, repoName, prCfg)
 			if err != nil {
 				logrus.WithError(err).Errorf("Failed to initialize Git Client for %s/%s", orgName, repoName)
 				continue
 			}
 
 			// write changes to file
-			repoDir := repoClient.Directory()
+			repoDir := rep.RepoClient.Directory()
 			aliasesPath := filepath.Join(repoDir, "OWNERS_ALIASES")
 
 			if err := writeChanges(aliasesPath, changes); err != nil {
@@ -133,7 +123,7 @@ func main() {
 			}
 
 			// commit and push changes
-			if err := commitAndPush(repoClient, pushFactory, orgName, repoName, prCfg); err != nil {
+			if err := commitAndPush(rep, gh, orgName, repoName, prCfg); err != nil {
 				logrus.WithError(err).Errorf("Commit and push failed repo: %s/%s", orgName, repoName)
 				continue
 			}
@@ -148,7 +138,7 @@ func main() {
 			logrus.Infof("Successfully applied changes to %s/%s and opened PR #%d", orgName, repoName, id)
 
 			// cleanup
-			if err := repoClient.Clean(); err != nil {
+			if err := rep.RepoClient.Clean(); err != nil {
 				logrus.WithError(err).Errorf("Failed to delete/cleanup locally stored repo: %s/%s", orgName, repoName)
 			}
 		}
