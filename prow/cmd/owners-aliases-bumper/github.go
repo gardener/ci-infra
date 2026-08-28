@@ -91,7 +91,7 @@ func checkoutRepo(ghClient github.Client, gh *ghi.GithubServer, orgName, repoNam
 
 // commitAndPush stages the working-tree changes, creates a signed-off commit
 // via gh.Gc (which shells out to the git binary, RepoClient.Commit has no
-// --signoff), and pushes cfg.branch to the central remote. DCO 
+// --signoff), and pushes cfg.branch to the central remote. DCO
 // requires Signed-off
 func commitAndPush(rep *ghi.Repository, gh *ghi.GithubServer, orgName, repoName string, cfg prConfig) error {
 	log := logrus.WithField("repo", orgName+"/"+repoName)
