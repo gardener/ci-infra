@@ -12,8 +12,6 @@ IMG_CHERRYPICKER := cherrypicker
 REG_CHERRYPICKER := $(REGISTRY)/$(IMG_CHERRYPICKER)
 IMG_JOB_FORKER := job-forker
 REG_JOB_FORKER := $(REGISTRY)/$(IMG_JOB_FORKER)
-IMG_MILESTONE_ACTIVATOR := milestone-activator
-REG_MILESTONE_ACTIVATOR  := $(REGISTRY)/$(IMG_MILESTONE_ACTIVATOR)
 IMG_RELEASE_HANDLER := release-handler
 REG_RELEASE_HANDLER  := $(REGISTRY)/$(IMG_RELEASE_HANDLER)
 IMG_BRANCH_CLEANER := branch-cleaner
@@ -42,7 +40,6 @@ endif
 	@echo "Building docker images with version and tag $(VERSION)"
 	@docker build -t $(REG_CHERRYPICKER):$(VERSION) -t $(REG_CHERRYPICKER):latest -f Dockerfile --target $(IMG_CHERRYPICKER) .
 	@docker build -t $(REG_JOB_FORKER):$(VERSION) -t $(REG_JOB_FORKER):latest -f Dockerfile --target $(IMG_JOB_FORKER) .
-	@docker build -t $(REG_MILESTONE_ACTIVATOR):$(VERSION) -t $(REG_MILESTONE_ACTIVATOR):latest -f Dockerfile --target $(IMG_MILESTONE_ACTIVATOR) .
 	@docker build -t $(REG_RELEASE_HANDLER):$(VERSION) -t $(REG_RELEASE_HANDLER):latest -f Dockerfile --target $(IMG_RELEASE_HANDLER) .
 	@docker build -t $(REG_BRANCH_CLEANER):$(VERSION) -t $(REG_BRANCH_CLEANER):latest -f Dockerfile --target $(IMG_BRANCH_CLEANER) .
 	@docker build -t $(REG_PERIBOLOS_CHECK_CONFIG):$(VERSION) -t $(REG_PERIBOLOS_CHECK_CONFIG):latest -f Dockerfile --target $(IMG_PERIBOLOS_CHECK_CONFIG) .
@@ -55,14 +52,12 @@ ifeq ("$(REGISTRY)", "")
 endif
 	@if ! docker images $(REG_CHERRYPICKER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_CHERRYPICKER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_JOB_FORKER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_JOB_FORKER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
-	@if ! docker images $(REG_MILESTONE_ACTIVATOR) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_MILESTONE_ACTIVATOR) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_RELEASE_HANDLER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_RELEASE_HANDLER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_BRANCH_CLEANER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_BRANCH_CLEANER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_PERIBOLOS_CHECK_CONFIG) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_PERIBOLOS_CHECK_CONFIG) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_OWNERS_ALIASES_BUMPER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_OWNERS_ALIASES_BUMPER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_CHERRYPICKER):$(VERSION)
 	@docker push $(REG_JOB_FORKER):$(VERSION)
-	@docker push $(REG_MILESTONE_ACTIVATOR):$(VERSION)
 	@docker push $(REG_RELEASE_HANDLER):$(VERSION)
 	@docker push $(REG_BRANCH_CLEANER):$(VERSION)
 	@docker push $(REG_PERIBOLOS_CHECK_CONFIG):$(VERSION)
@@ -70,7 +65,6 @@ endif
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_CHERRYPICKER):latest
 	@docker push $(REG_JOB_FORKER):latest
-	@docker push $(REG_MILESTONE_ACTIVATOR):latest
 	@docker push $(REG_RELEASE_HANDLER):latest
 	@docker push $(REG_BRANCH_CLEANER):latest
 	@docker push $(REG_PERIBOLOS_CHECK_CONFIG):latest
