@@ -35,12 +35,8 @@ jobs:
             target: branch-cleaner
           - name: cherrypicker
             target: cherrypicker
-          - name: image-builder
-            target: image-builder
           - name: job-forker
             target: job-forker
-          - name: milestone-activator
-            target: milestone-activator
           - name: release-handler
             target: release-handler
           - name: peribolos-checkconfig
