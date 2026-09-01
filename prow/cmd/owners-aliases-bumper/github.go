@@ -9,18 +9,16 @@ import (
 	"slices"
 
 	"github.com/sirupsen/logrus"
-	"sigs.k8s.io/prow/pkg/git/v2"
 	"sigs.k8s.io/prow/pkg/github"
+
+	ghi "github.com/gardener/ci-infra/prow/pkg/githubinteractor"
 )
 
 const (
 	defaultCommitTitle = "Update OWNERS_ALIASES from Peribolos config"
-	defaultCommitBody  = `
-Automated update by owners-aliases-bumper. Alias membership was synced with the GitHub team definitions in the Peribolos config.
-`
-	defaultPRBranch = "owners-aliases-bumper"
-	defaultPRTitle  = defaultCommitTitle
-	defaultPRBody   = `
+	defaultPRBranch    = "owners-aliases-bumper"
+	defaultPRTitle     = defaultCommitTitle
+	defaultPRBody      = `
 <!-- Please ensure that you do not include company internal information. -->
 
 **How to categorize this PR?**
@@ -55,17 +53,19 @@ This PR was generated automatically.
 type prConfig struct {
 	branch      string
 	commitTitle string
-	commitBody  string
 	prTitle     string
 	prBody      string
 }
 
-func checkoutRepo(ghClient github.Client, gitClient git.ClientFactory, orgName, repoName string, cfg prConfig) (git.RepoClient, error) {
+func checkoutRepo(ghClient github.Client, gh *ghi.GithubServer, orgName, repoName string, cfg prConfig) (*ghi.Repository, error) {
 	log := logrus.WithField("repo", orgName+"/"+repoName)
 
 	log.Debug("Cloning repo (git client factory)")
-	r, err := gitClient.ClientFor(orgName, repoName)
+	rep, err := ghi.NewRepository(fmt.Sprintf("%s/%s", orgName, repoName), gh)
 	if err != nil {
+		return nil, err
+	}
+	if err := rep.CloneRepo(); err != nil {
 		return nil, err
 	}
 
@@ -76,41 +76,41 @@ func checkoutRepo(ghClient github.Client, gitClient git.ClientFactory, orgName, 
 	}
 
 	log.Debugf("Checking out default branch %q", repoInfo.DefaultBranch)
-	if err := r.Checkout(repoInfo.DefaultBranch); err != nil {
+	if err := rep.RepoClient.Checkout(repoInfo.DefaultBranch); err != nil {
 		return nil, fmt.Errorf("unable to checkout branch %s of repo %s/%s: %w", repoInfo.DefaultBranch, orgName, repoName, err)
 	}
 
 	log.Debugf("Creating new branch %q", cfg.branch)
-	if err := r.CheckoutNewBranch(cfg.branch); err != nil {
+	if err := rep.RepoClient.CheckoutNewBranch(cfg.branch); err != nil {
 		return nil, fmt.Errorf("unable to checkout new branch %s of repo %s/%s: %w", cfg.branch, orgName, repoName, err)
 	}
 
-	log.Debugf("Repo checked out at %s on branch %q", r.Directory(), cfg.branch)
-	return r, nil
+	log.Debugf("Repo checked out at %s on branch %q", rep.RepoClient.Directory(), cfg.branch)
+	return rep, nil
 }
 
-// commitAndPush commits the working-tree changes using commitClient (which carries
-// the commit-author identity) and then pushes via pushFactory, which is separately
-// authenticated. Both operate on the same checkout: pushFactory wraps commitClient's
-// directory with ClientFromDir rather than re-cloning, so the commit is present when
-// we push. This split exists because GitClientFactory does not wire a GitUser, so a
-// single client would nil-panic in Commit.
-func commitAndPush(commitClient git.RepoClient, pushFactory git.ClientFactory, orgName, repoName string, cfg prConfig) error {
+// commitAndPush stages the working-tree changes, creates a signed-off commit
+// via gh.Gc (which shells out to the git binary, RepoClient.Commit has no
+// --signoff), and pushes cfg.branch to the central remote. DCO
+// requires Signed-off
+func commitAndPush(rep *ghi.Repository, gh *ghi.GithubServer, orgName, repoName string, cfg prConfig) error {
 	log := logrus.WithField("repo", orgName+"/"+repoName)
 
-	log.Infof("Committing changes with title %q", cfg.commitTitle)
-	if err := commitClient.Commit(cfg.commitTitle, cfg.commitBody); err != nil {
+	name, email := gh.BotUser.Name, gh.GetEmail()
+	if err := rep.RepoClient.Config("user.name", name); err != nil {
+		return fmt.Errorf("failed to configure git user for %s/%s: %w", orgName, repoName, err)
+	}
+	if err := rep.RepoClient.Config("user.email", email); err != nil {
+		return fmt.Errorf("failed to configure git email for %s/%s: %w", orgName, repoName, err)
+	}
+
+	log.Infof("Committing changes with title %q (signed off)", cfg.commitTitle)
+	if err := gh.Gc.Commit(rep.RepoClient.Directory(), name, email, cfg.commitTitle, true); err != nil {
 		return fmt.Errorf("failed to commit to repo %s/%s: %w", orgName, repoName, err)
 	}
 
-	// Wrap the same working tree with the authenticated factory to push.
-	pushClient, err := pushFactory.ClientFromDir(orgName, repoName, commitClient.Directory())
-	if err != nil {
-		return fmt.Errorf("failed to create push client for repo %s/%s: %w", orgName, repoName, err)
-	}
-
 	log.Infof("Pushing branch %q to central remote", cfg.branch)
-	if err := pushClient.PushToCentral(cfg.branch, true); err != nil {
+	if err := rep.RepoClient.PushToCentral(cfg.branch, true); err != nil {
 		return fmt.Errorf("failed to push to repo %s/%s: %w", orgName, repoName, err)
 	}
 

@@ -54,7 +54,6 @@ func openPR(number int) github.PullRequest {
 var testPRConfig = prConfig{
 	branch:      defaultPRBranch,
 	commitTitle: defaultCommitTitle,
-	commitBody:  defaultCommitBody,
 	prTitle:     defaultPRTitle,
 	prBody:      defaultPRBody,
 }

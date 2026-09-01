@@ -23,13 +23,11 @@ type options struct {
 	// PR/commit text overrides. Empty values fall back to the default* constants
 	// in github.go. The *BodyFile variants read the body from a file and are
 	// mutually exclusive with their inline counterpart (see buildPRConfig).
-	prBranch       string
-	prTitle        string
-	commitTitle    string
-	commitBody     string
-	commitBodyFile string
-	prBody         string
-	prBodyFile     string
+	prBranch    string
+	prTitle     string
+	commitTitle string
+	prBody      string
+	prBodyFile  string
 
 	ghOpts flagutil.GitHubOptions
 
@@ -54,8 +52,6 @@ func (o *options) parseArgs(flags *flag.FlagSet, args []string) error {
 	flags.StringVar(&o.prBranch, "pr-branch", defaultPRBranch, "Name of the branch pushed to the repo and used as the PR head.")
 	flags.StringVar(&o.prTitle, "pr-title", defaultPRTitle, "Title of the opened pull request.")
 	flags.StringVar(&o.commitTitle, "commit-title", defaultCommitTitle, "Title (subject line) of the commit.")
-	flags.StringVar(&o.commitBody, "commit-body", "", "Body of the commit. Mutually exclusive with --commit-body-file. Defaults to a built-in message if neither is set.")
-	flags.StringVar(&o.commitBodyFile, "commit-body-file", "", "Path to a file whose contents are used as the commit body. Mutually exclusive with --commit-body.")
 	flags.StringVar(&o.prBody, "pr-body", "", "Body of the pull request. Mutually exclusive with --pr-body-file. Defaults to a built-in message if neither is set.")
 	flags.StringVar(&o.prBodyFile, "pr-body-file", "", "Path to a file whose contents are used as the PR body. Mutually exclusive with --pr-body.")
 
@@ -85,14 +81,11 @@ func (o *options) parseArgs(flags *flag.FlagSet, args []string) error {
 }
 
 // buildPRConfig resolves the commit/PR text from the parsed options into a
-// prConfig. For each body, an inline flag and its *-file counterpart are
-// mutually exclusive; when neither is set the built-in default is used. Body
-// files are read here, so this may touch the filesystem and return an error.
+// prConfig. For the PR body, the inline flag and its *-file counterpart are
+// mutually exclusive; when neither is set the built-in default is used. The
+// body file is read here, so this may touch the filesystem and return an
+// error.
 func (o *options) buildPRConfig() (prConfig, error) {
-	commitBody, err := resolveBody("commit-body", o.commitBody, o.commitBodyFile, defaultCommitBody)
-	if err != nil {
-		return prConfig{}, err
-	}
 	prBody, err := resolveBody("pr-body", o.prBody, o.prBodyFile, defaultPRBody)
 	if err != nil {
 		return prConfig{}, err
@@ -101,7 +94,6 @@ func (o *options) buildPRConfig() (prConfig, error) {
 	return prConfig{
 		branch:      o.prBranch,
 		commitTitle: o.commitTitle,
-		commitBody:  commitBody,
 		prTitle:     o.prTitle,
 		prBody:      prBody,
 	}, nil
