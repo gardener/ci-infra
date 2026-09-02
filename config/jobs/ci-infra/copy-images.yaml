@@ -17,7 +17,7 @@ postsubmits:
     spec:
       containers:
       - name: copy-images
-        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/copy-images:v20260831-4f11301
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/copy-images:v20260902-b5817ba
         command:
         - ./config/images/copy-images.sh
         args:
