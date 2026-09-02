@@ -41,18 +41,6 @@ WORKDIR /
 COPY --from=builder /build/job-forker /job-forker
 ENTRYPOINT [ "/job-forker" ]
 
-FROM ssl_git_runner AS milestone-activator
-LABEL app=milestone-activator
-WORKDIR /
-COPY --from=builder /build/milestone-activator /milestone-activator
-ENTRYPOINT [ "/milestone-activator" ]
-
-FROM base_nonroot AS image-builder
-LABEL app=image-builder
-WORKDIR /
-COPY --from=builder /build/image-builder /image-builder
-ENTRYPOINT [ "/image-builder" ]
-
 FROM ssl_git_runner AS release-handler
 LABEL app=release-handler
 WORKDIR /
