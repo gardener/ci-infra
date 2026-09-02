@@ -1,0 +1,34 @@
+periodics:
+- cron: "13 * * * *"
+  name: ci-org-owners-aliases-bumper
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: org
+    base_ref: main
+  annotations:
+    description: Bumps OWNERS_ALIASES in all configured repos to match the Peribolos config. Periodic run.
+    testgrid-create-test-group: "false"
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20260727-9acf867
+      command:
+      - /owners-aliases-bumper
+      args:
+      - --peribolos-conf=config/org.yaml
+      - --github-token-path=/etc/github-token/token
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --confirm
+      volumeMounts:
+      - name: github-token
+        mountPath: /etc/github-token
+        readOnly: true
+    volumes:
+    - name: github-token
+      secret:
+        secretName: github-token
