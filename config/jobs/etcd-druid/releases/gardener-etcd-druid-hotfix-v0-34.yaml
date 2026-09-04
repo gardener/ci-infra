@@ -167,7 +167,7 @@ presubmits:
     spec:
       containers:
       - name: buildkit
-        image: moby/buildkit:v0.32.2-rootless
+        image: moby/buildkit:v0.33.0-rootless
         command:
         - /usr/local/bin/buildctl-testbuild-daemonless.sh
         args:
