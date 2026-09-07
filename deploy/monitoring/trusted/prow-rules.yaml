@@ -329,6 +329,16 @@ spec:
       record: slo_component_ok
     - expr: (vector(1) unless min(slo_component_ok == 0)) or (slo_component_ok == 0)
       record: slo_prow_ok
+  - name: peribolos
+    rules:
+    - alert: peribolos-cronjob-failing
+      annotations:
+        description: The peribolos cron job has not completed successfully for more than an hour. Please check the peribolos jobs in the peribolos namespace.
+      expr: |
+        time() - kube_cronjob_status_last_successful_time{cronjob="peribolos", namespace="peribolos"} > 3600
+      for: 10m
+      labels:
+        severity: critical
   - name: prow
     rules:
     - alert: prow-pod-crashlooping
