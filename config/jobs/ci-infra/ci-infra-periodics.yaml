@@ -150,14 +150,22 @@ periodics:
       - --config=config/prow/autobump-config/prow-component-autobump-config.yaml
       - --labels-override=kind/enhancement
       - --signoff
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: github-app
 
 - cron: "35 8-15 * * 1-5"
   name: ci-prow-autobump-autodeploy
@@ -182,14 +190,22 @@ periodics:
       - --config=config/prow/autobump-config/prow-component-autobump-config.yaml
       - --labels-override=kind/enhancement,skip-review
       - --signoff
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: github-app
 
 - cron: "45 * * * 1-5"
   name: ci-prow-autobump-jobs
@@ -214,14 +230,22 @@ periodics:
       - --config=config/prow/autobump-config/prow-job-autobump-config.yaml
       - --labels-override=kind/enhancement
       - --signoff
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: github-app
 
 - cron: "50 8-12 * * 1-5"
   name: ci-prow-autobump-autodeploy-jobs
@@ -246,14 +270,22 @@ periodics:
       - --config=config/prow/autobump-config/prow-job-autobump-config.yaml
       - --labels-override=kind/enhancement,skip-review
       - --signoff
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: github-app
 
 # These jobs are used as heartbeat health checks of the Prow instance's ability to run jobs (one for each cluster).
 # Alerts expect them to run every 5 mins and will fire after 20 mins without a successful run.
