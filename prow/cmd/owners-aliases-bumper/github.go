@@ -32,15 +32,10 @@ Tide will not merge your PR, if it is missing a kind/* label.
 /kind task
 
 **What this PR does / why we need it**:
-Automated update by owners-aliases-bumper. The alias membership in this
-repo's OWNERS_ALIASES file has been synced to match the GitHub team
-definitions in the Peribolos config.
+Automated update by owners-aliases-bumper. The alias membership in this repo's OWNERS_ALIASES file has been synced to match the GitHub teamdefinitions in the Peribolos config.
 
-Aliases that share a name with a Peribolos team are populated from that
-team's members and maintainers. Only aliases already present in
-OWNERS_ALIASES are updated — no aliases are added or removed. This keeps
-OWNERS_ALIASES in sync with the source-of-truth team definitions so
-approvers/reviewers don't drift from actual team membership.
+Aliases that share a name with a Peribolos team are populated from that team's members and maintainers. Only aliases already present in OWNERS_ALIASES are updated, no aliases are added or removed.
+This keeps OWNERS_ALIASES in sync with the team definitions so approvers/reviewers don't drift from actual team membership.
 
 **Special notes for your reviewer**:
 This PR was generated automatically.
