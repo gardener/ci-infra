@@ -42,6 +42,16 @@ var _ = Describe("Changes", func() {
 		It("returns empty when all elements match", func() {
 			Expect(deleteValue([]string{"a", "a"}, "a")).To(BeEmpty())
 		})
+
+		It("matches against normalized login on both sides (case-insensitive, strips leading @)", func() {
+			Expect(deleteValue([]string{"Alice", "JohnDoe", "@Bob"}, "johndoe")).
+				To(Equal([]string{"Alice", "@Bob"}))
+			Expect(deleteValue([]string{"Alice", "@Bob"}, "bob")).
+				To(Equal([]string{"Alice"}))
+			// value not pre-normalized either — still matches.
+			Expect(deleteValue([]string{"alice"}, "@Alice")).To(BeEmpty())
+			Expect(deleteValue([]string{"Alice"}, "ALICE")).To(BeEmpty())
+		})
 	})
 
 	Describe("#calculateAliasChanges", func() {
@@ -143,6 +153,60 @@ var _ = Describe("Changes", func() {
 			Expect(changes).ToNot(HaveKey("team-b"))
 			Expect(changes).ToNot(HaveKey("team-c"))
 		})
+
+		It("does not report a change when members are the same but in a different order", func() {
+			// Sets have no order — a repo file listing members out of alphabetical
+			// order must not produce a spurious add/remove pair.
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - carol\n  - alice\n  - bob\n")}
+			changes := calculateAliasChanges(gh, localConfig("team-a", "alice", "bob", "carol"), "gardener", "ci-infra")
+			Expect(changes).To(BeEmpty())
+		})
+
+		It("detects add/remove correctly regardless of the order in the repo file", func() {
+			// The diff is set-based, so reordering the repo file must not
+			// influence which members end up in the add/remove sets.
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - zack\n  - alice\n  - carol\n")}
+			changes := calculateAliasChanges(gh, localConfig("team-a", "alice", "bob", "zack"), "gardener", "ci-infra")
+			Expect(changes["team-a"].add).To(Equal(sets.New("bob")))
+			Expect(changes["team-a"].remove).To(Equal(sets.New("carol")))
+		})
+
+		It("adds all local members when the repo alias is an empty list", func() {
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a: []\n")}
+			changes := calculateAliasChanges(gh, localConfig("team-a", "alice", "bob"), "gardener", "ci-infra")
+			Expect(changes["team-a"].add).To(Equal(sets.New("alice", "bob")))
+			Expect(changes["team-a"].remove).To(BeEmpty())
+		})
+
+		It("removes all repo members when the local alias is empty (but present)", func() {
+			// Local config carries the alias key but no members — every repo
+			// member should be scheduled for removal.
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - alice\n  - bob\n")}
+			f := newFullOrgAliases()
+			// getConfig lazily creates the org bucket; adding then removing a
+			// member is a compact way to register 'team-a' as an empty set.
+			f.getConfig("gardener")["team-a"] = sets.New[string]()
+
+			changes := calculateAliasChanges(gh, f, "gardener", "ci-infra")
+			Expect(changes["team-a"].add).To(BeEmpty())
+			Expect(changes["team-a"].remove).To(Equal(sets.New("alice", "bob")))
+		})
+
+		It("treats duplicate entries in the repo file as a set (no spurious change)", func() {
+			// repoowners.ParseAliasesConfig returns a set, so a duplicated
+			// member in the source YAML must not appear as add/remove churn.
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - alice\n  - alice\n  - bob\n")}
+			changes := calculateAliasChanges(gh, localConfig("team-a", "alice", "bob"), "gardener", "ci-infra")
+			Expect(changes).To(BeEmpty())
+		})
+
+		It("returns no changes for a file with an empty aliases block", func() {
+			// A file whose top-level aliases: is empty yields no per-alias
+			// iteration and therefore no changes, regardless of local config.
+			gh := fakeFileGetter{content: []byte("aliases: {}\n")}
+			changes := calculateAliasChanges(gh, localConfig("team-a", "alice"), "gardener", "ci-infra")
+			Expect(changes).To(BeEmpty())
+		})
 	})
 
 	Describe("#writeChanges", func() {
@@ -216,17 +280,52 @@ var _ = Describe("Changes", func() {
 			Expect(err).To(MatchError(ContainSubstring("failed parsing file")))
 		})
 
-		It("appends a duplicate when asked to add a member that already exists", func() {
-			// Documents current behavior: writeChanges does not dedupe on add.
-			// In practice calculateAliasChanges only ever asks to add members
-			// that are absent (set difference), so this path is not hit in the
-			// normal flow, but the function itself does not guard against it.
-			writeFile("aliases:\n  team-a:\n  - alice\n")
+		It("does not add a duplicate when the member is already present (case-insensitive)", func() {
+			// Guards against duplicate entries if the file uses a different casing than the diff.
+			writeFile("aliases:\n  team-a:\n  - Alice\n")
 			err := writeChanges(path, map[string]change{
 				"team-a": {add: sets.New("alice"), remove: sets.New[string]()},
 			})
 			Expect(err).ToNot(HaveOccurred())
-			Expect(readBack()["team-a"]).To(Equal([]string{"alice", "alice"}))
+			Expect(readBack()["team-a"]).To(Equal([]string{"Alice"}))
+		})
+
+		It("removes members regardless of casing in the file (regression guard)", func() {
+			// change.remove is normalized (lowercase) but file entries keep original casing;
+			// deleteValue must match under NormLogin.
+			writeFile("aliases:\n  team-a:\n  - Alice\n  - JohnDoe\n  - MaryJane7\n  - \"@Bob\"\n")
+			err := writeChanges(path, map[string]change{
+				"team-a": {
+					add:    sets.New[string](),
+					remove: sets.New("johndoe", "maryjane7", "bob"),
+				},
+			})
+			Expect(err).ToNot(HaveOccurred())
+			Expect(readBack()["team-a"]).To(ConsistOf("Alice"))
+		})
+
+		It("sorts the member list alphabetically after applying changes", func() {
+			// slices.Sort runs on every touched alias regardless of the input
+			// order in the file, so a caller can rely on the resulting file
+			// being sorted per alias.
+			writeFile("aliases:\n  team-a:\n  - zack\n  - alice\n")
+			err := writeChanges(path, map[string]change{
+				"team-a": {add: sets.New("bob"), remove: sets.New[string]()},
+			})
+			Expect(err).ToNot(HaveOccurred())
+			Expect(readBack()["team-a"]).To(Equal([]string{"alice", "bob", "zack"}))
+		})
+
+		It("removes every occurrence when a member appears multiple times in the file", func() {
+			// The on-disk file is not de-duplicated on read (yaml.Unmarshal
+			// into []string keeps duplicates), so a remove has to strip every
+			// copy — otherwise the second one would silently survive.
+			writeFile("aliases:\n  team-a:\n  - alice\n  - bob\n  - alice\n")
+			err := writeChanges(path, map[string]change{
+				"team-a": {add: sets.New[string](), remove: sets.New("alice")},
+			})
+			Expect(err).ToNot(HaveOccurred())
+			Expect(readBack()["team-a"]).To(ConsistOf("bob"))
 		})
 	})
 
