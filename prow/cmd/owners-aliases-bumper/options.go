@@ -14,7 +14,6 @@ import (
 	"sigs.k8s.io/prow/pkg/flagutil"
 )
 
-// TODO add option to change pr branch and maybe even if fork or not
 type options struct {
 	peribolosConfig string
 	applyChanges    bool
@@ -28,6 +27,9 @@ type options struct {
 	commitTitle string
 	prBody      string
 	prBodyFile  string
+
+	gitUser  string
+	gitEmail string
 
 	ghOpts flagutil.GitHubOptions
 
@@ -54,6 +56,9 @@ func (o *options) parseArgs(flags *flag.FlagSet, args []string) error {
 	flags.StringVar(&o.commitTitle, "commit-title", defaultCommitTitle, "Title (subject line) of the commit.")
 	flags.StringVar(&o.prBody, "pr-body", "", "Body of the pull request. Mutually exclusive with --pr-body-file. Defaults to a built-in message if neither is set.")
 	flags.StringVar(&o.prBodyFile, "pr-body-file", "", "Path to a file whose contents are used as the PR body. Mutually exclusive with --pr-body.")
+
+	flags.StringVar(&o.gitEmail, "git-email", "", "Email used as the git commit author. When empty, the email is resolved from the authenticated GitHub bot user.")
+	flags.StringVar(&o.gitUser, "git-user", "", "Name used as the git commit author. When empty, the name is resolved from the authenticated GitHub bot user.")
 
 	o.ghOpts.AddFlags(flags)
 
