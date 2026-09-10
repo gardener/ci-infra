@@ -129,7 +129,10 @@ func writeChanges(aliasesPath string, aliasChanges map[string]change) (err error
 		}
 
 		for user := range change.add {
-			aliasModified.Aliases[alias] = append(aliasModified.Aliases[alias], user)
+			// only add users if not already present (guard, calculateAliasChanges should never produce such a case)
+			if !containsNormalized(aliasModified.Aliases[alias], user) {
+				aliasModified.Aliases[alias] = append(aliasModified.Aliases[alias], user)
+			}
 		}
 		slices.Sort(aliasModified.Aliases[alias])
 	}
@@ -162,7 +165,18 @@ func writeChanges(aliasesPath string, aliasChanges map[string]change) (err error
 }
 
 func deleteValue(arr []string, value string) []string {
+	norm := github.NormLogin(value)
 	return slices.DeleteFunc(arr, func(e string) bool {
-		return e == value
+		return github.NormLogin(e) == norm
 	})
+}
+
+func containsNormalized(arr []string, value string) bool {
+	norm := github.NormLogin(value)
+	for _, e := range arr {
+		if github.NormLogin(e) == norm {
+			return true
+		}
+	}
+	return false
 }

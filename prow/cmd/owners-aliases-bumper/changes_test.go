@@ -42,6 +42,16 @@ var _ = Describe("Changes", func() {
 		It("returns empty when all elements match", func() {
 			Expect(deleteValue([]string{"a", "a"}, "a")).To(BeEmpty())
 		})
+
+		It("matches against normalized login on both sides (case-insensitive, strips leading @)", func() {
+			Expect(deleteValue([]string{"Alice", "JordanJordanov", "@Bob"}, "jordanjordanov")).
+				To(Equal([]string{"Alice", "@Bob"}))
+			Expect(deleteValue([]string{"Alice", "@Bob"}, "bob")).
+				To(Equal([]string{"Alice"}))
+			// value not pre-normalized either — still matches.
+			Expect(deleteValue([]string{"alice"}, "@Alice")).To(BeEmpty())
+			Expect(deleteValue([]string{"Alice"}, "ALICE")).To(BeEmpty())
+		})
 	})
 
 	Describe("#calculateAliasChanges", func() {
@@ -216,17 +226,28 @@ var _ = Describe("Changes", func() {
 			Expect(err).To(MatchError(ContainSubstring("failed parsing file")))
 		})
 
-		It("appends a duplicate when asked to add a member that already exists", func() {
-			// Documents current behavior: writeChanges does not dedupe on add.
-			// In practice calculateAliasChanges only ever asks to add members
-			// that are absent (set difference), so this path is not hit in the
-			// normal flow, but the function itself does not guard against it.
-			writeFile("aliases:\n  team-a:\n  - alice\n")
+		It("does not add a duplicate when the member is already present (case-insensitive)", func() {
+			// Guards against duplicate entries if the file uses a different casing than the diff.
+			writeFile("aliases:\n  team-a:\n  - Alice\n")
 			err := writeChanges(path, map[string]change{
 				"team-a": {add: sets.New("alice"), remove: sets.New[string]()},
 			})
 			Expect(err).ToNot(HaveOccurred())
-			Expect(readBack()["team-a"]).To(Equal([]string{"alice", "alice"}))
+			Expect(readBack()["team-a"]).To(Equal([]string{"Alice"}))
+		})
+
+		It("removes members regardless of casing in the file (regression guard)", func() {
+			// change.remove is normalized (lowercase) but file entries keep original casing;
+			// deleteValue must match under NormLogin.
+			writeFile("aliases:\n  team-a:\n  - Alice\n  - JordanJordanov\n  - Kostov6\n  - \"@Bob\"\n")
+			err := writeChanges(path, map[string]change{
+				"team-a": {
+					add:    sets.New[string](),
+					remove: sets.New("jordanjordanov", "kostov6", "bob"),
+				},
+			})
+			Expect(err).ToNot(HaveOccurred())
+			Expect(readBack()["team-a"]).To(ConsistOf("Alice"))
 		})
 	})
 
