@@ -11,11 +11,12 @@ postsubmits:
       testgrid-create-test-group: "false"
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20260909-b6d7e97
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20260910-48ed655
         command:
         - /owners-aliases-bumper
         args:
         - --peribolos-conf=config/org.yaml
+        - --git-email="gardener.ci.robot@gmail.com"
         - --github-token-path=/etc/github-token/token
         - --github-endpoint=http://ghproxy.prow.svc.cluster.local
         - --github-endpoint=https://api.github.com
