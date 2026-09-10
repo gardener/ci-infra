@@ -20,6 +20,7 @@ periodics:
       - /owners-aliases-bumper
       args:
       - --peribolos-conf=config/org.yaml
+      - --git-email="gardener.ci.robot@gmail.com"
       - --github-token-path=/etc/github-token/token
       - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
