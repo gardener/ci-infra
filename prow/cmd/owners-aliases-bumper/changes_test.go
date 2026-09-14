@@ -29,6 +29,16 @@ func (f fakeFileGetter) GetFile(_, _, _, _ string) ([]byte, error) {
 	return f.content, f.err
 }
 
+// recordingFileGetter delegates to fn so tests can capture the call args
+// (used to assert fileMatchesRef queries the PR branch, not the default one).
+type recordingFileGetter struct {
+	fn func(org, repo, path, ref string) ([]byte, error)
+}
+
+func (r recordingFileGetter) GetFile(org, repo, path, ref string) ([]byte, error) {
+	return r.fn(org, repo, path, ref)
+}
+
 var _ = Describe("Changes", func() {
 	Describe("#deleteValue", func() {
 		It("removes all occurrences of the value", func() {
@@ -460,6 +470,103 @@ var _ = Describe("Changes", func() {
 			// ...but the one anchored to the removed line is gone with it.
 			Expect(out).ToNot(ContainSubstring("# to be removed"))
 			Expect(out).ToNot(ContainSubstring("bob"))
+		})
+	})
+
+	Describe("#fileMatchesRef", func() {
+		// fileMatchesRef guards the commit/push step so an unchanged PR
+		// branch is left alone (see main loop). These tests cover the
+		// content-equality contract and the not-found short-circuit that
+		// lets a first run fall through to the normal flow.
+
+		var (
+			dir  string
+			path string
+		)
+
+		BeforeEach(func() {
+			dir = GinkgoT().TempDir()
+			path = filepath.Join(dir, "OWNERS_ALIASES")
+		})
+
+		writeLocal := func(content string) {
+			Expect(os.WriteFile(path, []byte(content), 0o644)).To(Succeed())
+		}
+
+		It("returns true when the remote content matches the local file byte-for-byte", func() {
+			content := "aliases:\n  team-a:\n  - alice\n"
+			writeLocal(content)
+			gh := fakeFileGetter{content: []byte(content)}
+
+			match, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", path)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(match).To(BeTrue())
+		})
+
+		It("returns false when the remote content differs from the local file", func() {
+			writeLocal("aliases:\n  team-a:\n  - alice\n  - bob\n")
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - alice\n")}
+
+			match, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", path)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(match).To(BeFalse())
+		})
+
+		It("returns false when only trailing whitespace differs (raw byte compare, not semantic)", func() {
+			writeLocal("aliases:\n  team-a:\n  - alice\n")
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - alice")} // no trailing newline
+
+			match, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", path)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(match).To(BeFalse())
+		})
+
+		It("returns (false, nil) when the remote file/ref does not exist so callers fall through to commit+push", func() {
+			writeLocal("aliases:\n  team-a:\n  - alice\n")
+			gh := fakeFileGetter{err: &github.FileNotFound{}}
+
+			match, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", path)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(match).To(BeFalse())
+		})
+
+		It("propagates non-FileNotFound remote errors", func() {
+			writeLocal("aliases:\n  team-a:\n  - alice\n")
+			gh := fakeFileGetter{err: errors.New("boom")}
+
+			match, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", path)
+			Expect(err).To(MatchError(ContainSubstring("boom")))
+			Expect(match).To(BeFalse())
+		})
+
+		It("returns an error when the local file cannot be read", func() {
+			gh := fakeFileGetter{content: []byte("aliases:\n  team-a:\n  - alice\n")}
+			missing := filepath.Join(dir, "does-not-exist")
+
+			match, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", missing)
+			Expect(err).To(HaveOccurred())
+			Expect(match).To(BeFalse())
+		})
+
+		It("queries the given ref and path on the org/repo (not the default branch)", func() {
+			content := "aliases:\n  team-a:\n  - alice\n"
+			writeLocal(content)
+
+			var gotOrg, gotRepo, gotPath, gotRef string
+			gh := recordingFileGetter{fn: func(org, repo, p, ref string) ([]byte, error) {
+				gotOrg, gotRepo, gotPath, gotRef = org, repo, p, ref
+				return []byte(content), nil
+			}}
+
+			_, err := fileMatchesRef(gh, "gardener", "ci-infra", "owners-aliases-bumper", "OWNERS_ALIASES", path)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(gotOrg).To(Equal("gardener"))
+			Expect(gotRepo).To(Equal("ci-infra"))
+			Expect(gotPath).To(Equal("OWNERS_ALIASES"))
+			// Must be the PR branch — a mistaken "" here would compare
+			// against the default branch and always report false, so
+			// every run would still commit and force-push.
+			Expect(gotRef).To(Equal("owners-aliases-bumper"))
 		})
 	})
 })
