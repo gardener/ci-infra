@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -179,4 +180,20 @@ func containsNormalized(arr []string, value string) bool {
 		}
 	}
 	return false
+}
+
+// check if upstream already has the same file
+func fileMatchesRef(ghClient fileGetter, orgName, repoName, ref, path, localPath string) (bool, error) {
+	remote, err := ghClient.GetFile(orgName, repoName, path, ref)
+	if err != nil {
+		if _, notFound := errors.AsType[*github.FileNotFound](err); notFound {
+			return false, nil
+		}
+		return false, err
+	}
+	local, err := os.ReadFile(localPath)
+	if err != nil {
+		return false, fmt.Errorf("failed to read %s: %w", localPath, err)
+	}
+	return bytes.Equal(remote, local), nil
 }

@@ -133,10 +133,19 @@ func main() {
 				continue
 			}
 
-			// commit and push changes
-			if err := commitAndPush(rep, gh, orgName, repoName, prCfg); err != nil {
-				logrus.WithError(err).Errorf("Commit and push failed repo: %s/%s", orgName, repoName)
-				continue
+			// skip push if file on remote is already the same
+			upToDate, err := fileMatchesRef(ghClient, orgName, repoName, prCfg.branch, "OWNERS_ALIASES", aliasesPath)
+			if err != nil {
+				log.WithError(err).Warnf("Could not compare OWNERS_ALIASES against branch %q, proceeding with commit and push", prCfg.branch)
+			}
+			if upToDate {
+				log.Infof("Branch %q already carries the desired OWNERS_ALIASES, skipping commit and push", prCfg.branch)
+			} else {
+				// commit and push changes
+				if err := commitAndPush(rep, gh, orgName, repoName, prCfg); err != nil {
+					logrus.WithError(err).Errorf("Commit and push failed repo: %s/%s", orgName, repoName)
+					continue
+				}
 			}
 
 			// open PR
