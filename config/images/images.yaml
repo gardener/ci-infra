@@ -491,3 +491,8 @@ images:
   - v3.7.11
   - v3.7.12
   - v3.7.13
+# athens
+- source: gomods/athens
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/athens
+  tags:
+  - v0.18.1
