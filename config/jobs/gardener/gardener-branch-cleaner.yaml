@@ -15,7 +15,8 @@ periodics:
       command:
       - /branch-cleaner
       args:
-      - --github-token-path=/etc/github-token/token
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
       - --dry-run=false
@@ -25,10 +26,16 @@ periodics:
       - --ignore-open-prs=false
       - --release-branch-mode=true
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: github-app
