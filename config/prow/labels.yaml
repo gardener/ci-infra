@@ -894,3 +894,13 @@ repos:
       name: fast-track
       target: issues
       addedBy: anyone
+    - color: 209ab4
+      description: This topic is relevant for the hackathon in Q2/2026.
+      name: Q2/2026
+      target: issues
+      addedBy: anyone
+    - color: 209ab4
+      description: This topic is relevant for the hackathon in Q4/2026.
+      name: Q4/2026
+      target: issues
+      addedBy: anyone
