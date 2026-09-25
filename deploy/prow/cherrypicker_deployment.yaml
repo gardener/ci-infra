@@ -27,7 +27,8 @@ spec:
         image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/cherrypicker:v20260925-f642ef8
         imagePullPolicy: Always
         args:
-        - --github-token-path=/etc/github/token
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --dry-run=false
@@ -38,11 +39,17 @@ spec:
         - name: hmac
           mountPath: /etc/webhook
           readOnly: true
-        - name: github-token
+        - name: github-app
           mountPath: /etc/github
           readOnly: true
         - name: tmp
           mountPath: /tmp
+        env:
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
         resources:
           requests:
             cpu: 10m
@@ -53,6 +60,6 @@ spec:
       - name: hmac
         secret:
           secretName: hmac-token
-      - name: github-token
+      - name: github-app
         secret:
-          secretName: github-token
+          secretName: github-app

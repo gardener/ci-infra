@@ -1,6 +1,5 @@
 ---
-gitHubLogin: "gardener-ci-robot"
-gitHubToken: "/etc/github-token/token"
+gitHubLogin: "gardener-ci-robot" # not sure if we need this keeping for safety
 gitName: "Gardener Prow Robot"
 gitEmail: "gardener.ci.robot@gmail.com"
 skipPullRequest: false

@@ -25,7 +25,8 @@ spec:
             - --min-admins=5
             - --require-self
             - --config-path=/etc/config/org.yaml
-            - --github-token-path=/etc/github-token/token
+            - --github-app-id=$(GITHUB_APP_ID)
+            - --github-app-private-key-path=/etc/github/cert
             - --github-hourly-tokens=0
             - --github-allowed-burst=0
             - --ignore-secret-teams
@@ -40,17 +41,23 @@ spec:
             - --allow-repo-archival
             - --confirm
             volumeMounts:
-            - name: github-token
-              mountPath: /etc/github-token
+            - name: github-app
+              mountPath: /etc/github
               readOnly: true
             - name: peribolos-config
               mountPath: /etc/config
               readOnly: true
+            env:
+            - name: GITHUB_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: github-app
+                  key: appid
           restartPolicy: Never
           volumes:
-          - name: github-token
+          - name: github-app
             secret:
-              secretName: github-token
+              secretName: github-app
           - name: peribolos-config
             configMap:
               name: peribolos-config
