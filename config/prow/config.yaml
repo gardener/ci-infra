@@ -16,6 +16,10 @@ plank:
     '*':
       timeout: 2h
       grace_period: 15m
+      # Partial clone (git fetch --filter=blob:none): fetch history and trees but
+      # skip historical file blobs, fetching them on demand. Cheaper, faster
+      # clones. Matches upstream k8s test-infra. Does not affect auth/rate limits.
+      blobless_fetch: true
       utility_images:
         clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20260927-cca1df41e"
         initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20260927-cca1df41e"
