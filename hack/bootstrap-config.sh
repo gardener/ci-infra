@@ -68,7 +68,7 @@ cd "$(git rev-parse --show-toplevel)"
 
 docker run --rm -w /etc/ci-infra -v $PWD:/etc/ci-infra \
   -v "$temp_kubeconfig":/etc/kubeconfig \
-  us-docker.pkg.dev/k8s-infra-prow/images/config-bootstrapper:v20260927-cca1df41e \
+  us-docker.pkg.dev/k8s-infra-prow/images/config-bootstrapper:v20260930-7626c76a3 \
   --kubeconfig=/etc/kubeconfig \
   --source-path=.  \
   --config-path=config/prow/config.yaml \
