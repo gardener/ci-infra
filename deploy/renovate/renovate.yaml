@@ -95,6 +95,8 @@ spec:
             "gardener/gardener-extension-provider-azure",
             "gardener/gardener-extension-provider-openstack",
             "gardener/gardener-extension-provider-gcp",
+            "gardener/gardener-extension-provider-gdc",
+            "gardener/machine-controller-manager-provider-gdc",
             "gardener/oidc-apps-controller",
             "gardener/opentelemetry-collector",
             "gardener/egress-filter-refresher",
