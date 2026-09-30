@@ -8,7 +8,7 @@ presubmits:
       description: Runs peribolos-checkconfig to validate changes to org config
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/peribolos-checkconfig:v20260928-cb2cec8
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/peribolos-checkconfig:v20260930-66032ad
         command:
         - /peribolos-checkconfig
         args:
