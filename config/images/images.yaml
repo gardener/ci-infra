@@ -509,3 +509,4 @@ images:
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/athens
   tags:
   - v0.18.1
+  - v0.19.0
