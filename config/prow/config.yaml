@@ -21,10 +21,10 @@ plank:
       # clones. Matches upstream k8s test-infra. Does not affect auth/rate limits.
       blobless_fetch: true
       utility_images:
-        clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20260930-7626c76a3"
-        initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20260930-7626c76a3"
-        entrypoint: "us-docker.pkg.dev/k8s-infra-prow/images/entrypoint:v20260930-7626c76a3"
-        sidecar: "us-docker.pkg.dev/k8s-infra-prow/images/sidecar:v20260930-7626c76a3"
+        clonerefs: "us-docker.pkg.dev/k8s-infra-prow/images/clonerefs:v20260930-820f8d138"
+        initupload: "us-docker.pkg.dev/k8s-infra-prow/images/initupload:v20260930-820f8d138"
+        entrypoint: "us-docker.pkg.dev/k8s-infra-prow/images/entrypoint:v20260930-820f8d138"
+        sidecar: "us-docker.pkg.dev/k8s-infra-prow/images/sidecar:v20260930-820f8d138"
       gcs_configuration:
         bucket: "gardener-prow"
         path_strategy: explicit
