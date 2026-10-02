@@ -11,10 +11,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	prowjobv1 "sigs.k8s.io/prow/pkg/apis/prowjobs/v1"
-	"sigs.k8s.io/prow/pkg/config/secret"
 	"sigs.k8s.io/prow/pkg/flagutil"
-	gitv2 "sigs.k8s.io/prow/pkg/git/v2"
-	"sigs.k8s.io/prow/pkg/github"
 	"sigs.k8s.io/prow/pkg/pod-utils/downwardapi"
 )
 
@@ -41,9 +38,6 @@ func (o *options) validate() error {
 	}
 	if o.versionFilePath == "" {
 		return fmt.Errorf("please provide a non empty --version-file-path")
-	}
-	if o.github.TokenPath == "" {
-		return fmt.Errorf("please provide a non empty --github-token-path")
 	}
 	return nil
 }
@@ -83,41 +77,6 @@ func gatherOptions() options {
 	return o
 }
 
-func constructClientFactoryOpts(githubClient github.Client, o options) (*gitv2.ClientFactoryOpts, error) {
-	if err := secret.Add(o.github.TokenPath); err != nil {
-		return nil, err
-	}
-	userGenerator := func() (string, error) {
-		user, err := githubClient.BotUser()
-		if err != nil {
-			return "", err
-		}
-		return user.Login, nil
-	}
-	gitUser := func() (string, string, error) {
-		user, err := githubClient.BotUser()
-		if err != nil {
-			return "", "", err
-		}
-		name := user.Name
-		email := user.Email
-		return name, email, nil
-	}
-
-	tokenGetter := func(_ string) (string, error) {
-		return string(secret.GetTokenGenerator(o.github.TokenPath)()), nil
-	}
-
-	clientFactoryOpts := gitv2.ClientFactoryOpts{
-		Censor:   secret.Censor,
-		Username: userGenerator,
-		Token:    tokenGetter,
-		GitUser:  gitUser,
-	}
-
-	return &clientFactoryOpts, nil
-}
-
 func main() {
 	o := gatherOptions()
 	if err := o.validate(); err != nil {
@@ -130,19 +89,9 @@ func main() {
 	}
 	logrus.SetLevel(logLevel)
 
-	githubClient, err := o.github.GitHubClient(o.dryRun)
+	clientFactory, err := o.github.GitClientFactory("", nil, o.dryRun, false)
 	if err != nil {
-		logrus.WithError(err).Fatal("Error getting Git client")
-	}
-
-	clientFactoryOpts, err := constructClientFactoryOpts(githubClient, o)
-	if err != nil {
-		logrus.WithError(err).Fatal("Error constructing client factory opt")
-	}
-
-	clientFactory, err := gitv2.NewClientFactory(clientFactoryOpts.Apply)
-	if err != nil {
-		logrus.WithError(err).Fatal("Error creating client factory")
+		logrus.WithError(err).Fatal("Error creating git client factory")
 	}
 
 	releaseHandler := releaseHandler{
