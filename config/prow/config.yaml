@@ -12,8 +12,9 @@ plank:
     '*': https://prow.gardener.cloud/view/
   pod_pending_timeout: 15m
   pod_unscheduled_timeout: 15m
-  default_decoration_configs:
-    '*':
+  default_decoration_config_entries:
+  # Base decoration applied to all jobs on every build cluster.
+  - config:
       timeout: 2h
       grace_period: 15m
       # Partial clone (git fetch --filter=blob:none): fetch history and trees but
@@ -52,6 +53,19 @@ plank:
                   operator: In
                   values:
                   - "true"
+  # Authenticate clonerefs' git fetches only on the build cluster. There ~316
+  # jobs share one egress IP and hit GitHub's unauthenticated per-IP rate limit:
+  # the anonymous ref advertisement stalls (~65s) and the clone then fails with
+  # "could not read Username" before any test runs. Authenticated git uses the
+  # per-account 5000/h bucket instead. Scoped to gardener-prow-build so this
+  # token is not mounted on the low-volume trusted cluster, which never hits the
+  # limit. The github-clone-token secret must exist in the test-pods namespace
+  # of gardener-prow-build.
+  - cluster: gardener-prow-build
+    config:
+      oauth_token_secret:
+        name: github-clone-token
+        key: token
 
 sinker:
   resync_period: 1m

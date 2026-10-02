@@ -75,6 +75,7 @@ The following commands assume you are using the combined `kubeconfig` generated 
     - the secrets for GCP service accounts can be created by our credentials rotation script `./hack/rotate-secrets.sh`. Please see Rotate [credentials section](#rotate-credentials) for more details.
     - `github-app` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/getting_started_deploy.md#github-app))
     - `github-token` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with scopes `public_repo, read:org, repo:status`, needs to be present in the `prow` and `test-pods` namespace of the prow cluster)
+    - `github-clone-token` (minimally-scoped Personal Access Token used only by clonerefs for authenticated git clones, to avoid GitHub's unauthenticated per-IP rate limits; needs `public_repo` read access only. Must be present in the `test-pods` namespace of the `gardener-prow-build` cluster, where the decoration config references it via `oauth_token_secret` for that cluster. Not needed on `gardener-prow-trusted`, which runs too few jobs to hit the per-IP limit)
     - `github` (Personal Access Token for [@gardener-ci-robot](https://github.com/gardener-ci-robot) with `repo` scope, needs to be present in `renovate` namespace of the prow cluster)
     - `github-oauth-config` (according to [test-infra guide](https://github.com/kubernetes/test-infra/blob/f8021394c8e493af2d3ec336a87888368d92e0c8/prow/cmd/deck/github_oauth_setup.md))
     - `hmac-token`
