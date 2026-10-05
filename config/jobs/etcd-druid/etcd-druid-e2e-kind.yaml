@@ -48,6 +48,30 @@ presubmits:
               - name: GO_TEST_ARGS
                 value: "-run TestScaleOut"
 
+    - name: pull-etcd-druid-e2e-kind-scalein
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e scale in tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestScaleIn"
+
+    - name: pull-etcd-druid-e2e-kind-bootstrap-with-existing-cluster
+      <<: *e2e_common
+      annotations:
+        <<: *e2e_annotations
+        description: Runs KIND e2e bootstrap with existing cluster tests for etcd-druid on PRs
+      spec:
+        containers:
+          - <<: *e2e_container
+            env:
+              - name: GO_TEST_ARGS
+                value: "-run TestBootstrapWithExistingCluster"
+
     - name: pull-etcd-druid-e2e-kind-tls-label-updates
       <<: *e2e_common
       annotations:
