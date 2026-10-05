@@ -29,6 +29,10 @@ plank:
         bucket: "gardener-prow"
         path_strategy: explicit
       gcs_credentials_secret: "gardener-prow-storage"
+      github_app_id: "5196785"
+      github_app_private_key_secret:
+        name: clonerefs-github-app
+        key: cert
       resources:
         clonerefs:
           requests:
