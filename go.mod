@@ -10,7 +10,7 @@ require (
 	github.com/onsi/gomega v1.44.0
 	github.com/sirupsen/logrus v1.10.2
 	go.yaml.in/yaml/v4 v4.0.0-rc.6
-	golang.org/x/tools v0.50.0
+	golang.org/x/tools v0.51.0
 	k8s.io/apimachinery v0.37.0
 	sigs.k8s.io/prow v0.0.0-20261005101835-27fe62bda55f
 	sigs.k8s.io/yaml v1.6.0
@@ -163,7 +163,7 @@ require (
 	golang.org/x/oauth2 v0.37.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/telemetry v0.0.0-20260908163034-4bcc4b2ee518 // indirect
+	golang.org/x/telemetry v0.0.0-20260924152758-ed294f943157 // indirect
 	golang.org/x/term v0.46.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
