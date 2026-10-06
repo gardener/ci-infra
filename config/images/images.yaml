@@ -168,6 +168,7 @@ images:
   - distroless-v1.39.0
   - distroless-v1.39.1
   - distroless-v1.39.2
+  - distroless-v1.39.3
 - source: envoyproxy/gateway
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/envoyproxy/gateway
   tags:
