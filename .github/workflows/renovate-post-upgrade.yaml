@@ -1,0 +1,138 @@
+name: Renovate Post-Upgrade Tasks
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - config/images/images.yaml
+
+permissions:
+  contents: read
+
+jobs:
+  post-upgrade-tasks:
+    name: Run Post-Upgrade Tasks
+    # Only run for Renovate PRs originating from a branch in this repository.
+    if: >-
+      github.repository == 'gardener/ci-infra' &&
+      startsWith(github.head_ref, 'renovate/') &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      has-changes: ${{ steps.diff.outputs.has-changes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: false
+          # Full history is required to diff against the previous commit.
+          fetch-depth: 0
+      - name: Restore replaced image versions
+        env:
+          IMAGES_FILE: config/images/images.yaml
+          DIFF_FILE: ${{ runner.temp }}/images.diff
+          RESTORE_SCRIPT: ${{ runner.temp }}/restore.sed
+        run: |
+          set -euo pipefail
+
+          # Renovate's custom manager (see .github/renovate.json5) matches the last (highest) tag of each image
+          # and therefore replaces it when a newer version is available. To keep a list of all copied versions,
+          # re-insert every tag that Renovate removed right before the tag that replaced it. The previous
+          # versions are derived from the Renovate commit's diff, because this GitHub Action has no access to
+          # Renovate's template variables.
+
+          # Diff the Renovate update (the last commit) without context lines, so each hunk is just the removed
+          # tag and the tag that replaced it.
+          git diff --unified=0 HEAD~1 HEAD -- "${IMAGES_FILE}" > "${DIFF_FILE}"
+
+          # Build a sed program that re-inserts every removed tag before the line that replaced it. A tag that is
+          # only added (e.g. by a commit previously pushed by this Action) has no removed line and is therefore
+          # skipped, which keeps this step idempotent.
+          new_line=0
+          : > "${RESTORE_SCRIPT}"
+          # Matches a removed tag line: the diff "-" marker, the indentation (one or more spaces), the "- " list
+          # marker, then a value containing no ":". The ":" exclusion skips mapping items such as
+          # "- source: ..." (image tags never contain a ":"), and accepting any indentation keeps this working
+          # if images.yaml is ever re-indented.
+          tag_line_regex='^-[[:space:]]+-[[:space:]][^:]*$'
+          while IFS= read -r diff_line; do
+            if [[ "${diff_line}" == @@* ]]; then
+              # Hunk header "@@ -a[,x] +b[,y] @@": b is the line the replacement sits on in the new file.
+              new_line="$(printf '%s\n' "${diff_line}" | sed -E 's/^@@ -[0-9,]+ \+([0-9]+).*/\1/')"
+            elif [[ "${diff_line}" =~ $tag_line_regex ]]; then
+              # Re-insert the removed tag before line b (dropping the leading diff "-").
+              printf '%si\\%s\n' "${new_line}" "${diff_line#-}" >> "${RESTORE_SCRIPT}"
+            fi
+          done < "${DIFF_FILE}"
+
+          # Apply the insertions (sed resolves all line numbers against the original file).
+          if [ -s "${RESTORE_SCRIPT}" ]; then
+            sed -i -f "${RESTORE_SCRIPT}" "${IMAGES_FILE}"
+          fi
+      - name: Capture changes
+        id: diff
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "has-changes=false" >> "${GITHUB_OUTPUT}"
+          else
+            echo "has-changes=true" >> "${GITHUB_OUTPUT}"
+            git diff --cached --binary > "${RUNNER_TEMP}/post-upgrade.patch"
+          fi
+      - name: Upload patch
+        if: steps.diff.outputs.has-changes == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: post-upgrade-changes
+          path: ${{ runner.temp }}/post-upgrade.patch
+          retention-days: 1
+
+  commit:
+    name: Commit Changes
+    needs: post-upgrade-tasks
+    if: needs.post-upgrade-tasks.outputs.has-changes == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Set up git identity
+        uses: gardener/cc-utils/.github/actions/setup-git-identity@v1
+      - name: Download patch
+        uses: actions/download-artifact@v8
+        with:
+          name: post-upgrade-changes
+          path: ${{ runner.temp }}
+      - name: Apply patch and push
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+
+          git apply --3way --whitespace=nowarn "${RUNNER_TEMP}/post-upgrade.patch"
+          git add -A
+          git commit -m "Restore previously copied image versions"
+          git push origin "HEAD:${HEAD_REF}"
+      - name: Release automerge hold
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          # Remove the `do-not-merge/hold` label now that the restore commit has been pushed, so that tide can
+          # automerge the PR (Renovate opens it for automerge via the `skip-review` label; see
+          # config/prow/config.yaml). Renovate only sets the hold label when it opens the PR, so on a later
+          # Renovate update the label may already be absent - hence the guard.
+          if gh pr view "${PR_NUMBER}" --json labels --jq '.labels[].name' | grep -qx 'do-not-merge/hold'; then
+            gh pr edit "${PR_NUMBER}" --remove-label 'do-not-merge/hold'
+          fi
