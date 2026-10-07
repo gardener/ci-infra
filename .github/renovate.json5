@@ -13,6 +13,12 @@
     'gomodTidy',
   ],
   separateMinorPatch: true,
+  // Ignore the commits pushed by the `renovate-post-upgrade` GitHub Action (restoring previously copied image
+  // versions) when detecting whether a branch was manually edited. Otherwise, Renovate would treat the branch
+  // as modified and stop updating the PR.
+  gitIgnoredAuthors: [
+    '41898282+github-actions[bot]@users.noreply.github.com',
+  ],
   flux: {
     managerFilePatterns: [
       '/^clusters/.+\\.yaml$/',
@@ -165,18 +171,19 @@
       enabled: false,
     },
     {
-      // Add new versions instead of replacing old version to keep a list of all copied versions.
+      // Keep a list of all copied versions by adding new versions instead of replacing the old one.
+      // These PRs are automerged, but Renovate also adds the `do-not-merge/hold` label, which makes tide hold
+      // the PR until the `renovate-post-upgrade` GitHub Action has restored the versions Renovate replaced. The
+      // Action removes the label after pushing its commit, which lets the automerge proceed. Note that Renovate
+      // only sets the label when it opens the PR (it stops reconciling labels once they are modified), so the
+      // hold protects the initial PR; a force-pushed update is held by the pending required checks instead.
       matchFileNames: [
         'config/images/images.yaml',
       ],
       automerge: true,
-      postUpgradeTasks: {
-        commands: [
-          'go install github.com/mikefarah/yq/v4@latest',
-          'bash -c "sed -i `yq \'(.images[] | select(.source == \\"{{{depName}}}\\") | key) as \\$imagePos | (.images[\\$imagePos].tags | length) as \\$tagLength | .images[\\$imagePos].tags[\\$tagLength - 1] | line\' config/images/images.yaml`\'i\\  - {{{currentValue}}}\' config/images/images.yaml"',
-        ],
-        executionMode: 'update',
-      },
+      addLabels: [
+        'do-not-merge/hold',
+      ],
     },
   ],
 }
