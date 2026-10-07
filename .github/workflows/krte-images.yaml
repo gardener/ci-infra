@@ -26,12 +26,12 @@ jobs:
               {
                 "version": "1.26",
                 "IMAGE_ARG": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.26",
-                "golangtestimage": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261004-3d4467c-1.26"
+                "golangtestimage": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261006-e02a0f6-1.26"
               },
               {
                 "version": "1.27",
                 "IMAGE_ARG": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:1.27",
-                "golangtestimage": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261005-6727fce-1.27"
+                "golangtestimage": "europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261006-e02a0f6-1.27"
               }
             ]
           }
