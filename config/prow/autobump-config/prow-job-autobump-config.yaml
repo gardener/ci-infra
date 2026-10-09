@@ -1,13 +1,8 @@
 ---
-gitHubLogin: "gardener-ci-robot"
-gitHubToken: "/etc/github-token/token"
-gitName: "Gardener Prow Robot"
-gitEmail: "gardener.ci.robot@gmail.com"
 skipPullRequest: false
 gitHubOrg: "gardener"
 gitHubRepo: "ci-infra"
-remoteName: "ci-infra"
-headBranchName: "prowjobs-autobump"
+headBranchName: "autobump-prowjobs"
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
   - ".github/workflows"
