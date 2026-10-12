@@ -3,6 +3,7 @@
 triggers:
 - trusted_apps:
     - dependabot
+    - gardener-prow-autobumper
   repos:
   - gardener
   join_org_url: "https://gardener.cloud/docs/contribute/code/roles/"
@@ -50,6 +51,12 @@ label:
     - allowed_users:
       - gardener-ci-robot
       label: skip-review
+    gardener/ci-infra:
+    # Allow gardener-prow-autobumper user to mark PRs for automerging that it can auto-update prow images.
+    - allowed_users:
+      - gardener-prow-autobumper
+      label: skip-review
+
 
 lgtm:
 - repos:
