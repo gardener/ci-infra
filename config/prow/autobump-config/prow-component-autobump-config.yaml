@@ -2,6 +2,7 @@
 skipPullRequest: false
 gitHubOrg: "gardener"
 gitHubRepo: "ci-infra"
+headBranchName: "autobump-prowcomponents"
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
   - "config/prow"
