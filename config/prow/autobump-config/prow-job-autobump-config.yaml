@@ -1,4 +1,6 @@
 ---
+gitName: "gardener-prow-autobumper[bot]"
+gitEmail: "340115342+gardener-prow-autobumper[bot]@users.noreply.github.com"
 skipPullRequest: false
 gitHubOrg: "gardener"
 gitHubRepo: "ci-infra"
