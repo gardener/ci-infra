@@ -38,6 +38,8 @@ label:
     - teamsize/large
     - fast-track
     - crypto
+    - Q2/2026
+    - Q4/2026
 
   restricted_labels:
     gardener:
