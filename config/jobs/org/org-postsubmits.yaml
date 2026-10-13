@@ -21,6 +21,7 @@ postsubmits:
         - --github-endpoint=http://ghproxy.prow.svc.cluster.local
         - --github-endpoint=https://api.github.com
         - --confirm
+        - --signoff=true
         volumeMounts:
         - name: github-token
           mountPath: /etc/github-token
