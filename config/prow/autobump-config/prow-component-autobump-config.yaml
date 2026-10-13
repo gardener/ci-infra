@@ -1,9 +1,8 @@
 ---
-gitName: "gardener-prow-autobumper[bot]"
-gitEmail: "340115342+gardener-prow-autobumper[bot]@users.noreply.github.com"
 skipPullRequest: false
 gitHubOrg: "gardener"
 gitHubRepo: "ci-infra"
+headBranchName: "autobump-prowcomponents"
 upstreamURLBase: "https://raw.githubusercontent.com/gardener/ci-infra/master"
 includedConfigPaths:
   - "config/prow"

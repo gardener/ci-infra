@@ -179,7 +179,7 @@ tide:
     missingLabels: *tide-default-missing-labels
 
   # configuration for automerging gardener-prow-autobumper PRs in ci-infra repository
-  - author: gardener-prow-autobumper
+  - author: gardener-prow-autobumper[bot]
     repos:
     - gardener/ci-infra
     labels:
