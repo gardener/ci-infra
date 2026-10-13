@@ -105,33 +105,106 @@ var _ = Describe("Testing GetMatchingBranches()", func() {
 })
 
 var _ = Describe("Testing PushChanges()", func() {
-	var rep *ghi.Repository
+	var (
+		fakeGhc     *fghc.FakeGithubClient
+		fakeGcf     *fgc.FakeGitClientFactory
+		fakeGc      *fgc.FakeCommitClient
+		botUser     *github.UserData
+		buildServer func(appAuth bool) *ghi.GithubServer
+	)
 
 	BeforeEach(func() {
-		fakeGcf := &fgc.FakeGitClientFactory{}
-		fakeGhc := &fghc.FakeGithubClient{
+		fakeGcf = &fgc.FakeGitClientFactory{}
+		fakeGhc = &fghc.FakeGithubClient{
 			ProtectedBranches:   fakedProtectedBranches,
 			UnprotectedBranches: fakedUnprotectedBranches,
 		}
-		fakeGc := &fgc.FakeCommitClient{}
-		botUser := &github.UserData{
+		fakeGc = &fgc.FakeCommitClient{}
+		botUser = &github.UserData{
 			Name:  testLogin,
 			Login: testLogin,
 			Email: testEmail,
 		}
-		fakeGithubServer := &ghi.GithubServer{
-			Ghc:     fakeGhc,
-			Gcf:     fakeGcf,
-			Gc:      fakeGc,
-			BotUser: botUser,
+		buildServer = func(appAuth bool) *ghi.GithubServer {
+			return &ghi.GithubServer{
+				Ghc:     fakeGhc,
+				Gcf:     fakeGcf,
+				Gc:      fakeGc,
+				BotUser: botUser,
+				AppAuth: appAuth,
+			}
 		}
-
-		rep, _ = ghi.NewRepository(testFullRepoName, fakeGithubServer)
-		Expect(rep.CloneRepo()).To(Succeed())
 	})
 
-	It("should commit and push changes", func() {
-		err := rep.PushChanges("test", "test", rep.FullRepoName, "test", "test", []string{"Label1", "Label2"})
+	It("should commit and push changes to a fork", func() {
+		rep, err := ghi.NewRepository(testFullRepoName, buildServer(false))
 		Expect(err).NotTo(HaveOccurred())
+		Expect(rep.CloneRepo()).To(Succeed())
+
+		err = rep.PushChanges("test", "test", rep.FullRepoName, "test", "test", []string{"Label1", "Label2"}, true)
+		Expect(err).NotTo(HaveOccurred())
+	})
+
+	It("should commit and push changes to a branch when authenticating as GitHub App", func() {
+		rep, err := ghi.NewRepository(testFullRepoName, buildServer(true))
+		Expect(err).NotTo(HaveOccurred())
+		Expect(rep.CloneRepo()).To(Succeed())
+
+		err = rep.PushChanges("test", "test", rep.FullRepoName, "test", "test", []string{"Label1", "Label2"}, false)
+		Expect(err).NotTo(HaveOccurred())
+	})
+})
+
+var _ = Describe("Testing GithubServer committer identity", func() {
+	It("should prefer the configured email and bot user name", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{Name: testLogin, Login: testLogin, Email: testEmail},
+			Email:   "configured@test.test",
+		}
+		Expect(server.GetName()).To(Equal(testLogin))
+		Expect(server.GetEmail()).To(Equal("configured@test.test"))
+	})
+
+	It("should prefer the configured name and email over the bot user", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{Name: testLogin, Login: testLogin, Email: testEmail},
+			Name:    "configured-user",
+			Email:   "configured@test.test",
+		}
+		Expect(server.GetName()).To(Equal("configured-user"))
+		Expect(server.GetEmail()).To(Equal("configured@test.test"))
+	})
+
+	It("should derive a bot identity for GitHub App auth when name and email are empty", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{Login: "my-app"},
+			AppAuth: true,
+		}
+		Expect(server.GetName()).To(Equal("my-app[bot]"))
+		Expect(server.GetEmail()).To(Equal("my-app[bot]@users.noreply.github.com"))
+	})
+
+	It("should enforce the [bot] suffix on the committer name for GitHub App auth even if a display name is set", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{Name: "my-app", Login: "my-app"},
+			AppAuth: true,
+		}
+		Expect(server.GetName()).To(Equal("my-app[bot]"))
+	})
+
+	It("should append the [bot] suffix to an explicitly configured name without a login", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{Name: "gardener-ci-robot"},
+			AppAuth: true,
+		}
+		Expect(server.GetName()).To(Equal("gardener-ci-robot[bot]"))
+	})
+
+	It("should not duplicate the [bot] suffix when the login already carries it", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{Login: "my-app[bot]"},
+			AppAuth: true,
+		}
+		Expect(server.GetName()).To(Equal("my-app[bot]"))
 	})
 })
