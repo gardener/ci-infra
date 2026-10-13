@@ -11,7 +11,7 @@ postsubmits:
       testgrid-create-test-group: "false"
     spec:
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20261009-3764967
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20261012-5a9931b
         command:
         - /owners-aliases-bumper
         args:
