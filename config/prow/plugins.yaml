@@ -4,6 +4,7 @@ triggers:
 - trusted_apps:
     - dependabot
     - gardener-prow-autobumper
+    - renovate
   repos:
   - gardener
   join_org_url: "https://gardener.cloud/docs/contribute/code/roles/"
@@ -43,7 +44,7 @@ label:
 
   restricted_labels:
     gardener:
-    # Allow gardener-ci-robot user to mark PRs for automerging without review using a `/label skip-review` command.
+    # Allow renovate to mark PRs for auto-merging without review using a `/label skip-review` command.
     # This is useful with the following renovate configuration:
     # {
     #   "automergeType": "pr-comment",
@@ -51,12 +52,12 @@ label:
     # }
     # Then, you can set `automerge=true` in the respective `packageRule`.
     - allowed_users:
-      - gardener-ci-robot
+      - renovate[bot]
       label: skip-review
     gardener/ci-infra:
-    # Allow gardener-prow-autobumper user to mark PRs for automerging that it can auto-update prow images.
+    # Allow gardener-prow-autobumper user to mark PRs for auto-merging that it can auto-update prow images.
     - allowed_users:
-      - gardener-prow-autobumper
+      - gardener-prow-autobumper[bot]
       label: skip-review
 
 
