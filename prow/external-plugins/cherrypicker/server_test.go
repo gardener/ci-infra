@@ -407,6 +407,134 @@ func testCherryPickIC(clients localgit.Clients, t *testing.T) {
 	}
 }
 
+func TestCherryPickICWithGitHubAppV2(t *testing.T) {
+	t.Parallel()
+	testCherryPickICWithGitHubApp(localgit.NewV2, t)
+}
+
+// testCherryPickICWithGitHubApp verifies that when authenticating as a GitHub App the
+// cherry-pick branch is pushed into the central repo (Apps cannot fork), so the opened PR's
+// head ref is the bare branch name rather than "<fork-owner>:<branch>".
+func testCherryPickICWithGitHubApp(clients localgit.Clients, t *testing.T) {
+	iNumber := fakePR.GetPRNumber()
+	lg, c := makeFakeRepoWithCommit(clients, t)
+	if err := lg.CheckoutNewBranch("foo", "bar", "stage"); err != nil {
+		t.Fatalf("Checking out pull branch: %v", err)
+	}
+
+	ghc := &fghc{
+		prs: []github.PullRequest{
+			{
+				Number: iNumber,
+				Base: github.PullRequestBranch{
+					Ref: "master",
+				},
+				User:   github.User{Login: "foo-author"},
+				Merged: true,
+				Title:  "This is a fix for X",
+				Body:   body,
+			},
+		},
+		isMember: true,
+		patch:    patch,
+	}
+	ic := github.IssueCommentEvent{
+		Action: github.IssueCommentActionCreated,
+		Repo: github.Repo{
+			Owner: github.User{
+				Login: "foo",
+			},
+			Name:     "bar",
+			FullName: "foo/bar",
+		},
+		Issue: github.Issue{
+			Number:      iNumber,
+			State:       "closed",
+			PullRequest: &struct{}{},
+		},
+		Comment: github.IssueComment{
+			User: github.User{
+				Login: "wiseguy",
+			},
+			Body: "/cherrypick stage",
+		},
+	}
+
+	botUser := &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"}
+
+	getSecret := func() []byte {
+		return []byte("sha=abcdefg")
+	}
+
+	s := &Server{
+		botUser:        botUser,
+		githubAppAuth:  true,
+		gc:             c,
+		pusher:         &testPusher{},
+		ghc:            ghc,
+		tokenGenerator: getSecret,
+		log:            logrus.StandardLogger().WithField("client", "cherrypicker"),
+
+		prowAssignments: true,
+	}
+
+	if _, err := s.handleIssueComment(logrus.NewEntry(logrus.StandardLogger()), ic); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// With GitHub App authentication the cherry-pick is pushed into the central repo, so the
+	// head ref must not be prefixed with the bot's login.
+	expectedHead := fmt.Sprintf(cherryPickBranchFmt, iNumber, "stage")
+	if got := ghc.prs[1].Head.Ref; got != expectedHead {
+		t.Errorf("expected cherry-pick PR head ref %q, got %q", expectedHead, got)
+	}
+}
+
+func TestUserWithBotSuffix(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name          string
+		githubAppAuth bool
+		login         string
+		expected      string
+	}{
+		{
+			name:          "GitHub App authentication appends suffix",
+			githubAppAuth: true,
+			login:         "ci-robot",
+			expected:      "ci-robot[bot]",
+		},
+		{
+			name:          "GitHub App authentication does not append suffix twice",
+			githubAppAuth: true,
+			login:         "ci-robot[bot]",
+			expected:      "ci-robot[bot]",
+		},
+		{
+			name:          "GitHub App authentication leaves empty login untouched",
+			githubAppAuth: true,
+			login:         "",
+			expected:      "",
+		},
+		{
+			name:          "token authentication does not append suffix",
+			githubAppAuth: false,
+			login:         "ci-robot",
+			expected:      "ci-robot",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := &Server{githubAppAuth: tc.githubAppAuth}
+			if got := s.userWithBotSuffix(tc.login); got != tc.expected {
+				t.Errorf("expected %q, got %q", tc.expected, got)
+			}
+		})
+	}
+}
+
 func TestCherryPickPRV2(t *testing.T) {
 	t.Parallel()
 	testCherryPickPR(localgit.NewV2, t)
@@ -1107,6 +1235,7 @@ func TestGetPusherAndOrg(t *testing.T) {
 		name           string
 		org            string
 		repo           string
+		githubAppAuth  bool
 		expectedOrg    string
 		expectedPusher string
 		errors         bool
@@ -1117,6 +1246,15 @@ func TestGetPusherAndOrg(t *testing.T) {
 			repo:           "repo",
 			expectedOrg:    "ci-robot",
 			expectedPusher: "forkPusher",
+			errors:         false,
+		},
+		{
+			name:           "GitHub App authentication returns centralPusher without forking",
+			org:            "whatever",
+			repo:           "repo",
+			githubAppAuth:  true,
+			expectedOrg:    "whatever",
+			expectedPusher: "centralPusher",
 			errors:         false,
 		},
 		{
@@ -1146,6 +1284,7 @@ func TestGetPusherAndOrg(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			s.githubAppAuth = tc.githubAppAuth
 			p, org, err := s.getPusherAndOrg(logrus.WithField("test", t.Name()), tc.org, tc.repo)
 			if tc.errors && err == nil {
 				t.Errorf("expected error, but did not get one")
