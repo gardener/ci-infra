@@ -168,7 +168,7 @@ tide:
     - do-not-merge/work-in-progress
     - needs-rebase
 
-  # configuration for automerging gardener-ci-robot PRs
+  # configuration for auto-merging gardener-ci-robot PRs
   - author: gardener-ci-robot
     orgs:
     - gardener
@@ -178,7 +178,17 @@ tide:
     - skip-review
     missingLabels: *tide-default-missing-labels
 
-  # configuration for automerging gardener-prow-autobumper PRs in ci-infra repository
+  # configuration for auto-merging renovate PRs
+  - author: renovate[bot]
+    orgs:
+    - gardener
+    excludedRepos: *tide-excluded-repos
+    labels:
+    # renovate adds this label to PRs that should be merged automatically
+    - skip-review
+    missingLabels: *tide-default-missing-labels
+
+  # configuration for auto-merging gardener-prow-autobumper PRs in ci-infra repository
   - author: gardener-prow-autobumper[bot]
     repos:
     - gardener/ci-infra

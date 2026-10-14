@@ -6,7 +6,6 @@ resources:
 - ../base
 - prow-kustomization.yaml
 - oauth2-proxy-kustomization.yaml
-- renovate-kustomization.yaml
 - peribolos.yaml
 - peribolos-config.yaml
 
