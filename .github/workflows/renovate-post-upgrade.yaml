@@ -49,25 +49,61 @@ jobs:
           # tag and the tag that replaced it.
           git diff --unified=0 HEAD~1 HEAD -- "${IMAGES_FILE}" > "${DIFF_FILE}"
 
-          # Build a sed program that re-inserts every removed tag before the line that replaced it. A tag that is
-          # only added (e.g. by a commit previously pushed by this Action) has no removed line and is therefore
-          # skipped, which keeps this step idempotent.
+          # Build a sed program that re-inserts every removed tag before the line that replaced it. Only hunks
+          # that consist of exactly one removed tag and one added tag are considered - the single tag swap that
+          # Renovate produces. Any other hunk is skipped, which also keeps this step idempotent: a tag that is
+          # only added (e.g. by a commit previously pushed by this Action) has no matching removed line.
+          echo -n > "${RESTORE_SCRIPT}"
+
+          # Matches a tag line in the diff: the "+"/"-" diff marker, the indentation (one or more spaces), the
+          # "- " list marker, then a value containing no ":". The ":" exclusion skips mapping items such as
+          # "source: ..." (image tags never contain a ":"), and accepting any indentation keeps this working if
+          # images.yaml is ever re-indented.
+          tag_line_regex='^[-+][[:space:]]+-[[:space:]][^:]*$'
+
           new_line=0
-          : > "${RESTORE_SCRIPT}"
-          # Matches a removed tag line: the diff "-" marker, the indentation (one or more spaces), the "- " list
-          # marker, then a value containing no ":". The ":" exclusion skips mapping items such as
-          # "- source: ..." (image tags never contain a ":"), and accepting any indentation keeps this working
-          # if images.yaml is ever re-indented.
-          tag_line_regex='^-[[:space:]]+-[[:space:]][^:]*$'
+          removed_line=''
+          removed_count=0
+          added_count=0
+          invalid_hunk=0
+
+          flush_hunk() {
+            # Re-insert the removed tag before line b (its position in the new file), but only for a clean single
+            # tag swap: exactly one removed tag, one added tag, and nothing else in the hunk.
+            if [ "${invalid_hunk}" -eq 0 ] && [ "${removed_count}" -eq 1 ] && [ "${added_count}" -eq 1 ]; then
+              printf '%si\\%s\n' "${new_line}" "${removed_line#-}" >> "${RESTORE_SCRIPT}"
+            fi
+            # Reset the per-hunk state for the next hunk.
+            new_line=0
+            removed_line=''
+            removed_count=0
+            added_count=0
+            invalid_hunk=0
+          }
+
           while IFS= read -r diff_line; do
             if [[ "${diff_line}" == @@* ]]; then
+              # Hunk boundary: evaluate (and reset) the hunk that just ended before starting the next one.
+              flush_hunk
               # Hunk header "@@ -a[,x] +b[,y] @@": b is the line the replacement sits on in the new file.
               new_line="$(printf '%s\n' "${diff_line}" | sed -E 's/^@@ -[0-9,]+ \+([0-9]+).*/\1/')"
-            elif [[ "${diff_line}" =~ $tag_line_regex ]]; then
-              # Re-insert the removed tag before line b (dropping the leading diff "-").
-              printf '%si\\%s\n' "${new_line}" "${diff_line#-}" >> "${RESTORE_SCRIPT}"
+            elif [[ "${diff_line}" =~ ${tag_line_regex} ]]; then
+              # A tag line - the first character says whether it was removed or added.
+              if [[ "${diff_line}" == -* ]]; then
+                removed_line="${diff_line}"
+                removed_count=$((removed_count + 1))
+              else
+                added_count=$((added_count + 1))
+              fi
+            else
+              # Any other change in the hunk (a mapping item, a non-tag line, ...) disqualifies it. The file
+              # header lines ("--- a/..." / "+++ b/...") land here too, but they precede the first hunk header
+              # and are discarded when it resets the state.
+              invalid_hunk=1
             fi
           done < "${DIFF_FILE}"
+          # Evaluate the final hunk, which has no following header to trigger the flush.
+          flush_hunk
 
           # Apply the insertions (sed resolves all line numbers against the original file).
           if [ -s "${RESTORE_SCRIPT}" ]; then
