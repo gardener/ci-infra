@@ -445,3 +445,43 @@ periodics:
     - name: rclone-config
       configMap:
         name: rclone-config
+- cron: "7 * * * *"
+  name: ci-renovate-presubmit-generator
+  cluster: gardener-prow-trusted
+  decorate: true
+  extra_refs:
+  - org: gardener
+    repo: ci-infra
+    base_ref: master
+  reporter_config:
+    slack:
+      channel: prow-alerts
+  annotations:
+    description: Regenerates config/jobs/common/renovate-presubmits.yaml for all public gardener repos and opens a PR if it changed
+    testgrid-create-test-group: "false"
+  spec:
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/renovate-presubmit-generator:v20261013-a5c2905
+      command:
+      - /renovate-presubmit-generator
+      args:
+      - --confirm
+      - --labels-override=kind/task,skip-review
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      volumeMounts:
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: presubmit-generator-github-app
+            key: appid
+    volumes:
+    - name: github-app
+      secret:
+        secretName: presubmit-generator-github-app
