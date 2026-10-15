@@ -16,7 +16,8 @@ periodics:
       command:
       - /job-forker
       args:
-      - --github-token-path=/etc/github-token/token
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
       - --dry-run=false
@@ -24,17 +25,21 @@ periodics:
       - --recursive=true
       - --upstream-repository=gardener/ci-infra
       - --upstream-branch=master
-      - --git-email=gardener.ci.robot@gmail.com
       - --labels-override=kind/enhancement,skip-review
-      - --signoff=true
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: job-forker-github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: job-forker-github-app
 
 - cron: "44 * * * *"
   name: ci-job-forker-gardener-etcd-druid
@@ -48,30 +53,35 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261016-b7b8979
-        command:
-          - /job-forker
-        args:
-          - --github-token-path=/etc/github-token/token
-          - --github-endpoint=http://ghproxy.prow.svc.cluster.local
-          - --github-endpoint=https://api.github.com
-          - --dry-run=false
-          - --job-directory=config/jobs/etcd-druid
-          - --recursive=true
-          - --upstream-repository=gardener/ci-infra
-          - --upstream-branch=master
-          - --git-email=gardener.ci.robot@gmail.com
-          - --labels-override=kind/enhancement,skip-review
-          - --release-branch-pattern=^hotfix-v\d+\.\d+
-          - --signoff=true
-        volumeMounts:
-          - name: github-token
-            mountPath: /etc/github-token
-            readOnly: true
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261016-b7b8979
+      command:
+        - /job-forker
+      args:
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --dry-run=false
+      - --job-directory=config/jobs/etcd-druid
+      - --recursive=true
+      - --upstream-repository=gardener/ci-infra
+      - --upstream-branch=master
+      - --labels-override=kind/enhancement,skip-review
+      - --release-branch-pattern=^hotfix-v\d+\.\d+
+      volumeMounts:
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: job-forker-github-app
+            key: appid
     volumes:
-      - name: github-token
-        secret:
-          secretName: github-token
+    - name: github-app
+      secret:
+        secretName: job-forker-github-app
 
 - cron: "44 * * * *"
   name: ci-job-forker-gardener-landscape-kit
@@ -89,7 +99,8 @@ periodics:
       command:
       - /job-forker
       args:
-      - --github-token-path=/etc/github-token/token
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
       - --github-endpoint=http://ghproxy.prow.svc.cluster.local
       - --github-endpoint=https://api.github.com
       - --dry-run=false
@@ -97,17 +108,21 @@ periodics:
       - --recursive=true
       - --upstream-repository=gardener/ci-infra
       - --upstream-branch=master
-      - --git-email=gardener.ci.robot@gmail.com
       - --labels-override=kind/enhancement,skip-review
-      - --signoff=true
       volumeMounts:
-      - name: github-token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
         readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: job-forker-github-app
+            key: appid
     volumes:
-    - name: github-token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: job-forker-github-app
 
 - cron: "30 * * * 1-5"
   name: ci-prow-autobump
