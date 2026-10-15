@@ -43,6 +43,8 @@ jobs:
             target: peribolos-checkconfig
           - name: owners-aliases-bumper
             target: owners-aliases-bumper
+          - name: renovate-presubmit-generator
+            target: renovate-presubmit-generator
     with:
       name: ${{ matrix.images.name }}
       version: ${{ needs.compute-versions.outputs.semver-version }}

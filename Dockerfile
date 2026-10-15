@@ -64,3 +64,9 @@ LABEL app=owners-aliases-bumper
 WORKDIR /
 COPY --from=builder /build/owners-aliases-bumper /owners-aliases-bumper
 ENTRYPOINT [ "/owners-aliases-bumper" ]
+
+FROM ssl_git_runner AS renovate-presubmit-generator
+LABEL app=renovate-presubmit-generator
+WORKDIR /
+COPY --from=builder /build/renovate-presubmit-generator /renovate-presubmit-generator
+ENTRYPOINT [ "/renovate-presubmit-generator" ]
