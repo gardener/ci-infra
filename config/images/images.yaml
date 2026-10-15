@@ -488,6 +488,7 @@ images:
   - v1.0.4
   - v1.0.5
   - v1.0.6
+  - v1.0.7
 - source: busybox
   destination: europe-docker.pkg.dev/gardener-project/releases/3rd/busybox
   tags:
