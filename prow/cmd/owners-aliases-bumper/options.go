@@ -30,6 +30,7 @@ type options struct {
 
 	gitUser  string
 	gitEmail string
+	signoff  bool
 
 	ghOpts flagutil.GitHubOptions
 
@@ -59,6 +60,7 @@ func (o *options) parseArgs(flags *flag.FlagSet, args []string) error {
 
 	flags.StringVar(&o.gitEmail, "git-email", "", "Email used as the git commit author. When empty, the email is resolved from the authenticated GitHub bot user.")
 	flags.StringVar(&o.gitUser, "git-user", "", "Name used as the git commit author. When empty, the name is resolved from the authenticated GitHub bot user.")
+	flags.BoolVar(&o.signoff, "signoff", false, "Add a DCO sign-off line to the commit. GitHub App commits usually should not be signed off.")
 
 	o.ghOpts.AddFlags(flags)
 
@@ -82,6 +84,14 @@ func (o *options) parseArgs(flags *flag.FlagSet, args []string) error {
 		return errors.New("--peribolos-conf needs to be set")
 	}
 
+	if err := o.ghOpts.Validate(!o.applyChanges); err != nil {
+		return err
+	}
+	// Authentication is only needed when changes are applied (clone, commit, push, PR).
+	if o.applyChanges && o.ghOpts.TokenPath == "" && o.ghOpts.AppID == "" {
+		return errors.New("please provide either --github-token-path or --github-app-id together with --github-app-private-key-path")
+	}
+
 	return nil
 }
 
@@ -101,6 +111,7 @@ func (o *options) buildPRConfig() (prConfig, error) {
 		commitTitle: o.commitTitle,
 		prTitle:     o.prTitle,
 		prBody:      prBody,
+		signoff:     o.signoff,
 	}, nil
 }
 

@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path"
 	"regexp"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"sigs.k8s.io/prow/pkg/config"
@@ -100,19 +101,53 @@ type GithubServer struct {
 	Gc  GitClient
 
 	BotUser *github.UserData
+	Name    string
 	Email   string
+	// AppAuth indicates that the server authenticates as a GitHub App. GitHub Apps
+	// cannot fork repositories, so changes are pushed to a branch on the upstream
+	// repository instead of to a fork.
+	AppAuth bool
+}
+
+// botLoginSuffix is appended to a GitHub App's committer identity.
+const botLoginSuffix = "[bot]"
+
+// GetName tries to get the committer name of GithubServer from different sources.
+// When authenticating as a GitHub App, the committer name must carry a "[bot]" suffix.
+func (g *GithubServer) GetName() string {
+	if g.Name != "" {
+		return g.withBotSuffix(g.Name)
+	}
+	if g.BotUser.Name != "" {
+		return g.withBotSuffix(g.BotUser.Name)
+	}
+	return g.withBotSuffix(g.BotUser.Login)
 }
 
 // GetEmail tries to get the email of GithubServer from different sources
 func (g *GithubServer) GetEmail() string {
-	email := g.Email
-	if email == "" {
-		email = g.BotUser.Email
+	if g.Email != "" {
+		return g.Email
 	}
-	return email
+	if g.BotUser.Email != "" {
+		return g.BotUser.Email
+	}
+	if login := g.withBotSuffix(g.BotUser.Login); login != "" {
+		return fmt.Sprintf("%s@users.noreply.github.com", login)
+	}
+	return ""
 }
 
-// Repository handles the conversion between a fully qualified repository name and its organisation / repository name
+// withBotSuffix appends the "[bot]" suffix GitHub expects for a GitHub App's committer
+// identity, when authenticating as an App and the suffix is not present yet.
+func (g *GithubServer) withBotSuffix(name string) string {
+	if g.AppAuth && name != "" && !strings.HasSuffix(name, botLoginSuffix) {
+		name += botLoginSuffix
+	}
+	return name
+}
+
+// Repository handles the conversion between a fully qualified repository name and its organization / repository name
 type Repository struct {
 	FullRepoName string
 	Org          string
@@ -122,7 +157,7 @@ type Repository struct {
 	RepoClient git.RepoClient
 }
 
-// NewRepository creates a Repository object, by taking its fully qualified repository name (organisation/reponame) and splitting it into its counterparts
+// NewRepository creates a Repository object, by taking its fully qualified repository name (organization/reponame) and splitting it into its counterparts
 func NewRepository(fullRepoName string, gh *GithubServer) (*Repository, error) {
 	var err error
 	rep := Repository{
@@ -184,20 +219,33 @@ func (r *Repository) ensureForkExists() (*Repository, error) {
 	return NewRepository(fmt.Sprintf("%s/%s", r.Gh.BotUser.Login, repo), r.Gh)
 }
 
-// PushChanges pushes changes to the `targetBranch` with `commitMessage` and opens a PR, if it is not open already
-func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, commitMessage, prTitle string, labels []string) error {
-	if err := r.RepoClient.Config("user.name", r.Gh.BotUser.Name); err != nil {
+// PushChanges pushes changes to the `targetBranch` with `commitMessage` and opens a PR, if it is not open already.
+// When the GithubServer authenticates as a GitHub App (AppAuth), the changes are pushed to a branch on the
+// upstream repository, because GitHub Apps cannot create forks. Otherwise, the changes are pushed to a fork of
+// the upstream repository owned by the bot user. Commits are signed off when `signoff` is true.
+func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, commitMessage, prTitle string, labels []string, signoff bool) error {
+	if err := r.RepoClient.Config("user.name", r.Gh.GetName()); err != nil {
 		return fmt.Errorf("failed to configure git user: %w", err)
 	}
 	if err := r.RepoClient.Config("user.email", r.Gh.GetEmail()); err != nil {
 		return fmt.Errorf("failed to configure git email: %w", err)
 	}
 
-	fork, err := r.ensureForkExists()
-	if err != nil {
-		return err
+	// In fork mode, headRepo is the bot user's fork; in App mode, changes are pushed directly to the upstream repository.
+	headRepo := upstreamRepo
+	head := targetBranch
+	targetRepo := r.Repo
+	if !r.Gh.AppAuth {
+		fork, err := r.ensureForkExists()
+		if err != nil {
+			return err
+		}
+		logrus.Info("Ensured fork exists")
+		headRepo = fork.FullRepoName
+		head = fmt.Sprintf("%s:%s", r.Gh.BotUser.Login, targetBranch)
+		targetRepo = fork.Repo
 	}
-	logrus.Info("Ensured fork exists")
+
 	if r.RepoClient.BranchExists(targetBranch) {
 		if err := r.RepoClient.Checkout(targetBranch); err != nil {
 			return err
@@ -211,7 +259,7 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 			logrus.WithError(err).Infof("Error on cleaning up repo")
 		}
 	}()
-	if err := r.Gh.Gc.Commit(r.RepoClient.Directory(), r.Gh.BotUser.Name, r.Gh.GetEmail(), commitMessage, true); err != nil {
+	if err := r.Gh.Gc.Commit(r.RepoClient.Directory(), r.Gh.GetName(), r.Gh.GetEmail(), commitMessage, signoff); err != nil {
 		return err
 	}
 
@@ -227,7 +275,7 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 
 	for _, pr := range prs {
 		logrus.Infof("PR: %s, Head: %s, Base: %s", pr.Title, pr.Head.Repo.FullName, pr.Base.Repo.FullName)
-		if pr.Head.Repo.FullName == fork.FullRepoName && pr.Head.Ref == targetBranch &&
+		if pr.Head.Repo.FullName == headRepo && pr.Head.Ref == targetBranch &&
 			pr.Base.Repo.FullName == upstreamRepo && pr.Base.Ref == upstreamBranch {
 			logrus.Info("There is already an open PR")
 			prNumber = pr.Number
@@ -236,13 +284,19 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 		}
 	}
 
-	if err := r.RepoClient.PushToNamedFork(fork.Repo, targetBranch, true); err != nil {
-		return err
+	if r.Gh.AppAuth {
+		if err := r.RepoClient.PushToCentral(targetBranch, true); err != nil {
+			return err
+		}
+		logrus.Infof("Pushed to branch %s on %s", targetBranch, upstreamRepo)
+	} else {
+		if err := r.RepoClient.PushToNamedFork(targetRepo, targetBranch, true); err != nil {
+			return err
+		}
+		logrus.Infof("Pushed to branch %s on %s", targetBranch, headRepo)
 	}
-	logrus.Infof("Pushed to branch %s on %s/%s", targetBranch, r.Gh.BotUser.Login, fork.Repo)
 
 	if !prExists {
-		head := fmt.Sprintf("%s:%s", r.Gh.BotUser.Login, targetBranch)
 		logrus.Infof("Head: %s", head)
 		prNumber, err = r.Gh.Ghc.CreatePullRequest(r.Org, r.Repo, prTitle, "", head, upstreamBranch, true)
 		if err != nil {

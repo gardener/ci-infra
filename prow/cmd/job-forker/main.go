@@ -40,7 +40,9 @@ type options struct {
 	dryRun               bool
 	recursive            bool
 	github               flagutil.GitHubOptions
+	gitUser              string
 	gitEmail             string
+	signoff              bool
 
 	logLevel string
 }
@@ -48,6 +50,9 @@ type options struct {
 func (o *options) validate() error {
 	if err := o.github.Validate(o.dryRun); err != nil {
 		return err
+	}
+	if !o.dryRun && o.github.TokenPath == "" && o.github.AppID == "" {
+		return fmt.Errorf("please provide either --github-token-path or --github-app-id together with --github-app-private-key-path")
 	}
 	if o.upstreamRepo == "" {
 		return fmt.Errorf("please provide a non empty --upstream-repository")
@@ -78,7 +83,9 @@ func gatherOptions() options {
 	fs.BoolVar(&o.recursive, "recursive", false, "When set to true, all sub-folders of job-directory will be searched for prow-jobs")
 	fs.StringVar(&o.releaseBranchPattern, "release-branch-pattern", "^release-v\\d+\\.\\d+", "Pattern to identify release branches for which prow jobs should be forked")
 	fs.StringVar(&labelsOverride, "labels-override", "", "Labels which should be added to the PR")
-	fs.StringVar(&o.gitEmail, "git-email", "", "E-Mail the bot should use to commit changes")
+	fs.StringVar(&o.gitUser, "git-user", "", "Name used as the git commit author. When empty, the name is resolved from the authenticated GitHub bot user.")
+	fs.StringVar(&o.gitEmail, "git-email", "", "Email used as the git commit author. When empty, the email is resolved from the authenticated GitHub bot user.")
+	fs.BoolVar(&o.signoff, "signoff", false, "Add a DCO sign-off line to the commit. GitHub App commits usually should not be signed off")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "DryRun")
 	fs.StringVar(&o.logLevel, "log-level", "info", fmt.Sprintf("Log level is one of %v.", logrus.AllLevels))
 	o.github.AddFlags(fs)
@@ -129,7 +136,9 @@ func main() {
 		Gcf:     gitClientFactory,
 		Gc:      &ghi.CommitClient{},
 		BotUser: botUser,
+		Name:    o.gitUser,
 		Email:   o.gitEmail,
+		AppAuth: o.github.AppID != "",
 	}
 
 	upstreamRepo, err := ghi.NewRepository(o.upstreamRepo, &githubServer)
@@ -158,7 +167,8 @@ func main() {
 			fmt.Sprintf("%s-%s", TargetBranchPrefix, jobSpec.Job),
 			"Forked prow jobs for release branches",
 			fmt.Sprintf("Forked prow jobs for release branches created by prow job `%s`", jobSpec.Job),
-			o.labelsOverride)
+			o.labelsOverride,
+			o.signoff)
 		if err != nil {
 			logrus.WithError(err).Fatal("Error during pushing of changes")
 		}

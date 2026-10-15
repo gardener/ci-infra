@@ -26,6 +26,7 @@ periodics:
       - --upstream-branch=master
       - --git-email=gardener.ci.robot@gmail.com
       - --labels-override=kind/enhancement,skip-review
+      - --signoff=true
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token
@@ -62,6 +63,7 @@ periodics:
           - --git-email=gardener.ci.robot@gmail.com
           - --labels-override=kind/enhancement,skip-review
           - --release-branch-pattern=^hotfix-v\d+\.\d+
+          - --signoff=true
         volumeMounts:
           - name: github-token
             mountPath: /etc/github-token
@@ -97,6 +99,7 @@ periodics:
       - --upstream-branch=master
       - --git-email=gardener.ci.robot@gmail.com
       - --labels-override=kind/enhancement,skip-review
+      - --signoff=true
       volumeMounts:
       - name: github-token
         mountPath: /etc/github-token

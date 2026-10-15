@@ -50,6 +50,7 @@ type prConfig struct {
 	commitTitle string
 	prTitle     string
 	prBody      string
+	signoff     bool
 }
 
 func checkoutRepo(ghClient github.Client, gh *ghi.GithubServer, orgName, repoName string, cfg prConfig) (*ghi.Repository, error) {
@@ -84,14 +85,14 @@ func checkoutRepo(ghClient github.Client, gh *ghi.GithubServer, orgName, repoNam
 	return rep, nil
 }
 
-// commitAndPush stages the working-tree changes, creates a signed-off commit
-// via gh.Gc (which shells out to the git binary, RepoClient.Commit has no
-// --signoff), and pushes cfg.branch to the central remote. DCO
-// requires Signed-off
+// commitAndPush stages the working-tree changes, creates a commit via gh.Gc
+// (which shells out to the git binary, RepoClient.Commit has no --signoff), and
+// pushes cfg.branch to the central remote. The commit is signed off (DCO) when
+// cfg.signoff is set.
 func commitAndPush(rep *ghi.Repository, gh *ghi.GithubServer, orgName, repoName string, cfg prConfig) error {
 	log := logrus.WithField("repo", orgName+"/"+repoName)
 
-	name, email := gh.BotUser.Name, gh.GetEmail()
+	name, email := gh.GetName(), gh.GetEmail()
 	if err := rep.RepoClient.Config("user.name", name); err != nil {
 		return fmt.Errorf("failed to configure git user for %s/%s: %w", orgName, repoName, err)
 	}
@@ -99,8 +100,8 @@ func commitAndPush(rep *ghi.Repository, gh *ghi.GithubServer, orgName, repoName 
 		return fmt.Errorf("failed to configure git email for %s/%s: %w", orgName, repoName, err)
 	}
 
-	log.Infof("Committing changes with title %q (signed off)", cfg.commitTitle)
-	if err := gh.Gc.Commit(rep.RepoClient.Directory(), name, email, cfg.commitTitle, true); err != nil {
+	log.Infof("Committing changes with title %q (signoff: %t)", cfg.commitTitle, cfg.signoff)
+	if err := gh.Gc.Commit(rep.RepoClient.Directory(), name, email, cfg.commitTitle, cfg.signoff); err != nil {
 		return fmt.Errorf("failed to commit to repo %s/%s: %w", orgName, repoName, err)
 	}
 

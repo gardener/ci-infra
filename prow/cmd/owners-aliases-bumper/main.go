@@ -57,9 +57,10 @@ func main() {
 	// mode. Dry runs never checkout/commit so leaving them unset is fine.
 	// If --git-user and/or --git-email are supplied we can skip this
 	gh := &ghi.GithubServer{
-		Ghc: ghClient,
-		Gcf: gitFactory,
-		Gc:  &ghi.CommitClient{},
+		Ghc:     ghClient,
+		Gcf:     gitFactory,
+		Gc:      &ghi.CommitClient{},
+		AppAuth: o.ghOpts.AppID != "",
 	}
 	if o.applyChanges {
 		if o.gitUser != "" {
