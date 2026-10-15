@@ -188,6 +188,16 @@ tide:
     - skip-review
     missingLabels: *tide-default-missing-labels
 
+  # configuration for auto-merging gardener-prow-aliases-bumper PRs
+  - author: gardener-prow-aliases-bumper[bot]
+    orgs:
+    - gardener
+    excludedRepos: *tide-excluded-repos
+    labels:
+    # gardener-prow-aliases-bumper adds this label to PRs that should be merged automatically
+    - skip-review
+    missingLabels: *tide-default-missing-labels
+
   # configuration for auto-merging gardener-prow-autobumper PRs in ci-infra repository
   - author: gardener-prow-autobumper[bot]
     repos:
