@@ -125,7 +125,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261013-985126490
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261016-c7093f489
       command:
       - generic-autobumper
       args:
@@ -164,7 +164,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261013-985126490
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261016-c7093f489
       command:
       - generic-autobumper
       args:
@@ -203,7 +203,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261013-985126490
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261016-c7093f489
       command:
       - generic-autobumper
       args:
@@ -242,7 +242,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261013-985126490
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261016-c7093f489
       command:
       - generic-autobumper
       args:
@@ -284,7 +284,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261013-985126490
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261016-c7093f489
       command:
       - checkconfig
       args:
@@ -316,7 +316,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261013-985126490
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261016-c7093f489
       command:
       - checkconfig
       args:
@@ -349,7 +349,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261015-0600b6d-1.26
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261015-61268fa-1.26
       command:
       - make
       args:
