@@ -55,14 +55,14 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (mode)",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\"}[1h])) by (mode)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{mode}}",
                "refId": "A"
             },
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"COALESCED|REVALIDATED\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login))",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"COALESCED|REVALIDATED\"}[1h]))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "(No Cost)",
@@ -147,7 +147,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"COALESCED|REVALIDATED\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) \n/ sum(increase(ghcache_responses{mode=~\"COALESCED|REVALIDATED|MISS|CHANGED\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login))",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"COALESCED|REVALIDATED\"}[1h])) \n/ sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"COALESCED|REVALIDATED|MISS|CHANGED\"}[1h]))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "Efficiency",
@@ -344,7 +344,7 @@
          "tableColumn": "",
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"COALESCED|REVALIDATED\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login))",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"COALESCED|REVALIDATED\"}[1h]))",
                "format": "time_series",
                "instant": true,
                "intervalFactor": 2,
@@ -427,7 +427,7 @@
          "tableColumn": "",
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"COALESCED|REVALIDATED\"}[7d]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login))",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"COALESCED|REVALIDATED\"}[7d]))",
                "format": "time_series",
                "instant": true,
                "intervalFactor": 2,
@@ -454,7 +454,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "GitHub token usage by login and API version.",
+         "description": "GitHub token usage by GitHub App and API version.",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -490,19 +490,12 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(github_token_usage * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login, ratelimit_resource)) by (api_version, login, ratelimit_resource)",
-               "format": "time_series",
-               "intervalFactor": 2,
-               "legendFormat": "{{login}} : {{api_version}} : {{ratelimit_resource}}",
-               "refId": "A"
-             },
-             {
-               "expr": "sum(github_token_usage{token_hash=~\"gardener-prow.+\"}) by (token_hash, api_version, ratelimit_resource)",
+               "expr": "sum(github_token_usage{token_hash=~\".+ - .+\"}) by (token_hash, api_version, ratelimit_resource)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{token_hash}} : {{api_version}} : {{ratelimit_resource}}",
-               "refId": "B"
-             }
+               "refId": "A"
+            }
          ],
          "thresholds": [ ],
          "timeFrom": null,
@@ -582,7 +575,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(rate(github_request_duration_count[${range}]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (status)",
+               "expr": "sum(rate(github_request_duration_count{token_hash=~\".+ - .+\"}[${range}])) by (status)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{status}}",
@@ -667,7 +660,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(rate(github_request_duration_count{status=\"${status}\"}[${range}]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (path)",
+               "expr": "sum(rate(github_request_duration_count{token_hash=~\".+ - .+\",status=\"${status}\"}[${range}])) by (path)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{path}}",
@@ -716,7 +709,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "GitHub request rates by login, path and status.",
+         "description": "GitHub request rates by GitHub App, path and status.",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -754,17 +747,17 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(rate(github_request_duration_count{path=\"${path}\", status=\"${status}\"}[${range}]) * on(token_hash) group_left(login) max(github_user_info{login=~\"${login}\"}) by (token_hash, login)) by (login, path, status)",
+               "expr": "sum(rate(github_request_duration_count{token_hash=~\".+ - .+\",path=\"${path}\", status=\"${status}\", token_hash=~\"${token_hash}\"}[${range}])) by (token_hash, path, status)",
                "format": "time_series",
                "intervalFactor": 2,
-               "legendFormat": "{{status}}:{{login}}:{{path}}",
+               "legendFormat": "{{status}}:{{token_hash}}:{{path}}",
                "refId": "A"
             }
          ],
          "thresholds": [ ],
          "timeFrom": null,
          "timeShift": null,
-         "title": "Request Rates: ${login}, ${path}, and ${status} with ${range}",
+         "title": "Request Rates: ${token_hash}, ${path}, and ${status} with ${range}",
          "tooltip": {
             "shared": true,
             "sort": 0,
@@ -803,7 +796,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "histogram_quantile(<phi>, sum(rate(github_request_duration_bucket[${range}])) by (le))",
+         "description": "histogram_quantile(<phi>, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\"}[${range}])) by (le))",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -841,21 +834,21 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "histogram_quantile(0.99, sum(rate(github_request_duration_bucket[5m])) by (le))",
+               "expr": "histogram_quantile(0.99, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\"}[5m])) by (le))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "phi=0.99",
                "refId": "A"
             },
             {
-               "expr": "histogram_quantile(0.95, sum(rate(github_request_duration_bucket[5m])) by (le))",
+               "expr": "histogram_quantile(0.95, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\"}[5m])) by (le))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "phi=0.95",
                "refId": "B"
             },
             {
-               "expr": "histogram_quantile(0.5, sum(rate(github_request_duration_bucket[5m])) by (le))",
+               "expr": "histogram_quantile(0.5, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\"}[5m])) by (le))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "phi=0.5",
@@ -904,7 +897,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "histogram_quantile(<phi>, sum(rate(github_request_duration_bucket{path=~\"${path}\", status=~\"${status}\"}[${range}])) by (le))",
+         "description": "histogram_quantile(<phi>, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\",path=~\"${path}\", status=~\"${status}\"}[${range}])) by (le))",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -942,21 +935,21 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "histogram_quantile(0.99, sum(rate(github_request_duration_bucket{path=\"${path}\", status=\"${status}\"}[5m]) * on(token_hash) group_left(login) max(github_user_info{login=~\"${login}\"}) by (token_hash, login)) by (le))",
+               "expr": "histogram_quantile(0.99, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\",path=\"${path}\", status=\"${status}\", token_hash=~\"${token_hash}\"}[5m])) by (le))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "phi=0.99",
                "refId": "A"
             },
             {
-               "expr": "histogram_quantile(0.95, sum(rate(github_request_duration_bucket{path=\"${path}\", status=\"${status}\"}[5m]) * on(token_hash) group_left(login) max(github_user_info{login=~\"${login}\"}) by (token_hash, login)) by (le))",
+               "expr": "histogram_quantile(0.95, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\",path=\"${path}\", status=\"${status}\", token_hash=~\"${token_hash}\"}[5m])) by (le))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "phi=0.95",
                "refId": "B"
             },
             {
-               "expr": "histogram_quantile(0.5, sum(rate(github_request_duration_bucket{path=\"${path}\", status=\"${status}\"}[5m]) * on(token_hash) group_left(login) max(github_user_info{login=~\"${login}\"}) by (token_hash, login)) by (le))",
+               "expr": "histogram_quantile(0.5, sum(rate(github_request_duration_bucket{token_hash=~\".+ - .+\",path=\"${path}\", status=\"${status}\", token_hash=~\"${token_hash}\"}[5m])) by (le))",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "phi=0.5",
@@ -966,7 +959,7 @@
          "thresholds": [ ],
          "timeFrom": null,
          "timeShift": null,
-         "title": "Latency Distribution for ${login}, ${path}, and ${status} with ${range}",
+         "title": "Latency Distribution for ${token_hash}, ${path}, and ${status} with ${range}",
          "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1005,7 +998,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\"}[1h])) by (user_agent)",
+         "description": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\"}[1h])) by (user_agent)",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -1043,7 +1036,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (user_agent)",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\"}[1h])) by (user_agent)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{user_agent}}",
@@ -1092,7 +1085,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\"}[1h])) by (path)",
+         "description": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\"}[1h])) by (path)",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -1130,7 +1123,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (path)",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\"}[1h])) by (path)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{path}}",
@@ -1179,7 +1172,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\",path=\"${path}\"}[1h])) by (user_agent)",
+         "description": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\",path=\"${path}\"}[1h])) by (user_agent)",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -1217,7 +1210,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\",path=\"${path}\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (user_agent)",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\",path=\"${path}\"}[1h])) by (user_agent)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{user_agent}}",
@@ -1266,7 +1259,7 @@
          "dashLength": 10,
          "dashes": false,
          "datasource": "prometheus",
-         "description": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\",user_agent=\"${user_agent}\"}[1h])) by (path)",
+         "description": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\",user_agent=\"${user_agent}\"}[1h])) by (path)",
          "fill": 1,
          "gridPos": {
             "h": 9,
@@ -1304,7 +1297,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "sum(increase(ghcache_responses{mode=~\"MISS|NO-STORE|CHANGED\",user_agent=\"${user_agent}\"}[1h]) * on(token_hash) group_left(login) max(github_user_info{login=\"gardener-ci-robot\"}) by (token_hash, login)) by (path)",
+               "expr": "sum(increase(ghcache_responses{token_hash=~\".+ - .+\",mode=~\"MISS|NO-STORE|CHANGED\",user_agent=\"${user_agent}\"}[1h])) by (path)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "{{path}}",
@@ -1356,19 +1349,19 @@
    "templating": {
       "list": [
          {
-            "allValue": null,
+            "allValue": ".*",
             "current": { },
             "datasource": "prometheus",
             "hide": 0,
-            "includeAll": false,
-            "label": "login",
+            "includeAll": true,
+            "label": "app",
             "multi": false,
-            "name": "login",
+            "name": "token_hash",
             "options": [ ],
-            "query": "label_values(github_user_info{login=\"gardener-ci-robot\"}, login)",
+            "query": "label_values(github_request_duration_count{token_hash=~\".+ - .+\"}, token_hash)",
             "refresh": 2,
             "regex": "",
-            "sort": 0,
+            "sort": 1,
             "tagValuesQuery": "",
             "tags": [ ],
             "tagsQuery": "",
