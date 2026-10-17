@@ -448,11 +448,6 @@ default:
     description: OpenStack platform/infrastructure
     target: both
     addedBy: anyone
-  - name: platform/equinix-metal
-    color: 006b75
-    description: Equinix Metal platform/infrastructure (previously Packet)
-    target: both
-    addedBy: anyone
   - name: platform/vsphere
     color: 006b75
     description: VMware vSphere platform/infrastructure
