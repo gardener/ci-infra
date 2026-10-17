@@ -20,6 +20,8 @@ IMG_PERIBOLOS_CHECK_CONFIG := peribolos-checkconfig
 REG_PERIBOLOS_CHECK_CONFIG  := $(REGISTRY)/$(IMG_PERIBOLOS_CHECK_CONFIG)
 IMG_OWNERS_ALIASES_BUMPER := owners-aliases-bumper
 REG_OWNERS_ALIASES_BUMPER  := $(REGISTRY)/$(IMG_OWNERS_ALIASES_BUMPER)
+IMG_RENOVATE_PRESUBMIT_GENERATOR := renovate-presubmit-generator
+REG_RENOVATE_PRESUBMIT_GENERATOR  := $(REGISTRY)/$(IMG_RENOVATE_PRESUBMIT_GENERATOR)
 
 #########################################
 # Tools                                 #
@@ -44,6 +46,7 @@ endif
 	@docker build -t $(REG_BRANCH_CLEANER):$(VERSION) -t $(REG_BRANCH_CLEANER):latest -f Dockerfile --target $(IMG_BRANCH_CLEANER) .
 	@docker build -t $(REG_PERIBOLOS_CHECK_CONFIG):$(VERSION) -t $(REG_PERIBOLOS_CHECK_CONFIG):latest -f Dockerfile --target $(IMG_PERIBOLOS_CHECK_CONFIG) .
 	@docker build -t $(REG_OWNERS_ALIASES_BUMPER):$(VERSION) -t $(REG_OWNERS_ALIASES_BUMPER):latest -f Dockerfile --target $(IMG_OWNERS_ALIASES_BUMPER) .
+	@docker build -t $(REG_RENOVATE_PRESUBMIT_GENERATOR):$(VERSION) -t $(REG_RENOVATE_PRESUBMIT_GENERATOR):latest -f Dockerfile --target $(IMG_RENOVATE_PRESUBMIT_GENERATOR) .
 
 .PHONY: docker-push
 docker-push:
@@ -56,12 +59,14 @@ endif
 	@if ! docker images $(REG_BRANCH_CLEANER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_BRANCH_CLEANER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_PERIBOLOS_CHECK_CONFIG) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_PERIBOLOS_CHECK_CONFIG) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_OWNERS_ALIASES_BUMPER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_OWNERS_ALIASES_BUMPER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
+	@if ! docker images $(REG_RENOVATE_PRESUBMIT_GENERATOR) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_RENOVATE_PRESUBMIT_GENERATOR) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_CHERRYPICKER):$(VERSION)
 	@docker push $(REG_JOB_FORKER):$(VERSION)
 	@docker push $(REG_RELEASE_HANDLER):$(VERSION)
 	@docker push $(REG_BRANCH_CLEANER):$(VERSION)
 	@docker push $(REG_PERIBOLOS_CHECK_CONFIG):$(VERSION)
 	@docker push $(REG_OWNERS_ALIASES_BUMPER):$(VERSION)
+	@docker push $(REG_RENOVATE_PRESUBMIT_GENERATOR):$(VERSION)
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_CHERRYPICKER):latest
 	@docker push $(REG_JOB_FORKER):latest
@@ -69,6 +74,7 @@ ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_BRANCH_CLEANER):latest
 	@docker push $(REG_PERIBOLOS_CHECK_CONFIG):latest
 	@docker push $(REG_OWNERS_ALIASES_BUMPER):latest
+	@docker push $(REG_RENOVATE_PRESUBMIT_GENERATOR):latest
 endif
 
 

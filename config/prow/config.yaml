@@ -196,6 +196,15 @@ tide:
     # autobumper adds this label to PRs that should be merged automatically
     - skip-review
     missingLabels: *tide-default-missing-labels
+  
+    # configuration for auto-merging gardener-prow-presubmit-generator PRs in ci-infra repository
+  - author: gardener-prow-presubmit-generator[bot]
+    repos:
+    - gardener/ci-infra
+    labels:
+    # presubmit-generator adds this label to PRs that should be merged automatically
+    - skip-review
+    missingLabels: *tide-default-missing-labels
 
   context_options:
     # Use branch protection options to define required and optional contexts
