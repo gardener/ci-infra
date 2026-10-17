@@ -28,6 +28,8 @@ periodics:
       - --github-endpoint=https://api.github.com
       - --github-app-id=$(GITHUB_APP_ID)
       - --github-app-private-key-path=/etc/github/cert
+      - --github-hourly-tokens=0
+      - --github-allowed-burst=0
       - --debug
       volumeMounts:
       - name: github-app
