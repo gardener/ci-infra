@@ -3,6 +3,7 @@
 triggers:
 - trusted_apps:
     - dependabot
+    - gardener-prow-aliases-bumper
     - gardener-prow-autobumper
     - gardener-prow-presubmit-generator
     - renovate
@@ -53,6 +54,7 @@ label:
     # }
     # Then, you can set `automerge=true` in the respective `packageRule`.
     - allowed_users:
+      - gardener-prow-aliases-bumper[bot]
       - renovate[bot]
       label: skip-review
     gardener/ci-infra:
