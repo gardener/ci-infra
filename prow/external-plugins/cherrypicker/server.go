@@ -91,6 +91,7 @@ type Server struct {
 	tokenGenerator func() []byte
 	botUser        *github.UserData
 	email          string
+	githubAppAuth  bool
 
 	gc git.ClientFactory
 	// Used for unit testing
@@ -523,7 +524,7 @@ func (s *Server) handle(logger logrus.FieldLogger, author, requestor string, com
 		return s.createComment(logger, org, repo, num, comment, fmt.Sprintf("Failed to get PR patch from GitHub. This PR will need to be manually cherrypicked.\n<details><summary>Error message</summary>%v</details>", err))
 	}
 
-	if err := r.Config("user.name", s.botUser.Login); err != nil {
+	if err := r.Config("user.name", s.userWithBotSuffix(s.botUser.Login)); err != nil {
 		return fmt.Errorf("failed to configure git user: %w", err)
 	}
 	email := s.email
@@ -544,8 +545,13 @@ func (s *Server) handle(logger logrus.FieldLogger, author, requestor string, com
 		if err != nil {
 			return fmt.Errorf("failed to get pullrequests for %s/%s: %w", org, repo, err)
 		}
+		prHeadRef := newBranch
+
+		if pushOrg != org {
+			prHeadRef = fmt.Sprintf("%s:%s", pushOrg, newBranch)
+		}
 		for _, pr := range prs {
-			if pr.Head.Ref == fmt.Sprintf("%s:%s", s.botUser.Login, newBranch) {
+			if pr.Head.Ref == prHeadRef {
 				logger.WithField("preexisting_cherrypick", pr.HTMLURL).Info("PR already has cherrypick")
 				resp := fmt.Sprintf("Looks like #%d has already been cherry picked in %s", num, pr.HTMLURL)
 				return s.createComment(logger, org, repo, num, comment, resp)
@@ -708,6 +714,11 @@ func (s *Server) createIssue(l logrus.FieldLogger, org, repo, title, body string
 }
 
 func (s *Server) getPusherAndOrg(l logrus.FieldLogger, org, repo string) (pusher, string, error) {
+	// when GitHub App authentication is enabled, use the central pusher, because GitHub Apps cannot fork repositories.
+	if s.githubAppAuth {
+		return &centralPusher{}, org, nil
+	}
+
 	// fork repo if it doesn't exist
 	forkName, err := s.ghc.EnsureFork(s.botUser.Login, org, repo)
 	if err != nil && !github.IsForbidden(err) {
@@ -792,6 +803,18 @@ func (s *Server) listTrustedUsers(org, repo string) ([]string, error) {
 		logins = append(logins, collaborator.Login)
 	}
 	return logins, nil
+}
+
+// botLoginSuffix is appended to a GitHub App's committer identity.
+const botLoginSuffix = "[bot]"
+
+// userWithBotSuffix appends the "[bot]" suffix GitHub expects for a GitHub App's committer
+// identity, when authenticating as an App and the suffix is not present yet.
+func (s *Server) userWithBotSuffix(name string) string {
+	if s.githubAppAuth && name != "" && !strings.HasSuffix(name, botLoginSuffix) {
+		name += botLoginSuffix
+	}
+	return name
 }
 
 func normalize(input string) string {

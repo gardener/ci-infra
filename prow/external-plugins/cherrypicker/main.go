@@ -57,6 +57,10 @@ func (o *options) Validate() error {
 		}
 	}
 
+	if !o.dryRun && o.github.TokenPath == "" && o.github.AppID == "" {
+		return fmt.Errorf("please provide either --github-token-path or --github-app-id together with --github-app-private-key-path")
+	}
+
 	return nil
 }
 
@@ -132,6 +136,7 @@ func main() {
 		tokenGenerator: secret.GetTokenGenerator(o.webhookSecretFile),
 		botUser:        botUser,
 		email:          email,
+		githubAppAuth:  o.github.AppID != "",
 
 		gc:  gitClient,
 		ghc: githubClient,
