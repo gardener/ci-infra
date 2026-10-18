@@ -9,7 +9,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"sigs.k8s.io/prow/pkg/github"
 	"sigs.k8s.io/prow/pkg/logrusutil"
 
 	ghi "github.com/gardener/ci-infra/prow/pkg/githubinteractor"
@@ -53,35 +52,22 @@ func main() {
 		logrus.WithError(err).Fatal("Failed to initialize git client!")
 	}
 
-	// BotUser/Email require an authenticated client, we only fetch them in apply
-	// mode. Dry runs never checkout/commit so leaving them unset is fine.
-	// If --git-user and/or --git-email are supplied we can skip this
+	// The committer identity requires an authenticated client, so BotUser is only
+	// fetched in apply mode; dry runs never checkout/commit, so leaving it unset is fine.
 	gh := &ghi.GithubServer{
 		Ghc:     ghClient,
 		Gcf:     gitFactory,
 		Gc:      &ghi.CommitClient{},
+		Name:    o.gitUser,
+		Email:   o.gitEmail,
 		AppAuth: o.ghOpts.AppID != "",
 	}
 	if o.applyChanges {
-		if o.gitUser != "" {
-			gh.BotUser = &github.UserData{Name: o.gitUser}
-		} else {
-			botUser, err := ghClient.BotUser()
-			if err != nil {
-				logrus.WithError(err).Fatal("Failed to get bot user for git commit identity! (override with --git-user)")
-			}
-			gh.BotUser = botUser
+		botUser, err := ghClient.BotUser()
+		if err != nil {
+			logrus.WithError(err).Fatal("Failed to get bot user for git commit identity! (override with --git-user/--git-email)")
 		}
-
-		if o.gitEmail != "" {
-			gh.Email = o.gitEmail
-		} else {
-			email, err := ghClient.Email()
-			if err != nil {
-				logrus.WithError(err).Fatal("Failed to get bot email for git commit identity! (override with --git-email)")
-			}
-			gh.Email = email
-		}
+		gh.BotUser = botUser
 	}
 
 	// build our available aliases from the teams information we have
