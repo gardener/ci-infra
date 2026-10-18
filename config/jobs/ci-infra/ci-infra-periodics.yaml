@@ -12,7 +12,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261016-b7b8979
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261017-1fceda1
       command:
       - /job-forker
       args:
@@ -48,7 +48,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261016-b7b8979
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261017-1fceda1
         command:
           - /job-forker
         args:
@@ -85,7 +85,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261016-b7b8979
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261017-1fceda1
       command:
       - /job-forker
       args:
@@ -349,7 +349,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261015-61268fa-1.26
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261017-81f1293-1.26
       command:
       - make
       args:
@@ -372,7 +372,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20261016-b7b8979
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20261017-1fceda1
       command:
       - /branch-cleaner
       args:
@@ -461,7 +461,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/renovate-presubmit-generator:v20261013-a5c2905
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/renovate-presubmit-generator:v20261017-1fceda1
       command:
       - /renovate-presubmit-generator
       args:
