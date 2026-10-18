@@ -265,11 +265,11 @@ func (r *Repository) PushChanges(upstreamRepo, upstreamBranch, targetBranch, com
 		targetRepo = fork.Repo
 	}
 
-	if r.RepoClient.BranchExists(targetBranch) {
-		if err := r.RepoClient.Checkout(targetBranch); err != nil {
-			return err
-		}
-	} else if err := r.RepoClient.CheckoutNewBranch(targetBranch); err != nil {
+	// Always create the target branch fresh from the current HEAD, which is the base branch the caller
+	// checked out and modified. The changes are force-pushed below, so the branch is fully overwritten
+	// anyway. Checking out a pre-existing remote branch instead would abort, because the regenerated files
+	// already present in the working tree differ from that branch's committed version.
+	if err := r.RepoClient.CheckoutNewBranch(targetBranch); err != nil {
 		return err
 	}
 	defer func() {

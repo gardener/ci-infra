@@ -5,6 +5,7 @@
 package githubinteractor_test
 
 import (
+	"errors"
 	"fmt"
 
 	fgc "github.com/gardener/ci-infra/prow/pkg/git/fakegit"
@@ -152,6 +153,22 @@ var _ = Describe("Testing PushChanges()", func() {
 
 		err = rep.PushChanges("test", "test", rep.FullRepoName, "test", "test", []string{"Label1", "Label2"}, false)
 		Expect(err).NotTo(HaveOccurred())
+	})
+
+	It("should build the target branch fresh from HEAD even when it already exists remotely", func() {
+		repoClient := &fgc.FakeRepoClient{
+			FakeInteractor: fgc.FakeInteractor{CheckoutErr: errors.New("local changes would be overwritten by checkout")},
+		}
+		fakeGcf.RepoClient = repoClient
+
+		rep, err := ghi.NewRepository(testFullRepoName, buildServer(false))
+		Expect(err).NotTo(HaveOccurred())
+		Expect(rep.CloneRepo()).To(Succeed())
+
+		err = rep.PushChanges("test", "test", "ci-renovate-presubmits", "test", "test", nil, false)
+		Expect(err).NotTo(HaveOccurred())
+		Expect(repoClient.CheckoutNewBranchCalls).To(ConsistOf("ci-renovate-presubmits"))
+		Expect(repoClient.CheckoutCalls).To(BeEmpty())
 	})
 })
 
