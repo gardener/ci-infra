@@ -9,6 +9,9 @@ import "sigs.k8s.io/prow/pkg/git/v2"
 // FakeGitClientFactory fakes the prow git client factory
 type FakeGitClientFactory struct {
 	DirectoryString string
+	// RepoClient, when set, is returned by all client constructors. This lets tests inspect the
+	// interactions performed on the repo client. When nil, a fresh FakeRepoClient is returned.
+	RepoClient *FakeRepoClient
 }
 
 // FakeRepoClient fakes the prow git RepoClient
@@ -21,7 +24,14 @@ type FakeRepoClient struct {
 type FakePublisher struct{}
 
 // FakeInteractor fakes the prow git Publisher
-type FakeInteractor struct{}
+type FakeInteractor struct {
+	// CheckoutErr is returned by Checkout, to simulate e.g. local changes that would be overwritten.
+	CheckoutErr error
+	// CheckoutCalls records the arguments passed to Checkout.
+	CheckoutCalls []string
+	// CheckoutNewBranchCalls records the arguments passed to CheckoutNewBranch.
+	CheckoutNewBranchCalls []string
+}
 
 // FakeCommitClient fakes the gardener/ci-infra githubinteractor CommitClient
 type FakeCommitClient struct{}
@@ -33,20 +43,25 @@ func (gc *FakeCommitClient) Commit(_, _, _, _ string, _ bool) error {
 
 // ClientFromDir is a fake for ClientFromDir
 func (fgcf *FakeGitClientFactory) ClientFromDir(_, _, _ string) (git.RepoClient, error) {
-	repoClient := new(FakeRepoClient)
-	return repoClient, nil
+	return fgcf.repoClient(), nil
 }
 
 // ClientFor is a fake for ClientFor
 func (fgcf *FakeGitClientFactory) ClientFor(_, _ string) (git.RepoClient, error) {
-	repoClient := new(FakeRepoClient)
-	return repoClient, nil
+	return fgcf.repoClient(), nil
 }
 
 // ClientForWithRepoOpts is a fake for ClientForWithRepoOpts
 func (fgcf *FakeGitClientFactory) ClientForWithRepoOpts(_, _ string, _ git.RepoOpts) (git.RepoClient, error) {
-	repoClient := new(FakeRepoClient)
-	return repoClient, nil
+	return fgcf.repoClient(), nil
+}
+
+// repoClient returns the configured RepoClient or a fresh one.
+func (fgcf *FakeGitClientFactory) repoClient() git.RepoClient {
+	if fgcf.RepoClient != nil {
+		return fgcf.RepoClient
+	}
+	return new(FakeRepoClient)
 }
 
 // Clean is a fake for Clean
@@ -104,8 +119,9 @@ func (fi *FakeInteractor) IsDirty() (bool, error) {
 }
 
 // Checkout is a fake for Checkout
-func (fi *FakeInteractor) Checkout(_ string) error {
-	return nil
+func (fi *FakeInteractor) Checkout(commitlike string) error {
+	fi.CheckoutCalls = append(fi.CheckoutCalls, commitlike)
+	return fi.CheckoutErr
 }
 
 // RevParse is a fake for RevParse
@@ -129,7 +145,8 @@ func (fi *FakeInteractor) ObjectExists(_ string) (bool, error) {
 }
 
 // CheckoutNewBranch is a fake for CheckoutNewBranch
-func (fi *FakeInteractor) CheckoutNewBranch(_ string) error {
+func (fi *FakeInteractor) CheckoutNewBranch(branch string) error {
+	fi.CheckoutNewBranchCalls = append(fi.CheckoutNewBranchCalls, branch)
 	return nil
 }
 
