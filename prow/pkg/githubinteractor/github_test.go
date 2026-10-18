@@ -184,6 +184,19 @@ var _ = Describe("Testing GithubServer committer identity", func() {
 		Expect(server.GetEmail()).To(Equal("my-app[bot]@users.noreply.github.com"))
 	})
 
+	It("should use the app slug and ignore the API display name and email for GitHub App auth", func() {
+		server := &ghi.GithubServer{
+			BotUser: &github.UserData{
+				Name:  "Gardener Prow Presubmit Generator",
+				Login: "gardener-prow-presubmit-generator",
+				Email: "gardener-prow-presubmit-generator@users.noreply.github.com",
+			},
+			AppAuth: true,
+		}
+		Expect(server.GetName()).To(Equal("gardener-prow-presubmit-generator[bot]"))
+		Expect(server.GetEmail()).To(Equal("gardener-prow-presubmit-generator[bot]@users.noreply.github.com"))
+	})
+
 	It("should enforce the [bot] suffix on the committer name for GitHub App auth even if a display name is set", func() {
 		server := &ghi.GithubServer{
 			BotUser: &github.UserData{Name: "my-app", Login: "my-app"},

@@ -112,28 +112,47 @@ type GithubServer struct {
 // botLoginSuffix is appended to a GitHub App's committer identity.
 const botLoginSuffix = "[bot]"
 
-// GetName tries to get the committer name of GithubServer from different sources.
-// When authenticating as a GitHub App, the committer name must carry a "[bot]" suffix.
+// GetName returns the git committer name, in order of precedence:
+//  1. an explicit name (e.g. from --git-user);
+//  2. for GitHub App auth, the app slug (its login) as "<slug>[bot]" - the API
+//     display name is not recognized as the app's bot account;
+//  3. the API-provided user/app name;
+//  4. the login.
+//
+// Under GitHub App auth the returned name always carries the "[bot]" suffix.
 func (g *GithubServer) GetName() string {
 	if g.Name != "" {
 		return g.withBotSuffix(g.Name)
 	}
+	if g.AppAuth && g.BotUser.Login != "" {
+		return g.withBotSuffix(g.BotUser.Login)
+	}
 	if g.BotUser.Name != "" {
 		return g.withBotSuffix(g.BotUser.Name)
 	}
-	return g.withBotSuffix(g.BotUser.Login)
+	return g.BotUser.Login
 }
 
-// GetEmail tries to get the email of GithubServer from different sources
+// GetEmail returns the git committer email, in order of precedence:
+//  1. an explicit email (e.g. from --git-email);
+//  2. for GitHub App auth, "<slug>[bot]@users.noreply.github.com" - deriving it
+//     from the slug makes GitHub attribute the commit to the app's bot account,
+//     which the DCO check requires to accept the commit without a sign-off (the
+//     email returned by the API lacks the "[bot]" suffix);
+//  3. the API-provided email;
+//  4. a no-reply address built from the login.
 func (g *GithubServer) GetEmail() string {
 	if g.Email != "" {
 		return g.Email
 	}
+	if g.AppAuth && g.BotUser.Login != "" {
+		return fmt.Sprintf("%s@users.noreply.github.com", g.withBotSuffix(g.BotUser.Login))
+	}
 	if g.BotUser.Email != "" {
 		return g.BotUser.Email
 	}
-	if login := g.withBotSuffix(g.BotUser.Login); login != "" {
-		return fmt.Sprintf("%s@users.noreply.github.com", login)
+	if g.BotUser.Login != "" {
+		return fmt.Sprintf("%s@users.noreply.github.com", g.BotUser.Login)
 	}
 	return ""
 }

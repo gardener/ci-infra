@@ -80,26 +80,16 @@ func openPullRequest(o options, ghClient github.Client, repos []string) error {
 		Ghc:     ghClient,
 		Gcf:     gitFactory,
 		Gc:      &ghi.CommitClient{},
+		Name:    o.gitUser,
+		Email:   o.gitEmail,
 		AppAuth: o.ghOpts.AppID != "",
 	}
-	if o.gitUser != "" {
-		gh.BotUser = &github.UserData{Name: o.gitUser}
-	} else {
-		botUser, err := ghClient.BotUser()
-		if err != nil {
-			return err
-		}
-		gh.BotUser = botUser
+
+	botUser, err := ghClient.BotUser()
+	if err != nil {
+		return err
 	}
-	if o.gitEmail != "" {
-		gh.Email = o.gitEmail
-	} else {
-		email, err := ghClient.Email()
-		if err != nil {
-			return err
-		}
-		gh.Email = email
-	}
+	gh.BotUser = botUser
 
 	repoFullName := o.org + "/" + o.repo
 	repository, err := ghi.NewRepository(repoFullName, gh)
