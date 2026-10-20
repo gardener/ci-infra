@@ -527,11 +527,7 @@ func (s *Server) handle(logger logrus.FieldLogger, author, requestor string, com
 	if err := r.Config("user.name", s.userWithBotSuffix(s.botUser.Login)); err != nil {
 		return fmt.Errorf("failed to configure git user: %w", err)
 	}
-	email := s.email
-	if email == "" {
-		email = s.botUser.Email
-	}
-	if err := r.Config("user.email", email); err != nil {
+	if err := r.Config("user.email", s.committerEmail()); err != nil {
 		return fmt.Errorf("failed to configure git email: %w", err)
 	}
 
@@ -815,6 +811,19 @@ func (s *Server) userWithBotSuffix(name string) string {
 		name += botLoginSuffix
 	}
 	return name
+}
+
+// committerEmail returns the email to use for the git committer identity of cherry-pick commits.
+// When authenticating as a GitHub App, it derives the App's "[bot]" no-reply address so GitHub
+// attributes the commits to the App. Otherwise it falls back to the bot user's email.
+func (s *Server) committerEmail() string {
+	if s.email != "" {
+		return s.email
+	}
+	if s.githubAppAuth {
+		return fmt.Sprintf("%s@users.noreply.github.com", s.userWithBotSuffix(s.botUser.Login))
+	}
+	return s.botUser.Email
 }
 
 func normalize(input string) string {

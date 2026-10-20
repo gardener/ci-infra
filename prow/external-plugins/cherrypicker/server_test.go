@@ -535,6 +535,60 @@ func TestUserWithBotSuffix(t *testing.T) {
 	}
 }
 
+func TestCommitterEmail(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name          string
+		githubAppAuth bool
+		email         string
+		botUser       *github.UserData
+		expected      string
+	}{
+		{
+			name:          "manually configured email takes precedence over GitHub App",
+			githubAppAuth: true,
+			email:         "custom@example.com",
+			botUser:       &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"},
+			expected:      "custom@example.com",
+		},
+		{
+			name:          "manually configured email takes precedence over bot user email",
+			githubAppAuth: false,
+			email:         "custom@example.com",
+			botUser:       &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"},
+			expected:      "custom@example.com",
+		},
+		{
+			name:          "GitHub App authentication derives [bot] no-reply address",
+			githubAppAuth: true,
+			botUser:       &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"},
+			expected:      "ci-robot[bot]@users.noreply.github.com",
+		},
+		{
+			name:          "GitHub App authentication keeps existing [bot] suffix",
+			githubAppAuth: true,
+			botUser:       &github.UserData{Login: "ci-robot[bot]", Email: "ci-robot@users.noreply.github.com"},
+			expected:      "ci-robot[bot]@users.noreply.github.com",
+		},
+		{
+			name:          "token authentication falls back to bot user email",
+			githubAppAuth: false,
+			botUser:       &github.UserData{Login: "ci-robot", Email: "ci-robot@users.noreply.github.com"},
+			expected:      "ci-robot@users.noreply.github.com",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := &Server{githubAppAuth: tc.githubAppAuth, email: tc.email, botUser: tc.botUser}
+			if got := s.committerEmail(); got != tc.expected {
+				t.Errorf("expected %q, got %q", tc.expected, got)
+			}
+		})
+	}
+}
+
 func TestCherryPickPRV2(t *testing.T) {
 	t.Parallel()
 	testCherryPickPR(localgit.NewV2, t)
