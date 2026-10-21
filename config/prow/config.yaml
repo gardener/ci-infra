@@ -206,6 +206,15 @@ tide:
     - skip-review
     missingLabels: *tide-default-missing-labels
 
+  # configuration for auto-merging gardener-prow-job-forker PRs in ci-infra repository
+  - author: gardener-prow-job-forker[bot]
+    repos:
+    - gardener/ci-infra
+    labels:
+    # job-forker adds this label to PRs that should be merged automatically
+    - skip-review
+    missingLabels: *tide-default-missing-labels
+
   context_options:
     # Use branch protection options to define required and optional contexts
     from-branch-protection: true

@@ -4,6 +4,7 @@ triggers:
 - trusted_apps:
     - dependabot
     - gardener-prow-autobumper
+    - gardener-prow-job-forker
     - gardener-prow-presubmit-generator
     - renovate
   repos:
@@ -59,6 +60,7 @@ label:
     # Allow users to mark PRs for auto-merging in ci-infra repository.
     - allowed_users:
       - gardener-prow-autobumper[bot]
+      - gardener-prow-job-forker[bot]
       - gardener-prow-presubmit-generator[bot]
       label: skip-review
 
