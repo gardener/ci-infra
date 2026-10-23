@@ -2,7 +2,10 @@ aliases:
   ci-infra-reviewers:
   - acumino
   - ary1992
+  - dimitar-kostadinov
+  - dimityrmirchev
   - ialidzhikov
+  - Kostov6
   - LucaBernstein
   - marc1404
   - oliver-goetz
@@ -13,11 +16,12 @@ aliases:
   - timebertt
   - timuthy
   - tobschli
-  - dimityrmirchev
   ci-infra-approvers:
   - acumino
   - ary1992
+  - dimityrmirchev
   - ialidzhikov
+  - Kostov6
   - LucaBernstein
   - marc1404
   - oliver-goetz
@@ -28,4 +32,3 @@ aliases:
   - timebertt
   - timuthy
   - tobschli
-  - dimityrmirchev
