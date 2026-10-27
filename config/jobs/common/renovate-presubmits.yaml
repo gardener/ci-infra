@@ -57,9 +57,6 @@ presubmits:
   gardener/ci-infra:
   - <<: *renovate-presubmit
     name: pull-ci-infra-check-renovate-config
-  gardener/cluster-api-provider-gardener:
-  - <<: *renovate-presubmit
-    name: pull-cluster-api-provider-gardener-check-renovate-config
   gardener/controller-manager-library:
   - <<: *renovate-presubmit
     name: pull-controller-manager-library-check-renovate-config
