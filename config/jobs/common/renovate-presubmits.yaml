@@ -348,6 +348,9 @@ presubmits:
   gardener/test-infra:
   - <<: *renovate-presubmit
     name: pull-test-infra-check-renovate-config
+  gardener/udpmux:
+  - <<: *renovate-presubmit
+    name: pull-udpmux-check-renovate-config
   gardener/vpn2:
   - <<: *renovate-presubmit
     name: pull-vpn2-check-renovate-config
