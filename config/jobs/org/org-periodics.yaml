@@ -15,7 +15,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20261027-641a46b
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/owners-aliases-bumper:v20261028-5986164
       command:
       - /owners-aliases-bumper
       args:
