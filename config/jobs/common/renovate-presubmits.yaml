@@ -21,7 +21,7 @@ presubmits:
     decorate: true
     spec:
       containers:
-      - image: ghcr.io/renovatebot/renovate:44.195.0
+      - image: ghcr.io/renovatebot/renovate:44.195.1
         command:
         - renovate-config-validator
   gardener/alpine-iptables:
