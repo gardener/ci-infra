@@ -342,9 +342,6 @@ presubmits:
   gardener/terminal-controller-manager:
   - <<: *renovate-presubmit
     name: pull-terminal-controller-manager-check-renovate-config
-  gardener/terraformer:
-  - <<: *renovate-presubmit
-    name: pull-terraformer-check-renovate-config
   gardener/test-infra:
   - <<: *renovate-presubmit
     name: pull-test-infra-check-renovate-config
