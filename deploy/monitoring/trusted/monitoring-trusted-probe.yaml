@@ -5,7 +5,7 @@ metadata:
   namespace: prow
 spec:
   interval: 15s
-  module: http_auth_protected
+  module: http_2xx
   prober:
     url: blackbox-exporter.monitoring.svc.cluster.local:9115
   targets:
