@@ -59,6 +59,12 @@ WORKDIR /
 COPY --from=builder /build/peribolos-checkconfig /peribolos-checkconfig
 ENTRYPOINT [ "/peribolos-checkconfig" ]
 
+FROM base_nonroot AS commenter
+LABEL app=commenter
+WORKDIR /
+COPY --from=builder /build/commenter /commenter
+ENTRYPOINT [ "/commenter" ]
+
 FROM ssl_git_runner AS owners-aliases-bumper
 LABEL app=owners-aliases-bumper
 WORKDIR /

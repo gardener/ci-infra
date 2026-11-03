@@ -77,6 +77,8 @@ presubmits:
         - peribolos-checkconfig
         - --target
         - owners-aliases-bumper
+        - --target
+        - commenter
         readinessProbe:
           exec:
             command:
