@@ -5,8 +5,11 @@ triggers:
     - dependabot
     - gardener-prow-aliases-bumper
     - gardener-prow-autobumper
+    - gardener-prow-branch-cleaner
+    - gardener-prow-cherrypicker
     - gardener-prow-job-forker
     - gardener-prow-presubmit-generator
+    - gardener-prow-release-handler
     - renovate
   repos:
   - gardener
