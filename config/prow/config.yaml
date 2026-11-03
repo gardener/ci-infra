@@ -168,16 +168,6 @@ tide:
     - do-not-merge/work-in-progress
     - needs-rebase
 
-  # configuration for auto-merging gardener-ci-robot PRs
-  - author: gardener-ci-robot
-    orgs:
-    - gardener
-    excludedRepos: *tide-excluded-repos
-    labels:
-    # gardener-ci-robot adds this label to PRs that should be merged automatically
-    - skip-review
-    missingLabels: *tide-default-missing-labels
-
   # configuration for auto-merging renovate PRs
   - author: renovate[bot]
     orgs:
