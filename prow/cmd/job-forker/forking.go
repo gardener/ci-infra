@@ -93,10 +93,6 @@ func generatePeriodics(j config.JobConfig, repository string, branch github.Bran
 func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, outputDirectory string, filenames []string) (bool, error) {
 	logrus.Infof("Start forking for branch %s of repository %s", releaseBranch.Name, repository)
 
-	presubmits := []config.Presubmit{}
-	postsubmits := []config.Postsubmit{}
-	periodics := []config.Periodic{}
-
 	targetDir := path.Join(jobDirectoryPath, outputDirectory)
 	newFileName := createTargetFileName(repository, releaseBranch.Name)
 	targetFile := path.Join(targetDir, filepath.Base(newFileName))
@@ -106,15 +102,13 @@ func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, 
 		return false, nil
 	}
 
-	for _, file := range filenames {
-		j, err := config.ReadJobConfig(file)
-		if err != nil {
-			return false, fmt.Errorf("couldn't read jobConfig: %w", err)
-		}
-		presubmits = append(presubmits, generatePresubmits(j, repository, releaseBranch)...)
-		postsubmits = append(postsubmits, generatePostsubmits(j, repository, releaseBranch)...)
-		periodics = append(periodics, generatePeriodics(j, repository, releaseBranch)...)
+	j, err := config.ReadJobConfigs(filenames)
+	if err != nil {
+		return false, fmt.Errorf("couldn't read jobConfig: %w", err)
 	}
+	presubmits := generatePresubmits(j, repository, releaseBranch)
+	postsubmits := generatePostsubmits(j, repository, releaseBranch)
+	periodics := generatePeriodics(j, repository, releaseBranch)
 
 	payload := config.JobConfig{}
 
@@ -135,7 +129,7 @@ func forkJobs(repository string, releaseBranch github.Branch, jobDirectoryPath, 
 		return false, nil
 	}
 
-	err := os.MkdirAll(targetDir, os.ModePerm)
+	err = os.MkdirAll(targetDir, os.ModePerm)
 	if err != nil {
 		return false, fmt.Errorf("couldn't create output directory: %w", err)
 	}
@@ -215,22 +209,20 @@ func removeOrphanedJobs(repository string, releaseBranches []github.Branch, jobD
 
 func getReposFromJobFiles(files []string) ([]string, error) {
 	repoMap := make(map[string]bool)
-	for _, file := range files {
-		j, err := config.ReadJobConfig(file)
-		if err != nil {
-			return nil, fmt.Errorf("couldn't read jobConfig: %w", err)
-		}
-		for repo := range j.PresubmitsStatic {
+	j, err := config.ReadJobConfigs(files)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't read jobConfig: %w", err)
+	}
+	for repo := range j.PresubmitsStatic {
+		repoMap[repo] = true
+	}
+	for repo := range j.PostsubmitsStatic {
+		repoMap[repo] = true
+	}
+	for _, periodic := range j.Periodics {
+		for _, ref := range periodic.ExtraRefs {
+			repo := ref.OrgRepoString()
 			repoMap[repo] = true
-		}
-		for repo := range j.PostsubmitsStatic {
-			repoMap[repo] = true
-		}
-		for _, periodic := range j.Periodics {
-			for _, ref := range periodic.ExtraRefs {
-				repo := ref.OrgRepoString()
-				repoMap[repo] = true
-			}
 		}
 	}
 	repos := make([]string, len(repoMap))
