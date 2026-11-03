@@ -11,9 +11,9 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20261024-ae3a7551e2
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261103-65e5f87
       command:
-      - commenter
+      - /commenter
       args:
       - |-
         --query=org:gardener
@@ -23,8 +23,11 @@ periodics:
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=1440h
-      - --token=/etc/github-token/token
-      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --github-org=gardener
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
         This bot triages issues according to the following rules:
@@ -43,12 +46,19 @@ periodics:
       - --ceiling=10
       - --confirm
       volumeMounts:
-      - name: token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: commenter-github-app
+            key: appid
     volumes:
-    - name: token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: commenter-github-app
 
 - name: ci-gardener-triage-robot-issue-rotten
   interval: 1h
@@ -62,9 +72,9 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20261024-ae3a7551e2
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261103-65e5f87
       command:
-      - commenter
+      - /commenter
       args:
       - |-
         --query=org:gardener
@@ -75,8 +85,11 @@ periodics:
         label:lifecycle/stale
         -label:lifecycle/rotten
       - --updated=1440h
-      - --token=/etc/github-token/token
-      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --github-org=gardener
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
         This bot triages issues according to the following rules:
@@ -95,12 +108,19 @@ periodics:
       - --ceiling=10
       - --confirm
       volumeMounts:
-      - name: token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: commenter-github-app
+            key: appid
     volumes:
-    - name: token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: commenter-github-app
 
 - name: ci-gardener-triage-robot-issue-stale
   interval: 1h
@@ -114,9 +134,9 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20261024-ae3a7551e2
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261103-65e5f87
       command:
-      - commenter
+      - /commenter
       args:
       - |-
         --query=org:gardener
@@ -127,8 +147,11 @@ periodics:
         -label:lifecycle/stale
         -label:lifecycle/rotten
       - --updated=2160h
-      - --token=/etc/github-token/token
-      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --github-org=gardener
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all issues.
         This bot triages issues according to the following rules:
@@ -148,12 +171,19 @@ periodics:
       - --ceiling=10
       - --confirm
       volumeMounts:
-      - name: token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: commenter-github-app
+            key: appid
     volumes:
-    - name: token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: commenter-github-app
 
 - name: ci-gardener-triage-robot-pr-close
   interval: 1h
@@ -167,9 +197,9 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20261024-ae3a7551e2
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261103-65e5f87
       command:
-      - commenter
+      - /commenter
       args:
       - |-
         --query=org:gardener
@@ -178,8 +208,11 @@ periodics:
         -label:lifecycle/frozen
         label:lifecycle/rotten
       - --updated=336h
-      - --token=/etc/github-token/token
-      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --github-org=gardener
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
         This bot triages PRs according to the following rules:
@@ -197,12 +230,19 @@ periodics:
       - --ceiling=10
       - --confirm
       volumeMounts:
-      - name: token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: commenter-github-app
+            key: appid
     volumes:
-    - name: token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: commenter-github-app
 
 - name: ci-gardener-triage-robot-pr-rotten
   interval: 1h
@@ -216,9 +256,9 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20261024-ae3a7551e2
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261103-65e5f87
       command:
-      - commenter
+      - /commenter
       args:
       - |-
         --query=org:gardener
@@ -228,8 +268,11 @@ periodics:
         label:lifecycle/stale
         -label:lifecycle/rotten
       - --updated=720h
-      - --token=/etc/github-token/token
-      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --github-org=gardener
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
         This bot triages PRs according to the following rules:
@@ -247,12 +290,19 @@ periodics:
       - --ceiling=10
       - --confirm
       volumeMounts:
-      - name: token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: commenter-github-app
+            key: appid
     volumes:
-    - name: token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: commenter-github-app
 
 - name: ci-gardener-triage-robot-pr-stale
   interval: 1h
@@ -266,9 +316,9 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: gcr.io/k8s-staging-test-infra/commenter:v20261024-ae3a7551e2
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261103-65e5f87
       command:
-      - commenter
+      - /commenter
       args:
       - |-
         --query=org:gardener
@@ -278,8 +328,11 @@ periodics:
         -label:lifecycle/stale
         -label:lifecycle/rotten
       - --updated=720h
-      - --token=/etc/github-token/token
-      - --endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-app-id=$(GITHUB_APP_ID)
+      - --github-app-private-key-path=/etc/github/cert
+      - --github-endpoint=http://ghproxy.prow.svc.cluster.local
+      - --github-endpoint=https://api.github.com
+      - --github-org=gardener
       - |-
         --comment=The Gardener project currently lacks enough active contributors to adequately respond to all PRs.
         This bot triages PRs according to the following rules:
@@ -298,9 +351,16 @@ periodics:
       - --ceiling=10
       - --confirm
       volumeMounts:
-      - name: token
-        mountPath: /etc/github-token
+      - name: github-app
+        mountPath: /etc/github
+        readOnly: true
+      env:
+      - name: GITHUB_APP_ID
+        valueFrom:
+          secretKeyRef:
+            name: commenter-github-app
+            key: appid
     volumes:
-    - name: token
+    - name: github-app
       secret:
-        secretName: github-token
+        secretName: commenter-github-app
