@@ -243,7 +243,7 @@ type fakeClient struct {
 }
 
 // Fakes Creating a client, using the same signature as github.Client
-func (c *fakeClient) CreateComment(owner, repo string, number int, comment string) error {
+func (c *fakeClient) CreateComment(_, repo string, number int, comment string) error {
 	if strings.Contains(comment, "error") || repo == "error" {
 		return errors.New(comment)
 	}
@@ -252,7 +252,7 @@ func (c *fakeClient) CreateComment(owner, repo string, number int, comment strin
 }
 
 // Fakes listing an issue's comments, using the same signature as github.Client
-func (c *fakeClient) ListIssueComments(owner, repo string, number int) ([]github.IssueComment, error) {
+func (c *fakeClient) ListIssueComments(_, repo string, number int) ([]github.IssueComment, error) {
 	if repo == "list-error" {
 		return nil, errors.New("list error")
 	}
@@ -260,7 +260,7 @@ func (c *fakeClient) ListIssueComments(owner, repo string, number int) ([]github
 }
 
 // Fakes searching for issues, using the same signature as github.Client
-func (c *fakeClient) FindIssuesWithOrg(org, query, sort string, asc bool) ([]github.Issue, error) {
+func (c *fakeClient) FindIssuesWithOrg(org, query, _ string, _ bool) ([]github.Issue, error) {
 	c.orgSeen = org
 	if strings.Contains(query, "error") {
 		return nil, errors.New(query)
