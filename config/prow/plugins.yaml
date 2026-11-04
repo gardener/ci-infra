@@ -7,6 +7,7 @@ triggers:
     - gardener-prow-autobumper
     - gardener-prow-branch-cleaner
     - gardener-prow-cherrypicker
+    - gardener-prow-commenter
     - gardener-prow-job-forker
     - gardener-prow-presubmit-generator
     - gardener-prow-release-handler
