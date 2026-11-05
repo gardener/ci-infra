@@ -4,7 +4,7 @@ go 1.27.0
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/gardener/gardener-landscape-kit v0.8.3
+	github.com/gardener/gardener-landscape-kit v0.8.4
 	github.com/google/go-cmp v0.7.0
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
