@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: statusreconciler
-        image: us-docker.pkg.dev/k8s-infra-prow/images/status-reconciler:v20261104-091a7d737
+        image: us-docker.pkg.dev/k8s-infra-prow/images/status-reconciler:v20261105-a23969f42
         imagePullPolicy: Always
         args:
         - --dry-run=false
