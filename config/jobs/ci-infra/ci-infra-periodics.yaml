@@ -12,7 +12,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261104-573b254
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261105-480a53a
       command:
       - /job-forker
       args:
@@ -53,7 +53,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261104-573b254
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261105-480a53a
       command:
         - /job-forker
       args:
@@ -95,7 +95,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261104-573b254
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/job-forker:v20261105-480a53a
       command:
       - /job-forker
       args:
@@ -140,7 +140,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-52aea4401
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-091a7d737
       command:
       - generic-autobumper
       args:
@@ -179,7 +179,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-52aea4401
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-091a7d737
       command:
       - generic-autobumper
       args:
@@ -218,7 +218,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-52aea4401
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-091a7d737
       command:
       - generic-autobumper
       args:
@@ -257,7 +257,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-52aea4401
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/generic-autobumper:v20261104-091a7d737
       command:
       - generic-autobumper
       args:
@@ -299,7 +299,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261104-52aea4401
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261104-091a7d737
       command:
       - checkconfig
       args:
@@ -331,7 +331,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261104-52aea4401
+    - image: us-docker.pkg.dev/k8s-infra-prow/images/checkconfig:v20261104-091a7d737
       command:
       - checkconfig
       args:
@@ -364,7 +364,7 @@ periodics:
     testgrid-days-of-results: "60"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261104-7ef009f-1.27
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/golang-test:v20261105-a8e4720-1.27
       command:
       - make
       args:
@@ -387,7 +387,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20261104-573b254
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/branch-cleaner:v20261105-480a53a
       command:
       - /branch-cleaner
       args:
@@ -476,7 +476,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/renovate-presubmit-generator:v20261104-573b254
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/renovate-presubmit-generator:v20261105-480a53a
       command:
       - /renovate-presubmit-generator
       args:
