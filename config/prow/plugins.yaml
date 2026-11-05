@@ -75,7 +75,6 @@ lgtm:
 - repos:
   - gardener
   review_acts_as_lgtm: true
-  store_tree_hash: true
 
 owners:
   skip_collaborators:
