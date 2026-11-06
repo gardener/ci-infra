@@ -422,7 +422,7 @@ periodics:
       channel: prow-alerts
   spec:
     containers:
-    - image: rclone/rclone:1.75.2
+    - image: rclone/rclone:1.76.0
       command:
       - rclone
       args:
