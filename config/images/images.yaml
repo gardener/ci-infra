@@ -546,3 +546,12 @@ images:
   - v0.19.1
   - v0.19.2
   - v0.20.0
+# istio
+- source: istio/proxyv2
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/istio/proxyv2
+  tags:
+  - 1.32.0-distroless
+- source: istio/pilot
+  destination: europe-docker.pkg.dev/gardener-project/releases/3rd/istio/pilot
+  tags:
+  - 1.32.0-distroless
