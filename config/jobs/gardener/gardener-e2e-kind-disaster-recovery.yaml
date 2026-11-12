@@ -1,3 +1,47 @@
+presubmits:
+  gardener/gardener:
+  - name: pull-gardener-e2e-kind-disaster-recovery
+    cluster: gardener-prow-build
+    always_run: false
+    skip_if_only_changed: "^(\\.ci|\\.github|\\.ocm|\\.test-defs|docs|logo)/|\\.md$|^hack/tools/image|^(README|LICENSE|VERSION|OWNERS|OWNERS_ALIASES)$|^example/.*\\.ya?ml$"
+    skip_branches:
+    - release-v\d+.\d+ # don't run on release branches for now (add a job per branch later)
+    decorate: true
+    decoration_config:
+      timeout: 2h
+      grace_period: 15m
+    labels:
+      preset-dind-enabled: "true"
+      preset-kind-volume-mounts: "true"
+      preset-gocache-mounts: "true"
+    annotations:
+      description: Runs disaster recovery end-to-end tests for Gardener in pull requests
+      testgrid-dashboards: gardener-gardener
+      testgrid-days-of-results: "60"
+      fork-per-release: "true"
+    spec:
+      serviceAccountName: gardener-prow-gobuildcache-ro
+      containers:
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20261112-d41c26a-1.26
+        command:
+        - wrapper.sh
+        - bash
+        - -c
+        - make import-tools-bin ci-e2e-kind-force-restore
+        # we need privileged mode in order to do docker in docker
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 6
+            memory: 24Gi
+        env:
+        - name: GOCACHEPROG
+          value: "gobuildcache -readonly gs://gardener-prow-gobuildcache"
+        - name: SKAFFOLD_UPDATE_CHECK
+          value: "false"
+        - name: SKAFFOLD_INTERACTIVE
+          value: "false"
 periodics:
 - name: ci-gardener-e2e-kind-disaster-recovery
   cluster: gardener-prow-build
