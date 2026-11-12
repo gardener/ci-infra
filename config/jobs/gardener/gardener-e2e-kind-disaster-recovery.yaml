@@ -1,0 +1,44 @@
+periodics:
+- name: ci-gardener-e2e-kind-disaster-recovery
+  cluster: gardener-prow-build
+  interval: 2h
+  extra_refs:
+  - org: gardener
+    repo: gardener
+    base_ref: master
+  decorate: true
+  decoration_config:
+    timeout: 2h
+    grace_period: 15m
+  labels:
+    preset-dind-enabled: "true"
+    preset-kind-volume-mounts: "true"
+    preset-gocache-mounts: "true"
+  annotations:
+    description: Runs disaster recovery end-to-end tests for Gardener periodically
+    testgrid-dashboards: gardener-gardener
+    testgrid-days-of-results: "60"
+    fork-per-release: "true"
+  spec:
+    serviceAccountName: gardener-prow-gobuildcache-rw
+    containers:
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20261112-d41c26a-1.26
+      command:
+      - wrapper.sh
+      - bash
+      - -c
+      - make import-tools-bin ci-e2e-kind-force-restore
+      # we need privileged mode in order to do docker in docker
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          cpu: 6
+          memory: 24Gi
+      env:
+      - name: GOCACHEPROG
+        value: "gobuildcache gs://gardener-prow-gobuildcache"
+      - name: SKAFFOLD_UPDATE_CHECK
+        value: "false"
+      - name: SKAFFOLD_INTERACTIVE
+        value: "false"
