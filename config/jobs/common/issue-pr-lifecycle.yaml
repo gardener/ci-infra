@@ -11,7 +11,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-256a5a1
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-48962d6
       command:
       - /commenter
       args:
@@ -72,7 +72,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-256a5a1
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-48962d6
       command:
       - /commenter
       args:
@@ -134,7 +134,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-256a5a1
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-48962d6
       command:
       - /commenter
       args:
@@ -197,7 +197,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-256a5a1
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-48962d6
       command:
       - /commenter
       args:
@@ -256,7 +256,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-256a5a1
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-48962d6
       command:
       - /commenter
       args:
@@ -316,7 +316,7 @@ periodics:
     testgrid-create-test-group: "false"
   spec:
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-256a5a1
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/commenter:v20261113-48962d6
       command:
       - /commenter
       args:
