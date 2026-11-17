@@ -134,13 +134,26 @@ jobs:
     if: needs.post-upgrade-tasks.outputs.has-changes == 'true'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      # `id-token: write` is required for the OIDC token exchange performed by the `github-auth` action.
+      # The commit, push and label edit below authenticate with the `Federated GitHub Access` token instead
+      # of the default `GITHUB_TOKEN`, so access to the branches can be restricted via a GitHub App RuleSet.
+      id-token: write
+      contents: read
     steps:
+      - name: Get Federated GitHub Access token
+        id: fed-token
+        uses: gardener/cc-utils/.github/actions/github-auth@v1
+        with:
+          token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
+          repositories: ${{ github.event.repository.name }}
+          permissions: |-
+            contents: write
+            pull-requests: write
       - name: Checkout
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ steps.fed-token.outputs.token }}
       - name: Set up git identity
         uses: gardener/cc-utils/.github/actions/setup-git-identity@v1
       - name: Download patch
@@ -160,7 +173,7 @@ jobs:
           git push origin "HEAD:${HEAD_REF}"
       - name: Release automerge hold
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.fed-token.outputs.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
