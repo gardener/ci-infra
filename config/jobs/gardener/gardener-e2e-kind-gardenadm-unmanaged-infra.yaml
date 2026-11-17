@@ -22,7 +22,7 @@ presubmits:
     spec:
       serviceAccountName: gardener-prow-gobuildcache-ro
       containers:
-      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20261117-4c7e98c-1.26
+      - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20261117-12069b7-1.26
         command:
         - wrapper.sh
         - bash
@@ -66,7 +66,7 @@ periodics:
   spec:
     serviceAccountName: gardener-prow-gobuildcache-rw
     containers:
-    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20261117-4c7e98c-1.26
+    - image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/krte:v20261117-12069b7-1.26
       command:
       - wrapper.sh
       - bash
