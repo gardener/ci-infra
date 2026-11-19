@@ -154,23 +154,22 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ steps.fed-token.outputs.token }}
-      - name: Set up git identity
-        uses: gardener/cc-utils/.github/actions/setup-git-identity@v1
       - name: Download patch
         uses: actions/download-artifact@v8
         with:
           name: post-upgrade-changes
           path: ${{ runner.temp }}
-      - name: Apply patch and push
-        env:
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+      - name: Apply patch
         run: |
           set -euo pipefail
 
           git apply --3way --whitespace=nowarn "${RUNNER_TEMP}/post-upgrade.patch"
-          git add -A
-          git commit -m "Restore previously copied image versions"
-          git push origin "HEAD:${HEAD_REF}"
+      - name: Create signed commit and push
+        uses: gardener/cc-utils/.github/actions/signed-commit@v1
+        with:
+          token: ${{ steps.fed-token.outputs.token }}
+          branch: ${{ github.event.pull_request.head.ref }}
+          message: Restore previously copied image versions
       - name: Release automerge hold
         env:
           GH_TOKEN: ${{ steps.fed-token.outputs.token }}
