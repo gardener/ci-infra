@@ -142,7 +142,7 @@ jobs:
     steps:
       - name: Get Federated GitHub Access token
         id: fed-token
-        uses: gardener/cc-utils/.github/actions/github-auth@v1
+        uses: gardener/cc-utils/.github/actions/github-auth@bce63f62928717a11f610ec8022af9feb497d5df # v1
         with:
           token-server: ${{ vars.FEDERATED_GITHUB_ACCESS_TOKEN_SERVER }}
           repositories: ${{ github.event.repository.name }}
@@ -165,7 +165,7 @@ jobs:
 
           git apply --3way --whitespace=nowarn "${RUNNER_TEMP}/post-upgrade.patch"
       - name: Create signed commit and push
-        uses: gardener/cc-utils/.github/actions/signed-commit@v1
+        uses: gardener/cc-utils/.github/actions/signed-commit@bce63f62928717a11f610ec8022af9feb497d5df # v1
         with:
           token: ${{ steps.fed-token.outputs.token }}
           branch: ${{ github.event.pull_request.head.ref }}
