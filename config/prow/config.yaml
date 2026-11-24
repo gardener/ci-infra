@@ -150,10 +150,6 @@ tide:
   queries:
   - orgs:
     - gardener
-    excludedRepos: &tide-excluded-repos
-    - gardener/gardener-ai-conformance
-    - gardener/k8s-conformance
-    - gardener/demo
     labels:
     - lgtm
     - approved
@@ -172,7 +168,6 @@ tide:
   - author: renovate[bot]
     orgs:
     - gardener
-    excludedRepos: *tide-excluded-repos
     labels:
     # renovate adds this label to PRs that should be merged automatically
     - skip-review
@@ -182,7 +177,6 @@ tide:
   - author: gardener-prow-aliases-bumper[bot]
     orgs:
     - gardener
-    excludedRepos: *tide-excluded-repos
     labels:
     # gardener-prow-aliases-bumper adds this label to PRs that should be merged automatically
     - skip-review
