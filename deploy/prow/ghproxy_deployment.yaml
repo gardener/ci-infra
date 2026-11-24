@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: ghproxy
-        image: us-docker.pkg.dev/k8s-infra-prow/images/ghproxy:v20261120-901165669
+        image: us-docker.pkg.dev/k8s-infra-prow/images/ghproxy:v20261123-4bd5c66c8
         args:
         - --cache-dir=/cache
         - --cache-sizeGB=9
