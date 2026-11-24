@@ -543,6 +543,7 @@ images:
   - v3.7.16
   - v3.7.17
   - v3.7.18
+  - v3.7.19
   - v3.7.20
 # athens
 - source: gomods/athens
