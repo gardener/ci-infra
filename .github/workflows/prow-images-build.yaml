@@ -47,6 +47,8 @@ jobs:
             target: renovate-presubmit-generator
           - name: commenter
             target: commenter
+          - name: protect-restricted-prow-labels
+            target: protect-restricted-prow-labels
     with:
       name: ${{ matrix.images.name }}
       version: ${{ needs.compute-versions.outputs.semver-version }}

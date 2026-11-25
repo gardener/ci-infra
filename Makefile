@@ -24,6 +24,8 @@ IMG_RENOVATE_PRESUBMIT_GENERATOR := renovate-presubmit-generator
 REG_RENOVATE_PRESUBMIT_GENERATOR  := $(REGISTRY)/$(IMG_RENOVATE_PRESUBMIT_GENERATOR)
 IMG_COMMENTER := commenter
 REG_COMMENTER := $(REGISTRY)/$(IMG_COMMENTER)
+IMG_PROTECT_RESTRICTED_PROW_LABELS := protect-restricted-prow-labels
+REG_PROTECT_RESTRICTED_PROW_LABELS := $(REGISTRY)/$(IMG_PROTECT_RESTRICTED_PROW_LABELS)
 
 #########################################
 # Tools                                 #
@@ -50,6 +52,7 @@ endif
 	@docker build -t $(REG_OWNERS_ALIASES_BUMPER):$(VERSION) -t $(REG_OWNERS_ALIASES_BUMPER):latest -f Dockerfile --target $(IMG_OWNERS_ALIASES_BUMPER) .
 	@docker build -t $(REG_RENOVATE_PRESUBMIT_GENERATOR):$(VERSION) -t $(REG_RENOVATE_PRESUBMIT_GENERATOR):latest -f Dockerfile --target $(IMG_RENOVATE_PRESUBMIT_GENERATOR) .
 	@docker build -t $(REG_COMMENTER):$(VERSION) -t $(REG_COMMENTER):latest -f Dockerfile --target $(IMG_COMMENTER) .
+	@docker build -t $(REG_PROTECT_RESTRICTED_PROW_LABELS):$(VERSION) -t $(REG_PROTECT_RESTRICTED_PROW_LABELS):latest -f Dockerfile --target $(IMG_PROTECT_RESTRICTED_PROW_LABELS) .
 
 .PHONY: docker-push
 docker-push:
@@ -64,6 +67,7 @@ endif
 	@if ! docker images $(REG_OWNERS_ALIASES_BUMPER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_OWNERS_ALIASES_BUMPER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_RENOVATE_PRESUBMIT_GENERATOR) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_RENOVATE_PRESUBMIT_GENERATOR) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@if ! docker images $(REG_COMMENTER) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_COMMENTER) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
+	@if ! docker images $(REG_PROTECT_RESTRICTED_PROW_LABELS) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(REG_PROTECT_RESTRICTED_PROW_LABELS) version $(VERSION) is not yet built. Please run 'make docker-images'"; false; fi
 	@docker push $(REG_CHERRYPICKER):$(VERSION)
 	@docker push $(REG_JOB_FORKER):$(VERSION)
 	@docker push $(REG_RELEASE_HANDLER):$(VERSION)
@@ -72,6 +76,7 @@ endif
 	@docker push $(REG_OWNERS_ALIASES_BUMPER):$(VERSION)
 	@docker push $(REG_RENOVATE_PRESUBMIT_GENERATOR):$(VERSION)
 	@docker push $(REG_COMMENTER):$(VERSION)
+	@docker push $(REG_PROTECT_RESTRICTED_PROW_LABELS):$(VERSION)
 ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_CHERRYPICKER):latest
 	@docker push $(REG_JOB_FORKER):latest
@@ -81,6 +86,7 @@ ifeq ("$(PUSH_LATEST_TAG)", "true")
 	@docker push $(REG_OWNERS_ALIASES_BUMPER):latest
 	@docker push $(REG_RENOVATE_PRESUBMIT_GENERATOR):latest
 	@docker push $(REG_COMMENTER):latest
+	@docker push $(REG_PROTECT_RESTRICTED_PROW_LABELS):latest
 endif
 
 

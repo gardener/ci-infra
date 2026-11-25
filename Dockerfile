@@ -65,6 +65,12 @@ WORKDIR /
 COPY --from=builder /build/commenter /commenter
 ENTRYPOINT [ "/commenter" ]
 
+FROM base_nonroot AS protect-restricted-prow-labels
+LABEL app=protect-restricted-prow-labels
+WORKDIR /
+COPY --from=builder /build/protect-restricted-prow-labels /protect-restricted-prow-labels
+ENTRYPOINT [ "/protect-restricted-prow-labels" ]
+
 FROM ssl_git_runner AS owners-aliases-bumper
 LABEL app=owners-aliases-bumper
 WORKDIR /
