@@ -79,6 +79,8 @@ presubmits:
         - owners-aliases-bumper
         - --target
         - commenter
+        - --target
+        - protect-restricted-prow-labels
         readinessProbe:
           exec:
             command:
