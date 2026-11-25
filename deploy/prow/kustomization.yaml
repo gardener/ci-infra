@@ -12,11 +12,13 @@ resources:
 - crier_service.yaml
 - crier_vpa.yaml
 - deck_deployment.yaml
+- deck_pdb.yaml
 - deck_rbac.yaml
 - deck_service.yaml
 - deck_vpa.yaml
 - gcsweb_namespace.yaml
 - gcsweb_deployment.yaml
+- gcsweb_pdb.yaml
 - gcsweb_service.yaml
 - gcsweb_gateway.yaml
 - gcsweb_httproute.yaml
@@ -26,6 +28,7 @@ resources:
 - ghproxy_service.yaml
 - ghproxy_vpa.yaml
 - hook_deployment.yaml
+- hook_pdb.yaml
 - hook_rbac.yaml
 - hook_service.yaml
 - hook_vpa.yaml

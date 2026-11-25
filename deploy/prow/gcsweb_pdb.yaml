@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: gcsweb
+  namespace: gcsweb
+  labels:
+    app: gcsweb
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: gcsweb
