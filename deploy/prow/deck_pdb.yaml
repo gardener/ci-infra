@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app: deck
+  namespace: prow
+  name: deck
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: deck
