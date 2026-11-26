@@ -36,7 +36,11 @@ func (s *Server) reconcile() error {
 
 	// A configuration change can bring pull requests into scope that an earlier pass skipped, so
 	// force a full pass by resetting the watermark when the plugin-relevant config changes.
-	if fingerprint := configFingerprint(config, orgs, repos); fingerprint != s.lastConfigFingerprint {
+	fingerprint, err := configFingerprint(config, orgs, repos)
+	if err != nil {
+		return fmt.Errorf("failed to compute config fingerprint: %w", err)
+	}
+	if fingerprint != s.lastConfigFingerprint {
 		s.lastReconcile = time.Time{}
 		s.lastConfigFingerprint = fingerprint
 	}
@@ -231,7 +235,7 @@ func collectScopeSearches(config *plugins.Configuration, orgs, repos []string) [
 // configFingerprint returns a deterministic fingerprint of the plugin-relevant configuration: the
 // enabled scopes and the restricted-label rules (labels, allowed users and teams). The
 // reconciliation forces a full pass whenever it changes.
-func configFingerprint(config *plugins.Configuration, orgs, repos []string) string {
+func configFingerprint(config *plugins.Configuration, orgs, repos []string) (string, error) {
 	scopes := append(append([]string{}, orgs...), repos...)
 	sort.Strings(scopes)
 
@@ -247,11 +251,14 @@ func configFingerprint(config *plugins.Configuration, orgs, repos []string) stri
 		restricted[key] = normalized
 	}
 
-	data, _ := json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Scopes           []string
 		RestrictedLabels map[string][]plugins.RestrictedLabel
 	}{Scopes: scopes, RestrictedLabels: restricted})
-	return string(data)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func sortedCopy(in []string) []string {

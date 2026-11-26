@@ -54,7 +54,7 @@ func (o *options) Validate() error {
 
 func gatherOptions() options {
 	o := options{}
-	fs := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+	fs := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	fs.IntVar(&o.port, "port", 8888, "Port to listen on.")
 	fs.BoolVar(&o.dryRun, "dry-run", true, "Dry run for testing. Uses API tokens but does not mutate.")
 	fs.StringVar(&o.webhookSecretFile, "hmac-secret-file", "/etc/webhook/hmac", "Path to the file containing the GitHub HMAC secret.")

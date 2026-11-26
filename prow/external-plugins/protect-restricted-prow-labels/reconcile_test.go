@@ -33,7 +33,9 @@ func (c *eventCountingClient) ListIssueEvents(org, repo string, number int) ([]g
 func primeConfigFingerprint(s *Server) {
 	config := s.configAgent.Config()
 	orgs, repos := config.EnabledReposForExternalPlugin(pluginName)
-	s.lastConfigFingerprint = configFingerprint(config, orgs, repos)
+	fingerprint, err := configFingerprint(config, orgs, repos)
+	Expect(err).NotTo(HaveOccurred())
+	s.lastConfigFingerprint = fingerprint
 }
 
 var _ = Describe("Server", func() {
