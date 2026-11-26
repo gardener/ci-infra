@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: protect-restricted-prow-labels
+  namespace: prow
+spec:
+  selector:
+    app: protect-restricted-prow-labels
+  ports:
+  - port: 80
+    targetPort: 8888
+  type: ClusterIP
+  trafficDistribution: PreferSameZone

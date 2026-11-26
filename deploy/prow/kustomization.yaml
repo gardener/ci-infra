@@ -41,6 +41,11 @@ resources:
 - needs-rebase_deployment.yaml
 - needs-rebase_service.yaml
 - needs-rebase_vpa.yaml
+- protect-restricted-prow-labels_deployment.yaml
+- protect-restricted-prow-labels_pdb.yaml
+- protect-restricted-prow-labels_rbac.yaml
+- protect-restricted-prow-labels_service.yaml
+- protect-restricted-prow-labels_vpa.yaml
 - prow_controller_manager_deployment.yaml
 - prow_controller_manager_rbac.yaml
 - prow_controller_manager_service.yaml

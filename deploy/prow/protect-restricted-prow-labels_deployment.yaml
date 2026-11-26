@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: prow
+  name: protect-restricted-prow-labels
+  labels:
+    app: protect-restricted-prow-labels
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: protect-restricted-prow-labels
+  template:
+    metadata:
+      labels:
+        app: protect-restricted-prow-labels
+    spec:
+      serviceAccountName: protect-restricted-prow-labels
+      terminationGracePeriodSeconds: 180
+      containers:
+      - name: protect-restricted-prow-labels
+        image: europe-docker.pkg.dev/gardener-project/releases/ci-infra/protect-restricted-prow-labels:v20261126-103b4d7
+        imagePullPolicy: Always
+        args:
+        - --dry-run=false
+        - --github-endpoint=http://ghproxy
+        - --github-endpoint=https://api.github.com
+        - --github-app-id=$(GITHUB_APP_ID)
+        - --github-app-private-key-path=/etc/github/cert
+        env:
+        - name: GITHUB_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: github-app
+              key: appid
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+          - name: http
+            containerPort: 8888
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 3
+          timeoutSeconds: 600
+        volumeMounts:
+        - name: github-app
+          mountPath: /etc/github
+          readOnly: true
+        - name: hmac
+          mountPath: /etc/webhook
+          readOnly: true
+        - name: plugins
+          mountPath: /etc/plugins
+          readOnly: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+      topologySpreadConstraints:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - protect-restricted-prow-labels
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+      volumes:
+      - name: github-app
+        secret:
+          secretName: github-app
+      - name: hmac
+        secret:
+          secretName: hmac-token
+      - name: plugins
+        configMap:
+          name: plugins
