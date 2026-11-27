@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app: protect-restricted-prow-labels
+  namespace: prow
+  name: protect-restricted-prow-labels
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: protect-restricted-prow-labels
